@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.contrib.gis.db import models
 from django.conf import settings
 #from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from jsonfield import JSONField
 User = settings.AUTH_USER_MODEL
 

@@ -133,7 +133,9 @@ export default class TaskManager extends React.Component {
 					iconElementLeft={< IconButton onTouchTap = {
 					this.backToList.bind( this )
 				} > <NavigationArrowBack ></NavigationArrowBack> < /IconButton>}
-					title={appConfig.layer.split( ":" )[ 1 ]}/> {loading && <MenuItem style={{
+					title={appConfig.layer.split( ":" )[ 1 ]}/> 
+					
+					{loading && <MenuItem style={{
 					textAlign: "center",
 					padding: 10
 				}}>
@@ -147,45 +149,7 @@ export default class TaskManager extends React.Component {
 					     </div>
 				}
 			
-				{!loading && this.state.selectMode && this.state.selectedFeatures.length == 1 && <Table selectable={false}>
-					<TableHeader
-						displaySelectAll={false}
-						adjustForCheckbox={false}
-						enableSelectAll={false}>
-						<TableRow>
-							<TableHeaderColumn
-								colSpan="3"
-								tooltip="Feature Details"
-								style={{
-								textAlign: 'center'
-							}}>
-								{"Feature Details"}
-							</TableHeaderColumn>
-						</TableRow>
-						<TableRow>
-							<TableHeaderColumn tooltip="Property">Property</TableHeaderColumn>
-							<TableHeaderColumn tooltip="Value">Value</TableHeaderColumn>
-						</TableRow>
-					</TableHeader>
-					<TableBody
-						displayRowCheckbox={false}
-						deselectOnClickaway={false}
-						stripedRows={true}>
-						{Object.keys(this.state.selectedFeatures[0].getProperties( )).map(( key, i ) => {
-							if ( key != "geometry" ) {
-								return <TableRow key={i}>
-									<TableRowColumn>
-										<span>{key}</span>
-									</TableRowColumn>
-									<TableRowColumn>
-										<span>{this.state.selectedFeatures[0].getProperties( )[ key ]}</span>
-									</TableRowColumn>
-								</TableRow >
-							}
-
-						})}
-					</TableBody>
-				</Table>}
+			
 			</Drawer>
 		);
 	}
