@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ instance.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <style>
+        html {
+            height: 100%;
+            margin: 0px;
+        }
+        body {
+            overflow: hidden;
+            height: 100%;
+            margin: 0px;
+        }
+        .no-js #loader {
+            display: none;
+        }
+        .js #loader {
+            display: block;
+            position: absolute;
+            left: 100px;
+            top: 0;
+        }
+        .se-pre-con {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: url({% static 'cartoview_feature_list/img/loading.gif' %}) center no-repeat #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="se-pre-con"></div>
+
+<div style="height:100%" id="root"></div>
+
+<script>
+    var appConfig = {{ instance.config | safe }};
+    var map_id={{instance.map_id}};
+    var mapUrl = "{% url 'map_json' instance.map_id %}";
+    var geoserver_url = "{{ GEOSERVER_BASE_URL }}";
+    var abstract = " {% spaceless %}{{ instance.abstract|title }}{% endspaceless %} ";
+</script>
+<script src="{% static 'cartoview_tasks_manager/dist/ReactClient.bundle.js' %}"></script>
+</body>
+</html>

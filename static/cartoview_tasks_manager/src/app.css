@@ -1,0 +1,83 @@
+.map {
+  height: 100%;
+  width: 70%;
+  margin: 0;
+}
+
+.full-height-width {
+  height: 100%;
+  width: 100%;
+}
+
+.row .row {
+  margin: 0 -1.5em;
+}
+
+.col {
+  padding: 0 0em;
+}
+
+.row:after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+[class*=hint--] {
+  position: relative;
+  display: inline-block;
+}
+
+.feature-paging {
+  display: flex;
+}
+
+.layer-title {
+  padding-left: 10px;
+}
+
+.panel-wrapper {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+
+.scrollbar-x {
+  overflow-x: 'auto'
+}
+
+.layer-list {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 12;
+}
+
+.basemap_button {
+  position: fixed;
+  top: 70px;
+  left: 20px;
+  z-index: 1;
+}
+
+.legends {
+  top: 120px;
+  position: absolute;
+  left: 20px;
+}
+.loading-center{
+  text-align: center!important;
+  text-align: -webkit-center !important;
+
+}
+.zoom {
+  position: fixed;
+  left: 20px;
+  top: 120px !important
+}
+
+.about-ico {
+  top: 170px;
+  position: absolute;
+  left: 20px;
+}
