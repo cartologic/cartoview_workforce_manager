@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
 from django.contrib.gis.db import models
 from django.conf import settings
-#from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from jsonfield import JSONField
+from cartoview.app_manager.models import AppInstance
 User = settings.AUTH_USER_MODEL
 
 class Project(models.Model):
@@ -15,6 +14,11 @@ class Project(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     config = JSONField()
+    app_instance = models.OneToOneField(
+        AppInstance,
+        on_delete=models.CASCADE,
+
+    )
 
 class Task(models.Model):
     task_title = models.CharField(max_length=200)
