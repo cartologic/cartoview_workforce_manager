@@ -65,7 +65,7 @@ class ProjectResource(ModelResource):
         print ("Entered Order Create")
         print(bundle)
         print("self",self)
-        bundle.obj.user="/apps/cartoview_tasks_manager/api/v1/user/1001/"
+        bundle.obj.user="/apps/cartoview_workforce_manager/api/v1/user/1001/"
         print(bundle.obj)
         print(bundle.obj.user)
         return super(ProjectResource, self).obj_create(bundle, request=request, **kwargs)

@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
                 ('status', models.IntegerField(default=1, choices=[(1, 'open'), (2, 'reopened'), (3, 'closed'), (4, 'duplicate'), (5, 'resolved')])),
                 ('assigned_to', models.ForeignKey(related_name='task_requests_assigned_to', to=settings.AUTH_USER_MODEL)),
                 ('created_by', models.ForeignKey(related_name='task_requests_created_by', to=settings.AUTH_USER_MODEL)),
-                ('project', models.ForeignKey(to='cartoview_tasks_manager.Project')),
+                ('project', models.ForeignKey(to='cartoview_workforce_manager.Project')),
             ],
         ),
     ]

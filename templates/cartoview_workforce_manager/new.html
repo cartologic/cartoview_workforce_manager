@@ -25,7 +25,7 @@
 
 {% endblock %}
 {% block extra_script %}
-    <script src="{{ STATIC_URL }}cartoview_tasks_manager/dist/config.bundle.js"></script>
+    <script src="{{ STATIC_URL }}cartoview_workforce_manager/dist/config.bundle.js"></script>
     <script>
     var username="{{request.user.username}}"
     var viewer=new Viewer('root',{'urls':{'resources_url':"/api/maps","mapLayers":"/apps/maplayers/api","layerAttributes":"/apps/rest/app_manager/geonodelayerattribute/"},'limit':9},username);
