@@ -18,7 +18,8 @@ class Project(models.Model):
 
 class Task(models.Model):
     task_title = models.CharField(max_length=200)
-    task_description = models.CharField(max_length=200)
+    task_short_description = models.CharField(max_length=200)
+    task_description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, related_name='%(class)s_requests_created_by', on_delete=models.CASCADE)
@@ -26,14 +27,18 @@ class Task(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     due_date = models.DateTimeField(null=True, blank=True)
     PRIORITY_CHOICES = (
+        (0, 'critical'),
         (1, 'high'),
         (2, 'medium'),
         (3, 'low'),
+        (4,'very low')
     )
     STATUS_CHOICES = (
         (1, 'open'),
-        (2, 'working on'),
-        (3, 'closed')
+        (2, 'reopened'),
+        (3, 'closed'),
+        (4, 'duplicate'),
+        (5, 'resolved')
     )
     priority = models.CharField(
         max_length=2,
