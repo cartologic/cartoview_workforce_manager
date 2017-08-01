@@ -1,2 +1,3 @@
-# cartoview_app_template
-django app template for cartoview
+# Workforce Manager
+Cartoview app  to manage project/work group tasks.
+It provides a full management of a task status, priority, attachments, comments ...
