@@ -86,7 +86,8 @@ class TaskResource(ModelResource):
             'assigned_to': ALL_WITH_RELATIONS,
             'project': ["exact", ],
             'status': ALL,
-            'priority': ALL
+            'priority': ALL,
+            'task_description' : ALL
         }
 
         queryset = Task.objects.all()
