@@ -84,7 +84,9 @@ class TaskResource(ModelResource):
         filtering = {
             'user': ALL_WITH_RELATIONS,
             'assigned_to': ALL_WITH_RELATIONS,
-            'project': ["exact", ]
+            'project': ["exact", ],
+            'status': ALL,
+            'priority': ALL
         }
 
         queryset = Task.objects.all()

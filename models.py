@@ -44,13 +44,12 @@ class Task(models.Model):
         (4, 'duplicate'),
         (5, 'resolved')
     )
-    priority = models.CharField(
-        max_length=2,
+    priority = models.IntegerField(
         choices=PRIORITY_CHOICES,
         default=3,
     )
-    status = models.CharField(
-        max_length=2,
+    status = models.IntegerField(
+        
         choices=STATUS_CHOICES,
-        default=3,
+        default=1,
     )
