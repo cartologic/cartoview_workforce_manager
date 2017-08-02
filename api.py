@@ -7,6 +7,8 @@ from django.core.urlresolvers import reverse
 from tastypie.utils import trailing_slash
 from django.conf.urls import url
 from django.contrib.auth import get_user_model
+from pprint import pprint
+
 User = get_user_model()
 
 class UserResource(ModelResource):
@@ -64,19 +66,22 @@ class ProjectResource(ModelResource):
 
 
 class TaskResource(ModelResource):
-    user = fields.ForeignKey(UserResource, 'created_by')
+    created_by = fields.ForeignKey(UserResource, 'created_by')
     assigned_to = fields.ForeignKey(UserResource, 'assigned_to')
-    project = fields.ForeignKey(ProjectResource, 'project')
+    project = fields.ForeignKey(ProjectResource, 'project', full=True)
 
     def hydrate(self, bundle):
+        print("in hydrate", bundle.data['project'])
+
+
         bundle.obj.created_by = bundle.request.user
         return bundle
 
     class Meta:
         filtering = {
-            'user': ALL_WITH_RELATIONS,
+            'created_by': ALL_WITH_RELATIONS,
             'assigned_to': ALL_WITH_RELATIONS,
-            'project': ["exact", ],
+            'project': ["exact", ALL_WITH_RELATIONS ],
             'status': ALL,
             'priority': ALL,
             'description' : ALL

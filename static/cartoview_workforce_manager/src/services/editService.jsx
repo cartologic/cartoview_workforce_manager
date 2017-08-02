@@ -6,8 +6,8 @@ export default class EditService {
 	}
 	save( instanceConfig, id ) {
 		const url = id
-			? this.baseUrl + "apps/cartoview_feature_list/" + id + "/edit"
-			: this.baseUrl + "apps/cartoview_feature_list/new"
+			? this.baseUrl + "apps/cartoview_workforce_manager/" + id + "/edit"
+			: this.baseUrl + "apps/cartoview_workforce_manager/new"
 		return fetch(hasTrailingSlash( url )
 			? url
 			: url + "/", {

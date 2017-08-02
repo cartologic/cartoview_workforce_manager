@@ -7,7 +7,7 @@ const Access = t.enums({
 	public: 'Public', private: 'Private (only me)',
 	// others: 'Other Users'
 });
-const mapConfig = t.struct({ title: t.String, abstract: t.String, access: Access });
+ const mapConfig = t.struct({ title: t.String, abstract: t.String, access: Access });
 const options = {
 	fields: {
 		title: {
@@ -25,21 +25,17 @@ export default class General extends Component {
 		super( props )
 		this.state = {
 			defaultConfig: {
-				title: this.props.state.config.title
-					? this.props.state.config.title
-					: this.props.instance.title || "No Title Provided",
-				abstract: this.props.state.config.abstract
-					? this.props.state.config.abstract
-					: this.props.instance.abstract || "No Abstract Provided",
-				access: this.props.state.config.access
-					? this.props.state.config.access
-					: this.props.config
-						? this.props.config.access
-						: 'private'
+			title: "No Title Provided",
+			abstract: "No Abstract Provided",
+				
 			}
 		}
 	}
-
+componentWillReceiveProps( nextProps ) {
+		// console.log(nextProps); if (nextProps.config !== this.state.defaultConfig) {
+		this.setState({  success: nextProps.success });
+		// }
+	}
 	save( ) {
 		var basicConfig = this.refs.form.getValue( );
 		if ( basicConfig ) {
@@ -47,7 +43,7 @@ export default class General extends Component {
 				title: basicConfig.title,
 				abstract: basicConfig.abstract,
 				access: basicConfig.access,
-				keywords: this.keywords
+				
 			}
 			this.props.onComplete( properConfig )
 		}
@@ -62,18 +58,16 @@ export default class General extends Component {
 
 	render( ) {
 		return (
-			<div className="row">
 				<div className="row">
-					<div className="col-xs-5 col-md-4">
-						<h4>{'General'}</h4>
-					</div>
+				<div className="row">
+					<div className="col-xs-5 col-md-4"></div>
 					<div className="col-xs-7 col-md-8">
 						<button
 							style={{
 							display: "inline-block",
 							margin: "0px 3px 0px 3px"
 						}}
-							className="btn btn-primary btn-sm pull-right"
+							className="btn btn-primary btn-sm pull-right disabled"
 							onClick={this.save.bind( this )}>{"next "}
 							<i className="fa fa-arrow-right"></i>
 						</button>
@@ -88,6 +82,62 @@ export default class General extends Component {
 							<i className="fa fa-arrow-left"></i>{" Previous"}</button>
 					</div>
 				</div>
+				<div className="row" style={{
+					marginTop: "3%"
+				}}>
+					<div className="col-xs-5 col-md-4">
+					
+					</div>
+					<div className="col-xs-7 col-md-8">
+						<a
+							style={{
+							display: "inline-block",
+							margin: "0px 3px 0px 3px"
+						}}
+							className={this.state.success === true
+							? "btn btn-primary btn-sm pull-right"
+							: "btn btn-primary btn-sm pull-right disabled"}
+							href={`/apps/cartoview_workforce_manager/${ this.props.id }/view/`}>
+							View
+						</a>
+
+						<a
+							style={{
+							display: "inline-block",
+							margin: "0px 3px 0px 3px"
+						}}
+							className={this.state.success === true
+							? "btn btn-primary btn-sm pull-right"
+							: "btn btn-primary btn-sm pull-right disabled"}
+							href={`/apps/appinstance/${ this.props.id }/`}
+							target={"_blank"}>
+							Details
+						</a>
+
+						<button
+							style={{
+							display: "inline-block",
+							margin: "0px 3px 0px 3px"
+						}}
+							className={this.state.success === true
+							? "btn btn-primary btn-sm pull-right disabled"
+							: "btn btn-primary btn-sm pull-right"}
+							onClick={this.save.bind( this )}>Save</button>
+
+						<p
+							style={this.state.success == true
+							? {
+								display: "inline-block",
+								margin: "0px 3px 0px 3px",
+								float: "right"
+							}
+							: {
+								display: "none",
+								margin: "0px 3px 0px 3px",
+								float: "right"
+							}}>App instance successfully created!</p>
+					</div>
+				</div>
 				<hr></hr>
 
 				<Form
@@ -95,14 +145,6 @@ export default class General extends Component {
 					value={this.state.defaultConfig}
 					type={mapConfig}
 					options={options}/>
-
-				<KeywordsInput
-					updateKeywords={( keywords ) => {
-					this.updateKeywords( keywords )
-				}}
-					keywords={this.props.state.config.keywords
-					? this.props.state.config.keywords
-					: this.props.keywords}/>
 			</div>
 		)
 	}

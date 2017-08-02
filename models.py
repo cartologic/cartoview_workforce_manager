@@ -7,20 +7,16 @@ from jsonfield import JSONField
 from cartoview.app_manager.models import AppInstance
 User = settings.AUTH_USER_MODEL
 
-class Project(models.Model):
-    name = models.CharField(max_length=200)
-    description = models.CharField(max_length=200)
+class Project(AppInstance):
+    #project_name = models.CharField(max_length=200)
+    #project_description = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    config = JSONField()
+    #config = JSONField()
     workers = models.ManyToManyField(User,related_name='%(class)s_requests_workers')
     dispatchers = models.ManyToManyField(User,related_name='%(class)s_requests_dispatchers')
-    app_instance = models.OneToOneField(
-        AppInstance,
-        on_delete=models.CASCADE,
-
-    )
+    #app_instance = models.OneToOneField(AppInstance,on_delete=models.CASCADE)
 
 class Task(models.Model):
     title = models.CharField(max_length=200)
