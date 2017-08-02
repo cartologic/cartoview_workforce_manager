@@ -8,12 +8,14 @@ from cartoview.app_manager.models import AppInstance
 User = settings.AUTH_USER_MODEL
 
 class Project(models.Model):
-    project_name = models.CharField(max_length=200)
-    project_description = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
+    description = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     config = JSONField()
+    workers = models.ManyToManyField(User,related_name='%(class)s_requests_workers')
+    dispatchers = models.ManyToManyField(User,related_name='%(class)s_requests_dispatchers')
     app_instance = models.OneToOneField(
         AppInstance,
         on_delete=models.CASCADE,
@@ -21,9 +23,9 @@ class Project(models.Model):
     )
 
 class Task(models.Model):
-    task_title = models.CharField(max_length=200)
-    task_short_description = models.CharField(max_length=200)
-    task_description = models.TextField(blank=True, null=True)
+    title = models.CharField(max_length=200)
+    short_description = models.CharField(max_length=200)
+    description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, related_name='%(class)s_requests_created_by', on_delete=models.CASCADE)

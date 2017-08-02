@@ -21,7 +21,7 @@ class UserResource(ModelResource):
 
 
 class ProjectResource(ModelResource):
-    user = fields.ForeignKey(UserResource, 'created_by')
+    created_by= fields.ForeignKey(UserResource, 'created_by')
 
     def get_tasks(self, request, **kwargs):
         if request.method == 'DELETE':
@@ -50,8 +50,8 @@ class ProjectResource(ModelResource):
 
     class Meta:
         filtering = {
-            'user': ALL_WITH_RELATIONS,
-            'project_name': ALL,
+            'created_by': ALL_WITH_RELATIONS,
+            'name': ALL,
             'id': ALL
         }
         queryset = Project.objects.all()
@@ -61,14 +61,6 @@ class ProjectResource(ModelResource):
         allowed_methods = ['get', 'post', 'put', 'delete']
 
 
-    def obj_create(self, bundle, request=None, **kwargs):
-        print ("Entered Order Create")
-        print(bundle)
-        print("self",self)
-        bundle.obj.user="/apps/cartoview_workforce_manager/api/v1/user/1001/"
-        print(bundle.obj)
-        print(bundle.obj.user)
-        return super(ProjectResource, self).obj_create(bundle, request=request, **kwargs)
 
 
 class TaskResource(ModelResource):
@@ -87,7 +79,7 @@ class TaskResource(ModelResource):
             'project': ["exact", ],
             'status': ALL,
             'priority': ALL,
-            'task_description' : ALL
+            'description' : ALL
         }
 
         queryset = Task.objects.all()
