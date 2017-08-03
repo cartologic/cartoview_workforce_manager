@@ -8,9 +8,9 @@ from tastypie.utils import trailing_slash
 from django.conf.urls import url
 from django.contrib.auth import get_user_model
 from pprint import pprint
-
+from geonode.people.models import Profile
 User = get_user_model()
-
+from .customAuth import CustomAuthorization
 class UserResource(ModelResource):
     class Meta:
         queryset = User.objects.all()
@@ -23,7 +23,8 @@ class UserResource(ModelResource):
 
 
 class ProjectResource(ModelResource):
-    created_by= fields.ForeignKey(UserResource, 'created_by')
+    created_by = fields.ForeignKey(UserResource, 'created_by')
+    # dispatchers = fields.ToManyField(UserResource, 'dispatchers', full=True)
 
     def get_tasks(self, request, **kwargs):
         if request.method == 'DELETE':
@@ -70,13 +71,9 @@ class TaskResource(ModelResource):
     assigned_to = fields.ForeignKey(UserResource, 'assigned_to')
     project = fields.ForeignKey(ProjectResource, 'project', full=True)
 
-    def hydrate(self, bundle):
-        print("in hydrate", bundle.data['project'])
-
-
+    def hydrate_created_by(self, bundle):
         bundle.obj.created_by = bundle.request.user
         return bundle
-
     class Meta:
         filtering = {
             'created_by': ALL_WITH_RELATIONS,
@@ -89,6 +86,6 @@ class TaskResource(ModelResource):
 
         queryset = Task.objects.all()
         resource_name = 'task'
-        authorization = Authorization()
+        authorization = CustomAuthorization()
         authentication = BasicAuthentication()
         allowed_methods = ['get', 'post', 'put', 'delete']

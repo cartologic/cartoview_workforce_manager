@@ -6,7 +6,6 @@ from django.contrib.auth import get_user_model
 from jsonfield import JSONField
 from cartoview.app_manager.models import AppInstance
 User = settings.AUTH_USER_MODEL
-
 class Project(AppInstance):
     #project_name = models.CharField(max_length=200)
     #project_description = models.CharField(max_length=200)
@@ -47,7 +46,7 @@ class Task(models.Model):
         default=3,
     )
     status = models.IntegerField(
-        
+
         choices=STATUS_CHOICES,
         default=1,
     )

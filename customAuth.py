@@ -19,7 +19,9 @@ class CustomAuthorization(Authorization):
 
     def create_detail(self, object_list, bundle):
         # return bundle.obj.created_by == bundle.request.user
-        pass
+
+         return True if bundle.request.user in bundle.obj.project.dispatchers.all() else False
+
     def update_list(self, object_list, bundle):
         allowed = []
 

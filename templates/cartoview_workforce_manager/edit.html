@@ -35,9 +35,8 @@
   var geoserver_url = "{{ GEOSERVER_BASE_URL }}";
   var abstract = " {% spaceless %}{{ instance.abstract|title }}{% endspaceless %} ";
   {% endif %}
-    var instance_id={{instance.id}};
     var username="{{instance.owner.username}}"
-    var viewer=new Viewer('root',{'instance':{map:{id:map_id,title:title,abstract:abstract},id:instance_id,config:appConfig},'urls':{'resources_url':"/api/maps","view":"/apps/cartoview_workforce_manager/"+instance_id+"/view/","mapLayers":"/apps/maplayers/api","layerAttributes":"/apps/rest/app_manager/geonodelayerattribute/"},'limit':9},username,instance_id);
+    var viewer=new Viewer('root',{'instance':{map:{id:map_id,title:title,abstract:abstract},id:instance_id,config:appConfig},'urls':{'resources_url':"/api/maps","view":"/apps/cartoview_workforce_manager/"+instance_id+"/view/","mapLayers":"/apps/maplayers/api","layerAttributes":"/apps/rest/app_manager/geonodelayerattribute/"},'limit':9},username);
     viewer.view();
     </script>
 <div id="myModal" class="modal fade" role="dialog">

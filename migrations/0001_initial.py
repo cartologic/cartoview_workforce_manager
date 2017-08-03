@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-import jsonfield.fields
 from django.conf import settings
 
 
@@ -17,23 +16,25 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Project',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('project_name', models.CharField(max_length=200)),
-                ('project_description', models.CharField(max_length=200)),
+                ('appinstance_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='app_manager.AppInstance')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('config', jsonfield.fields.JSONField(default=dict)),
-                ('app_instance', models.OneToOneField(to='app_manager.AppInstance')),
                 ('created_by', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('dispatchers', models.ManyToManyField(related_name='project_requests_dispatchers', to=settings.AUTH_USER_MODEL)),
+                ('workers', models.ManyToManyField(related_name='project_requests_workers', to=settings.AUTH_USER_MODEL)),
             ],
+            options={
+                'abstract': False,
+            },
+            bases=('app_manager.appinstance',),
         ),
         migrations.CreateModel(
             name='Task',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('task_title', models.CharField(max_length=200)),
-                ('task_short_description', models.CharField(max_length=200)),
-                ('task_description', models.TextField(null=True, blank=True)),
+                ('title', models.CharField(max_length=200)),
+                ('short_description', models.CharField(max_length=200)),
+                ('description', models.TextField(null=True, blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('due_date', models.DateTimeField(null=True, blank=True)),

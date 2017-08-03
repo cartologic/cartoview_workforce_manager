@@ -13,14 +13,14 @@ def save(request, instance_id=None, app_name=APP_NAME):
     res_json = dict(success=False)
 
     data = json.loads(request.body)
-    # map_id = data.get('map', None)
+    map_id = data.get('map', None)
     title = data.get('title', "")
-    config = data.get('config', None)
+    config = data.get('config', {})
     access = data.get('access', None)
-    # config.update(access=access)
+    config.update(access=access)
     config = json.dumps(data.get('config', None))
     abstract = data.get('abstract', "")
-    # keywords = data.get('keywords', [])
+    keywords = data.get('keywords', [])
 
     if instance_id is None:
         instance_obj = AppInstance()
@@ -32,7 +32,7 @@ def save(request, instance_id=None, app_name=APP_NAME):
     instance_obj.title = title
     instance_obj.config = config
     instance_obj.abstract = abstract
-    # instance_obj.map_id = map_id
+    instance_obj.map_id = map_id
     instance_obj.save()
 
     owner_permissions = [
@@ -65,10 +65,10 @@ def save(request, instance_id=None, app_name=APP_NAME):
     instance_obj.set_permissions(permessions)
 
     # update the instance keywords
-    # if hasattr(instance_obj, 'keywords'):
-    #     for k in keywords:
-    #         if k not in instance_obj.keyword_list():
-    #             instance_obj.keywords.add(k)
+    if hasattr(instance_obj, 'keywords'):
+        for k in keywords:
+            if k not in instance_obj.keyword_list():
+                instance_obj.keywords.add(k)
 
     res_json.update(dict(success=True, id=instance_obj.id))
     return HttpResponse(json.dumps(res_json), content_type="application/json")
