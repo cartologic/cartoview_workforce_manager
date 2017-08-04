@@ -13,9 +13,17 @@ class Project(AppInstance):
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     #config = JSONField()
-    workers = models.ManyToManyField(User,related_name='%(class)s_requests_workers')
-    dispatchers = models.ManyToManyField(User,related_name='%(class)s_requests_dispatchers')
+    workers = models.ManyToManyField(User,related_name='%(class)s_requests_workers',through='ProjectWorkers')
+    dispatchers = models.ManyToManyField(User,related_name='%(class)s_requests_dispatchers',through='ProjectDispatchers')
     #app_instance = models.OneToOneField(AppInstance,on_delete=models.CASCADE)
+
+class ProjectDispatchers(models.Model):
+     dispatcher = models.ForeignKey(User, on_delete=models.CASCADE)
+     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+
+class ProjectWorkers(models.Model):
+     worker = models.ForeignKey(User, on_delete=models.CASCADE)
+     project = models.ForeignKey(Project, on_delete=models.CASCADE)
 
 class Task(models.Model):
     title = models.CharField(max_length=200)
