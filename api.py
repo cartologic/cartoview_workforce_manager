@@ -75,6 +75,8 @@ class ProjectResource(ModelResource):
         return bundle
 
     class Meta:
+        always_return_data = True
+
         filtering = {
             'created_by': ALL_WITH_RELATIONS,
             'name': ALL,
@@ -115,6 +117,7 @@ class TaskResource(ModelResource):
 
 class ProjectDispatchersResource(ModelResource):
     dispatcher = fields.ForeignKey(UserResource, 'dispatcher', full=True)
+    project=fields.ForeignKey(ProjectResource, 'project')
     class Meta:
 
         filtering = {
@@ -127,14 +130,15 @@ class ProjectDispatchersResource(ModelResource):
         allowed_methods = ['get', 'post', 'put', 'delete']
 
 class ProjectWorkersResource(ModelResource):
-    dispatcher = fields.ForeignKey(UserResource, 'dispatcher', full=True)
+    worker = fields.ForeignKey(UserResource, 'worker', full=True)
+    project=fields.ForeignKey(ProjectResource, 'project')
     class Meta:
 
         filtering = {
-            'dispatcher': ALL_WITH_RELATIONS,
+            'worker': ALL_WITH_RELATIONS,
         }
         queryset = ProjectWorkers.objects.all()
-        resource_name = 'project_dispatchers'
+        resource_name = 'project_workers'
         authorization = Authorization()
         authentication = BasicAuthentication()
         allowed_methods = ['get', 'post', 'put', 'delete']

@@ -104,7 +104,7 @@ def view_app(
     instance = _resolve_appinstance(
         request, instance_id, 'base.view_resourcebase', _PERMISSION_MSG_VIEW)
     context.update({
-        "map_config": instance.map.viewer_json(request.user, None),
+        # "map_config": instance.map.viewer_json(request.user, None),
         "instance": instance
     })
     return render(request, template, context)

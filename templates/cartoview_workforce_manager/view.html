@@ -1,53 +1,34 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ instance.title }}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <style>
-        html {
-            height: 100%;
-            margin: 0px;
-        }
-        body {
-            overflow: hidden;
-            height: 100%;
-            margin: 0px;
-        }
-        .no-js #loader {
-            display: none;
-        }
-        .js #loader {
-            display: block;
-            position: absolute;
-            left: 100px;
-            top: 0;
-        }
-        .se-pre-con {
-            position: fixed;
-            left: 0px;
-            top: 0px;
-            width: 100%;
-            height: 100%;
-            z-index: 9999;
-            background: url({% static 'cartoview_feature_list/img/loading.gif' %}) center no-repeat #fff;
-        }
-    </style>
-</head>
-<body>
-<div class="se-pre-con"></div>
+{% extends "app_manager/app_install_base.html" %}
+{% load bootstrap_tags staticfiles %}
+{% load i18n %}
 
-<div style="height:100%" id="root"></div>
+{% block title %} {{ block.super }} - {% trans "Basic Viewer" %} {% endblock %}
+{% block head %}
+    {% include "geonode/ext_header.html" %}
+    {% include "geonode/app_header.html" %}
+    {{ block.super }}
 
-<script>
-    var appConfig = {{ instance.config | safe }};
-    var map_id={{instance.map_id}};
-    var mapUrl = "{% url 'map_json' instance.map_id %}";
-    var geoserver_url = "{{ GEOSERVER_BASE_URL }}";
-    var abstract = " {% spaceless %}{{ instance.abstract|title }}{% endspaceless %} ";
-</script>
-<script src="{% static 'cartoview_workforce_manager/dist/ReactClient.bundle.js' %}"></script>
-</body>
-</html>
+{% endblock %}
+{% block body %}
+    <div id="page-wrapper">
+        <div class="container-fluid">
+          <div class="page-header">
+            <div class="row">
+              <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8"><span class="h1">Workforce Manager</span></div>
+            </div>
+
+          </div>
+            <div id="root"></div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block extra_script %}
+    <script src="{{ STATIC_URL }}cartoview_workforce_manager/dist/ReactClient.bundle.js"></script>
+    <script>
+    var username="{{request.user.username}}"
+ 
+    </script>
+  
+
+{% endblock %}
