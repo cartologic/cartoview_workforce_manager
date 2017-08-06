@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import t from 'tcomb-form';
 
-import KeywordsInput from './KeywordsInput.jsx'
 
 
 const projectConfig = t.struct({ title: t.String, abstract: t.String,  });

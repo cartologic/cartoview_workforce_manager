@@ -14,7 +14,7 @@
         <div class="container-fluid">
           <div class="page-header">
             <div class="row">
-              <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8"><span class="h1">Workforce Manager</span></div>
+              <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8"><span class="h3">Workforce Manager</span></div>
             </div>
 
           </div>
@@ -24,11 +24,13 @@
 
 {% endblock %}
 {% block extra_script %}
-    <script src="{{ STATIC_URL }}cartoview_workforce_manager/dist/ReactClient.bundle.js"></script>
+    
     <script>
     var username="{{request.user.username}}"
+    var id= {{id}}
+  console.log("id",id)
  
     </script>
-  
+  <script src="{{ STATIC_URL }}cartoview_workforce_manager/dist/ReactClient.bundle.js"></script>
 
 {% endblock %}

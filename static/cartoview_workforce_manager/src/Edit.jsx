@@ -1,13 +1,9 @@
 import React, { Component } from 'react'
 import './css/app.css'
 import Navigator from './components/Navigator.jsx'
-import ResourceSelector from './components/ResourceSelector.jsx'
+
 import General from './components/General.jsx'
-import NavigationTools from './components/NavigationTools.jsx'
-import Dispatchers from './components/dispatchers.jsx'
-import Workers from './components/workers.jsx'
-import ListOptions from './components/ListOptions.jsx'
-import EditService from './services/editService.jsx'
+
 import { getCRSFToken, hasTrailingSlash } from './helpers/helpers.jsx'
 
 export default class Edit extends Component {
