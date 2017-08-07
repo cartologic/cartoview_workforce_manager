@@ -2,8 +2,7 @@
 from __future__ import unicode_literals
 from django.contrib.gis.db import models
 from django.conf import settings
-from django.contrib.auth import get_user_model
-from jsonfield import JSONField
+from django.db.models import signals
 from cartoview.app_manager.models import AppInstance
 User = settings.AUTH_USER_MODEL
 class Project(AppInstance):
@@ -58,3 +57,7 @@ class Task(models.Model):
         choices=STATUS_CHOICES,
         default=1,
     )
+def appinstance_post_save(instance, *args, **kwargs):
+    if not isinstance(instance, AppInstance):
+        return True
+signals.post_save.connect(appinstance_post_save,sender=Project)

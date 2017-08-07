@@ -9,7 +9,8 @@ from django.conf.urls import url
 from django.contrib.auth import get_user_model
 from .customAuth import CustomAuthorization
 User = get_user_model()
-
+from geonode.api.api import ProfileResource
+from geonode.people.models import Profile
 
 
 class UserResource(ModelResource):
@@ -26,7 +27,17 @@ class UserResource(ModelResource):
 class ProjectResource(ModelResource):
     created_by = fields.ForeignKey(UserResource, 'created_by')
     dispatchers = fields.ManyToManyField(UserResource, 'dispatchers', full=True, readonly=True)
-
+    owner = fields.ForeignKey(
+        ProfileResource, 'owner', full=True, null=True, blank=True)
+    def hydrate_owner(self, bundle):
+        print bundle
+        # owner, created = Profile.objects.get_or_create(
+        #     username=bundle.data['owner'])
+        # bundle.data['owner'] = owner
+        bundle.obj.owner = bundle.request.user
+        return bundle
+    def dehydrate_owner(self, bundle):
+        return bundle.obj.owner.username
     def get_tasks(self, request, **kwargs):
         if request.method == 'DELETE':
             return TaskResource().delete_list(request, project=kwargs['pk'])
@@ -72,6 +83,7 @@ class ProjectResource(ModelResource):
 
     def hydrate(self, bundle):
         bundle.obj.created_by = bundle.request.user
+
         return bundle
 
     class Meta:

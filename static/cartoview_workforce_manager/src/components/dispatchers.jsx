@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import t from 'tcomb-form';
 import { getCRSFToken, hasTrailingSlash } from '../helpers/helpers.jsx'
 
-import KeywordsInput from './KeywordsInput.jsx'
-
 
 
 export default class Dispatchers extends Component {
