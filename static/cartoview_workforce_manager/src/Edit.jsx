@@ -4,7 +4,7 @@ import Navigator from './components/Navigator.jsx'
 
 import General from './components/General.jsx'
 import EditService from './services/editService'
-import { getCRSFToken, hasTrailingSlash } from './helpers/helpers.jsx'
+import { getCRSFToken} from './helpers/helpers.jsx'
 import Dispatchers from './components/dispatchers.jsx'
 import Workers from './components/workers.jsx'
 
