@@ -110,6 +110,13 @@ class TaskResource(ModelResource):
         bundle.obj.created_by = bundle.request.user
         return bundle
 
+    def dehydrate_created_by(self, bundle):
+        bundle.data['created_by'] = {'username': bundle.obj.created_by.username}
+        return bundle.data['created_by']
+
+    def dehydrate_assigned_to(self, bundle):
+        bundle.data['assigned_to'] = {'username': bundle.obj.assigned_to.username}
+        return bundle.data['assigned_to']
     class Meta:
         filtering = {
             'created_by': ALL_WITH_RELATIONS,

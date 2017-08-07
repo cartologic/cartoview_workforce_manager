@@ -108,7 +108,7 @@ handleChange(e){
 							}
 							
 						}
-				 />{item.username } {console.log("this",this)}</label> <br/></div>
+				 />{item.username }</label> <br/></div>
 
             })
         }</div>}

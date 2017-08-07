@@ -6,8 +6,8 @@ class CustomAuthorization(Authorization):
     def read_list(self, object_list, bundle):
         # This assumes a ``QuerySet`` from ``ModelResource``.
         print(bundle.request.user)
-        # return object_list
-        return object_list.filter(created_by=bundle.request.user)
+        return object_list
+        #return object_list.filter(created_by=bundle.request.user)
 
     def read_detail(self, object_list, bundle):
         # Is the requested object owned by the user?
