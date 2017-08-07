@@ -12,7 +12,7 @@ class CustomAuthorization(Authorization):
     def read_detail(self, object_list, bundle):
         # Is the requested object owned by the user?
         # return bundle.obj.created_by == bundle.request.user
-        pass
+        return True
     def create_list(self, object_list, bundle):
         # Assuming they're auto-assigned to ``user``.
         return object_list
