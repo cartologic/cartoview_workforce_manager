@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {getCRSFToken} from '../helpers/helpers.jsx'
-
+import '../css/project.css'
 export default class ProjectDetails extends Component {
     constructor(props) {
         super(props)
@@ -42,24 +42,24 @@ console.log(this.props)
 
                 {this.state.project && < div className="col-md-8">
                 <ul className="list-group">
-                    <li className="list-group-item"><b>project abstract:</b> {this.state.project.title}</li>
-                    <li className="list-group-item"><b>project abstract:</b> {this.state.project.abstract}</li>
-                    <li className="list-group-item"><b>project was created by:</b> {this.state.project.owner}</li>
-                    <li className="list-group-item"><b>project Dispatchers:</b> <div style={{'padding': '3%'}} >
-                                                                                 <ul style={{"listStyleType":"square"}}>
+                    <li className="list-group-item"><div className="headers"><b>Project Title:</b></div> {this.state.project.title}</li>
+                    <li className="list-group-item"><div className="headers"><b>Project Abstract:</b></div> {this.state.project.abstract}</li>
+                    <li className="list-group-item"> <div className="headers"><b>Project was created by:</b> </div>{this.state.project.owner}</li>
+                    <li className="list-group-item"> <div className="headers"><b>Project Dispatchers:</b> </div><div style={{'padding': '3%'}} >
+                                                                                 <ul style={{"listStyleType":"disc"}}>
                                                                                   { this.props.workers.map((worker,i)=>{
                                                                                     console.log(worker)
                                                                                      return <li key={i} >{worker.worker.username}</li>
                                                                                    })}
 
                                                                                     </ul></div></li>
-                    <li className="list-group-item"><b>project workers :</b>
+                                                                                  <li className="list-group-item"> <div className="headers"><b>project workers :</b></div>
 
 
                       <div style={{'padding': '3%'}} >
-                                                                                  <ul style={{"listStyleType":"square"}}>
+                                                                                  <ul style={{"listStyleType":"disc"}}>
                                                                                    { this.props.project.dispatchers.map((dispatcher,i)=>{
-                                                                                     
+
                                                                                       return <li key={i} >{dispatcher.username}</li>
                                                                                     })}
 
