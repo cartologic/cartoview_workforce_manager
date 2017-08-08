@@ -24,7 +24,18 @@ const assign= t.enums({
 
 });
 
+const options = {
+	fields: {
+			description: {
 
+				type: "textarea",
+
+				attrs:{
+					rows:"4"
+				}
+		}
+	}
+};
 
 export default class AddTask extends Component {
 	constructor( props ) {
@@ -57,13 +68,14 @@ export default class AddTask extends Component {
                          const Person = t.struct({
                               title: t.String,
                               short_description: t.String,
-                              Description: t.String,
+                              description: t.String,
                               assigned_to :t.enums(tCombEnum),
                               due_date: t.Date,
                               priority: Priority ,
                               status: Status,// enum,
 
                         })
+
                             this.setState({person:Person})
 
 					 })
@@ -83,8 +95,7 @@ export default class AddTask extends Component {
     	var project={"project":{"pk":id}}
 
 var copy = Object.assign(project, value);
-        console.log("@@@@@",copy)
-		console.log(JSON.stringify(copy))
+
    var url='/apps/cartoview_workforce_manager/api/v1/task/'
 
 		 fetch(url,{method:"POST",
@@ -113,6 +124,7 @@ var copy = Object.assign(project, value);
                     <br/>
                     {this.state.person && <Form
                     ref="form"
+										options={options}
                     type={this.state.person}
 
                     />}
