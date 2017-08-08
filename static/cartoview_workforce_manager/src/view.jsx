@@ -41,12 +41,13 @@ export default class ReactClient extends React.Component {
 		return (
 			<div className="container ">
   
-  <ul className="nav nav-tabs">
+  <ul className="nav nav-pills">
     <li className="active"><a data-toggle="tab" href="#home">Tasks</a></li>
     <li><a data-toggle="tab" href="#menu1">New Task</a></li>
     <li><a data-toggle="tab" href="#menu2">Ptoject Details </a></li>
     <li><a data-toggle="tab" href="#menu3">Edit Project</a></li>
   </ul>
+				<hr/>
 	  <div className="tab-content">
     <div id="home" className="tab-pane fade in active">
       <Tasks id={id} />
