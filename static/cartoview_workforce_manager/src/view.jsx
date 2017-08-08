@@ -117,7 +117,7 @@ loadWorkers=()=>{
      <AddTask />
     </div>
     <div id="menu2" className="tab-pane fade">
-      <ProjectDetails id={id} project={this.state.project} workers={this.state.workers}/>
+      {this.state.workers && this.state.project && <ProjectDetails id={id} project={this.state.project} workers={this.state.workers}/>}
 		</div>
     <div id="menu3" className="tab-pane fade">
       <ProjectEdit />

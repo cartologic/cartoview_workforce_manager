@@ -31,7 +31,9 @@ export default class ProjectDetails extends Component {
             });
 
     }
-
+    componentDidMount( ) {
+console.log(this.props)
+  	}
 
     render() {
         return (
@@ -43,8 +45,26 @@ export default class ProjectDetails extends Component {
                     <li className="list-group-item"><b>project abstract:</b> {this.state.project.title}</li>
                     <li className="list-group-item"><b>project abstract:</b> {this.state.project.abstract}</li>
                     <li className="list-group-item"><b>project was created by:</b> {this.state.project.owner}</li>
-                    <li className="list-group-item"><b>project Dispatchers:</b> {}</li>
-                    <li className="list-group-item"><b>project workers :</b> {}</li>
+                    <li className="list-group-item"><b>project Dispatchers:</b> <div style={{'padding': '3%'}} >
+                                                                                 <ul style={{"listStyleType":"square"}}>
+                                                                                  { this.props.workers.map((worker,i)=>{
+                                                                                    console.log(worker)
+                                                                                     return <li key={i} >{worker.worker.username}</li>
+                                                                                   })}
+
+                                                                                    </ul></div></li>
+                    <li className="list-group-item"><b>project workers :</b>
+
+
+                      <div style={{'padding': '3%'}} >
+                                                                                  <ul style={{"listStyleType":"square"}}>
+                                                                                   { this.props.project.dispatchers.map((dispatcher,i)=>{
+                                                                                     
+                                                                                      return <li key={i} >{dispatcher.username}</li>
+                                                                                    })}
+
+                                                                                     </ul></div>
+                    </li>
                 </ul>
 
 </div>
