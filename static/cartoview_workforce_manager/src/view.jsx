@@ -120,7 +120,7 @@ loadWorkers=()=>{
       {this.state.workers && this.state.project && <ProjectDetails id={id} project={this.state.project} workers={this.state.workers}/>}
 		</div>
     <div id="menu3" className="tab-pane fade">
-      { this.state.project && <ProjectEdit project={this.state.project} />}
+        {this.state.workers &&this.state.project && <ProjectEdit project={this.state.project} workers={this.state.workers}/>}
 			 </div>
   </div>
 </div>

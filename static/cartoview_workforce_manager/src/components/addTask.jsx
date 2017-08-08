@@ -120,7 +120,7 @@ var copy = Object.assign(project, value);
 		return (
 			<div>
 			<div className="col-md-2"></div>
-                {!this.state.success && < div className="col-md-8">
+                {!this.state.success && < div className="col-md-8 well">
                     <br/>
                     {this.state.person && <Form
                     ref="form"
