@@ -35,10 +35,10 @@ export default class ProjectDetails extends Component {
 
     render() {
         return (
-            <div>
-                {this.state.project &&
+          <div>
+          <div className="col-md-2"></div>
 
-
+                {this.state.project && < div className="col-md-8">
                 <ul className="list-group">
                     <li className="list-group-item"><b>project abstract:</b> {this.state.project.title}</li>
                     <li className="list-group-item"><b>project abstract:</b> {this.state.project.abstract}</li>
@@ -47,9 +47,9 @@ export default class ProjectDetails extends Component {
                     <li className="list-group-item"><b>project workers :</b> {}</li>
                 </ul>
 
-
+</div>
                 }
-
+          <div className="col-md-2"></div>
             </div> )
     }
 }

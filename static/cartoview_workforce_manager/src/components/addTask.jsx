@@ -37,7 +37,7 @@ export default class AddTask extends Component {
 
 
 
-         var url='/apps/cartoview_workforce_manager/api/v1/user/'
+         var url='/apps/cartoview_workforce_manager/api/v1/project/'+id+"/workers"
 		 fetch(url,{method:"GET",headers:new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken( ),"Authorization":"Basic YWRtaW46YWRtaW4="})})
                     .then(function(response) {
                         if (response.status >= 400) {
@@ -50,7 +50,7 @@ export default class AddTask extends Component {
                      this.setState({assign :data.objects},()=>{
                     	var tCombEnum={}
                                 this.state.assign.forEach((user)=>{
-                                    tCombEnum[user.resource_uri]=user.username
+                                    tCombEnum[user.worker.resource_uri]=user.worker.username
                                 }
 
     )

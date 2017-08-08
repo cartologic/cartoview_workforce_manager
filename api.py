@@ -141,6 +141,7 @@ class ProjectDispatchersResource(ModelResource):
 
         filtering = {
             'dispatcher': ALL_WITH_RELATIONS,
+            'project':ALL_WITH_RELATIONS,
         }
         queryset = ProjectDispatchers.objects.all()
         resource_name = 'project_dispatchers'
@@ -155,6 +156,7 @@ class ProjectWorkersResource(ModelResource):
 
         filtering = {
             'worker': ALL_WITH_RELATIONS,
+            'project':ALL_WITH_RELATIONS,
         }
         queryset = ProjectWorkers.objects.all()
         resource_name = 'project_workers'

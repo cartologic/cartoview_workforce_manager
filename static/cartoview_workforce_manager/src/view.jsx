@@ -12,17 +12,76 @@ import TaskDetails from './components/taskDetails';
 import ProjectDetails from './components/ProjectDetails';
 import ProjectEdit from './components/projectEdit';
 import Tasks from './components/tasks';
+import { getCRSFToken} from './helpers/helpers.jsx'
 injectTapEventPlugin( );
 addLocaleData( enLocaleData );
 export default class ReactClient extends React.Component {
 	constructor( props ) {
 		super( props )
 		this.state = {
-		
+			project: "",
+      tasks:"",
+			workers:"",
+			dispatchers:""
 		}
-	
+    this.loadProject()
+    this.loadWorkers()
 	console.log("props",id)
 	}
+
+
+	loadProject=()=>{
+
+		var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id
+		console.log(url)
+		fetch(url, {
+				method: "GET",
+				headers: new Headers({
+						"Content-Type": "application/json; charset=UTF-8",
+						"X-CSRFToken": getCRSFToken(),
+						"Authorization": "Basic YWRtaW46YWRtaW4="
+				})
+		})
+				.then(function (response) {
+						if (response.status >= 400) {
+								throw new Error("Bad response from server");
+						}
+						return response.json();
+				})
+				.then((data) => {
+						console.log(data)
+						this.setState({project: data})
+				});
+}
+
+
+
+
+loadWorkers=()=>{
+
+	var url = '/apps/cartoview_workforce_manager/api/v1/project/'+id+"/workers"
+	console.log(url)
+	fetch(url, {
+			method: "GET",
+			headers: new Headers({
+					"Content-Type": "application/json; charset=UTF-8",
+					"X-CSRFToken": getCRSFToken(),
+					"Authorization": "Basic YWRtaW46YWRtaW4="
+			})
+	})
+			.then(function (response) {
+					if (response.status >= 400) {
+							throw new Error("Bad response from server");
+					}
+					return response.json();
+			})
+			.then((data) => {
+					console.log(data.objects)
+					this.setState({workers: data.objects})
+			});
+}
+
+
 
 	componentWillMount( ) {
 
@@ -31,16 +90,18 @@ export default class ReactClient extends React.Component {
 		return {muiTheme: getMuiTheme( CustomTheme )};
 	}
 	componentDidMount( ) {
-	
+
 	}
 	_toggleBaseMapModal( ) {
-		
+
 	}
 	render( ) {
-		
+
 		return (
 			<div className="container ">
-  
+<br/>
+				<span className="h4">{this.state.project.title}</span>
+				<hr/>
   <ul className="nav nav-pills">
     <li className="active"><a data-toggle="tab" href="#home">Tasks</a></li>
     <li><a data-toggle="tab" href="#menu1">New Task</a></li>
@@ -53,10 +114,10 @@ export default class ReactClient extends React.Component {
       <Tasks id={id} />
 	    </div>
     <div id="menu1" className="tab-pane fade">
-     <AddTask/>
+     <AddTask />
     </div>
     <div id="menu2" className="tab-pane fade">
-      <ProjectDetails id={id}/>
+      <ProjectDetails id={id} project={this.state.project} workers={this.state.workers}/>
 		</div>
     <div id="menu3" className="tab-pane fade">
       <ProjectEdit />
