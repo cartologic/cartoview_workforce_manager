@@ -1,7 +1,7 @@
 from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 from tastypie.authorization import Authorization
 from tastypie.authentication import BasicAuthentication
-from .models import Task, Project, ProjectDispatchers,ProjectWorkers,Comment
+from .models import Task, Project, ProjectDispatchers,ProjectWorkers,Comment,Attachment
 from tastypie import fields
 from django.core.urlresolvers import reverse
 from tastypie.utils import trailing_slash
@@ -11,7 +11,12 @@ from .customAuth import CustomAuthorization
 User = get_user_model()
 from geonode.api.api import ProfileResource
 from geonode.people.models import Profile
+import base64
+import os
+import mimetypes
 
+from django.core.files.uploadedfile import SimpleUploadedFile
+from tastypie import fields
 
 class UserResource(ModelResource):
     class Meta:
@@ -215,4 +220,81 @@ class CommentResource(ModelResource):
         authorization = Authorization()
         authentication = BasicAuthentication()
         allowed_methods = ['get', 'post', 'put', 'delete']
-  
+ 
+class Base64FileField(fields.FileField):            
+        def __init__(self, *args, **kwargs):
+                self.return64 = kwargs.pop('return64', False)
+                super(Base64FileField, self).__init__(*args, **kwargs)
+
+        def _url(self, obj):
+            instance = getattr(obj, self.instance_name, None)
+            try:
+                url = getattr(instance, 'url', None)
+            except ValueError:
+                url = None
+            return url
+
+        def dehydrate(self, bundle, **kwargs):
+            if not self.return64:
+                return self._url(bundle.obj)
+            else:
+                if (not self.instance_name in bundle.data
+                        and hasattr(bundle.obj, self.instance_name)):
+                    file_field = getattr(bundle.obj, self.instance_name)
+                    if file_field:
+                        content_type, encoding = mimetypes.guess_type(
+                            file_field.file.name)
+                        b64 = open(
+                            file_field.file.name, "rb").read().encode("base64")
+                        ret = {"name": os.path.basename(file_field.file.name),
+                            "file": b64,
+                            "content-type": (content_type or
+                                                "application/octet-stream")}
+                        return ret
+                return None
+
+        def hydrate(self, obj):
+            value = super(Base64FileField, self).hydrate(obj)
+            if value and isinstance(value, dict):
+                return SimpleUploadedFile(value["name"],
+                                        base64.b64decode(value["file"]),
+                                        value.get("content_type",
+                                                    "application/octet-stream"))
+            elif isinstance(value, basestring):
+                if value == self._url(obj.obj):
+                    return getattr(obj.obj, self.instance_name).name
+                return value
+            else:
+                return None   
+
+class MultiPartResource(ModelResource):
+                user= fields.ForeignKey(UserResource, 'user', full=True)
+                task=fields.ForeignKey(TaskResource, 'task')
+                
+                def hydrate_user(self, bundle):
+                    bundle.obj.user= bundle.request.user
+                    return bundle
+                class Meta:
+
+                    filtering = {
+                        'user': ALL_WITH_RELATIONS,
+                        'task':ALL_WITH_RELATIONS,
+                    }
+                    queryset = Attachment.objects.all()
+                    resource_name = 'attachment'
+                    authorization = Authorization()
+                    authentication = BasicAuthentication()
+                    allowed_methods = ['get', 'post', 'put', 'delete']
+                def deserialize(self, request, data, format=None):
+                    if not format:
+                        format = request.META.get('CONTENT_TYPE', 'application/json')
+
+                    if format == 'application/x-www-form-urlencoded':
+                        return request.POST
+
+                    if format.startswith('multipart'):
+                        print("req",request.POST)
+                        data = request.POST.copy()
+                        data.update(request.FILES)
+                        return data
+                    # return super(MultipartResource, self).deserialize(request, data, format)

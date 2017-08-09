@@ -19,6 +19,7 @@
     "react-addons-transition-group": "^15.5.2",
     "react-dom": "^15.5.4",
     "react-image": "^1.0.1",
+    "react-image-uploader": "^1.0.0",
     "react-intl": "^2.3.0",
     "react-paginate": "^4.4.3",
     "react-select": "^1.0.0-rc.5",

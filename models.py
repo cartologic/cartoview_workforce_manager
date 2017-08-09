@@ -63,7 +63,12 @@ class Comment(models.Model):
             commenter = models.ForeignKey(User, related_name='%(class)s_requests_commenter', on_delete=models.CASCADE)
             comment = models.TextField(blank=True, null=True)
             task =models.ForeignKey(Task, on_delete=models.CASCADE)
+            
 
+class Attachment(models.Model):
+    task =models.ForeignKey(Task, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='%(class)s_requests_user', on_delete=models.CASCADE)
+    image = models.FileField()
 
 def appinstance_post_save(instance, *args, **kwargs):
     if not isinstance(instance, AppInstance):

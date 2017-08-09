@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Comments from './comments';
+import Attachments from './attachments.jsx';
 
 export default class Details extends Component {
 	constructor( props ) {
@@ -113,7 +114,7 @@ export default class Details extends Component {
 	
 	  <div className="panel panel-default">
       <div className="panel-heading">Attachments</div>
-      <div className="panel-body">Panel Content</div>
+      <div className="panel-body"><Attachments task={this.props.task.id}/></div>
     </div>
 	
 	  <div className="panel panel-default">
