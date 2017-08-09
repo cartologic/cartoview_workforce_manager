@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-
+import Details from './details.jsx';
+import Edit from './edit.jsx';
 
 export default class TaskDetails extends Component {
 	constructor( props ) {
@@ -12,11 +13,30 @@ export default class TaskDetails extends Component {
 
 	render( ) {
 		return (  
+<div >
+	
+			<div className="panel panel-default  ">
+<br/>
+ <ul className="nav nav-tabs">
 
+  <li className="active"><a data-toggle="tab" href="#detail">Details</a></li>
+  <li><a data-toggle="tab" href="#edit">Edit</a></li>
 
- <p>task detail</p>
+</ul>
 
+<div className="tab-content">
+  <div id="detail" className="tab-pane fade in active">
+   <Details task={this.props.task}/>
+  </div>
+  <div id="edit" className="tab-pane fade">
+  <br/>
+    <Edit task={this.props.task}/>
+  </div>
 
+</div>
+</div>
+	
+</div>
 		 )
 	}
 }

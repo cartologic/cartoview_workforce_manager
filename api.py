@@ -20,7 +20,8 @@ class UserResource(ModelResource):
         authentication = BasicAuthentication()
         resource_name = 'user'
         filtering = {
-            'username': ALL
+            'username': ALL,
+           
         }
 
 
@@ -103,7 +104,7 @@ class ProjectResource(ModelResource):
 
 class TaskResource(ModelResource):
     created_by = fields.ForeignKey(UserResource, 'created_by')
-    assigned_to = fields.ForeignKey(UserResource, 'assigned_to')
+    assigned_to = fields.ForeignKey(UserResource, 'assigned_to',full=True)
     project = fields.ForeignKey(ProjectResource, 'project', full=True)
 
     def hydrate_created_by(self, bundle):
@@ -111,12 +112,15 @@ class TaskResource(ModelResource):
         return bundle
 
     def dehydrate_created_by(self, bundle):
-        bundle.data['created_by'] = {'username': bundle.obj.created_by.username}
+        bundle.data['created_by'] = {'username': bundle.obj.created_by.username,}
         return bundle.data['created_by']
 
     def dehydrate_assigned_to(self, bundle):
-        bundle.data['assigned_to'] = {'username': bundle.obj.assigned_to.username}
-        return bundle.data['assigned_to']
+       
+    
+         #print("assignto deh",bundle.obj.assigned_to.__dict__)
+         bundle.data['assigned_to'] = {'username': bundle.obj.assigned_to.username}
+         return bundle.data['assigned_to']
     class Meta:
         filtering = {
             'created_by': ALL_WITH_RELATIONS,

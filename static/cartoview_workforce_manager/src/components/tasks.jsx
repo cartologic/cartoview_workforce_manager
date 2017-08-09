@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { getCRSFToken, hasTrailingSlash } from '../helpers/helpers.jsx'
-
+import TaskDetails from './taskDetails.jsx'
 export default class Tasks extends Component {
 	constructor( props ) {
 		super( props )
 		this.state={
 			 tasks: [],
-			selectedtask:""
+			selectedtask:null
 		 }
         var url='/apps/cartoview_workforce_manager/api/v1/project/'+this.props.id+'/tasks'
 		 fetch(url,{method:"GET",headers:new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken( ),"Authorization":"Basic YWRtaW46YWRtaW4="})})
@@ -21,10 +21,7 @@ export default class Tasks extends Component {
                      this.setState({tasks:data.objects})
                     });
 
-
 	}
-
-
 	
 
 	render( ) {
@@ -33,7 +30,7 @@ export default class Tasks extends Component {
 <div className="container">
  
        <br/>
-    {this.state.tasks.length!=0 && <table className="table table-hover table-bordered table-responsive">
+    {this.state.tasks.length!=0 && !this.state.selectedtask &&<table className="table table-hover table-bordered table-responsive">
     <thead>
       <tr>
         <th>Title </th>
@@ -50,7 +47,7 @@ export default class Tasks extends Component {
 
  { this.state.tasks.map((item,i) =>{
 
-       return <tr key="i">
+       return <tr key={i} onClick={()=>{this.setState({"selectedtask":item})}}>
                 <td>{item.title}</td>
                 <td>{item.short_description}</td>
                 <td>{item.created_by.username}</td>
@@ -81,6 +78,17 @@ export default class Tasks extends Component {
       
     </tbody>
   </table>}
+
+{this.state.selectedtask &&  
+<div>
+<div className="col-md-1"></div>
+<div className="col-md-10">
+<button className="btn btn-link" onClick={()=>{this.setState({"selectedtask":null})}}><span className="glyphicon glyphicon-chevron-left"></span>Back To List View</button>
+
+<TaskDetails task={this.state.selectedtask} />
+</div>
+<div className="col-md-1"></div>
+</div>}
 
     {!this.state.tasks.length && <div>
         <p>No tasks yet for this project</p>

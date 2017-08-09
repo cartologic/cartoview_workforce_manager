@@ -4,20 +4,39 @@ import React, { Component } from 'react';
 export default class ProjectEdit extends Component {
 	constructor( props ) {
 		super( props )
-
+this.state={
+	success:false,
+}
 	}
 
 
 save=()=>{
 console.log("title",this.refs.title.value)
-console.log("title",this.refs.abstract)
+console.log("title",this.refs.abstrac)
+
+var project={"title":this.refs.title.value,"abstract":this.refs.abstrac.value}
+var url='/apps/cartoview_workforce_manager/api/v1/project/'+id
+		 fetch(url,{method:"PUT",headers:new Headers({"Content-Type": "application/json; charset=UTF-8","Authorization":"Basic YWRtaW46YWRtaW4="})
+		 ,body:JSON.stringify(project)})
+                    .then(function(response) {
+                        if (response.status >= 400) {
+                        throw new Error("Bad response from server");
+                        }
+                        return response.json();
+                    })
+                    .then((data)=> {
+                
+                     this.setState({success:true})
+                    });
+
+
 }
 
 	render( ) {
 		return (<div className="container">
 						<div className="col-md-2"></div>
 			<div className="well col-md-8">
-<div className="headers"><b>Edit general </b></div>
+<div className="headers"><b>General Edit </b></div>
 			    <div className="form-group">
 						<br/>
 			      <label>Project Title</label>
@@ -25,9 +44,14 @@ console.log("title",this.refs.abstract)
 			    </div>
 			    <div className="form-group" >
 			      <label>Project Abstract</label>
-			      <input className="form-control"  ref="abstract" id="pwd"  defaultValue={this.props.project.abstract}/>
+			      <input className="form-control"  ref="abstrac" id="pwd"  defaultValue={this.props.project.abstract}/>
 			    </div>
  <button type="button" className="btn btn-primary" style={{"pullRight":"true" }} onClick={this.save}>Save</button>
+{this.state.success&&
+  <div className="alert alert-info">
+    your changed was saved successfully.
+</div>
+}
 
 
 <hr/>
@@ -49,28 +73,6 @@ console.log("title",this.refs.abstract)
 
 
 
-	<ul className="list-group">
-			 <div className="headers"><b>Edit Project Dispatchers</b> </div><div style={{'padding': '3%'}} >
-																																	 <ul style={{"listStyleType":"disc"}}>
-																																		{ this.props.workers.map((worker,i)=>{
-																																			console.log(worker)
-																																			 return <li key={i} >{worker.worker.username}</li>
-																																		 })}
-
-																																			</ul></div>
-																																	<div className="headers"><b>Edit project workers </b></div>
-
-
-				<div style={{'padding': '3%'}} >
-																																		<ul style={{"listStyleType":"disc"}}>
-																																		 { this.props.project.dispatchers.map((dispatcher,i)=>{
-
-																																				return <li key={i} >{dispatcher.username}</li>
-																																			})}
-
-																																			 </ul></div>
-
-	</ul>
 
 
 

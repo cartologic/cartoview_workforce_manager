@@ -34,7 +34,7 @@ class CustomAuthorization(Authorization):
 
     def update_detail(self, object_list, bundle):
         # return bundle.obj.created_by == bundle.request.user
-        pass
+        return True
     def delete_list(self, object_list, bundle):
 
         return bundle.obj.created_by == bundle.request.user
