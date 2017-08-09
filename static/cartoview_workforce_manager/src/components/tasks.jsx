@@ -11,10 +11,11 @@ export default class Tasks extends Component {
         var url='/apps/cartoview_workforce_manager/api/v1/project/'+this.props.id+'/tasks'
 		 fetch(url,{method:"GET",headers:new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken( ),"Authorization":"Basic YWRtaW46YWRtaW4="})})
                     .then(function(response) {
+                      
                         if (response.status >= 400) {
                         throw new Error("Bad response from server");
                         }
-                        return response.json();
+                         return response.json();
                     })
                     .then((data)=> {
                     console.log(data.objects)
@@ -47,7 +48,7 @@ export default class Tasks extends Component {
 
  { this.state.tasks.map((item,i) =>{
 
-       return <tr key={i} onClick={()=>{this.setState({"selectedtask":item})}}>
+       return <tr key={i} onClick={()=>{this.setState({"selectedtask":item})}} style={{"cursor": "pointer"}}>
                 <td>{item.title}</td>
                 <td>{item.short_description}</td>
                 <td>{item.created_by.username}</td>

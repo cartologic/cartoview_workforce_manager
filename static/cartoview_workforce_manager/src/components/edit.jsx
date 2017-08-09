@@ -50,7 +50,8 @@ export default class Edit extends Component {
                         assigned_to :"/apps/cartoview_workforce_manager/api/v1/user/1001/",
                         due_date: new Date(this.props.task.due_date),
                         priority: this.props.task.priority ,
-                        status: this.props.task.status          
+                        status: this.props.task.status   ,
+                        work_order:this.props.task.work_order       
                     }
                         
                         
@@ -83,6 +84,7 @@ export default class Edit extends Component {
                               short_description: t.String,
                               description: t.String,
                               assigned_to :t.enums(tCombEnum),
+                              work_order:t.maybe(t.Integer),
                               due_date: t.Date,
                               priority: Priority ,
                               status: Status,// enum,

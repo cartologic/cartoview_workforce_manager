@@ -1,7 +1,7 @@
 from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 from tastypie.authorization import Authorization
 from tastypie.authentication import BasicAuthentication
-from .models import Task, Project, ProjectDispatchers,ProjectWorkers
+from .models import Task, Project, ProjectDispatchers,ProjectWorkers,Comment
 from tastypie import fields
 from django.core.urlresolvers import reverse
 from tastypie.utils import trailing_slash
@@ -44,6 +44,7 @@ class ProjectResource(ModelResource):
             return TaskResource().delete_list(request, project=kwargs['pk'])
         elif request.method == 'GET':
             return TaskResource().get_list(request, project=kwargs['pk'])
+   
 
     def get_dispatchers(self, request, **kwargs):
 
@@ -71,6 +72,10 @@ class ProjectResource(ModelResource):
             url(r"^(?P<resource_name>%s)/(?P<pk>\w[\w/-]*)/workers%s$" % (
             self._meta.resource_name, trailing_slash()),
                 self.wrap_view('get_workers'), name="api_get_project_dispatchers")
+                ,
+            url(r"^(?P<resource_name>%s)/(?P<pk>\w[\w/-]*)/comments%s$" % (
+            self._meta.resource_name, trailing_slash()),
+                self.wrap_view('get_comments'), name="api_get_comments")
         ]
 
     def dehydrate(self, bundle):
@@ -112,15 +117,39 @@ class TaskResource(ModelResource):
         return bundle
 
     def dehydrate_created_by(self, bundle):
-        bundle.data['created_by'] = {'username': bundle.obj.created_by.username,}
+        bundle.data['created_by'] = {'username': bundle.obj.created_by.username}
         return bundle.data['created_by']
 
     def dehydrate_assigned_to(self, bundle):
-       
-    
-         #print("assignto deh",bundle.obj.assigned_to.__dict__)
+        #print("assignto deh",bundle.obj.assigned_to.__dict__)
          bundle.data['assigned_to'] = {'username': bundle.obj.assigned_to.username}
          return bundle.data['assigned_to']
+
+    def get_comments(self, request, **kwargs):
+            
+       
+        bundle = self.build_bundle(data={'pk': kwargs['pk']}, request=request)
+        obj = self.cached_obj_get(bundle=bundle, **self.remove_api_resource_names(kwargs))
+
+        child_resource = CommentResource()
+        return child_resource.get_list(request, task=obj.pk)    
+    def prepend_urls(self):
+            return [
+            url(r'^(?P<resource_name>%s)/(?P<pk>\w[\w/-]*)/tasks%s$' % (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('get_tasks'),
+                name='api_get_tasks_for_project'),
+            url(r"^(?P<resource_name>%s)/(?P<pk>\w[\w/-]*)/dispatchers%s$" % (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('get_dispatchers'), name="api_get_project_dispatchers"),
+            url(r"^(?P<resource_name>%s)/(?P<pk>\w[\w/-]*)/workers%s$" % (
+            self._meta.resource_name, trailing_slash()),
+                self.wrap_view('get_workers'), name="api_get_project_dispatchers")
+                ,
+            url(r"^(?P<resource_name>%s)/(?P<pk>\w[\w/-]*)/comments%s$" % (
+            self._meta.resource_name, trailing_slash()),
+                self.wrap_view('get_comments'), name="api_get_comments")
+        ] 
+    
+         
     class Meta:
         filtering = {
             'created_by': ALL_WITH_RELATIONS,
@@ -128,7 +157,8 @@ class TaskResource(ModelResource):
             'project': ["exact", ALL_WITH_RELATIONS],
             'status': ALL,
             'priority': ALL,
-            'description': ALL
+            'description': ALL,
+            'id':ALL
         }
 
         queryset = Task.objects.all()
@@ -167,3 +197,22 @@ class ProjectWorkersResource(ModelResource):
         authorization = Authorization()
         authentication = BasicAuthentication()
         allowed_methods = ['get', 'post', 'put', 'delete']
+
+class CommentResource(ModelResource):
+    commenter = fields.ForeignKey(UserResource, 'commenter', full=True)
+    task=fields.ForeignKey(TaskResource, 'task')
+    def hydrate_commenter(self, bundle):
+              bundle.obj.commenter = bundle.request.user
+              return bundle
+    class Meta:
+
+        filtering = {
+            'commenter': ALL_WITH_RELATIONS,
+            'task':ALL_WITH_RELATIONS,
+        }
+        queryset = Comment.objects.all()
+        resource_name = 'comment'
+        authorization = Authorization()
+        authentication = BasicAuthentication()
+        allowed_methods = ['get', 'post', 'put', 'delete']
+  
