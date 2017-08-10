@@ -89,9 +89,8 @@ export default class AddTask extends Component {
 
 
 	 save() {
-    // call getValue() to get the values of the form
-    var value = this.refs.form.getValue();
 
+    var value = this.refs.form.getValue();
     if (value) {
     	var project={"project":{"pk":id}}
 
@@ -109,7 +108,7 @@ var copy = Object.assign(project, value);
                         throw new Error("Bad response from server");
                         }
 
-                    })
+                    }).then(()=>{this.setState({"success":true})})
 
 
 

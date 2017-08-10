@@ -1,0 +1,7 @@
+{this.state.attachments.map((attach,i)=>{
+
+return <div className="item active" key={i}>
+   <img src={attach.image}  style={{"width":"100%"}}/>
+ </div>
+
+}) }
