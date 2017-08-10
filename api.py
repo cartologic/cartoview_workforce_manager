@@ -11,10 +11,11 @@ from .customAuth import CustomAuthorization
 User = get_user_model()
 from geonode.api.api import ProfileResource
 from geonode.people.models import Profile
+from cartoview.app_manager.resources import FileUploadResource
 import base64
 import os
 import mimetypes
-
+from tastypie.serializers import Serializer
 from django.core.files.uploadedfile import SimpleUploadedFile
 from tastypie import fields
 
@@ -26,7 +27,7 @@ class UserResource(ModelResource):
         resource_name = 'user'
         filtering = {
             'username': ALL,
-           
+
         }
 
 
@@ -49,7 +50,7 @@ class ProjectResource(ModelResource):
             return TaskResource().delete_list(request, project=kwargs['pk'])
         elif request.method == 'GET':
             return TaskResource().get_list(request, project=kwargs['pk'])
-   
+
 
     def get_dispatchers(self, request, **kwargs):
 
@@ -131,13 +132,13 @@ class TaskResource(ModelResource):
          return bundle.data['assigned_to']
 
     def get_comments(self, request, **kwargs):
-            
-       
+
+
         bundle = self.build_bundle(data={'pk': kwargs['pk']}, request=request)
         obj = self.cached_obj_get(bundle=bundle, **self.remove_api_resource_names(kwargs))
 
         child_resource = CommentResource()
-        return child_resource.get_list(request, task=obj.pk)    
+        return child_resource.get_list(request, task=obj.pk)
     def prepend_urls(self):
             return [
             url(r'^(?P<resource_name>%s)/(?P<pk>\w[\w/-]*)/tasks%s$' % (self._meta.resource_name, trailing_slash()),
@@ -152,9 +153,9 @@ class TaskResource(ModelResource):
             url(r"^(?P<resource_name>%s)/(?P<pk>\w[\w/-]*)/comments%s$" % (
             self._meta.resource_name, trailing_slash()),
                 self.wrap_view('get_comments'), name="api_get_comments")
-        ] 
-    
-         
+        ]
+
+
     class Meta:
         filtering = {
             'created_by': ALL_WITH_RELATIONS,
@@ -220,58 +221,77 @@ class CommentResource(ModelResource):
         authorization = Authorization()
         authentication = BasicAuthentication()
         allowed_methods = ['get', 'post', 'put', 'delete']
- 
-class Base64FileField(fields.FileField):            
-        def __init__(self, *args, **kwargs):
-                self.return64 = kwargs.pop('return64', False)
-                super(Base64FileField, self).__init__(*args, **kwargs)
 
-        def _url(self, obj):
-            instance = getattr(obj, self.instance_name, None)
-            try:
-                url = getattr(instance, 'url', None)
-            except ValueError:
-                url = None
-            return url
 
-        def dehydrate(self, bundle, **kwargs):
-            if not self.return64:
-                return self._url(bundle.obj)
-            else:
-                if (not self.instance_name in bundle.data
-                        and hasattr(bundle.obj, self.instance_name)):
-                    file_field = getattr(bundle.obj, self.instance_name)
-                    if file_field:
-                        content_type, encoding = mimetypes.guess_type(
-                            file_field.file.name)
-                        b64 = open(
-                            file_field.file.name, "rb").read().encode("base64")
-                        ret = {"name": os.path.basename(file_field.file.name),
-                            "file": b64,
-                            "content-type": (content_type or
-                                                "application/octet-stream")}
-                        return ret
-                return None
+class MultipartFormSerializer(Serializer):
 
-        def hydrate(self, obj):
-            value = super(Base64FileField, self).hydrate(obj)
-            if value and isinstance(value, dict):
-                return SimpleUploadedFile(value["name"],
-                                        base64.b64decode(value["file"]),
-                                        value.get("content_type",
-                                                    "application/octet-stream"))
-            elif isinstance(value, basestring):
-                if value == self._url(obj.obj):
-                    return getattr(obj.obj, self.instance_name).name
-                return value
-            else:
-                return None   
+    def __init__(self, *args, **kwargs):
+        self.content_types['file_upload'] = 'multipart/form-data'
+        self.formats.append('file_upload')
+        super(MultipartFormSerializer, self).__init__(*args, **kwargs)
 
-class MultiPartResource(ModelResource):
+    def from_file_upload(self, data, options=None):
+        request = options['request']
+        deserialized = {}
+        for k in request.POST:
+            deserialized[str(k)] = str(request.POST[k])
+        for k in request.FILES:
+            deserialized[str(k)] = request.FILES[k]
+        return deserialized
+
+    # add request param to extract files
+    def deserialize(self, content, request=None, format='application/json'):
+        """
+        Given some data and a format, calls the correct method to deserialize
+        the data and returns the result.
+        """
+        desired_format = None
+
+        format = format.split(';')[0]
+
+        for short_format, long_format in self.content_types.items():
+            if format == long_format:
+                if hasattr(self, "from_%s" % short_format):
+                    desired_format = short_format
+                    break
+
+        if desired_format is None:
+            raise UnsupportedFormat(
+                "The format indicated '%s' had no available deserialization\
+                 method. Please check your ``formats`` and ``content_types``\
+                  on your Serializer." %
+                format)
+
+        if isinstance(content,
+                      six.binary_type) and desired_format != 'file_upload':
+            content = force_text(content)
+
+        deserialized = getattr(self, "from_%s" % desired_format)(content, {
+            'request': request
+        })
+        return deserialized
+
+class MultiResource(object):
+   def deserialize(self, request, data, format=None):
+       if not format:
+           format = request.Meta.get('CONTENT_TYPE', 'application/json')
+       if format == 'application/x-www-form-urlencoded':
+           return request.POST
+       if format.startswith('multipart'):
+           data = request.POST.copy()
+           print (request.POST)
+           data.update(request.FILES)
+           return data
+       return super(MultiResource, self).deserialize(request, data, format)
+
+
+
+class MultiPartResource(MultiResource,ModelResource):
                 user= fields.ForeignKey(UserResource, 'user', full=True)
                 task=fields.ForeignKey(TaskResource, 'task')
-                
+
                 def hydrate_user(self, bundle):
+                    print (bundle.data)
                     bundle.obj.user= bundle.request.user
                     return bundle
                 class Meta:
@@ -285,16 +305,3 @@ class MultiPartResource(ModelResource):
                     authorization = Authorization()
                     authentication = BasicAuthentication()
                     allowed_methods = ['get', 'post', 'put', 'delete']
-                def deserialize(self, request, data, format=None):
-                    if not format:
-                        format = request.META.get('CONTENT_TYPE', 'application/json')
-
-                    if format == 'application/x-www-form-urlencoded':
-                        return request.POST
-
-                    if format.startswith('multipart'):
-                        print("req",request.POST)
-                        data = request.POST.copy()
-                        data.update(request.FILES)
-                        return data
-                    # return super(MultipartResource, self).deserialize(request, data, format)

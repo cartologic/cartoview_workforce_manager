@@ -40,6 +40,17 @@ export default class Attachments extends Component {
 sendImg=()=>{
 console.log("img",this.refs.img.value)
 
+let data = new FormData();
+
+data.append('action', 'ADD');
+
+data.append('task',`/apps/cartoview_workforce_manager/api/v1/task/${this.props.task}/`);
+data.append('image', this.refs.img.files[0])
+
+// this works
+// let request = new XMLHttpRequest();
+// request.open('POST', url);
+// request.send(data);
 
 
 var url='/apps/cartoview_workforce_manager/api/v1/attachment/'
@@ -47,7 +58,7 @@ var url='/apps/cartoview_workforce_manager/api/v1/attachment/'
 		 fetch(url,{method:"POST",
 		            credentials: "same-origin",
 		            headers:new Headers({"Authorization":"Basic YWRtaW46YWRtaW4="}),
-				    body:this.refs.img.value
+				    body:data
 					})
                     .then(function(response) {
 
@@ -59,14 +70,7 @@ var url='/apps/cartoview_workforce_manager/api/v1/attachment/'
                       return response.json()
 
 
-                    }).then(( data ) => {
-                         console.log(data)
-                         if(data.objects.length>0){this.setState({"flag":true})}
-                         this.setState({"attachments":data.objects})
-
-                      })
-
-
+                    })
 
 
 
@@ -82,7 +86,8 @@ this.setState({"flag":false})
 
 		return (
 <div>
-      <input type="file" className="form-control" ref="img" />
+      <input type="file" className="form-control" ref="img" name="image" style={{"marginBottom": "2%"}} />
+
       <button className="btn btn-default pull-right" style={{marginTop:"2%"}} onClick={this.sendImg}>upload</button>
 
 {this.state.attachments && <div className="container col-md-10">
