@@ -11,7 +11,7 @@ export default class Tasks extends Component {
         var url='/apps/cartoview_workforce_manager/api/v1/project/'+this.props.id+'/tasks'
 		 fetch(url,{method:"GET",headers:new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken( ),"Authorization":"Basic YWRtaW46YWRtaW4="})})
                     .then(function(response) {
-                      
+
                         if (response.status >= 400) {
                         throw new Error("Bad response from server");
                         }
@@ -21,15 +21,17 @@ export default class Tasks extends Component {
                     console.log(data.objects)
                      this.setState({tasks:data.objects})
                     });
-
+console.log("back",this.props.back)
 	}
-	
 
+componentWillReceiveProps(nextProps){
+	console.log("nxt",nextProps)
+}
 	render( ) {
-		return (  
+		return (
 
 <div className="container">
- 
+
        <br/>
     {this.state.tasks.length!=0 && !this.state.selectedtask &&<table className="table table-hover table-bordered table-responsive">
     <thead>
@@ -40,8 +42,8 @@ export default class Tasks extends Component {
         <th> Assigned To </th>
 		<th>Priority </th>
         <th>Status </th>
-	
-        
+
+
       </tr>
     </thead>
     <tbody>
@@ -76,11 +78,12 @@ export default class Tasks extends Component {
 
 
 
-      
+
     </tbody>
   </table>}
 
-{this.state.selectedtask &&  
+{
+	this.state.selectedtask &&
 <div>
 <div className="col-md-1"></div>
 <div className="col-md-10">

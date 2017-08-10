@@ -35,7 +35,7 @@ class Task(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     due_date = models.DateTimeField(null=True, blank=True)
     work_order=models.TextField(default=0,blank=True, null=True)
-    
+
     PRIORITY_CHOICES = (
         (0, 'critical'),
         (1, 'high'),
@@ -63,7 +63,7 @@ class Comment(models.Model):
             commenter = models.ForeignKey(User, related_name='%(class)s_requests_commenter', on_delete=models.CASCADE)
             comment = models.TextField(blank=True, null=True)
             task =models.ForeignKey(Task, on_delete=models.CASCADE)
-            
+            created_at = models.DateTimeField(auto_now_add=True)
 
 class Attachment(models.Model):
     task =models.ForeignKey(Task, on_delete=models.CASCADE)

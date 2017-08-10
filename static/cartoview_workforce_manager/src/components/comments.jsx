@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import Moment from 'react-moment';
 
 export default class Comments extends Component {
 	constructor( props ) {
@@ -13,7 +13,7 @@ this.getComments()
 
 
 
-		
+
 	}
 
 sendComment=()=>{
@@ -31,9 +31,9 @@ sendComment=()=>{
                         if (response.status >= 400) {
                         throw new Error("Bad response from server");
                         }
-                       
+
                     }).then(()=> {
-                    
+
                      this.getComments()
                     })
                     this.refs.comment.value=""
@@ -42,7 +42,28 @@ sendComment=()=>{
 
 
 
+deleteComment=(id)=>{
 
+console.log(id);
+var url='/apps/cartoview_workforce_manager/api/v1/comment/'+id
+
+fetch(url,{method:"DELETE",
+					 credentials: "same-origin",
+					 headers:new Headers({"Content-Type": "application/json; charset=UTF-8", "Authorization":"Basic YWRtaW46YWRtaW4="}),
+
+		 })
+							 .then(function(response) {
+									 if (response.status >= 400) {
+									 throw new Error("Bad response from server");
+									 }
+
+							 }).then(()=> {
+
+								this.getComments()
+							 })
+
+
+}
 
 	getComments=()=>{
      var url='/apps/cartoview_workforce_manager/api/v1/task/'+this.props.task+'/comments'
@@ -50,20 +71,20 @@ sendComment=()=>{
 		 fetch(url,{method:"GET",
 		            credentials: "same-origin",
 		            headers:new Headers({"Content-Type": "application/json; charset=UTF-8","Authorization":"Basic YWRtaW46YWRtaW4="}),
-				
+
 					})
                     .then(function(response) {
-                       
+
                         if (response.status >= 400) {
-                           
+
                         throw new Error("Bad response from server");
                         }
-            
+
                       return response.json()
 
-                       
+
                     }).then(( data ) => { this.setState({"comments":data.objects})
-                   
+
                       })
 
 
@@ -74,18 +95,35 @@ sendComment=()=>{
 
 
 
-		return ( 
+		return (
 <div>
         <div>
         <textarea ref="comment" className="form-control" rows="2" id="comment" placeholder="add comment"></textarea>
         </div>
-  <div style={{"paddingTop": 10}}> 
+  <div style={{"paddingTop": 10}}>
   <button className="btn btn-primary pull-right" onClick={this.sendComment} >Comment</button>
   </div>
   <div style={{"marginTop":"5%"}}>
   {this.state.comments.map((comment,i)=>{
 
-      return <div key={i} className="well well-sm" ><p><b>{comment.commenter.username}</b>: {comment.comment}</p>  </div>
+      return <div key={i} className="well " >
+
+
+
+
+			<div className="media">
+
+	            <div className="media-body">
+	              <h4 className="media-heading">{comment.commenter.username}<small><i>Posted on      <Moment format="YYYY/MM/DD">{comment.created_at}</Moment></i></small></h4>
+	              <p>{comment.comment}</p>
+	            </div>
+							<button className="btn btn-link pull-right " style={{"color":"indianred","padding":"0%"}} onClick={() => this.deleteComment(comment.id)}>Delete</button>
+							<button className="btn btn-link pull-right" style={{"padding":"0%"}} >Edit  |</button>
+
+	          </div>
+</div>
+
+
   })}
 
 

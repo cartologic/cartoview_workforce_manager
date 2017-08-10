@@ -13,6 +13,7 @@ import ProjectDetails from './components/ProjectDetails';
 import ProjectEdit from './components/projectEdit';
 import Tasks from './components/tasks';
 import { getCRSFToken} from './helpers/helpers.jsx'
+import './css/project.css'
 injectTapEventPlugin( );
 addLocaleData( enLocaleData );
 export default class ReactClient extends React.Component {
@@ -22,7 +23,8 @@ export default class ReactClient extends React.Component {
 			project: "",
       tasks:"",
 			workers:"",
-			dispatchers:""
+			dispatchers:"",
+			back:false
 		}
     this.loadProject()
     this.loadWorkers()
@@ -95,6 +97,10 @@ loadWorkers=()=>{
 	_toggleBaseMapModal( ) {
 
 	}
+	search=(e)=>{
+		e.preventDefault()
+		console.log(this.refs.search.value)
+	}
 	render( ) {
 
 		return (
@@ -103,15 +109,33 @@ loadWorkers=()=>{
 				<span className="h4">{this.state.project.title}</span>
 				<hr/>
   <ul className="nav nav-pills">
-    <li className="active"><a data-toggle="tab" href="#home">Tasks</a></li>
-    <li><a data-toggle="tab" href="#menu1">New Task</a></li>
+    <li className="active"><a data-toggle="tab" href="#home" onClick={()=>{this.setState({back:!this.state.back})}}>Tasks</a></li>
+    <li><a data-toggle="tab" href="#menu1" >New Task</a></li>
     <li><a data-toggle="tab" href="#menu2">Ptoject Details </a></li>
-    <li><a data-toggle="tab" href="#menu3">Edit Project</a></li>
+
+
+
+				<div className="container">
+				<div className="row">
+			        <div className="span12">
+			            <form id="custom-search-form" className="form-search form-horizontal pull-right">
+			                <div className="input-append span12">
+			                    <input type="text" ref="search" className="search-query" placeholder="Search"/>
+			                    <button  className="btn" onClick={this.search}><i className="glyphicon glyphicon-search"></i></button>
+			                </div>
+			            </form>
+			        </div>
+				</div>
+			</div>
+
+
+
   </ul>
 				<hr/>
 	  <div className="tab-content">
     <div id="home" className="tab-pane fade in active">
-      <Tasks id={id} />
+      <Tasks  id={id} back={this.state.back} />
+
 	    </div>
     <div id="menu1" className="tab-pane fade">
      <AddTask />

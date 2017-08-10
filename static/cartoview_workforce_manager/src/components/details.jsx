@@ -17,7 +17,7 @@ export default class Details extends Component {
 		var month=date.getMonth();
 		var year =date.getFullYear()
 
-        var date2= new Date(this.props.task.created_at)
+    var date2= new Date(this.props.task.created_at)
 		var day2=date2.getDate()
 		var month2=date2.getMonth();
 		var year2 =date2.getFullYear()
@@ -113,7 +113,7 @@ export default class Details extends Component {
 
 
 	  <div className="panel panel-primary">
-      <div className="panel-heading">Attachments</div>
+      <div className="panel-heading">Images</div>
       <div className="panel-body"><Attachments task={this.props.task.id}/></div>
     </div>
 
