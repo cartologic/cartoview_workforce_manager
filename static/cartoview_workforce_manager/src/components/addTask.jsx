@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import t from 'tcomb-form';
-import { getCRSFToken, hasTrailingSlash } from '../helpers/helpers.jsx'
+import {getCRSFToken} from '../helpers/helpers.jsx'
+
 const Form = t.form.Form;
 var tComb={}
 const Priority = t.enums({
@@ -57,8 +58,8 @@ export default class AddTask extends Component {
                         return response.json();
                     })
                     .then((data)=> {
-                    console.log(data.objects)
-                     this.setState({assign :data.objects},()=>{
+
+                        this.setState({assign :data.objects},()=>{
                     	var tCombEnum={}
                                 this.state.assign.forEach((user)=>{
                                     tCombEnum[user.worker.resource_uri]=user.worker.username
