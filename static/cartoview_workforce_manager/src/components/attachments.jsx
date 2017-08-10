@@ -7,36 +7,41 @@ export default class Attachments extends Component {
 
     this.state={
         attachments:null,
-        flag:null
+        flag:null,
+				success:false
     }
 
-
-     var url='/apps/cartoview_workforce_manager/api/v1/attachment/?task__id='+this.props.task
-
-		 fetch(url,{method:"GET",
-		            credentials: "same-origin",
-		            headers:new Headers({"Content-Type": "application/json; charset=UTF-8","Authorization":"Basic YWRtaW46YWRtaW4="}),
-
-					})
-                    .then(function(response) {
-
-                        if (response.status >= 400) {
-
-                        throw new Error("Bad response from server");
-                        }
-
-                      return response.json()
-
-
-                    }).then(( data ) => {
-                         console.log(data)
-                         if(data.objects.length>0){this.setState({"flag":true})}
-                         this.setState({"attachments":data.objects})
-
-                      })
+this.getImage()
 
 
     }
+		getImage=()=>{
+
+			var url='/apps/cartoview_workforce_manager/api/v1/attachment/?task__id='+this.props.task
+
+			fetch(url,{method:"GET",
+								 credentials: "same-origin",
+								 headers:new Headers({"Content-Type": "application/json; charset=UTF-8","Authorization":"Basic YWRtaW46YWRtaW4="}),
+
+					 })
+										 .then(function(response) {
+
+												 if (response.status >= 400) {
+
+												 throw new Error("Bad response from server");
+												 }
+
+											 return response.json()
+
+
+										 }).then(( data ) => {
+													console.log(data)
+													if(data.objects.length>0){this.setState({"flag":true})}
+													this.setState({"attachments":data.objects})
+
+											 })
+
+		}
 sendImg=()=>{
 console.log("img",this.refs.img.value)
 
@@ -67,10 +72,11 @@ var url='/apps/cartoview_workforce_manager/api/v1/attachment/'
                         throw new Error("Bad response from server");
                         }
 
-                      return response.json()
+                      return response
 
-
-                    })
+                    }).then(()=>{this.setState({"success":true})
+                        this.getImage()
+									})
 
 
 
@@ -87,7 +93,9 @@ this.setState({"flag":false})
 		return (
 <div>
       <input type="file" className="form-control" ref="img" name="image" style={{"marginBottom": "2%"}} />
-
+				{this.state.success &&<div className="alert alert-info">
+				Your image was attached successfully.
+			</div>}
       <button className="btn btn-default pull-right" style={{marginTop:"2%"}} onClick={this.sendImg}>upload</button>
 
 {this.state.attachments && <div className="container col-md-10">
