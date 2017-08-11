@@ -164,7 +164,8 @@ class TaskResource(ModelResource):
             'status': ALL,
             'priority': ALL,
             'description': ALL,
-            'id':ALL
+            'id':ALL,
+            'work_order':ALL
         }
 
         queryset = Task.objects.all()
