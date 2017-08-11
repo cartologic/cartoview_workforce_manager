@@ -91,7 +91,17 @@ export default class Details extends Component {
                                 <td style={{"width": "70%"}}>
 
                                     {this.props.task.work_order == 0 ?
-                                        <span>No work order was specified for this task</span> : this.props.task.work_order}
+                                        <span>No work order was specified for this task </span> : this.props.task.work_order}
+
+                                </td>
+
+                            </tr>
+                              <tr>
+                                <td><b>Task Group</b></td>
+                                <td style={{"width": "70%"}}>
+
+                                    {this.props.task.group == "" ?
+                                        <span>No Group was specified for this task yet</span> : this.props.task.group}
 
                                 </td>
 

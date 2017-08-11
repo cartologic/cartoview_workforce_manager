@@ -130,7 +130,7 @@ export default class Comments extends Component {
 										style={{"color": "indianred", "padding": "0%"}}
 										onClick={() => this.deleteComment(comment.id)}>Delete
 								</button>
-								<button className="btn btn-link pull-right" style={{"padding": "0%"}}>Edit |</button>
+							
 
 							</div>
 						</div>

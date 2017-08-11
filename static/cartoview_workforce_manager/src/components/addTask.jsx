@@ -73,6 +73,7 @@ export default class AddTask extends Component {
                               assigned_to :t.enums(tCombEnum),
                               due_date: t.Date,
 							  work_order:t.maybe(t.Integer),
+							  group:t.maybe(t.String),
                               priority: Priority ,
                               status: Status,// enum,
 

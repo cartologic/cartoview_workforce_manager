@@ -29,7 +29,7 @@ export default class Edit extends Component {
         this.state = {
             success: false,
             assign: [],
-            person: null,
+            task: null,
             options: {
                 "fields": {
                     "description": {
@@ -48,7 +48,8 @@ export default class Edit extends Component {
                 due_date: new Date(this.props.task.due_date),
                 priority: this.props.task.priority,
                 status: this.props.task.status,
-                work_order: this.props.task.work_order
+                work_order: this.props.task.work_order,
+                group: this.props.task.group
             }
 
 
@@ -78,19 +79,20 @@ export default class Edit extends Component {
                             tCombEnum[user.worker.resource_uri] = user.worker.username
                         }
                     )
-                    const Person = t.struct({
+                    const Task = t.struct({
                         title: t.String,
                         short_description: t.String,
                         description: t.String,
                         assigned_to: t.enums(tCombEnum),
                         work_order: t.maybe(t.Integer),
+                        group:t.maybe(t.String),
                         due_date: t.Date,
                         priority: Priority,
                         status: Status,// enum,
 
                     })
 
-                    this.setState({person: Person})
+                    this.setState({task: Task})
 
                 })
             });
@@ -142,12 +144,12 @@ export default class Edit extends Component {
                 < div className=" ">
 
                     <div style={{"padding": "2%"}}>
-                        {this.state.person &&
+                        {this.state.task &&
 
                         <Form
                             ref="form"
                             options={this.state.options}
-                            type={this.state.person}
+                            type={this.state.task}
                             value={this.state.value}
                         />}
                         <button className="btn btn-primary" onClick={this.save}>Save</button>
