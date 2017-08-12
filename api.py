@@ -23,7 +23,7 @@ class UserResource(ModelResource):
     class Meta:
         queryset = User.objects.all()
         authorization = Authorization()
-        authentication = BasicAuthentication()
+        # authentication = BasicAuthentication()
         resource_name = 'user'
         filtering = {
             'username': ALL,
@@ -114,7 +114,7 @@ class ProjectResource(ModelResource):
         queryset = Project.objects.all()
         resource_name = 'project'
         authorization = Authorization()
-        authentication = BasicAuthentication()
+        # authentication = BasicAuthentication()
         allowed_methods = ['get', 'post', 'put', 'delete']
 
 
@@ -176,7 +176,7 @@ class TaskResource(ModelResource):
         queryset = Task.objects.all()
         resource_name = 'task'
         authorization = CustomAuthorization()
-        authentication = BasicAuthentication()
+        # authentication = BasicAuthentication()
         allowed_methods = ['get', 'post', 'put', 'delete']
 
 
@@ -192,7 +192,7 @@ class ProjectDispatchersResource(ModelResource):
         queryset = ProjectDispatchers.objects.all()
         resource_name = 'project_dispatchers'
         authorization = Authorization()
-        authentication = BasicAuthentication()
+        # authentication = BasicAuthentication()
         allowed_methods = ['get', 'post', 'put', 'delete']
 
 class ProjectWorkersResource(ModelResource):
@@ -207,7 +207,7 @@ class ProjectWorkersResource(ModelResource):
         queryset = ProjectWorkers.objects.all()
         resource_name = 'project_workers'
         authorization = Authorization()
-        authentication = BasicAuthentication()
+        # authentication = BasicAuthentication()
         allowed_methods = ['get', 'post', 'put', 'delete']
 
 class CommentResource(ModelResource):
@@ -225,7 +225,7 @@ class CommentResource(ModelResource):
         queryset = Comment.objects.all()
         resource_name = 'comment'
         authorization = Authorization()
-        authentication = BasicAuthentication()
+        # authentication = BasicAuthentication()
         allowed_methods = ['get', 'post', 'put', 'delete']
 
 
@@ -309,5 +309,5 @@ class MultiPartResource(MultiResource,ModelResource):
                     queryset = Attachment.objects.all()
                     resource_name = 'attachment'
                     authorization = Authorization()
-                    authentication = BasicAuthentication()
+                    # authentication = BasicAuthentication()
                     allowed_methods = ['get', 'post', 'put', 'delete']

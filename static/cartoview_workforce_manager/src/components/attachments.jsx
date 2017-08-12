@@ -11,7 +11,7 @@ export default class Attachments extends Component {
             credentials: "same-origin",
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
-                 'Authorization': `Basic ${hash}`
+                
             }),
 
         })
@@ -56,7 +56,7 @@ export default class Attachments extends Component {
         fetch(url, {
             method: "POST",
             credentials: "same-origin",
-            headers: new Headers({ 'Authorization': `Basic ${hash}`}),
+            headers: new Headers({ }),
             body: data
         })
             .then(function (response) {

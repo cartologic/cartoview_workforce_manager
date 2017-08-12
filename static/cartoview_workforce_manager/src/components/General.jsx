@@ -35,7 +35,7 @@ loadProject=()=>{
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
                 
-                 'Authorization': `Basic ${hash}`
+                
             })
         })
             .then(function (response) {

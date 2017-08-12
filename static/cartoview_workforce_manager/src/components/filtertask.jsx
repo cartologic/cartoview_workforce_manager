@@ -43,7 +43,7 @@ if(this.refs.worker.value){
             credentials: "same-origin",
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
-           'Authorization': `Basic ${hash}`
+      
             }),
            
         })

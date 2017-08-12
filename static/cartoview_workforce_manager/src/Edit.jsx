@@ -4,9 +4,14 @@ import Navigator from './components/Navigator.jsx'
 
 import General from './components/General.jsx'
 import EditService from './services/editService'
+import MapEditService from './services/MapEditService'
+
+
 import {getCRSFToken} from './helpers/helpers.jsx'
 import Dispatchers from './components/dispatchers.jsx'
 import Workers from './components/workers.jsx'
+import ResourceSelector from './components/ResourceSelector.jsx'
+
 
 export default class Edit extends Component {
     constructor(props) {
@@ -16,13 +21,13 @@ export default class Edit extends Component {
             workers:"",
             dispatchers:"",
             step: 0,
-            config: {},
-            selectedResource: this.props.config.instance
-                ? this.props.config.instance.map
-                : undefined
+      config: {},
+      selectedResource: this.props.config.instance ? this.props.config.instance.map:undefined,
+ 
         }
         this.editService = new EditService({baseUrl: '/'})
-
+        
+        this.mapeditService = new MapEditService({baseUrl: '/'})
     }
 
     goToStep(step) {
@@ -39,6 +44,7 @@ export default class Edit extends Component {
     render() {
         var {step} = this.state
         const steps = [
+          
             {
                 label: "General",
                 component: General,
@@ -69,6 +75,45 @@ export default class Edit extends Component {
 
                 }
             },
+             {
+        label: "Select Map",
+        component: ResourceSelector,
+        props: {
+          resourcesUrl: this.props.config.urls.resources_url,
+          instance: this.state.selectedResource,
+          username:this.props.username,
+          selectMap: (resource) => {
+            this.setState({selectedResource: resource})
+          },
+          limit: this.props.config.limit,
+          onComplete: () => {
+            var {step} = this.state;
+            this.setState({
+              config: Object.assign(this.state.config, {map: this.state.selectedResource.id})
+            },()=>{
+
+                     
+			
+		 var url = '/apps/cartoview_workforce_manager/api/v1/project/'+ this.state.id + "/"
+		return fetch( url ,
+			 {
+			method: 'PUT',
+			credentials: "same-origin",
+			headers: new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken( )}),
+			body: JSON.stringify( {"mapid":this.state.selectedResource.id} )
+		}).then(( response ) => {response.json( )
+        
+         let {step} = this.state;
+                        this.goToStep(++step)
+        })
+
+
+
+            })
+            
+          }
+        }
+      } ,
             {
 
                 label: "Dispatchers",
@@ -92,7 +137,7 @@ export default class Edit extends Component {
                                 headers: new Headers({
                                     "Content-Type": "application/json; charset=UTF-8",
                                     "X-CSRFToken": getCRSFToken(),
-                                    'Authorization': `Basic ${hash}`
+                                 
                                 }),
                                 body: JSON.stringify({
                                     "project": "/apps/cartoview_workforce_manager/api/v1/project/" + this.state.id + "/",
@@ -117,7 +162,7 @@ export default class Edit extends Component {
                                 headers: new Headers({
                                     "Content-Type": "application/json; charset=UTF-8",
                                     "X-CSRFToken": getCRSFToken(),
-                                    'Authorization': `Basic ${hash}`
+                                
                                 }),
                             
                             })
@@ -142,7 +187,7 @@ export default class Edit extends Component {
                                 headers: new Headers({
                                     "Content-Type": "application/json; charset=UTF-8",
                                     "X-CSRFToken": getCRSFToken(),
-                                     'Authorization': `Basic ${hash}`
+                                  
                                 }),
                                 body: JSON.stringify({
                                     "project": "/apps/cartoview_workforce_manager/api/v1/project/" + this.state.id + "/",
@@ -200,7 +245,7 @@ export default class Edit extends Component {
                                 headers: new Headers({
                                     "Content-Type": "application/json; charset=UTF-8",
                                     "X-CSRFToken": getCRSFToken(),
-                                     'Authorization': `Basic ${hash}`
+                              
                                 }),
                                 body: JSON.stringify({
                                     "project": "/apps/cartoview_workforce_manager/api/v1/project/" + this.state.id + "/",
@@ -224,7 +269,7 @@ export default class Edit extends Component {
                                 headers: new Headers({
                                     "Content-Type": "application/json; charset=UTF-8",
                                     "X-CSRFToken": getCRSFToken(),
-                                     'Authorization': `Basic ${hash}`
+                                
                                 }),
                             
                             })
@@ -252,7 +297,7 @@ export default class Edit extends Component {
                                 headers: new Headers({
                                     "Content-Type": "application/json; charset=UTF-8",
                                     "X-CSRFToken": getCRSFToken(),
-                                     'Authorization': `Basic ${hash}`
+                              
                                 }),
                                 body: JSON.stringify({
                                     "project": "/apps/cartoview_workforce_manager/api/v1/project/" + this.state.id + "/",

@@ -19,7 +19,7 @@ export default class ProjectEdit extends Component {
             method: "PUT",
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
-              'Authorization': `Basic ${hash}`
+            
             })
             ,
             body: JSON.stringify(project)

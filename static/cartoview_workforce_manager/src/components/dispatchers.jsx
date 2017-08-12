@@ -17,7 +17,7 @@ export default class Dispatchers extends Component {
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
                 "X-CSRFToken": getCRSFToken(),
-                'Authorization': `Basic ${hash}`
+       
             })
         })
             .then(function (response) {
@@ -45,7 +45,7 @@ if(!isNaN(id)){
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
                 "X-CSRFToken": getCRSFToken(),
-                'Authorization': `Basic ${hash}`
+              
             })
         })
             .then(function (response) {

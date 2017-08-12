@@ -11,6 +11,7 @@ class Project(AppInstance):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    mapid= models.IntegerField(default=0,blank=True, null=True)
     #config = JSONField()
     workers = models.ManyToManyField(User,related_name='%(class)s_requests_workers',through='ProjectWorkers')
     dispatchers = models.ManyToManyField(User,related_name='%(class)s_requests_dispatchers',through='ProjectDispatchers')

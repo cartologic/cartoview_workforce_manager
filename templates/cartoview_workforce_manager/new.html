@@ -28,8 +28,8 @@
     <script src="{{ STATIC_URL }}cartoview_workforce_manager/dist/config.bundle.js"></script>
     <script>
     var username="{{request.user.username}}"
-    var password="{{request.user.username}}"
-    var hash =btoa (`${username}:${password}`)
+  
+  
     
     var viewer=new Viewer('root',{'urls':{'resources_url':"/api/maps","mapLayers":"/apps/maplayers/api","layerAttributes":"/apps/rest/app_manager/geonodelayerattribute/"},'limit':9},username);
     viewer.view();
