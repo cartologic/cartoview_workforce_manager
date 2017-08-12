@@ -5,16 +5,38 @@ export default class EditService {
 		
 	}
 	save( instanceConfig, id ) {
-		const url = id
-			? this.baseUrl + "apps/cartoview_workforce_manager/" + id + "/edit"
-			: this.baseUrl + "apps/cartoview_workforce_manager/api/v1/project/"
-		return fetch(hasTrailingSlash( url )
-			? url
-			: url + "/", {
+
+
+ if(isNaN(id)){
+	 	console.log("in save",id)
+		const url =this.baseUrl + "apps/cartoview_workforce_manager/api/v1/project/"
+			
+		
+		return fetch( url ,
+			 {
 			method: 'POST',
 			credentials: "same-origin",
-			headers: new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken( ),"Authorization":"Basic YWRtaW46YWRtaW4="}),
+			headers: new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken( )}),
 			body: JSON.stringify( instanceConfig )
 		}).then(( response ) => response.json( ))
+ }
+else{
+const url =this.baseUrl + "apps/cartoview_workforce_manager/api/v1/project/"+id
+			
+		
+		return fetch( url ,
+			 {
+			method: 'PUT',
+			credentials: "same-origin",
+			headers: new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken( )}),
+			body: JSON.stringify( instanceConfig )
+		}).then(( response ) => response.json( ))
+
+}
+
+
+
+
+	
 	}
 }

@@ -62,7 +62,7 @@ export default class Edit extends Component {
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
                 "X-CSRFToken": getCRSFToken(),
-                "Authorization": "Basic YWRtaW46YWRtaW4="
+              'Authorization': `Basic ${hash}`
             })
         })
             .then(function (response) {
@@ -119,7 +119,7 @@ export default class Edit extends Component {
                 headers: new Headers({
                     "Content-Type": "application/json; charset=UTF-8",
                     "X-CSRFToken": getCRSFToken(),
-                    "Authorization": "Basic YWRtaW46YWRtaW4="
+                     'Authorization': `Basic ${hash}`
                 }),
                 body: JSON.stringify(copy)
             })

@@ -24,7 +24,9 @@
 {% block extra_script %}
 
     <script>
-    var username="{{request.user.username}}"
+     var username="{{request.user.username}}"
+    var password="{{request.user.username}}"
+    var hash =btoa (`${username}:${password}`)
     var id= {{id}}
 
 

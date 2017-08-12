@@ -50,7 +50,7 @@ export default class AddTask extends Component {
 
 
          var url='/apps/cartoview_workforce_manager/api/v1/project/'+id+"/workers"
-		 fetch(url,{method:"GET",headers:new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken( ),"Authorization":"Basic YWRtaW46YWRtaW4="})})
+		 fetch(url,{method:"GET",headers:new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken( ), 'Authorization': `Basic ${hash}`})})
                     .then(function(response) {
                         if (response.status >= 400) {
                         throw new Error("Bad response from server");
@@ -102,7 +102,7 @@ var copy = Object.assign(project, value);
 
 		 fetch(url,{method:"POST",
 		            credentials: "same-origin",
-		            headers:new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken( ),"Authorization":"Basic YWRtaW46YWRtaW4="}),
+		            headers:new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken( ), 'Authorization': `Basic ${hash}`}),
 					body:JSON.stringify(copy)
 					})
                     .then(function(response) {

@@ -7,6 +7,7 @@ export default class Dispatchers extends Component {
         super(props)
         this.state = {
             dispatchers: "",
+            selectedDispatchers: [],
             selectedDispatchers: []
         }
 
@@ -16,7 +17,7 @@ export default class Dispatchers extends Component {
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
                 "X-CSRFToken": getCRSFToken(),
-                "Authorization": "Basic YWRtaW46YWRtaW4="
+                'Authorization': `Basic ${hash}`
             })
         })
             .then(function (response) {
@@ -30,9 +31,58 @@ export default class Dispatchers extends Component {
                 this.setState({dispatchers: data.objects})
             });
 
-//   this.changeEvent=this.changeEvente.bind(this)
+
+
+
+
+
+if(!isNaN(id)){
+    
+       var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + "/dispatchers"
+
+        fetch(url, {
+            method: "GET",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8",
+                "X-CSRFToken": getCRSFToken(),
+                'Authorization': `Basic ${hash}`
+            })
+        })
+            .then(function (response) {
+                if (response.status >= 400) {
+                    throw new Error("Bad response from server");
+                }
+                return response.json();
+            })
+            .then((data) => {
+
+                this.setState({selectedDispatchers: data.objects})
+            });
     }
 
+
+
+
+    }
+check=(uri)=>{
+   
+    if(!isNaN(id))
+    {
+        if(this.state.selectedDispatchers.length>0){
+        for(var i=0;i<this.state.selectedDispatchers.length;i++){
+            if( this.state.selectedDispatchers[i].dispatcher)
+          { if (this.state.selectedDispatchers[i].dispatcher.resource_uri==uri.resource_uri)
+     
+            { return true} }
+            else{if (this.state.selectedDispatchers[i]==uri.resource_uri)
+     
+            { return true} }
+            }
+       
+    }}
+    
+    
+}
 
     save() {
 
@@ -40,7 +90,8 @@ export default class Dispatchers extends Component {
             // here should pu the value of selected dispatchers
 
         }
-        this.props.onComplete(this.state.selectedDispatchers)
+       
+         this.props.onComplete(this.state.selectedDispatchers)
 
     }
 
@@ -81,7 +132,7 @@ export default class Dispatchers extends Component {
 				<hr></hr>
 
                 {this.state.dispatchers && <div className="checkbox"> {this.state.dispatchers.map((item) => {
-                    return <div key={item.id}><label><input type="checkbox" value={item.resource_uri}
+                    return <div key={item.id}><label><input type="checkbox" value={item.resource_uri} checked={this.check(item)}
 															onChange={(e) => {
                                                                 var checkedArray = this.state.selectedDispatchers;
                                                                 var selectedValue = e.target.value;

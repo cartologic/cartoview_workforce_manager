@@ -10,14 +10,14 @@ export default class Workers extends Component {
             workers: "",
             selectedworkers: []
         }
-
+ console.log(this.props.workers)
         var url = '/apps/cartoview_workforce_manager/api/v1/user/'
         fetch(url, {
             method: "GET",
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
                 "X-CSRFToken": getCRSFToken(),
-                "Authorization": "Basic YWRtaW46YWRtaW4="
+             'Authorization': `Basic ${hash}`
             })
         })
             .then(function (response) {
@@ -31,9 +31,48 @@ export default class Workers extends Component {
                 this.setState({workers: data.objects})
             });
 
-//   this.changeEvent=this.changeEvente.bind(this)
-    }
+if(!isNaN(id)){
+    
+       var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + "/workers"
 
+        fetch(url, {
+            method: "GET",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8",
+                "X-CSRFToken": getCRSFToken(),
+                 'Authorization': `Basic ${hash}`
+            })
+        })
+            .then(function (response) {
+                if (response.status >= 400) {
+                    throw new Error("Bad response from server");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log(data.objects)
+                this.setState({selectedWorkers: data.objects})
+            });
+    }
+    }
+check=(uri)=>{
+    if(!isNaN(id))
+     {
+        
+        for(var i=0;i<this.state.selectedWorkers.length;i++){
+            if( this.state.selectedWorkers[i].worker)
+          { if (this.state.selectedWorkers[i].worker.resource_uri==uri.resource_uri)
+     
+            { return true} }
+            else{if (this.state.selectedWorkers[i]==uri.resource_uri)
+     
+            { return true} }
+            }
+       
+     }
+    
+    
+}
 
     save() {
 
@@ -97,7 +136,7 @@ export default class Workers extends Component {
 				<hr></hr>
 
                 {this.state.workers && <div className="checkbox"> {this.state.workers.map((item) => {
-                    return <div key={item.id}><label><input type="checkbox" value={item.resource_uri}
+                    return <div key={item.id}><label><input type="checkbox" value={item.resource_uri} checked={this.check(item)}
 															onChange={(e) => {
                                                                 var checkedArray = this.state.selectedworkers;
                                                                 var selectedValue = e.target.value;

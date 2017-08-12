@@ -24,7 +24,7 @@ export default class Comments extends Component {
             credentials: "same-origin",
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
-                "Authorization": "Basic YWRtaW46YWRtaW4="
+                 'Authorization': `Basic ${hash}`
             }),
             body: JSON.stringify(comment)
         })
@@ -52,7 +52,7 @@ export default class Comments extends Component {
             credentials: "same-origin",
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
-                "Authorization": "Basic YWRtaW46YWRtaW4="
+                 'Authorization': `Basic ${hash}`
             }),
 
         })
@@ -77,7 +77,7 @@ export default class Comments extends Component {
             credentials: "same-origin",
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
-                "Authorization": "Basic YWRtaW46YWRtaW4="
+                 'Authorization': `Basic ${hash}`
             }),
 
         })

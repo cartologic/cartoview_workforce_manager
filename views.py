@@ -91,7 +91,7 @@ def edit(request, instance_id, template="%s/edit.html" % APP_NAME, context={}):
     if request.method == 'POST':
         return save(request, instance_id)
     instance = AppInstance.objects.get(pk=instance_id)
-    context.update(instance=instance)
+    context.update(instance=instance,id=instance_id)
     return render(request, template, context)
 
 

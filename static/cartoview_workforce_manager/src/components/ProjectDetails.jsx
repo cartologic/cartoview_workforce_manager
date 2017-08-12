@@ -17,7 +17,7 @@ export default class ProjectDetails extends Component {
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
                 "X-CSRFToken": getCRSFToken(),
-                "Authorization": "Basic YWRtaW46YWRtaW4="
+                'Authorization': `Basic ${hash}`
             })
         })
             .then(function (response) {
@@ -54,7 +54,7 @@ export default class ProjectDetails extends Component {
                             <div className="headers"><b>Project was created by:</b></div>
                             {this.state.project.owner}</li>
                         <li className="list-group-item">
-                            <div className="headers"><b>Project Dispatchers:</b></div>
+                            <div className="headers"><b>Project Workers:</b></div>
                             <div style={{'padding': '3%'}}>
                                 <ul style={{"listStyleType": "disc"}}>
                                     {this.props.workers.map((worker, i) => {
@@ -66,7 +66,7 @@ export default class ProjectDetails extends Component {
                             </div>
                         </li>
                         <li className="list-group-item">
-                            <div className="headers"><b>project workers :</b></div>
+                            <div className="headers"><b>Project Dispatchers :</b></div>
 
 
                             <div style={{'padding': '3%'}}>

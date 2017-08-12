@@ -53,20 +53,25 @@ class ProjectResource(ModelResource):
 
 
     def get_dispatchers(self, request, **kwargs):
-
+        
         bundle = self.build_bundle(data={'pk': kwargs['pk']}, request=request)
         obj = self.cached_obj_get(bundle=bundle, **self.remove_api_resource_names(kwargs))
 
         child_resource = ProjectDispatchersResource()
-        return child_resource.get_list(request, project=obj.pk)
-
+        if request.method=='GET':
+             return child_resource.get_list(request, project=obj.pk)
+        elif request.method=='DELETE':
+             return child_resource.delete_list(request, project=obj.pk)
     def get_workers(self, request, **kwargs):
 
         bundle = self.build_bundle(data={'pk': kwargs['pk']}, request=request)
         obj = self.cached_obj_get(bundle=bundle, **self.remove_api_resource_names(kwargs))
 
         child_resource = ProjectWorkersResource()
-        return child_resource.get_list(request, project=obj.pk)
+        if request.method=='GET':
+             return child_resource.get_list(request, project=obj.pk)
+        elif request.method=='DELETE':
+             return child_resource.delete_list(request, project=obj.pk)
 
     def prepend_urls(self):
         return [

@@ -14,7 +14,7 @@
           <div class="page-header">
             <div class="row">
               <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8"><span class="h1">Workforce Manager</span></div>
-              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target="#myModal">?</button></div>
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><button type="button" class="btn btn-default pull-right" data-toggle="modal" data-target="#myModal" style="border-color:white;border-radius: 50px"><i class="fa fa-info-circle  fa-2x" aria-hidden="true"></i></button></div>
             </div>
           </div>
             <div id="root"></div>
@@ -27,16 +27,21 @@
     <script>
 
   {% if instance %}
-  var appConfig = {{ instance.config|escape|safe }};
-  var abstract = " {% spaceless %}{{ instance.abstract|title }}{% endspaceless %} ";
-  var title = "{{ instance.title }}";
-  var map_id={{instance.map_id}};
-  var instance_id={{instance.id}};
-  var geoserver_url = "{{ GEOSERVER_BASE_URL }}";
-  var abstract = " {% spaceless %}{{ instance.abstract|title }}{% endspaceless %} ";
+  var id={{id}}
+ 
+  // var appConfig = {{ instance.config|escape|safe }};
+  // var abstract = " {% spaceless %}{{ instance.abstract|title }}{% endspaceless %} ";
+  // var title = "{{ instance.title }}";
+  // var map_id={{instance.map_id}};
+  // var instance_id={{instance.id}};
+  // var geoserver_url = "{{ GEOSERVER_BASE_URL }}";
+  // var abstract = " {% spaceless %}{{ instance.abstract|title }}{% endspaceless %} ";
   {% endif %}
-    var username="{{instance.owner.username}}"
-    var viewer=new Viewer('root',{'instance':{map:{id:map_id,title:title,abstract:abstract},id:instance_id,config:appConfig},'urls':{'resources_url':"/api/maps","view":"/apps/cartoview_workforce_manager/"+instance_id+"/view/","mapLayers":"/apps/maplayers/api","layerAttributes":"/apps/rest/app_manager/geonodelayerattribute/"},'limit':9},username);
+    // var username="{{instance.owner.username}}"
+     var username="{{request.user.username}}"
+    var password="{{request.user.username}}"
+    var hash =btoa (`${username}:${password}`)
+    var viewer=new Viewer('root',{'urls':{'resources_url':"/api/maps","view":"/apps/cartoview_workforce_manager/"+id+"/view/","mapLayers":"/apps/maplayers/api","layerAttributes":"/apps/rest/app_manager/geonodelayerattribute/"},'limit':9},username);
     viewer.view();
     </script>
 <div id="myModal" class="modal fade" role="dialog">

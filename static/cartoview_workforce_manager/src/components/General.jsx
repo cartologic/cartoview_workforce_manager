@@ -16,23 +16,41 @@ const Form = t.form.Form;
 export default class General extends Component {
     constructor(props) {
         super(props)
+         if(!isNaN(id)){
+                this.loadProject()
+                        }
         this.state = {
-            defaultConfig: {
-                // title: this.props.state.config.title
-                // 	? this.props.state.config.title
-                // 	: this.props.instance.title || "No Title Provided",
-                // abstract: this.props.state.config.abstract
-                // 	? this.props.state.config.abstract
-                // 	: this.props.instance.abstract || "No Abstract Provided",
-                // access: this.props.state.config.access
-                // 	? this.props.state.config.access
-                // 	: this.props.config
-                // 		? this.props.config.access
-                // 		: 'private'
-            }
+        project:"",
+        value:"",
         }
-    }
+   
 
+
+    }
+loadProject=()=>{
+      var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id
+
+        fetch(url, {
+            method: "GET",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8",
+                
+                 'Authorization': `Basic ${hash}`
+            })
+        })
+            .then(function (response) {
+                if (response.status >= 400) {
+                    throw new Error("Bad response from server");
+                }
+                return response.json();
+            })
+            .then((data) => {
+
+                this.setState({"project": data,   "value":{title:data.title,
+               abstract: data.abstract
+               }})
+            });
+}
     save() {
         var basicConfig = this.refs.form.getValue();
         if (basicConfig) {
@@ -71,7 +89,7 @@ export default class General extends Component {
 
 				<Form
 					ref="form"
-					value={this.state.defaultConfig}
+					value={this.state.value}
 					type={projectConfig}
 					options={options}/>
 
