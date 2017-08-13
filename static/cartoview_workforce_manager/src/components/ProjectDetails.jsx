@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {getCRSFToken} from '../helpers/helpers.jsx'
 import '../css/project.css'
-
+import LocationMap from './locationMap.jsx';
 export default class ProjectDetails extends Component {
     constructor(props) {
         super(props)
+        console.log(this.props)
         this.state = {
             project: "",
 
@@ -17,7 +18,7 @@ export default class ProjectDetails extends Component {
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
                 "X-CSRFToken": getCRSFToken(),
-             
+
             })
         })
             .then(function (response) {
@@ -79,6 +80,11 @@ export default class ProjectDetails extends Component {
                                 </ul>
                             </div>
                         </li>
+                  {  /*    <li className="list-group-item">
+                            <div className="headers"><b>Project map</b></div>
+                            <LocationMap mapId={this.props.mapid} />
+                          </li>*/}
+
                     </ul>
 
                 </div>

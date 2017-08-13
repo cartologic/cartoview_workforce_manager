@@ -24,7 +24,7 @@ export default class TaskDetails extends Component {
 
                     <div className="tab-content">
                         <div id="detail" className="tab-pane fade in active">
-                            <Details task={this.props.task}/>
+                            <Details task={this.props.task} mapid={this.props.mapid}/>
                         </div>
                         <div id="edit" className="tab-pane fade">
                             <br/>

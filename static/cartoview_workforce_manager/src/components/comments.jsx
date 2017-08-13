@@ -24,7 +24,7 @@ export default class Comments extends Component {
             credentials: "same-origin",
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
-               
+
             }),
             body: JSON.stringify(comment)
         })
@@ -52,7 +52,7 @@ export default class Comments extends Component {
             credentials: "same-origin",
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
-              
+
             }),
 
         })
@@ -77,7 +77,7 @@ export default class Comments extends Component {
             credentials: "same-origin",
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
-              
+
             }),
 
         })
@@ -126,11 +126,12 @@ export default class Comments extends Component {
 									</h4>
 									<p>{comment.comment}</p>
 								</div>
+              {  comment.commenter.username==username &&
 								<button className="btn btn-link pull-right "
 										style={{"color": "indianred", "padding": "0%"}}
 										onClick={() => this.deleteComment(comment.id)}>Delete
-								</button>
-							
+								</button>}
+
 
 							</div>
 						</div>

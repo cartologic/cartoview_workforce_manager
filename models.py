@@ -37,6 +37,10 @@ class Task(models.Model):
     due_date = models.DateTimeField(null=True, blank=True)
     work_order=models.TextField(default=0,blank=True, null=True)
     group= models.TextField(blank=True, null=True)
+    x=models.DecimalField(blank=True, null=True ,max_digits=19, decimal_places=10)
+    y=models.DecimalField(blank=True, null=True,max_digits=19, decimal_places=10)
+    extent= models.TextField(blank=True, null=True)
+
     PRIORITY_CHOICES = (
         (0, 'critical'),
         (1, 'high'),

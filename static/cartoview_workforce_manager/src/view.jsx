@@ -32,7 +32,7 @@ export default class ReactClient extends React.Component {
             status:"",
             filter:[],
             result:false,
-            selectedtask2:""
+            selectedtask2:"",currentComponent:"list"
         }
         this.loadTasks()
         this.loadProject()
@@ -72,21 +72,21 @@ if(this.refs.worker.value){
             credentials: "same-origin",
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
-  
+
             }),
-           
+
         })
             .then(function (response) {
                 if (response.status >= 400) {
                     throw new Error("Bad response from server");
-                      
+
                 }
                    return response.json();
             }).then((data) => {
                       this.setState({"filter":data.objects,"result":true})
-           
+
         })
-     
+
 
     }
     loadTasks=()=>{
@@ -96,7 +96,7 @@ if(this.refs.worker.value){
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
                 "X-CSRFToken": getCRSFToken(),
-    
+
             })
         })
             .then(function (response) {
@@ -120,7 +120,7 @@ if(this.refs.worker.value){
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
                 "X-CSRFToken": getCRSFToken(),
-               
+
             })
         })
             .then(function (response) {
@@ -145,7 +145,7 @@ if(this.refs.worker.value){
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
                 "X-CSRFToken": getCRSFToken(),
-             
+
             })
         })
             .then(function (response) {
@@ -169,7 +169,7 @@ if(this.refs.worker.value){
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
                 "X-CSRFToken": getCRSFToken(),
-   
+
             })
         })
             .then(function (response) {
@@ -206,7 +206,7 @@ if(this.refs.worker.value){
     }
 
     render() {
-
+      let {currentComponent}=this.state
         return (
 			<div className="container ">
 				<br/>
@@ -216,33 +216,21 @@ if(this.refs.worker.value){
 					<li className="active"><a data-toggle="tab" href="#home"  onClick={() => {
                                 this.setState({"selectedtask": null})
                             }}>Tasks</a></li>
-					<li><a data-toggle="tab" href="#menu1">New Task</a></li>
+                          <li  onClick={()=>this.setState({currentComponent:"add"})}><a data-toggle="tab" href="#menu1">New Task</a></li>
                     <li><a data-toggle="tab" href="#filter" onClick={() => {
                                 this.setState({"selectedtask2": null,"result":false,"filter":[]})
                             }}>Filter Task </a></li>
-					<li><a data-toggle="tab" href="#menu2">Ptoject Details </a></li>
+					<li onClick={()=>this.setState({currentComponent:"details"})}><a data-toggle="tab" href="#menu2">Ptoject Details </a></li>
 
 
-					<div className="container">
-						<div className="row">
-							<div className="span12">
-								<form id="custom-search-form" className="form-search form-horizontal pull-right">
-									<div className="input-append span12">
-										<input type="text" ref="search" className="search-query" placeholder="Search"/>
-										<button className="btn" onClick={this.search}><i
-											className="glyphicon glyphicon-search"></i></button>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
+					
 
 
 				</ul>
 				<hr/>
 				<div className="tab-content">
-					<div id="home" className="tab-pane fade in active">			
-                                               
+					<div id="home" className="tab-pane fade in active">
+
                           <div className="container">
                                             <br/>
                                             {this.state.tasks.length != 0 && !this.state.selectedtask &&
@@ -297,9 +285,9 @@ if(this.refs.worker.value){
                                                 <div>
                                                     <div className="col-md-1"></div>
                                                     <div className="col-md-10">
-                                                
 
-                                                        <TaskDetails task={this.state.selectedtask}/>
+
+                                                        <TaskDetails task={this.state.selectedtask} mapid={this.state.project.mapid}/>
                                                     </div>
                                                     <div className="col-md-1"></div>
                                                 </div>}
@@ -312,25 +300,25 @@ if(this.refs.worker.value){
                                         </div>
 					</div>
 					<div id="menu1" className="tab-pane fade">
-						<AddTask/>
+						{this.state.project&&  currentComponent === "add" &&<AddTask  mapid={this.state.project.mapid} />}
 					</div>
 					<div id="menu2" className="tab-pane fade">
-                        {this.state.workers && this.state.project &&
-						<ProjectDetails id={id} project={this.state.project} workers={this.state.workers}/>}
+                        {this.state.workers && this.state.project && currentComponent === "details" &&
+						<ProjectDetails id={id} project={this.state.project} mapid={this.state.project.mapid} workers={this.state.workers}/>}
 					</div>
 					<div id="menu3" className="tab-pane fade">
                         {this.state.workers && this.state.project &&
 						<ProjectEdit project={this.state.project} workers={this.state.workers}/>}
 					</div>
-                  
-                       
+
+
 
 <div id="filter" className="tab-pane fade">
                          <div>
                             <div className="col-md-2"></div>
                             <div className="col-md-8">
                                {this.state.dispatchers && this.state.workers&&
-                               
+
 
 
                                               <div>
@@ -345,20 +333,20 @@ if(this.refs.worker.value){
                                     <label className="radio"><input type="radio" name="optradio" value="2" onChange={()=>{this.setState({"priority":2})}}/>Medium</label>
                                      <label className="radio"><input type="radio" name="optradio" value="3" onChange={()=>{this.setState({"priority":3})}}/>Low</label>
                                     <label className="radio"><input type="radio" name="optradio" value="4" onChange={()=>{this.setState({"priority":4})}}/>Very Low</label>
-                            
+
                             </div>
                     </div>
                     <div className="panel panel-primary">
                             <div className="panel-heading">Filter By Status</div>
                             <div className="panel-body">
-                            
-                               
+
+
                                     <label className="radio"><input type="radio" name="optradio2" value="1" onChange={()=>{this.setState({"status":1})}}/>Open</label>
                                     <label className="radio"><input type="radio" name="optradio2" value="2" onChange={()=>{this.setState({"status":2})}}/>Re-open</label>
                                      <label className="radio"><input type="radio" name="optradio2" value="3" onChange={()=>{this.setState({"status":3})}}/>Closed</label>
                                     <label className="radio"><input type="radio" name="optradio2" value="4" onChange={()=>{this.setState({"status":4})}}/>Resolved</label>
                                     <label className="radio"><input type="radio" name="optradio2" value="5" onChange={()=>{this.setState({"status":5})}}/>Duplicate</label>
-                        
+
                             </div>
                     </div>
                     <div className="panel panel-primary">
@@ -367,42 +355,42 @@ if(this.refs.worker.value){
                     </div>
                     <div className="panel panel-primary">
                             <div className="panel-heading">Filter By Task creator</div>
-                            <div className="panel-body">       
+                            <div className="panel-body">
                                 <div className="form-group">
-                              
+
                                     <select className="form-control" ref="dispatcher">
                                      <option  value=""></option>
                                          {this.state.dispatchers.map((dispatcher,i)=>{
-                                      
+
                                         return <option key={i} value={dispatcher.dispatcher.username}>{dispatcher.dispatcher.username}</option>
                                     })}
-                                    
+
                                     </select>
                                     </div>
-                        
+
                             </div>
                     </div>
                     <div className="panel panel-primary">
                             <div className="panel-heading">Filter By Assignee</div>
                             <div className="panel-body">
                              <div className="form-group">
-                              
+
                                 <select className="form-control" id="sel1" ref="worker">
                                  <option  value=""></option>
                                     {this.state.workers.map((worker,i)=>{
-                                      
+
                                         return <option key={i} value={worker.worker.username}>{worker.worker.username}</option>
                                     })}
-                                    
+
                                 </select>
                                 </div>
-                                                
+
                             </div>
                     </div>
-                   
+
                       <button className="btn btn-primary pull-right" style={{"margin":"2%"}} onClick={this.sendFilter} >Filter</button>
-                
-                
+
+
                 </div>
             </div>}
 {this.state.result&&this.state.filter.length==0 &&<p>No result found</p>}
@@ -468,23 +456,23 @@ if(this.refs.worker.value){
   {
                                                 this.state.selectedtask2 &&
                                                 <div>
-                                                    
 
-                                                        <TaskDetails task={this.state.selectedtask2}/>
-                                                   
-                                                  
+
+                                                        <TaskDetails task={this.state.selectedtask2} mapid={this.state.project.mapid}/>
+
+
                                                 </div>}
 
 
             </div>
 
 
-                               
-                               
+
+
                                }
                             <div className="col-md-2"></div>
                             </div>
-					</div> 
+					</div>
 
 
 

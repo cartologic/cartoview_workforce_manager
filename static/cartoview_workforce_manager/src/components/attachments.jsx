@@ -11,7 +11,7 @@ export default class Attachments extends Component {
             credentials: "same-origin",
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
-                
+
             }),
 
         })
@@ -112,7 +112,7 @@ export default class Attachments extends Component {
 
 
                         <div className="carousel-inner">
-                            {this.state.attachments && <div className="item active">
+                            {this.state.attachments.length>0 && <div className="item active">
                                 <img src={this.state.attachments[0].image} style={{"width": "100%"}}/>
                             </div>}
                             {this.state.attachments.map((attach, i) => {

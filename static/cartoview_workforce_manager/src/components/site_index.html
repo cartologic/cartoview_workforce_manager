@@ -1,0 +1,336 @@
+{% extends 'index.html' %}
+{% load i18n %}
+{% load cartoview_tags %}
+{% block extra_head %}
+    {{ block.super }}
+    <style>
+        .center-counter a {
+
+            color: #ff8f31;
+            font-size: large;
+        }
+
+        .button_shadow {
+            background-color: #0d406d;
+        }
+
+        .icons-spaces {
+            margin-bottom: 20px;
+        }
+
+        .center-counter {
+            padding-bottom: 10px;
+            color: white;
+            padding-top: 10px;
+            padding-left: 25px;
+            padding-right: 25px;
+            font-family: sans-serif;
+            font-size: x-large;
+        }
+
+        .works a {
+            color: #0D406D;
+        }
+
+.slideright {
+  
+  animation: moveImageright 1s linear ;
+  /*left: -350px;*/
+  /*padding: 10px;*/
+}
+
+@keyframes moveImageright {
+    100% {
+      transform: translateX(calc(100vw + 350px));
+    }
+}
+.slideleft {
+  
+  animation: moveImageleft 0.5s linear ;
+  left: -350px;
+
+}
+
+@keyframes moveImageleft {
+    100% {
+      transform: translateX(calc(-100vw - 350px));
+    }
+}
+.w3-black, .w3-hover-black:hover {
+   
+}
+
+.w3-display-right {
+    position: absolute;
+    top: 120px;
+    right: -2%;
+    transform: translate(0%,-50%);
+    -ms-transform: translate(0%,-50%);
+}
+.w3-display-left {
+    position: absolute;
+    top: 120px;
+    left: -2%;
+    transform: translate(0%,-50%);
+    -ms-transform: translate(0%,-50%);
+}
+
+.w3-btn, .w3-button {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.w3-btn, .w3-button {
+    border: none;
+    display: inline-block;
+    outline: 0;
+    padding: 8px 16px;
+    vertical-align: middle;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    background-color: inherit;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap;
+}
+    </style>
+{% endblock %}
+{% block hero %}
+<!--<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">-->
+    <div id="site-banner" style="text-shadow: 2px 2px black;" class="jumbotron">
+        <div class="container">
+            <h1 style="text-align: center;">{% trans "Build Geo Apps" %}</h1>
+            <h3 class="text-center">
+                <span class="count">{{ apps_instance_count }}</span>
+                Apps
+                Created
+            </h3>
+            <div class="row text-center" style="margin-top: 30px">
+                {% if not user.is_authenticated %}
+                    <div class="col-md-2 col-md-offset-4">
+                        <a class="btn button_shadow btn-primary" style="color: white"
+                           href="{% url 'account_login' %}?next={% url 'app_manager_base_url' %}"
+                           role="button">
+                            Create New
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="col-md-2 col-md-offset-4">
+                        <a class="btn button_shadow btn-primary" style="color: white"
+                           href="{% url 'app_manager_base_url' %}"
+                           role="button">
+                            Create New
+                        </a>
+                    </div>
+                {% endif %}
+
+                <div class="col-md-2">
+                    <a class="btn button_shadow btn-primary" style="color: white"
+                       href="{% url 'appinstance_browse' %}"
+                       role="button">
+                        Explore
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 20px;padding: 10px">
+            <p class="text-center">{% blocktrans %}
+                <a href="http://cartoview.net" class="cartoview_install">Cartoview is open source. Install on your
+                    Platform.
+                </a>
+            {% endblocktrans %}</p>
+        </div>
+    </div>
+    <div class="row" style="background: #0d406d;">
+        <div class="col-xs-6 col-sm-6 col-md-2 col-md-offset-1 text-center center-counter">
+            <div class="row">
+                <span class="count">{% layers_counts %}</span>
+            </div>
+            <a href="{% url 'layer_browse' %}">Layers</a>
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-2 text-center center-counter">
+            <div class="row">
+                <span class="count">{% maps_counts %}</span>
+            </div>
+
+            <a href="{% url 'maps_browse' %}">Maps</a>
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-2 text-center center-counter ">
+            <div class="row">
+                <span class="count">{% users_counts %}</span>
+            </div>
+
+            <a href="{% url 'profile_browse' %}">Users</a>
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-2 text-center center-counter ">
+            <div class="row">
+                <span class="count">{% groups_counts %}</span>
+            </div>
+
+            <a href="{% url 'group_list' %}">Groups</a>
+        </div>
+        <div class="col-xs-6 col-sm-6  col-md-2 text-center center-counter">
+            <div class="row">
+                <span class="count">{% apps_counts %}</span>
+            </div>
+            <a href="{% url 'appinstance_browse' %}">Apps</a>
+        </div>
+
+    </div>
+    <div class="row text-center works" style="padding: 20px">
+        <h3 style="margin-bottom: 40px;color: #0D406D;">HOW IT WORKS</h3>
+        <div class="row" style="padding: 10px;margin-bottom: 40px">
+            <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                <div class="row icons-spaces">
+                    <img src="{{ STATIC_URL }}/cartoview/img/edit.png">
+                </div>
+                <a href="{% url 'account_signup' %}">1. Register</a>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                <div class="row icons-spaces">
+                    <img src="{{ STATIC_URL }}/cartoview/img/layers.png">
+                </div>
+                <a href="{% url 'layer_upload' %}">2. Upload Layer</a>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                <div class="row icons-spaces">
+                    <img src="{{ STATIC_URL }}/cartoview/img/map.png">
+                </div>
+                <a href="{% url 'new_map' %}">3. Create Map</a>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                <div class="row icons-spaces">
+                    <img src="{{ STATIC_URL }}/cartoview/img/app.png">
+                </div>
+                {% if not user.is_authenticated %}
+
+                    <a href="{% url 'account_login' %}?next={% url 'app_manager_base_url' %}">4. Create Application</a>
+
+                {% else %}
+
+                    <a href="{% url 'app_manager_base_url' %}">
+                        4. Create Application
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+    <section id="showcase">
+        <div class="container">
+            <div class="row" >
+                <h2>Featured Apps</h2>
+                {% verbatim %}
+                <div style="position:relative" ng-controller="featuredappsCtrl">
+                    <div ng-repeat="item in featuredApps ">
+
+                        <div class="col-md-3">
+                            <a href="{{ item.urls.view || item.urls.details }}"><img
+                                    class="{{class}}"
+                                    ng-src="{{ item.thumbnail}}"
+                                    fallback-src="/static/{{ item.app_name }}/logo.png"
+                                    loading-src/></a>
+                            <h4 class="{{class}}">{{ item.title | limitTo: 20 }}{{item.title.length > 20 ? '...' : ''}}</h4>
+                        </div>
+                    </div>
+                  
+                     <button class="w3-button w3-black w3-display-left" ng-click="prevpage()">&#10094;</button> 
+
+                   <button class="w3-button w3-black w3-display-right" ng-click="nextpage()">&#10095;</button> 
+                </div>
+                {% endverbatim %}
+            </div>
+            <p><a href="{% url 'appinstance_browse' %}">
+                Explore all
+            </a></p>
+        </div>
+    </section>
+{% endblock %}
+{% block mainbody %}
+    {{ block.super }}
+{% endblock %}
+{% block extra_script %}
+    {{ block.super }}
+    <script>
+        $('.count').each(function () {
+            var $this = $(this);
+            $({counter: 0}).animate({counter: $this.text()}, {
+                duration: 1000,
+                easing: 'swing',
+                step: function () {
+                    $this.text(Math.ceil(this.counter));
+                }
+            });
+        });
+    </script>
+    <script>
+    //TODO: please fix animation logic
+        (function () {
+            FEATURED_URL = '{% url 'cartoview_all_resources' %}';
+            var app = angular.module('featured', ['dcbImgFallback']);
+            app.controller('featuredappsCtrl', function ($scope, $http,$interval,$timeout) {
+
+                $http.get(FEATURED_URL + "?type=app&featured=true").then(function (response) {
+                    
+                    var allApps=response.data;
+                    var page=1;
+                    var max= Math.ceil(allApps.length/4);
+
+                    const itemPerPage = 4;
+                    $scope.class=allApps.length >4 ? "slide" : "";
+                    $scope.featuredApps = allApps;
+                    $scope.featuredApps= allApps.slice((page-1)*itemPerPage,itemPerPage*page)
+                    $scope.nextpage=function() {
+                        if(page<max){
+                                $scope.class = allApps.length >4 ? "slideright": "";
+                                $timeout(function() { 
+                                    $scope.class=allApps.length >4 ? "slide" : "";
+                                    page++;
+                                $scope.featuredApps= allApps.slice((page-1)*itemPerPage,itemPerPage*page)
+                                }, 500);
+
+                                }
+                        else{
+                                $scope.class=allApps.length >4 ? "slideright": "";
+                                $timeout(function() { 
+                                            $scope.class=allApps.length >4 ? "slide" : "";
+                                            page=1;
+                                            $scope.featuredApps= allApps.slice((page-1)*itemPerPage,itemPerPage*page)
+                                            }, 500);
+                                            }}
+                    $scope.prevpage=function() {
+                        if(page>1){
+                                    $scope.class=allApps.length >4 ? "slideleft" : "";
+                                    $timeout(function() { 
+                                        $scope.class=allApps.length >4 ? "slide" : "";
+                                        --page;
+                                        $scope.featuredApps= allApps.slice((page-1)*itemPerPage,itemPerPage*page)
+                                                        },500);
+                                    }
+                        else{
+                            $scope.class=allApps.length >4 ? "slideleft" : "";
+                            $timeout(function() { 
+                                $scope.class=allApps.length >4 ? "slide" : "";
+                                page=max
+                                $scope.featuredApps= allApps.slice((page-1)*itemPerPage,itemPerPage*page)
+                                }, 500); }}
+
+                        $interval(function () {$scope.nextpage() }, 6000);
+
+
+                });
+            });
+            app.controller('featuredCtrl', function ($scope, $http) {
+                $http.get(FEATURED_URL + "?featured=true&not_app=true").then(function (response) {
+                    $scope.featured = response.data;
+                });
+            });
+        })();
+
+    </script>
+{% endblock %}

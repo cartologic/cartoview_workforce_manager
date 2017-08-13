@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Comments from './comments';
 import Attachments from './attachments.jsx';
-import LocationMap from './locationMap.jsx';
+import ShowLocationMap from './showLocationMap.jsx';
 export default class Details extends Component {
     constructor(props) {
         super(props)
@@ -127,7 +127,7 @@ export default class Details extends Component {
                 </div>
                 <div className="panel panel-primary">
                     <div className="panel-heading">Location</div>
-                    <div className="panel-body"><LocationMap mapId="51" /></div>
+                    <div className="panel-body"><ShowLocationMap mapId={this.props.mapid} x={this.props.task.x} y={this.props.task.y}/></div>
                 </div>
             </div>
 
