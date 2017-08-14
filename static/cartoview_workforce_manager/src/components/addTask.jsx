@@ -208,16 +208,22 @@ console.log(copy)
 
     }
   }
-	componentDidMount() {
+  componentWillMount(){
     this.checkDispatcher()
+  }
+	componentDidMount() { 
     this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
     this.update(this.props.mapid);
     this.init( this.map )
+    
     setTimeout(()=>{
       this.map.updateSize()
       this.map.render()
     },3000)
 
+    
+    
+    
   }
 componentWillReceiveProps(nextProps){
 	if(nextProps.children != this.props.children){
@@ -233,7 +239,7 @@ componentWillReceiveProps(nextProps){
                     <br/>
                  
                     {this.state.person &&
-                    <div>
+                  
                    
                     <Form
                     ref="form"
@@ -241,16 +247,16 @@ componentWillReceiveProps(nextProps){
                     type={this.state.person}
 										value={this.state.value}
 
-                    />
-                     <label>Task Location</label>
+                    />}
+                     <label>Click to Add Task Location</label>
 											 <div style={{height:"100%"}} ref="map" className={' map-ct'}>
 
 										 		{this.props.children}
 										 	</div>
                     <button className="btn btn-primary" onClick={this.save}>Save</button>
                     </div>
-                    }
-                    </div>
+                    
+                  
                 }
 
 
