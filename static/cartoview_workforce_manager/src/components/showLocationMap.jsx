@@ -49,11 +49,11 @@ console.log(props)
   		if(this.props.x&&this.props.y) {
 
         //postrender because feature doesnt appear on componentDidMount 
-        map.on('postrender', ( e ) => {
-
+         setTimeout(()=>{
+      
         var point_geom = new ol.geom.Point([this.props.x,this.props.y])
         point_feature.setGeometry(point_geom);
-        console.log(point_feature)
+        // console.log(point_feature)
         var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
 
         var fill = new ol.style.Fill({
@@ -78,7 +78,7 @@ console.log(props)
 
 
 
-      })}}
+      },3000)}}
 
 
 
@@ -87,10 +87,7 @@ console.log(props)
     this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
     this.update(this.props.mapId);
     this.init( this.map )
-    // setTimeout(()=>{
-    //   this.map.updateSize()
-    //   this.map.render()
-    // },3000)
+   
 
   }
   render() {
