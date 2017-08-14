@@ -300,7 +300,7 @@ if(this.refs.worker.value){
                                         </div>
 					</div>
 					<div id="menu1" className="tab-pane fade">
-						{this.state.project&&  currentComponent === "add" &&<AddTask  mapid={this.state.project.mapid} />}
+						{this.state.project&&this.state.dispatchers&&    currentComponent === "add" &&<AddTask  mapid={this.state.project.mapid} dispatchers={this.state.dispatchers}/>}
 					</div>
 					<div id="menu2" className="tab-pane fade">
                         {this.state.workers && this.state.project && currentComponent === "details" &&

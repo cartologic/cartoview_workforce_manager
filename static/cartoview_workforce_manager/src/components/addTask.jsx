@@ -49,6 +49,7 @@ export default class AddTask extends Component {
 		super( props )
 		this.state={
 			success: false,
+      auth:false,
 			assign:[],
       person:null,
 			point:[],
@@ -130,7 +131,14 @@ export default class AddTask extends Component {
     }
   }
 
-
+checkDispatcher=()=>{
+console.log( this.props.dispatchers,username)
+  this.props.dispatchers.forEach((dispatcher)=>{
+if (dispatcher.dispatcher.username==username){
+  this.setState({auth:true})
+}
+  })
+}
   init=( map )=> {
     var point_feature = new ol.Feature({ });
   		map.on('singleclick', ( e ) => {
@@ -201,6 +209,7 @@ console.log(copy)
     }
   }
 	componentDidMount() {
+    this.checkDispatcher()
     this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
     this.update(this.props.mapid);
     this.init( this.map )
@@ -219,21 +228,28 @@ componentWillReceiveProps(nextProps){
 		return (
 			<div>
 			<div className="col-md-2"></div>
-                {!this.state.success && < div className="col-md-8 well">
+                {!this.state.success  &&  this.state.auth&& < div className="col-md-8 well">
+                
                     <br/>
-                    {this.state.person && <Form
+                 
+                    {this.state.person &&
+                    <div>
+                   
+                    <Form
                     ref="form"
 										options={options}
                     type={this.state.person}
 										value={this.state.value}
 
-                    />}
+                    />
                      <label>Task Location</label>
 											 <div style={{height:"100%"}} ref="map" className={' map-ct'}>
 
 										 		{this.props.children}
 										 	</div>
                     <button className="btn btn-primary" onClick={this.save}>Save</button>
+                    </div>
+                    }
                     </div>
                 }
 
@@ -242,6 +258,13 @@ componentWillReceiveProps(nextProps){
 					<br/>
 				<div className="alert alert-info">
   Your Task was created successfully.
+</div>
+
+				 </div>}
+         	{!this.state.auth && <div className="col-md-8">
+					<br/>
+				<div className="alert alert-info">
+  Only Dispatchers can create new task.
 </div>
 
 				 </div>}

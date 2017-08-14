@@ -95,7 +95,7 @@ def edit(request, instance_id, template="%s/edit.html" % APP_NAME, context={}):
     context.update(instance=instance,id=instance_id,app=APP_NAME)
     return render(request, template, context)
 
-
+@login_required
 def view_app(
         request,
         instance_id,
