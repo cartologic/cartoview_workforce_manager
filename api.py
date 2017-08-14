@@ -11,14 +11,12 @@ from .customAuth import CustomAuthorization
 User = get_user_model()
 from geonode.api.api import ProfileResource
 from geonode.people.models import Profile
-from cartoview.app_manager.resources import FileUploadResource
-import base64
-import os
-import mimetypes
-from tastypie.serializers import Serializer
-from django.core.files.uploadedfile import SimpleUploadedFile
-from tastypie import fields
 
+
+from tastypie.serializers import Serializer
+
+from tastypie import fields
+from cartoview.app_manager.models import App, AppInstance
 class UserResource(ModelResource):
     class Meta:
         queryset = User.objects.all()
@@ -37,7 +35,7 @@ class ProjectResource(ModelResource):
     owner = fields.ForeignKey(
         ProfileResource, 'owner', full=True, null=True, blank=True)
     def hydrate_owner(self, bundle):
-        print bundle
+
         # owner, created = Profile.objects.get_or_create(
         #     username=bundle.data['owner'])
         # bundle.data['owner'] = owner
@@ -100,7 +98,10 @@ class ProjectResource(ModelResource):
 
     def hydrate(self, bundle):
         bundle.obj.created_by = bundle.request.user
-
+        app_name=bundle.data['app']
+        instance_obj = AppInstance()
+        instance_obj.app = App.objects.get(name=app_name)
+        bundle.obj.app=instance_obj.app
         return bundle
 
     class Meta:

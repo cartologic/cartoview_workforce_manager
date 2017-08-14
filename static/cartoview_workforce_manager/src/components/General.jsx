@@ -57,7 +57,7 @@ loadProject=()=>{
             let properConfig = {
                 title: basicConfig.title,
                 abstract: basicConfig.abstract,
-
+                app: app
             }
             this.props.onComplete(properConfig)
         }

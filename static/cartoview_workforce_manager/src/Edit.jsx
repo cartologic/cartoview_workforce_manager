@@ -58,7 +58,7 @@ export default class Edit extends Component {
                         ? this.props.config.instance.config
                         : undefined,
                     onComplete: (basicConfig) => {
-
+                        console.log("vs",basicConfig)
                         this.editService.save(basicConfig, id).then((res) => {
 
                             this.setState({success: true, id: res.id})
