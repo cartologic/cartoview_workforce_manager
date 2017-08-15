@@ -1,9 +1,12 @@
 import React, {Component} from 'react';
 import t from 'tcomb-form';
 import {getCRSFToken} from '../helpers/helpers.jsx'
-
+import ReactDOM from 'react-dom';
+import MapConfigTransformService from '@boundlessgeo/sdk/services/MapConfigTransformService';
+import MapConfigService from '@boundlessgeo/sdk//services/MapConfigService';
 const Form = t.form.Form;
 var tComb = {}
+import ol from 'openlayers';
 const Priority = t.enums({
     0: 'Critical',
     1: 'High',
@@ -30,6 +33,9 @@ export default class Edit extends Component {
             success: false,
             assign: [],
             task: null,
+            x:this.props.task.x,
+            y:this.props.task.y,
+      			extent:this.props.task.extent,
             options: {
                 "fields": {
                     "description": {
@@ -44,16 +50,26 @@ export default class Edit extends Component {
                 title: this.props.task.title,
                 short_description: this.props.task.short_description,
                 description: this.props.task.description,
-                assigned_to: "/apps/cartoview_workforce_manager/api/v1/user/1001/",
+                assigned_to: "/apps/cartoview_workforce_manager/api/v1/user/"+this.props.task.assigned_to.id+"/",
                 due_date: new Date(this.props.task.due_date),
                 priority: this.props.task.priority,
                 status: this.props.task.status,
                 work_order: this.props.task.work_order,
                 group: this.props.task.group
             }
+}
+            this.map = new ol.Map({
+              //controls: [new ol.control.Attribution({collapsible: false}), new ol.control.ScaleLine()],
+              layers: [new ol.layer.Tile({title: 'OpenStreetMap', source: new ol.source.OSM()})],
+              view: new ol.View({
+                center: [
+                  0, 0
+                ],
+                zoom: 3
+              })
+            });
 
 
-        }
 
 
         var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + "/workers"
@@ -62,7 +78,7 @@ export default class Edit extends Component {
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
                 "X-CSRFToken": getCRSFToken(),
-          
+
             })
         })
             .then(function (response) {
@@ -99,7 +115,116 @@ export default class Edit extends Component {
 
 
         this.save = this.save.bind(this)
+        console.log(this.state)
     }
+
+    update(mapId) {
+      console.log("mapid",mapId);
+      if (mapId) {
+        var url = `/maps/${mapId}/data`
+        fetch(url, {
+          method: "GET",
+          credentials: 'include'
+        }).then((response) => {
+          if (response.status == 200) {
+            return response.json();
+          }
+        }).then((config) => {
+          if (config) {
+            MapConfigService.load(MapConfigTransformService.transform(config), this.map);
+          //  this.props.onMapReady(this.map)
+
+
+          }
+        });
+      }
+    }
+
+    init=( map )=> {
+      var point_feature = new ol.Feature({ });
+    		map.on('singleclick', ( e ) => {
+
+
+          this.setState({x:e.coordinate[0],y:e.coordinate[1],extent:map.getView().calculateExtent(map.getSize()),value:this.state.value})
+          var point_geom = new ol.geom.Point(e.coordinate)
+          console.log( this.state)
+
+          point_feature.setGeometry(point_geom);
+          var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
+
+          var fill = new ol.style.Fill({
+          color: [180, 0, 100, 1]
+            });
+          var stroke = new ol.style.Stroke({
+            color: [90, 0, 0, 1],
+            width: 1
+          });
+          var style = new ol.style.Style({
+          image: new ol.style.Circle({
+            fill: fill,
+            stroke: stroke,
+            radius: 8
+          }),
+          fill: fill,
+          stroke: stroke
+        });
+          vector_layer.setStyle(style);
+          map.addLayer(vector_layer);
+
+
+
+
+        })
+
+
+        if(this.state.x&&this.state.y) {
+
+          //postrender because feature doesnt appear on componentDidMount
+           setTimeout(()=>{
+
+          var point_geom = new ol.geom.Point([this.state.x,this.state.y])
+          point_feature.setGeometry(point_geom);
+          // console.log(point_feature)
+          var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
+
+          var fill = new ol.style.Fill({
+          color: [180, 0, 100, 1]
+            });
+          var stroke = new ol.style.Stroke({
+            color: [90, 0, 0, 1],
+            width: 1
+          });
+          var style = new ol.style.Style({
+          image: new ol.style.Circle({
+            fill: fill,
+            stroke: stroke,
+            radius: 8
+          }),
+          fill: fill,
+          stroke: stroke
+        });
+          vector_layer.setStyle(style);
+         map.addLayer(vector_layer);
+
+
+
+
+        },3000)}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      }
 
 
     save() {
@@ -109,7 +234,14 @@ export default class Edit extends Component {
         if (value) {
             var project = {"project": {"pk": id}}
 
-            var copy = Object.assign(project, value);
+            if(this.state.x&&this.state.y){
+            var mapconf={"x":this.state.x,"y":this.state.y,"extent":this.state.extent.toString()}
+
+            var copy1 = Object.assign(mapconf, value);
+            var copy = Object.assign(project, copy1);
+            }
+            else{
+            var copy = Object.assign(project, value);}
 
             var url = '/apps/cartoview_workforce_manager/api/v1/task/' + this.props.task.id
 
@@ -119,7 +251,7 @@ export default class Edit extends Component {
                 headers: new Headers({
                     "Content-Type": "application/json; charset=UTF-8",
                     "X-CSRFToken": getCRSFToken(),
-                    
+
                 }),
                 body: JSON.stringify(copy)
             })
@@ -135,7 +267,25 @@ export default class Edit extends Component {
 
         }
     }
+    componentDidMount() {
+      this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
+      this.update(this.props.mapid);
+      this.init( this.map )
 
+      setTimeout(()=>{
+        this.map.updateSize()
+        this.map.render()
+      },3000)
+console.log("sss",this.state);
+
+
+
+    }
+  componentWillReceiveProps(nextProps){
+  	if(nextProps.children != this.props.children){
+
+  	}
+  }
 
     render() {
         return (
@@ -152,6 +302,11 @@ export default class Edit extends Component {
                             type={this.state.task}
                             value={this.state.value}
                         />}
+                        <label>Click to Edit Task Location</label>
+                          <div style={{height:"100%"}} ref="map" className={' map-ct'}>
+
+                           {this.props.children}
+                         </div>
                         <button className="btn btn-primary" onClick={this.save}>Save</button>
                     </div>
                 </div>

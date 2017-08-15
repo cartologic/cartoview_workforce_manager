@@ -57,7 +57,7 @@ export default class AddTask extends Component {
 			value:null
 		}
 
-	      this.loaded = false;
+
 	      this.map = new ol.Map({
 	        //controls: [new ol.control.Attribution({collapsible: false}), new ol.control.ScaleLine()],
 	        layers: [new ol.layer.Tile({title: 'OpenStreetMap', source: new ol.source.OSM()})],

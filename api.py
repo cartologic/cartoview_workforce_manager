@@ -51,7 +51,7 @@ class ProjectResource(ModelResource):
 
 
     def get_dispatchers(self, request, **kwargs):
-        
+
         bundle = self.build_bundle(data={'pk': kwargs['pk']}, request=request)
         obj = self.cached_obj_get(bundle=bundle, **self.remove_api_resource_names(kwargs))
 
@@ -136,7 +136,7 @@ class TaskResource(ModelResource):
 
     def dehydrate_assigned_to(self, bundle):
         #print("assignto deh",bundle.obj.assigned_to.__dict__)
-         bundle.data['assigned_to'] = {'username': bundle.obj.assigned_to.username}
+         bundle.data['assigned_to'] = {'username': bundle.obj.assigned_to.username,'id':bundle.obj.assigned_to.id}
          return bundle.data['assigned_to']
 
     def get_comments(self, request, **kwargs):
