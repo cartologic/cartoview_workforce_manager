@@ -17,7 +17,7 @@ export default class Dispatchers extends Component {
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
                 "X-CSRFToken": getCRSFToken(),
-       
+
             })
         })
             .then(function (response) {
@@ -37,7 +37,7 @@ export default class Dispatchers extends Component {
 
 
 if(!isNaN(id)){
-    
+
        var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + "/dispatchers"
 
         fetch(url, {
@@ -45,7 +45,7 @@ if(!isNaN(id)){
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
                 "X-CSRFToken": getCRSFToken(),
-              
+
             })
         })
             .then(function (response) {
@@ -65,23 +65,23 @@ if(!isNaN(id)){
 
     }
 check=(uri)=>{
-   
+
     if(!isNaN(id))
     {
         if(this.state.selectedDispatchers.length>0){
         for(var i=0;i<this.state.selectedDispatchers.length;i++){
             if( this.state.selectedDispatchers[i].dispatcher)
           { if (this.state.selectedDispatchers[i].dispatcher.resource_uri==uri.resource_uri)
-     
+
             { return true} }
             else{if (this.state.selectedDispatchers[i]==uri.resource_uri)
-     
+
             { return true} }
             }
-       
+
     }}
-    
-    
+
+
 }
 
     save() {
@@ -90,7 +90,7 @@ check=(uri)=>{
             // here should pu the value of selected dispatchers
 
         }
-       
+
          this.props.onComplete(this.state.selectedDispatchers)
 
     }
@@ -132,6 +132,7 @@ check=(uri)=>{
 				<hr></hr>
 
                 {this.state.dispatchers && <div className="checkbox"> {this.state.dispatchers.map((item) => {
+                  if(item.username&&item.id>0){
                     return <div key={item.id}><label><input type="checkbox" value={item.resource_uri} checked={this.check(item)}
 															onChange={(e) => {
                                                                 var checkedArray = this.state.selectedDispatchers;
@@ -157,7 +158,7 @@ check=(uri)=>{
                                                             }
 
                                                             }
-					/>{item.username}</label> <br/></div>
+					/>{item.username}</label> <br/></div>}
 
                 })
                 }</div>}

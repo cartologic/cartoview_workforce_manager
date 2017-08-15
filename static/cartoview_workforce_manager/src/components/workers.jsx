@@ -17,7 +17,7 @@ export default class Workers extends Component {
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
                 "X-CSRFToken": getCRSFToken(),
-         
+
             })
         })
             .then(function (response) {
@@ -32,7 +32,7 @@ export default class Workers extends Component {
             });
 
 if(!isNaN(id)){
-    
+
        var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + "/workers"
 
         fetch(url, {
@@ -40,7 +40,7 @@ if(!isNaN(id)){
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
                 "X-CSRFToken": getCRSFToken(),
-           
+
             })
         })
             .then(function (response) {
@@ -58,20 +58,20 @@ if(!isNaN(id)){
 check=(uri)=>{
     if(!isNaN(id))
      {
-        
+
         for(var i=0;i<this.state.selectedWorkers.length;i++){
             if( this.state.selectedWorkers[i].worker)
           { if (this.state.selectedWorkers[i].worker.resource_uri==uri.resource_uri)
-     
+
             { return true} }
             else{if (this.state.selectedWorkers[i]==uri.resource_uri)
-     
+
             { return true} }
             }
-       
+
      }
-    
-    
+
+
 }
 
     save() {
@@ -136,6 +136,7 @@ check=(uri)=>{
 				<hr></hr>
 
                 {this.state.workers && <div className="checkbox"> {this.state.workers.map((item) => {
+                  if(item.username&&item.id>0){
                     return <div key={item.id}><label><input type="checkbox" value={item.resource_uri} checked={this.check(item)}
 															onChange={(e) => {
                                                                 var checkedArray = this.state.selectedworkers;
@@ -161,7 +162,7 @@ check=(uri)=>{
                                                             }
 
                                                             }
-					/>{item.username}</label> <br/></div>
+					/>{item.username}</label> <br/></div>}
 
                 })
                 }</div>}
