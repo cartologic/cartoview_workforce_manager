@@ -177,7 +177,7 @@ if (dispatcher.dispatcher.username==username){
 	 save() {
 
     var value = this.refs.form.getValue();
-		console.log("save",value);
+
     if (value) {
 var project={"project":{"pk":id}}
 if(this.state.point.length){
@@ -202,7 +202,14 @@ console.log(copy)
                         throw new Error("Bad response from server");
                         }
 
-                    }).then(()=>{this.setState({"success":true})})
+                    }).then(()=>{this.setState({"success":true},()=>{
+
+                        setTimeout(()=>{
+													this.setState({"success":false})
+
+												},5000)
+
+										})})
 
 
 
@@ -211,19 +218,19 @@ console.log(copy)
   componentWillMount(){
     this.checkDispatcher()
   }
-	componentDidMount() { 
+	componentDidMount() {
     this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
     this.update(this.props.mapid);
     this.init( this.map )
-    
+
     setTimeout(()=>{
       this.map.updateSize()
       this.map.render()
     },3000)
 
-    
-    
-    
+
+
+
   }
 componentWillReceiveProps(nextProps){
 	if(nextProps.children != this.props.children){
@@ -234,13 +241,14 @@ componentWillReceiveProps(nextProps){
 		return (
 			<div>
 			<div className="col-md-2"></div>
-                {!this.state.success  &&  this.state.auth&& < div className="col-md-8 well">
-                
+			<div className="col-md-8 ">
+                {  this.state.auth&& < div className="well">
+
                     <br/>
-                 
+
                     {this.state.person &&
-                  
-                   
+
+
                     <Form
                     ref="form"
 										options={options}
@@ -255,18 +263,19 @@ componentWillReceiveProps(nextProps){
 										 	</div>
                     <button className="btn btn-primary" onClick={this.save}>Save</button>
                     </div>
-                    
-                  
+
+
                 }
 
 
-				{this.state.success && <div className="col-md-8">
-					<br/>
-				<div className="alert alert-info">
-  Your Task was created successfully.
-</div>
+				{this.state.success &&
 
-				 </div>}
+				  <div className="alert alert-info">
+           Your Task was created successfully.
+
+			 </div>}
+		 </div>
+		 <div className="col-md-2"></div>
          	{!this.state.auth && <div className="col-md-8">
 					<br/>
 				<div className="alert alert-info">

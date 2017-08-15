@@ -9,13 +9,14 @@ export default class Tasks extends Component {
             tasks: [],
             selectedtask: null
         }
+          console.log("wiil mount")
         var url = '/apps/cartoview_workforce_manager/api/v1/project/' + this.props.id + '/tasks'
         fetch(url, {
             method: "GET",
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
                 "X-CSRFToken": getCRSFToken(),
-              
+
             })
         })
             .then(function (response) {
@@ -33,6 +34,9 @@ export default class Tasks extends Component {
     }
 
 
+componentDidMount(){
+  console.log("wiil mount")
+}
     render() {
         return (
 
@@ -102,7 +106,7 @@ export default class Tasks extends Component {
 					</div>}
 
                 {!this.state.tasks.length && <div>
-					<p>No tasks yet for this project</p>
+					<p>No tasks yet for this projects</p>
 				</div>
 
                 }

@@ -215,6 +215,7 @@ if(this.refs.worker.value){
 				<ul className="nav nav-pills">
 					<li className="active"><a data-toggle="tab" href="#home"  onClick={() => {
                                 this.setState({"selectedtask": null})
+                                this.loadTasks()
                             }}>Tasks</a></li>
                           <li  onClick={()=>this.setState({currentComponent:"add"})}><a data-toggle="tab" href="#menu1">New Task</a></li>
                     <li><a data-toggle="tab" href="#filter" onClick={() => {
@@ -223,7 +224,7 @@ if(this.refs.worker.value){
 					<li onClick={()=>this.setState({currentComponent:"details"})}><a data-toggle="tab" href="#menu2">Ptoject Details </a></li>
 
 
-					
+
 
 
 				</ul>
