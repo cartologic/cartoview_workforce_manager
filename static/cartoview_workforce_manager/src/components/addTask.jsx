@@ -96,7 +96,7 @@ export default class AddTask extends Component {
 							  work_order:t.maybe(t.Integer),
 							  group:t.maybe(t.String),
                               priority: Priority ,
-                              status: Status,// enum,
+                            //  status: Status,// enum,
 
                         })
 
