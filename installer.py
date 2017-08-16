@@ -2,7 +2,7 @@ __author__ = 'author'
 
 info = {
     "title": "Cartoview Workforce Manager",
-    "description": "Simple workforce task management app that allow users to assign tasks to other users",
+    "description": "Cartoview app to manage project/work group tasks. It provides a full management of a task status, priority, location ,attachments, comments",
     "author": 'Cartologic',
     "home_page": 'http://cartoview.org/apps/cartoview_workforce_manager',
     "help_url": "http://cartoview.org/apps/cartoview_workforce_manager/help/",
