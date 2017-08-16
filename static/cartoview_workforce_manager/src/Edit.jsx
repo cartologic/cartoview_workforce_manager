@@ -1,12 +1,9 @@
 import React, {Component} from 'react'
 import './css/app.css'
 import Navigator from './components/Navigator.jsx'
-
 import General from './components/General.jsx'
 import EditService from './services/editService'
 import MapEditService from './services/MapEditService'
-
-
 import {getCRSFToken} from './helpers/helpers.jsx'
 import Dispatchers from './components/dispatchers.jsx'
 import Workers from './components/workers.jsx'

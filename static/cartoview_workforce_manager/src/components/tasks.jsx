@@ -100,7 +100,7 @@ componentDidMount(){
                             }}><span className="glyphicon glyphicon-chevron-left"></span>Back To List View
 							</button>
 
-							<TaskDetails task={this.state.selectedtask}/>
+							<TaskDetails task={this.state.selectedtask.i}/>
 						</div>
 						<div className="col-md-1"></div>
 					</div>}

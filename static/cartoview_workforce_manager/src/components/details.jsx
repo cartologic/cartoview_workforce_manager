@@ -8,7 +8,6 @@ export default class Details extends Component {
 
     }
 
-
     render() {
         var date = new Date(this.props.task.due_date)
         var day = date.getDate()
