@@ -64,13 +64,12 @@ console.log(props)
           width: 1
         });
         var style = new ol.style.Style({
-        image: new ol.style.Circle({
-          fill: fill,
-          stroke: stroke,
-          radius: 8
-        }),
-        fill: fill,
-        stroke: stroke
+          image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+          anchor: [0.5, 10],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          src: URLS.static +'marker.png'
+      }))
       });
         vector_layer.setStyle(style);
        map.addLayer(vector_layer);

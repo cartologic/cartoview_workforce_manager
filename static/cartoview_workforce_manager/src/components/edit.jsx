@@ -152,22 +152,14 @@ export default class Edit extends Component {
           point_feature.setGeometry(point_geom);
           var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
 
-          var fill = new ol.style.Fill({
-          color: [180, 0, 100, 1]
-            });
-          var stroke = new ol.style.Stroke({
-            color: [90, 0, 0, 1],
-            width: 1
-          });
-          var style = new ol.style.Style({
-          image: new ol.style.Circle({
-            fill: fill,
-            stroke: stroke,
-            radius: 8
-          }),
-          fill: fill,
-          stroke: stroke
-        });
+           var style = new ol.style.Style({
+          image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+          anchor: [0.5, 10],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          src: URLS.static +'marker.png'
+      }))
+      });
           vector_layer.setStyle(style);
           map.addLayer(vector_layer);
 
@@ -187,22 +179,14 @@ export default class Edit extends Component {
           // console.log(point_feature)
           var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
 
-          var fill = new ol.style.Fill({
-          color: [180, 0, 100, 1]
-            });
-          var stroke = new ol.style.Stroke({
-            color: [90, 0, 0, 1],
-            width: 1
-          });
-          var style = new ol.style.Style({
-          image: new ol.style.Circle({
-            fill: fill,
-            stroke: stroke,
-            radius: 8
-          }),
-          fill: fill,
-          stroke: stroke
-        });
+           var style = new ol.style.Style({
+          image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+          anchor: [0.5, 10],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          src: URLS.static +'marker.png'
+      }))
+      });
           vector_layer.setStyle(style);
          map.addLayer(vector_layer);
 

@@ -25,7 +25,14 @@
      var username="{{request.user.username}}"
 
     var id= {{id}}
-
+ var URLS = {
+      
+        static: "{{ STATIC_URL }}",
+     
+      };
+      function getMapConfigUrl(id){
+        return "/maps/" + id + "/data"
+      }
 
     </script>
   <script src="{{ STATIC_URL }}cartoview_workforce_manager/dist/ReactClient.bundle.js"></script>

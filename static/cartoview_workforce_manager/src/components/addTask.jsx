@@ -143,29 +143,21 @@ if (dispatcher.dispatcher.username==username){
     var point_feature = new ol.Feature({ });
   		map.on('singleclick', ( e ) => {
 
-        console.log( e.coordinate,map.getView().calculateExtent(map.getSize()))
-				console.log(this.refs.form.getValue())
+        
         this.setState({point:e.coordinate,extent:map.getView().calculateExtent(map.getSize()),value:this.refs.form.getValue()})
         var point_geom = new ol.geom.Point(e.coordinate)
         point_feature.setGeometry(point_geom);
         var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
 
-        var fill = new ol.style.Fill({
-        color: [180, 0, 100, 1]
-          });
-        var stroke = new ol.style.Stroke({
-          color: [90, 0, 0, 1],
-          width: 1
-        });
-        var style = new ol.style.Style({
-        image: new ol.style.Circle({
-          fill: fill,
-          stroke: stroke,
-          radius: 8
-        }),
-        fill: fill,
-        stroke: stroke
+         var style = new ol.style.Style({
+          image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+          anchor: [0.5, 10],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          src: URLS.static +'marker.png'
+      }))
       });
+       
         vector_layer.setStyle(style);
         map.addLayer(vector_layer);
 
@@ -256,7 +248,7 @@ componentWillReceiveProps(nextProps){
 										value={this.state.value}
 
                     />}
-                     <label>Click to Add Task Location</label>
+                     <label>Click to Add Task Location</label>{!this.state.point.length &&<small> ( loctaion is not set)</small>}
 											 <div style={{height:"100%"}} ref="map" className={' map-ct'}>
 
 										 		{this.props.children}
