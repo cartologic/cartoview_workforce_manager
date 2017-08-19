@@ -18,7 +18,7 @@ console.log(props)
         center: [
           0, 0
         ],
-        zoom: 3
+        zoom: 3,
       })
     });
 }
@@ -35,7 +35,7 @@ console.log(props)
       }).then((config) => {
         if (config) {
           MapConfigService.load(MapConfigTransformService.transform(config), this.map);
-        //  this.props.onMapReady(this.map)
+  
 
 
         }
@@ -48,36 +48,33 @@ console.log(props)
     var point_feature = new ol.Feature({ });
   		if(this.props.x&&this.props.y) {
 
-        //postrender because feature doesnt appear on componentDidMount 
+        
          setTimeout(()=>{
       
         var point_geom = new ol.geom.Point([this.props.x,this.props.y])
         point_feature.setGeometry(point_geom);
-        // console.log(point_feature)
+    
         var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
-
-        var fill = new ol.style.Fill({
-        color: [180, 0, 100, 1]
-          });
-        var stroke = new ol.style.Stroke({
-          color: [90, 0, 0, 1],
-          width: 1
+        console.log(this.props.extent)
+        map.setView(new ol.View({
+        center:  [parseInt(this.props.x),parseInt(this.props.y)],
+        zoom: 6
+                                  }));
+          var style = new ol.style.Style({
+            image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+            anchor: [0.5, 10],
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'pixels',
+            src: URLS.static +'marker.png'
+        }))
         });
-        var style = new ol.style.Style({
-          image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
-          anchor: [0.5, 10],
-          anchorXUnits: 'fraction',
-          anchorYUnits: 'pixels',
-          src: URLS.static +'marker.png'
-      }))
-      });
         vector_layer.setStyle(style);
        map.addLayer(vector_layer);
 
 
 
 
-      },3000)}}
+      },500)}}
 
 
 

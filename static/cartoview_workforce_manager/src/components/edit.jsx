@@ -35,7 +35,7 @@ export default class Edit extends Component {
             task: null,
             x:this.props.task.x,
             y:this.props.task.y,
-      			extent:this.props.task.extent,
+      		extent:this.props.task.extent,
             options: {
                 "fields": {
                     "description": {
@@ -166,19 +166,23 @@ export default class Edit extends Component {
 
 
 
+
         })
 
 
         if(this.state.x&&this.state.y) {
 
           //postrender because feature doesnt appear on componentDidMount
-           setTimeout(()=>{
-
+       
+   setTimeout(()=>{
           var point_geom = new ol.geom.Point([this.state.x,this.state.y])
           point_feature.setGeometry(point_geom);
           // console.log(point_feature)
           var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
-
+            map.setView(new ol.View({
+            center:  [parseInt(this.state.x),parseInt(this.state.y)],
+            zoom: 6
+                                        }));
            var style = new ol.style.Style({
           image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
           anchor: [0.5, 10],
@@ -193,22 +197,9 @@ export default class Edit extends Component {
 
 
 
-        },3000)}
+      },500)}}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-      }
+        
 
 
     save() {
@@ -255,12 +246,11 @@ export default class Edit extends Component {
       this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
       this.update(this.props.mapid);
       this.init( this.map )
-
       setTimeout(()=>{
         this.map.updateSize()
-        this.map.render()
+        // this.map.render()
       },3000)
-console.log("sss",this.state);
+
 
 
 

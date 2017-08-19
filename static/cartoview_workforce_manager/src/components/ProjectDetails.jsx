@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {getCRSFToken} from '../helpers/helpers.jsx'
 import '../css/project.css'
-import LocationMap from './locationMap.jsx';
+import ShowAllLocationMap from './showAllLocationMap.jsx';
 export default class ProjectDetails extends Component {
     constructor(props) {
         super(props)
@@ -80,10 +80,10 @@ export default class ProjectDetails extends Component {
                                 </ul>
                             </div>
                         </li>
-                  {  /*    <li className="list-group-item">
+                        <li className="list-group-item">
                             <div className="headers"><b>Project map</b></div>
-                            <LocationMap mapId={this.props.mapid} />
-                          </li>*/}
+                            <ShowAllLocationMap mapId={this.props.mapid} project={this.state.project.id} />
+                          </li>
 
                     </ul>
 
