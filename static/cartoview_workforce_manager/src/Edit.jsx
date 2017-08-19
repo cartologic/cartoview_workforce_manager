@@ -251,15 +251,16 @@ export default class Edit extends Component {
                             })
                                 .then(function (response) {
                                     if (response.status >= 400) {
+                                        console.log(response)
                                         throw new Error("Bad response from server");
                                     }
 
                                 })
 
                         }}
-                        else{
+                        else{console.log("congfig",basicConfig)
                              var url = '/apps/cartoview_workforce_manager/api/v1/project_workers/'
-                             var del_url = '/apps/cartoview_workforce_manager/api/project/'+id+'/workers'
+                             var del_url = '/apps/cartoview_workforce_manager/api/v1/project/'+id+'/workers/'
                                 fetch(del_url, {
                                 method: "DELETE",
                                 credentials: "same-origin",
@@ -272,10 +273,11 @@ export default class Edit extends Component {
                             })
                                 .then(function (response) {
                                     if (response.status >= 400) {
+                                         console.log(response)
                                         throw new Error("Bad response from server");
                                         
                                     }
-                                    return response()
+                                   
                                 }).then (()=>{ 
                                     
                                     var workers=""
@@ -288,6 +290,7 @@ export default class Edit extends Component {
                                        workers=basicConfig[i].workers.resource_uri
                                    } 
                                    else workers=basicConfig[i]
+                                   console.log("final",workers)
                             fetch(url, {
                                 method: "POST",
                                 credentials: "same-origin",
@@ -298,11 +301,12 @@ export default class Edit extends Component {
                                 }),
                                 body: JSON.stringify({
                                     "project": "/apps/cartoview_workforce_manager/api/v1/project/" + this.state.id + "/",
-                                    "workers": workers
+                                    "worker": workers
                                 })
                             })
                                 .then(function (response) {
                                     if (response.status >= 400) {
+                                         console.log(response)
                                         throw new Error("Bad response from server");
                                     }
 

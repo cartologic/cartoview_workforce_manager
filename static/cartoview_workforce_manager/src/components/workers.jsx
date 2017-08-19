@@ -8,7 +8,7 @@ export default class Workers extends Component {
 
         this.state = {
             workers: "",
-            selectedworkers: []
+            selectedWorkers: []
         }
  console.log(this.props.workers)
         var url = '/apps/cartoview_workforce_manager/api/v1/user/'
@@ -75,8 +75,8 @@ check=(uri)=>{
 }
 
     save() {
-
-        this.props.onComplete(this.state.selectedworkers)
+console.log("worler",this.state.selectedWorkers)
+        this.props.onComplete(this.state.selectedWorkers)
 
     }
 
@@ -139,7 +139,7 @@ check=(uri)=>{
                   if(item.username&&item.id>0){
                     return <div key={item.id}><label><input type="checkbox" value={item.resource_uri} checked={this.check(item)}
 															onChange={(e) => {
-                                                                var checkedArray = this.state.selectedworkers;
+                                                                var checkedArray = this.state.selectedWorkers;
                                                                 var selectedValue = e.target.value;
                                                                 if (e.target.checked === true) {
 

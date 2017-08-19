@@ -8,7 +8,7 @@ export default class Dispatchers extends Component {
         this.state = {
             dispatchers: "",
             selectedDispatchers: [],
-            selectedDispatchers: []
+         
         }
 
         var url = '/apps/cartoview_workforce_manager/api/v1/user/'
