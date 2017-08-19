@@ -6,6 +6,8 @@ export default class Tasks extends Component {
     constructor(props) {
         super(props)
         this.state = {
+
+            loading:true,
             tasks: [],
             selectedtask: null
         }
@@ -28,22 +30,22 @@ export default class Tasks extends Component {
             })
             .then((data) => {
 
-                this.setState({tasks: data.objects})
+                this.setState({tasks: data.objects,loading:false})
             });
 
     }
 
 
 componentDidMount(){
-  console.log("wiil mount")
+
 }
     render() {
         return (
 
 			<div className="container">
-
+{this.state.loading && <img src={URLS.static +'marker.png'}/>}
 				<br/>
-                {this.state.tasks.length != 0 && !this.state.selectedtask &&
+                {this.state.tasks.length != 0 && !this.state.selectedtask && !this.state.loading&&
 				<table className="table table-hover table-bordered table-responsive">
 					<thead>
 					<tr>
@@ -105,7 +107,8 @@ componentDidMount(){
 						<div className="col-md-1"></div>
 					</div>}
 
-                {!this.state.tasks.length && <div>
+                {!this.state.tasks.length && !this.state.loading &&
+                <div>
 					<p>No tasks yet for this projects</p>
 				</div>
 

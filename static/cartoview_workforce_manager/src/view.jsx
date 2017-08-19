@@ -22,22 +22,23 @@ export default class ReactClient extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            loading:true,
             project: "",
             tasks: "",
             workers: "",
             dispatchers: "",
-              tasks: [],
+            tasks: [],
             selectedtask: null,
-             priority:"",
+            priority:"",
             status:"",
             filter:[],
             result:false,
             selectedtask2:"",currentComponent:"list"
         }
-        this.loadTasks()
-        this.loadProject()
-        this.loadWorkers()
-         this.loadDispatchers()
+            this.loadTasks()
+            this.loadProject()
+            this.loadWorkers()
+            this.loadDispatchers()
 
     }
 
@@ -108,7 +109,7 @@ if(this.refs.worker.value){
             })
             .then((data) => {
 
-                this.setState({tasks: data.objects})
+                this.setState({tasks: data.objects,loading:false})
             });
     }
     loadProject = () => {
@@ -233,8 +234,16 @@ if(this.refs.worker.value){
 					<div id="home" className="tab-pane fade in active">
 
                           <div className="container">
+                          {this.state.loading && 
+                          <div>
+                          <div className="col-md-4"></div>
+                        <div className="col-md-4"><img src={URLS.static +'cartoview_workforce_manager/loader'}/>
+                        </div>
+                        <div className="col-md-4"></div>
+                          </div>
+                          }
                                             <br/>
-                                            {this.state.tasks.length != 0 && !this.state.selectedtask &&
+                                            {this.state.tasks.length != 0 && !this.state.selectedtask && !this.state.loading&&
                                             <table className="table table-hover table-bordered table-responsive">
                                                 <thead>
                                                 <tr>
@@ -293,7 +302,7 @@ if(this.refs.worker.value){
                                                     <div className="col-md-1"></div>
                                                 </div>}
 
-                                            {!this.state.tasks.length && <div>
+                                            {!this.state.tasks.length &&  !this.state.loading &&<div>
                                                 <p>No tasks yet for this project</p>
                                             </div>
 
