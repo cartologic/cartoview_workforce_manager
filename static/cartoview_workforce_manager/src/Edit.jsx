@@ -18,12 +18,13 @@ export default class Edit extends Component {
             workers:"",
             dispatchers:"",
             step: 0,
-      config: {},
-      selectedResource: this.props.config.instance ? this.props.config.instance.map:undefined,
- 
+            map:0,
+            config: {},
+            selectedResource: this.props.config.instance ? this.props.config.instance.map:undefined,
+
         }
         this.editService = new EditService({baseUrl: '/'})
-        
+
         this.mapeditService = new MapEditService({baseUrl: '/'})
     }
 
@@ -41,7 +42,7 @@ export default class Edit extends Component {
     render() {
         var {step} = this.state
         const steps = [
-          
+
             {
                 label: "General",
                 component: General,
@@ -55,7 +56,7 @@ export default class Edit extends Component {
                         ? this.props.config.instance.config
                         : undefined,
                     onComplete: (basicConfig) => {
-                        console.log("vs",basicConfig)
+                        this.setState({map:basicConfig.map})
                         this.editService.save(basicConfig, id).then((res) => {
 
                             this.setState({success: true, id: res.id})
@@ -77,7 +78,7 @@ export default class Edit extends Component {
         component: ResourceSelector,
         props: {
           resourcesUrl: this.props.config.urls.resources_url,
-          instance: this.state.selectedResource,
+          instance: this.state.map,
           username:this.props.username,
           selectMap: (resource) => {
             this.setState({selectedResource: resource})
@@ -89,8 +90,8 @@ export default class Edit extends Component {
               config: Object.assign(this.state.config, {map: this.state.selectedResource.id})
             },()=>{
 
-                     
-			
+
+
 		 var url = '/apps/cartoview_workforce_manager/api/v1/project/'+ this.state.id + "/"
 		return fetch( url ,
 			 {
@@ -99,7 +100,7 @@ export default class Edit extends Component {
 			headers: new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken( )}),
 			body: JSON.stringify( {"mapid":this.state.selectedResource.id} )
 		}).then(( response ) => {response.json( )
-        
+
          let {step} = this.state;
                         this.goToStep(++step)
         })
@@ -107,7 +108,7 @@ export default class Edit extends Component {
 
 
             })
-            
+
           }
         }
       } ,
@@ -134,7 +135,7 @@ export default class Edit extends Component {
                                 headers: new Headers({
                                     "Content-Type": "application/json; charset=UTF-8",
                                     "X-CSRFToken": getCRSFToken(),
-                                 
+
                                 }),
                                 body: JSON.stringify({
                                     "project": "/apps/cartoview_workforce_manager/api/v1/project/" + this.state.id + "/",
@@ -150,7 +151,7 @@ export default class Edit extends Component {
 
                         }}
                         else{
-                            
+
                             var del_url = '/apps/cartoview_workforce_manager/api/v1/project/'+id+'/dispatchers/'
                              var url = '/apps/cartoview_workforce_manager/api/v1/project_dispatchers/'
                                 fetch(del_url, {
@@ -159,24 +160,24 @@ export default class Edit extends Component {
                                 headers: new Headers({
                                     "Content-Type": "application/json; charset=UTF-8",
                                     "X-CSRFToken": getCRSFToken(),
-                                
+
                                 }),
-                            
+
                             })
                                 .then(function (response) {
                                     if (response.status >= 400) {
                                         throw new Error("Bad response from server");
                                     }
 
-                                }).then (()=>{ 
-                                    
+                                }).then (()=>{
+
                                     var dispatcher=""
                                     for (var i = 0; i < basicConfig.length; i++) {
 
-                                      
+
                                    if(basicConfig[i].dispatcher){
                                        dispatcher=basicConfig[i].dispatcher.resource_uri
-                                   } 
+                                   }
                                    else dispatcher=basicConfig[i]
                             fetch(url, {
                                 method: "POST",
@@ -184,7 +185,7 @@ export default class Edit extends Component {
                                 headers: new Headers({
                                     "Content-Type": "application/json; charset=UTF-8",
                                     "X-CSRFToken": getCRSFToken(),
-                                  
+
                                 }),
                                 body: JSON.stringify({
                                     "project": "/apps/cartoview_workforce_manager/api/v1/project/" + this.state.id + "/",
@@ -202,7 +203,7 @@ export default class Edit extends Component {
 
 
 
-                            
+
 
 
 
@@ -242,7 +243,7 @@ export default class Edit extends Component {
                                 headers: new Headers({
                                     "Content-Type": "application/json; charset=UTF-8",
                                     "X-CSRFToken": getCRSFToken(),
-                              
+
                                 }),
                                 body: JSON.stringify({
                                     "project": "/apps/cartoview_workforce_manager/api/v1/project/" + this.state.id + "/",
@@ -267,28 +268,28 @@ export default class Edit extends Component {
                                 headers: new Headers({
                                     "Content-Type": "application/json; charset=UTF-8",
                                     "X-CSRFToken": getCRSFToken(),
-                                
+
                                 }),
-                            
+
                             })
                                 .then(function (response) {
                                     if (response.status >= 400) {
                                          console.log(response)
                                         throw new Error("Bad response from server");
-                                        
+
                                     }
-                                   
-                                }).then (()=>{ 
-                                    
+
+                                }).then (()=>{
+
                                     var workers=""
                                     for (var i = 0; i < basicConfig.length; i++) {
                                           console.log(basicConfig[i].workers)
                                           console.log(basicConfig[i])
-                                          
-                                      
+
+
                                    if(basicConfig[i].workers){
                                        workers=basicConfig[i].workers.resource_uri
-                                   } 
+                                   }
                                    else workers=basicConfig[i]
                                    console.log("final",workers)
                             fetch(url, {
@@ -297,7 +298,7 @@ export default class Edit extends Component {
                                 headers: new Headers({
                                     "Content-Type": "application/json; charset=UTF-8",
                                     "X-CSRFToken": getCRSFToken(),
-                              
+
                                 }),
                                 body: JSON.stringify({
                                     "project": "/apps/cartoview_workforce_manager/api/v1/project/" + this.state.id + "/",
@@ -319,7 +320,7 @@ export default class Edit extends Component {
 
 
 
-                            
+
                         }
 
                         this.setState({success: true})
@@ -340,12 +341,12 @@ export default class Edit extends Component {
 	 <Navigator
 					steps={steps}
 					step={step}
-					onStepSelected={(step) => this.goToStep(step)}/> 
-                    
-                    
-                    
-                    
-            
+					onStepSelected={(step) => this.goToStep(step)}/>
+
+
+
+
+
 				<div className="col-xs-12 col-sm-12 col-md-9 col-lg-9 right-panel">
                     {steps.map((s, index) => index == step && <s.component key={index} {...s.props}/>)}
 				</div>
