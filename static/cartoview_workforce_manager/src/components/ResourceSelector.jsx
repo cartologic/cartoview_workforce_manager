@@ -18,7 +18,6 @@ export default class ResourceSelector extends Component {
       pageCount: 0,
       mymaps:true
     }
-  console.log(this.props)
   }
 
 
@@ -153,7 +152,7 @@ export default class ResourceSelector extends Component {
               onClick={() => this.props.selectMap(resource)}
               key={resource.id}
               className={(this.props.instance
-              ? (this.props.instance && this.props.instance == resource.id)
+              ? (this.props.instance && this.props.instance.id == resource.id)
               : false)
               ? "row resource-box bg-success"
               : "row resource-box"}>

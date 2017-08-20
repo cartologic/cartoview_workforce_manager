@@ -19,8 +19,8 @@ export default class Edit extends Component {
             dispatchers:"",
             step: 0,
             map:0,
-            config: {},
-            selectedResource: this.props.config.instance ? this.props.config.instance.map:undefined,
+      config: {},
+      selectedResource: this.props.config.instance ? this.props.config.instance.map:undefined,
 
         }
         this.editService = new EditService({baseUrl: '/'})
@@ -51,6 +51,7 @@ export default class Edit extends Component {
                     keywords: this.props.keywords,
                     urls: this.props.config.urls,
                     instance: this.state.selectedResource,
+
                     project:this.state.project,
                     config: this.props.config.instance
                         ? this.props.config.instance.config
@@ -77,28 +78,30 @@ export default class Edit extends Component {
         label: "Select Map",
         component: ResourceSelector,
         props: {
-          resourcesUrl: this.props.config.urls.resources_url,
-          instance: this.state.map,
-          username:this.props.username,
-          selectMap: (resource) => {
-            this.setState({selectedResource: resource})
-          },
-          limit: this.props.config.limit,
-          onComplete: () => {
-            var {step} = this.state;
-            this.setState({
-              config: Object.assign(this.state.config, {map: this.state.selectedResource.id})
-            },()=>{
+              resourcesUrl: this.props.config.urls.resources_url,
+              instance: this.state.selectedResource||{"id":this.state.map},
+
+              username:this.props.username,
+              selectMap: (resource) => {
+                console.log(resource)
+                this.setState({selectedResource: resource})
+              },
+              limit: this.props.config.limit,
+              onComplete: () => {
+                var {step} = this.state;
+                this.setState({
+                  config: Object.assign(this.state.config, {map: this.state.selectedResource?this.state.selectedResource.id:this.state.map})
+                },()=>{
 
 
-
+console.log(this.state.config)
 		 var url = '/apps/cartoview_workforce_manager/api/v1/project/'+ this.state.id + "/"
 		return fetch( url ,
 			 {
 			method: 'PUT',
 			credentials: "same-origin",
 			headers: new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken( )}),
-			body: JSON.stringify( {"mapid":this.state.selectedResource.id} )
+			body: JSON.stringify( {"mapid":this.state.config.map} )
 		}).then(( response ) => {response.json( )
 
          let {step} = this.state;
