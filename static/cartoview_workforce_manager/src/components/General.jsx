@@ -21,7 +21,7 @@ export default class General extends Component {
                         }
         this.state = {
         project:"",
-        value:"",
+        value:this.props.value?this.props.value:"",
         }
    
 

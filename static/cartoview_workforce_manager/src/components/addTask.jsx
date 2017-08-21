@@ -5,7 +5,7 @@ import {getCRSFToken} from '../helpers/helpers.jsx'
 import AddLocationMap from './addLocationMap.jsx';
 
 import MapConfigTransformService from '@boundlessgeo/sdk/services/MapConfigTransformService';
-import MapConfigService from '@boundlessgeo/sdk//services/MapConfigService';
+import MapConfigService from '@boundlessgeo/sdk/services/MapConfigService';
 
 import ol from 'openlayers';
 const Form = t.form.Form;
@@ -93,8 +93,8 @@ export default class AddTask extends Component {
                               description: t.String,
                               assigned_to :t.enums(tCombEnum),
                               due_date: t.Date,
-							  work_order:t.maybe(t.Integer),
-							  group:t.maybe(t.String),
+                              work_order:t.maybe(t.String),
+                              group:t.maybe(t.String),
                               priority: Priority ,
                             //  status: Status,// enum,
 

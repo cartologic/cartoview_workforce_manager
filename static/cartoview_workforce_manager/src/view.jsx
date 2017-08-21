@@ -223,7 +223,7 @@ if(this.refs.worker.value){
                                 this.setState({"selectedtask2": null,"result":false,"filter":[]})
                             }}>Filter Task </a></li>
 					<li onClick={()=>this.setState({currentComponent:"details"})}><a data-toggle="tab" href="#menu2">Project Details </a></li>
-                    		<li ><a  href={'/apps/appinstances/?app__title=cartoview_workforce_manager&limit=100&offset=0&owner__username=' +username}>My Projects </a></li>
+                    		<li ><a  href={'/apps/appinstances/?app__title=Cartoview%20Workforce%20Manager&limit=100&offset=0&owner__username='+username}>My Projects </a></li>
 
 
 

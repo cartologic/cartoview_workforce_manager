@@ -18,9 +18,9 @@ export default class Edit extends Component {
             workers:"",
             dispatchers:"",
             step: 0,
-      config: {},
-      selectedResource: this.props.config.instance ? this.props.config.instance.map:undefined,
- 
+            config: {},
+            selectedResource: this.props.config.instance ? this.props.config.instance.map:undefined,
+            value:{}
         }
         this.editService = new EditService({baseUrl: '/'})
         
@@ -47,6 +47,7 @@ export default class Edit extends Component {
                 component: General,
                 props: {
                     state: this.state,
+                    value:this.state.value,
                     keywords: this.props.keywords,
                     urls: this.props.config.urls,
                     instance: this.state.selectedResource,
@@ -56,6 +57,7 @@ export default class Edit extends Component {
                         : undefined,
                     onComplete: (basicConfig) => {
                         console.log("vs",basicConfig)
+                        this.setState({value:basicConfig})
                         this.editService.save(basicConfig, id).then((res) => {
 
                             this.setState({success: true, id: res.id})
