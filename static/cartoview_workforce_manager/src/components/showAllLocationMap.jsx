@@ -52,7 +52,7 @@ preparePoints=()=>{
             method: "GET",
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
-               
+
 
             })
         })
@@ -71,10 +71,10 @@ preparePoints=()=>{
                   var point_geom = new ol.geom.Point([task.x,task.y])
                   point_feature.setGeometry(point_geom);
                   array.push(point_feature)
-                
-       
+
+
                  })
-                 this.setState({points:array},()=>{ 
+                 this.setState({points:array},()=>{
 
                             var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: this.state.points})})
                             var style = new ol.style.Style({
@@ -98,14 +98,14 @@ preparePoints=()=>{
 }
 
   init=( map )=> {
-  
-  	
 
-        
-         
+
+
+
+
     //     var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: this.state.points})})
 
-       
+
     //     var style = new ol.style.Style({
     //       image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
     //       anchor: [0.5, 10],
@@ -129,7 +129,10 @@ preparePoints=()=>{
     this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
     this.update(this.props.mapId);
     this.init( this.map )
-   
+    setTimeout(()=>{
+      this.map.updateSize()
+      this.map.render()
+    },3000)
 
   }
   render() {

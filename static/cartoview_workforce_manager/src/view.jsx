@@ -15,7 +15,7 @@ import {getCRSFToken} from './helpers/helpers.jsx'
 import TaskDetails from './components/taskDetails.jsx'
 import FilterTask from './components/filtertask.jsx';
 import './css/project.css'
-
+import ReactPaginate from 'react-paginate';
 injectTapEventPlugin();
 addLocaleData(enLocaleData);
 export default class ReactClient extends React.Component {
@@ -33,7 +33,10 @@ export default class ReactClient extends React.Component {
             status:"",
             filter:[],
             result:false,
-            selectedtask2:"",currentComponent:"list"
+            selectedtask2:"",currentComponent:"list",
+            pageCount:0,
+            perPage:5,
+            pagedTasks:[]
         }
             this.loadTasks()
             this.loadProject()
@@ -109,7 +112,10 @@ if(this.refs.worker.value){
             })
             .then((data) => {
 
-                this.setState({tasks: data.objects,loading:false})
+                this.setState({tasks: data.objects,loading:false,pageCount:Math.ceil(data.objects.length/this.state.perPage)},()=>{
+                  var pagedTasks = this.state.tasks.slice(0,this.state.perPage);
+                  this.setState({pagedTasks:pagedTasks})})
+
             });
     }
     loadProject = () => {
@@ -160,7 +166,15 @@ if(this.refs.worker.value){
                 this.setState({workers: data.objects})
             });
     }
+     handlePageClick=(data)=>{
+console.log(data.selected)
 
+var pagedTasks = this.state.tasks.slice(data.selected*this.state.perPage, (data.selected+1)*this.state.perPage);
+this.setState({pagedTasks:pagedTasks})
+
+
+
+     }
     loadDispatchers = () => {
 
         var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + "/dispatchers"
@@ -234,7 +248,7 @@ if(this.refs.worker.value){
 					<div id="home" className="tab-pane fade in active">
 
                           <div className="container">
-                          {this.state.loading && 
+                          {this.state.loading &&
                           <div>
                           <div className="col-md-4"></div>
                         <div className="col-md-4"><img src={URLS.static +'cartoview_workforce_manager/loader'}/>
@@ -244,7 +258,7 @@ if(this.refs.worker.value){
                           }
                                             <br/>
                                             {this.state.tasks.length != 0 && !this.state.selectedtask && !this.state.loading&&
-                                            <table className="table table-hover table-bordered table-responsive">
+                                          <div>  <table className="table table-hover table-bordered table-responsive">
                                                 <thead>
                                                 <tr>
                                                     <th>Title</th>
@@ -259,7 +273,7 @@ if(this.refs.worker.value){
                                                 </thead>
                                                 <tbody>
 
-                                                {this.state.tasks.map((item, i) => {
+                                                {this.state.pagedTasks.map((item, i) => {
 
                                                         return <tr key={i} onClick={() => {
                                                             this.setState({"selectedtask": item})
@@ -288,7 +302,23 @@ if(this.refs.worker.value){
 
 
                                                 </tbody>
-                                            </table>}
+                                              </table>
+                                              {this.state.pageCount>1 &&<div className="commentBox">
+
+                                                    <ReactPaginate previousLabel={"previous"}
+                                                                   nextLabel={"next"}
+                                                                   breakLabel={<a href="">...</a>}
+                                                                   breakClassName={"break-me"}
+                                                                   pageCount={this.state.pageCount}
+                                                                   marginPagesDisplayed={2}
+                                                                   pageRangeDisplayed={5}
+                                                                   onPageChange={this.handlePageClick}
+                                                                   containerClassName={"pagination"}
+                                                                   subContainerClassName={"pages pagination"}
+                                                                   activeClassName={"active"} />
+                                                               </div>}
+                                            </div>
+                                          }
 
                                             {
                                                 this.state.selectedtask &&

@@ -23,7 +23,7 @@ export default class General extends Component {
         project:"",
         value:this.props.value?this.props.value:"",
         }
-   
+
 
 
     }
@@ -34,8 +34,8 @@ loadProject=()=>{
             method: "GET",
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
-                
-                
+
+
             })
         })
             .then(function (response) {
@@ -57,7 +57,8 @@ loadProject=()=>{
             let properConfig = {
                 title: basicConfig.title,
                 abstract: basicConfig.abstract,
-                app: app
+                app: app,
+                map:this.state.project.mapid
             }
             this.props.onComplete(properConfig)
         }
