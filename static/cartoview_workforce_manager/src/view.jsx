@@ -10,10 +10,11 @@ import './app.css';
 import AddTask from './components/addTask';
 import ProjectDetails from './components/ProjectDetails';
 import ProjectEdit from './components/projectEdit';
-import Tasks from './components/tasks';
+import MyTasks from './components/myTasks';
 import {getCRSFToken} from './helpers/helpers.jsx'
 import TaskDetails from './components/taskDetails.jsx'
 import FilterTask from './components/filtertask.jsx';
+
 import './css/project.css'
 import ReactPaginate from 'react-paginate';
 injectTapEventPlugin();
@@ -63,13 +64,13 @@ if(this.refs.work_order.value){
 if(this.refs.dispatcher.value){
     console.log(this.refs.dispatcher)
      console.log(this.refs.dispatcher.value)
-    work_order="created_by__username="+this.refs.dispatcher.value+"&"
+    dispatcher="created_by__username="+this.refs.dispatcher.value+"&"
 }
 if(this.refs.worker.value){
-    work_order="assigned_to__username="+this.refs.worker.value+"&"
+   worker="assigned_to__username="+this.refs.worker.value+"&"
 }
 
- var url = '/apps/cartoview_workforce_manager/api/v1/project/'+id+'/tasks/?'+priority+status+work_order
+ var url = '/apps/cartoview_workforce_manager/api/v1/project/'+id+'/tasks/?'+priority+status+work_order+worker+dispatcher
 
         fetch(url, {
             method: "GET",
@@ -214,12 +215,11 @@ this.setState({pagedTasks:pagedTasks})
     _toggleBaseMapModal() {
 
     }
-
     search = (e) => {
         e.preventDefault()
 
     }
-
+   
     render() {
       let {currentComponent}=this.state
         return (
@@ -237,8 +237,11 @@ this.setState({pagedTasks:pagedTasks})
                                 this.setState({"selectedtask2": null,"result":false,"filter":[]})
                             }}>Filter Task </a></li>
 					<li onClick={()=>this.setState({currentComponent:"details"})}><a data-toggle="tab" href="#menu2">Project Details </a></li>
-                    		<li ><a  href={'/apps/appinstances/?app__title=Cartoview%20Workforce%20Manager&limit=100&offset=0&owner__username='+username}>My Projects </a></li>
-
+					<li><a data-toggle="tab" href="#mytasks">My Tasks </a></li>
+                  
+                    
+                    <li ><a  href={'/apps/appinstances/?app__title=Cartoview%20Workforce%20Manager&limit=100&offset=0&owner__username='+username}>My Projects </a></li>
+                    
 
 
 
@@ -352,9 +355,11 @@ this.setState({pagedTasks:pagedTasks})
 					</div>
 
 
+                        <div  id="mytasks" className="tab-pane fade">
+                        <MyTasks id={id}/></div>
 
-<div id="filter" className="tab-pane fade">
-                         <div>
+                        <div id="filter" className="tab-pane fade">
+                                                <div>
                             <div className="col-md-2"></div>
                             <div className="col-md-8">
                                {this.state.dispatchers && this.state.workers&&

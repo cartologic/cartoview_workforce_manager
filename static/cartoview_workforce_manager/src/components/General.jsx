@@ -70,7 +70,7 @@ loadProject=()=>{
 			<div className="row">
 				<div className="row">
 					<div className="col-xs-5 col-md-4">
-						<h4>{'General'}</h4>
+						
 					</div>
 					<div className="col-xs-7 col-md-8">
 						<button
@@ -86,7 +86,7 @@ loadProject=()=>{
 
 					</div>
 				</div>
-				<hr></hr>
+				
 
 				<Form
 					ref="form"

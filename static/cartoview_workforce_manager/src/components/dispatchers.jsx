@@ -116,14 +116,7 @@ check=(uri)=>{
 							onClick={this.save.bind(this)}>{"next "}
 							<i className="fa fa-arrow-right"></i>
 						</button>
-						<button
-							style={{
-                                display: "inline-block",
-                                margin: "0px 3px 0px 3px"
-                            }}
-							className="btn btn-primary btn-sm pull-right"
-							onClick={() => this.props.onPrevious()}>
-							<i className="fa fa-arrow-left"></i>{" Previous"}</button>
+					
 
 
 					</div>

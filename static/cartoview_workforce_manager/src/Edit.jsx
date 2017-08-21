@@ -8,7 +8,7 @@ import {getCRSFToken} from './helpers/helpers.jsx'
 import Dispatchers from './components/dispatchers.jsx'
 import Workers from './components/workers.jsx'
 import ResourceSelector from './components/ResourceSelector.jsx'
-
+import Users from './components/users.jsx';
 
 export default class Edit extends Component {
     constructor(props) {
@@ -71,15 +71,18 @@ export default class Edit extends Component {
                             this.setState({
                                 config: Object.assign(this.state.config, basicConfig)
                             })
-                            this.goToStep(++step)
+                             this.goToStep(++step)
 
-                        })
-
+                           })
+                       
 
                     },
 
                 }
             },
+
+
+          
              {
         label: "Select Map",
         component: ResourceSelector,
@@ -121,132 +124,68 @@ console.log(this.state.config)
           }
         }
       } ,
-            {
-
-                label: "Dispatchers",
-                component: Dispatchers,
+             {
+                label: "Users",
+                component: Users,
                 props: {
-                    state: this.state,
-                    keywords: this.props.keywords,
-                    urls: this.props.config.urls,
-                    instance: this.state.selectedResource,
+                    id:this.state.id,
                     dispatchers:this.state.dispatchers,
-                    config: this.props.config.instance
-                        ? this.props.config.instance.config
-                        : undefined,
-                    onComplete: (basicConfig) => {
-               if(isNaN(id)){
-                        var url = '/apps/cartoview_workforce_manager/api/v1/project_dispatchers/'
-                        for (var i = 0; i < basicConfig.length; i++) {
-                            fetch(url, {
-                                method: "POST",
-                                credentials: "same-origin",
-                                headers: new Headers({
-                                    "Content-Type": "application/json; charset=UTF-8",
-                                    "X-CSRFToken": getCRSFToken(),
-
-                                }),
-                                body: JSON.stringify({
-                                    "project": "/apps/cartoview_workforce_manager/api/v1/project/" + this.state.id + "/",
-                                    "dispatcher": basicConfig[i]
-                                })
-                            })
-                                .then(function (response) {
-                                    if (response.status >= 400) {
-                                        throw new Error("Bad response from server");
-                                    }
-
-                                })
-
-                        }}
-                        else{
-
-                            var del_url = '/apps/cartoview_workforce_manager/api/v1/project/'+id+'/dispatchers/'
-                             var url = '/apps/cartoview_workforce_manager/api/v1/project_dispatchers/'
-                                fetch(del_url, {
-                                method: "DELETE",
-                                credentials: "same-origin",
-                                headers: new Headers({
-                                    "Content-Type": "application/json; charset=UTF-8",
-                                    "X-CSRFToken": getCRSFToken(),
-
-                                }),
-
-                            })
-                                .then(function (response) {
-                                    if (response.status >= 400) {
-                                        throw new Error("Bad response from server");
-                                    }
-
-                                }).then (()=>{
-
-                                    var dispatcher=""
-                                    for (var i = 0; i < basicConfig.length; i++) {
-
-
-                                   if(basicConfig[i].dispatcher){
-                                       dispatcher=basicConfig[i].dispatcher.resource_uri
-                                   }
-                                   else dispatcher=basicConfig[i]
-                            fetch(url, {
-                                method: "POST",
-                                credentials: "same-origin",
-                                headers: new Headers({
-                                    "Content-Type": "application/json; charset=UTF-8",
-                                    "X-CSRFToken": getCRSFToken(),
-
-                                }),
-                                body: JSON.stringify({
-                                    "project": "/apps/cartoview_workforce_manager/api/v1/project/" + this.state.id + "/",
-                                    "dispatcher": dispatcher
-                                })
-                            })
-                                .then(function (response) {
-                                    if (response.status >= 400) {
-                                        throw new Error("Bad response from server");
-                                    }
-
-                                })
-
-                        }})
-
-
-
-
-
-
-
-                        }
-
-                        let {step} = this.state;
-                        this.goToStep(++step)
-
-
-                    },
-                    onPrevious: () => {
-                        this.onPrevious()
-                    }
-                }
-            },
-
-            {
-
-                label: "Workers",
-                component: Workers,
-                props: {
+                    workers:this.state.workers,
                     state: this.state,
+                    value:this.state.value,
                     keywords: this.props.keywords,
                     urls: this.props.config.urls,
                     instance: this.state.selectedResource,
-                    workers:this.state.workers,
+                    project:this.state.project,
                     config: this.props.config.instance
                         ? this.props.config.instance.config
                         : undefined,
-                    onComplete: (basicConfig) => {
-                        if(isNaN(id)){
-                        var url = '/apps/cartoview_workforce_manager/api/v1/project_workers/'
-                        for (var i = 0; i < basicConfig.length; i++) {
-                            fetch(url, {
+                    onComplete: (dispatchers,workers) => {
+                        console.log(dispatchers,workers)
+                        this.setState({dispatchers:dispatchers,workers:workers})
+                                if(!isNaN(id)){
+                                    var del_url_dis = '/apps/cartoview_workforce_manager/api/v1/project/'+id+'/dispatchers/'
+                                        fetch(del_url_dis, {
+                                        method: "DELETE",
+                                        credentials: "same-origin",
+                                        headers: new Headers({
+                                            "Content-Type": "application/json; charset=UTF-8",
+                                         
+
+                                        }),
+
+                                    })
+                                        .then(function (response) {
+                                            if (response.status >= 400) {
+                                                throw new Error("Bad response from server");
+                                            }
+
+                                        })
+
+                                    var del_url_wor = '/apps/cartoview_workforce_manager/api/v1/project/'+id+'/workers/'
+                                        fetch(del_url_wor, {
+                                        method: "DELETE",
+                                        credentials: "same-origin",
+                                        headers: new Headers({
+                                            "Content-Type": "application/json; charset=UTF-8",
+                                       
+
+                                        }),
+
+                                    })
+                                        .then(function (response) {
+                                            if (response.status >= 400) {
+                                                throw new Error("Bad response from server");
+                                            }
+
+                                        })
+
+
+
+                                }
+                        var dispatcher_url = '/apps/cartoview_workforce_manager/api/v1/project_dispatchers/'
+                        for (var i = 0; i < dispatchers.length; i++) {
+                            fetch(dispatcher_url, {
                                 method: "POST",
                                 credentials: "same-origin",
                                 headers: new Headers({
@@ -256,92 +195,71 @@ console.log(this.state.config)
                                 }),
                                 body: JSON.stringify({
                                     "project": "/apps/cartoview_workforce_manager/api/v1/project/" + this.state.id + "/",
-                                    "worker": basicConfig[i]
+                                    "dispatcher": {"username":dispatchers[i]}
                                 })
                             })
                                 .then(function (response) {
                                     if (response.status >= 400) {
-                                        console.log(response)
                                         throw new Error("Bad response from server");
                                     }
 
-                                })
-
-                        }}
-                        else{console.log("congfig",basicConfig)
-                             var url = '/apps/cartoview_workforce_manager/api/v1/project_workers/'
-                             var del_url = '/apps/cartoview_workforce_manager/api/v1/project/'+id+'/workers/'
-                                fetch(del_url, {
-                                method: "DELETE",
-                                credentials: "same-origin",
-                                headers: new Headers({
-                                    "Content-Type": "application/json; charset=UTF-8",
-                                    "X-CSRFToken": getCRSFToken(),
-
-                                }),
-
-                            })
-                                .then(function (response) {
-                                    if (response.status >= 400) {
-                                         console.log(response)
-                                        throw new Error("Bad response from server");
-
-                                    }
-
-                                }).then (()=>{
-
-                                    var workers=""
-                                    for (var i = 0; i < basicConfig.length; i++) {
-                                          console.log(basicConfig[i].workers)
-                                          console.log(basicConfig[i])
 
 
-                                   if(basicConfig[i].workers){
-                                       workers=basicConfig[i].workers.resource_uri
-                                   }
-                                   else workers=basicConfig[i]
-                                   console.log("final",workers)
-                            fetch(url, {
-                                method: "POST",
-                                credentials: "same-origin",
-                                headers: new Headers({
-                                    "Content-Type": "application/json; charset=UTF-8",
-                                    "X-CSRFToken": getCRSFToken(),
 
-                                }),
-                                body: JSON.stringify({
-                                    "project": "/apps/cartoview_workforce_manager/api/v1/project/" + this.state.id + "/",
-                                    "worker": workers
-                                })
-                            })
-                                .then(function (response) {
-                                    if (response.status >= 400) {
-                                         console.log(response)
-                                        throw new Error("Bad response from server");
-                                    }
+
 
                                 })
-
-                        }})
-
-
-
-
-
-
 
                         }
+                         var worker_url = '/apps/cartoview_workforce_manager/api/v1/project_workers/'
+                        for (var j = 0; j < workers.length; j++) {
+                            fetch(worker_url, {
+                                method: "POST",
+                                credentials: "same-origin",
+                                headers: new Headers({
+                                    "Content-Type": "application/json; charset=UTF-8",
+                                    "X-CSRFToken": getCRSFToken(),
 
-                        this.setState({success: true})
-                        window.location.href = "/apps/cartoview_workforce_manager/" + this.state.id + "/view/"
+                                }),
+                                body: JSON.stringify({
+                                    "project": "/apps/cartoview_workforce_manager/api/v1/project/" + this.state.id + "/",
+                                    "worker": {"username":workers[j]}
+                                })
+                            })
+                                .then(function (response) {
+                                    if (response.status >= 400) {
+                                        throw new Error("Bad response from server");
+                                    }
 
 
-                    },
-                    onPrevious: () => {
-                        this.onPrevious()
-                    }
+
+
+
+
+                                })
+
+                        }
+                        
+                      
+
+
+                         this.setState({success: true})
+                         window.location.href = "/apps/cartoview_workforce_manager/" + this.state.id + "/view/"
+
+                          
+                            
+                        }
+
+
+                    
+
                 }
             }
+           
+           
+           
+
+            
 
 
         ]
