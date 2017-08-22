@@ -198,6 +198,55 @@ class ProjectDispatchersResource(ModelResource):
         # authentication = BasicAuthentication()
         allowed_methods = ['get', 'post', 'put', 'delete']
 
+class TaskHistoryResource(ModelResource):
+    assigned_to = fields.ForeignKey(UserResource, 'assigned_to',full=True,readonly=True)
+    class Meta:
+
+        filtering = {
+             'assigned_to': ALL_WITH_RELATIONS,
+        }
+        queryset = Task.history.all()
+        resource_name = 'task_history'
+        authorization = Authorization()
+        # authentication = BasicAuthentication()
+        allowed_methods = ['get','delete']
+class ProjectHistoryResource(ModelResource):
+
+    class Meta:
+
+        filtering = {
+            
+        }
+        queryset = Project.history.all()
+        resource_name = 'project_history'
+        authorization = Authorization()
+        # authentication = BasicAuthentication()
+        allowed_methods = ['get','delete']
+class CommentHistoryResource(ModelResource):
+    
+    class Meta:
+
+        filtering = {
+            
+        }
+        queryset = Comment.history.all()
+        resource_name = 'comment_history'
+        authorization = Authorization()
+        # authentication = BasicAuthentication()
+        allowed_methods = ['get','delete']
+class AttatchmentHistoryResource(ModelResource):
+    
+    class Meta:
+
+        filtering = {
+            
+        }
+        queryset = Attachment.history.all()
+        resource_name = 'attachment_history'
+        authorization = Authorization()
+        # authentication = BasicAuthentication()
+        allowed_methods = ['get','delete']
+
 class ProjectWorkersResource(ModelResource):
     worker = fields.ForeignKey(UserResource, 'worker', full=True)
     project=fields.ForeignKey(ProjectResource, 'project')

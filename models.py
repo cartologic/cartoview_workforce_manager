@@ -5,6 +5,8 @@ from django.conf import settings
 from django.db.models import signals
 from cartoview.app_manager.models import AppInstance
 User = settings.AUTH_USER_MODEL
+from simple_history.models import HistoricalRecords
+from jsonfield import JSONField
 class Project(AppInstance):
     #project_name = models.CharField(max_length=200)
     #project_description = models.CharField(max_length=200)
@@ -12,19 +14,21 @@ class Project(AppInstance):
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     mapid= models.IntegerField(default=0,blank=True, null=True)
-    #config = JSONField()
+    Project_config = JSONField(blank=True, null=True)
     workers = models.ManyToManyField(User,related_name='%(class)s_requests_workers',through='ProjectWorkers')
     dispatchers = models.ManyToManyField(User,related_name='%(class)s_requests_dispatchers',through='ProjectDispatchers')
     #app_instance = models.OneToOneField(AppInstance,on_delete=models.CASCADE)
+    history = HistoricalRecords()
 
 class ProjectDispatchers(models.Model):
      dispatcher = models.ForeignKey(User, on_delete=models.CASCADE)
      project = models.ForeignKey(Project, on_delete=models.CASCADE)
+     history = HistoricalRecords()
 
 class ProjectWorkers(models.Model):
      worker = models.ForeignKey(User, on_delete=models.CASCADE)
      project = models.ForeignKey(Project, on_delete=models.CASCADE)
-
+     history = HistoricalRecords()
 class Task(models.Model):
     title = models.CharField(max_length=200)
     short_description = models.CharField(max_length=200)
@@ -40,7 +44,7 @@ class Task(models.Model):
     x=models.DecimalField(blank=True, null=True ,max_digits=19, decimal_places=10)
     y=models.DecimalField(blank=True, null=True,max_digits=19, decimal_places=10)
     extent= models.TextField(blank=True, null=True)
-
+   
     PRIORITY_CHOICES = (
         (0, 'critical'),
         (1, 'high'),
@@ -64,17 +68,19 @@ class Task(models.Model):
         choices=STATUS_CHOICES,
         default=1,
     )
+
+    history = HistoricalRecords(excluded_fields=['priority','extent','x','y','work_order','due_date','created_by','created_at','title','description','short_description','updated_at'])
 class Comment(models.Model):
             commenter = models.ForeignKey(User, related_name='%(class)s_requests_commenter', on_delete=models.CASCADE)
             comment = models.TextField(blank=True, null=True)
             task =models.ForeignKey(Task, on_delete=models.CASCADE)
             created_at = models.DateTimeField(auto_now_add=True)
-
+            history = HistoricalRecords()
 class Attachment(models.Model):
     task =models.ForeignKey(Task, on_delete=models.CASCADE)
     user = models.ForeignKey(User, related_name='%(class)s_requests_user', on_delete=models.CASCADE)
     image = models.FileField()
-
+    history = HistoricalRecords()
 def appinstance_post_save(instance, *args, **kwargs):
     if not isinstance(instance, AppInstance):
         return True
