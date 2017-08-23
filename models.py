@@ -68,7 +68,6 @@ class Task(models.Model):
         default=1,
     )
 
-    history = HistoricalRecords(excluded_fields=['priority','extent','x','y','work_order','due_date','created_by','created_at','title','description','short_description','updated_at'])
 class Comment(models.Model):
             commenter = models.ForeignKey(User, related_name='%(class)s_requests_commenter', on_delete=models.CASCADE)
             comment = models.TextField(blank=True, null=True)

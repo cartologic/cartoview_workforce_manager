@@ -74,7 +74,7 @@ if(this.refs.worker.value){
         <div className="panel panel-default" style={{"padding":"0"}}>
                 <div className="panel-body" style={{"padding":"0"}}>
                     <div className="panel panel-primary">
-                            <div className="panel-heading" >Filter By Priority</div>
+                            <div className="panel-heading" >Priority</div>
                             <div className="panel-body">
                                     <label className="radio"><input type="radio" name="optradio" value="0" onChange={()=>{this.setState({"priority":0})}}/>Critical</label>
                                     <label className="radio"><input type="radio" name="optradio" value="1" onChange={()=>{this.setState({"priority":1})}}/>High</label>
@@ -85,7 +85,7 @@ if(this.refs.worker.value){
                             </div>
                     </div>
                     <div className="panel panel-primary">
-                            <div className="panel-heading">Filter By Status</div>
+                            <div className="panel-heading">Status</div>
                             <div className="panel-body">
                             
                                
@@ -98,11 +98,11 @@ if(this.refs.worker.value){
                             </div>
                     </div>
                     <div className="panel panel-primary">
-                            <div className="panel-heading">Filter By Work Order</div>
+                            <div className="panel-heading">Work Order</div>
                             <div className="panel-body"><input type="number" className="form-control" ref="work_order" /></div>
                     </div>
                     <div className="panel panel-primary">
-                            <div className="panel-heading">Filter By Task creator</div>
+                            <div className="panel-heading">Task creator</div>
                             <div className="panel-body">       
                                 <div className="form-group">
                               
@@ -119,7 +119,7 @@ if(this.refs.worker.value){
                             </div>
                     </div>
                     <div className="panel panel-primary">
-                            <div className="panel-heading">Filter By Assignee</div>
+                            <div className="panel-heading">Assignee</div>
                             <div className="panel-body">
                              <div className="form-group">
                               
