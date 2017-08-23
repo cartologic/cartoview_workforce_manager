@@ -11,12 +11,11 @@ from .customAuth import CustomAuthorization
 User = get_user_model()
 from geonode.api.api import ProfileResource
 from geonode.people.models import Profile
-
-
+from geonode.maps.models import Map
 from tastypie.serializers import Serializer
-
 from tastypie import fields
 from cartoview.app_manager.models import App, AppInstance
+
 class UserResource(ModelResource):
     class Meta:
         queryset = User.objects.all()
@@ -32,8 +31,10 @@ class UserResource(ModelResource):
 class ProjectResource(ModelResource):
     created_by = fields.ForeignKey(UserResource, 'created_by')
     dispatchers = fields.ManyToManyField(UserResource, 'dispatchers', full=True, readonly=True)
-    owner = fields.ForeignKey(
-        ProfileResource, 'owner', full=True, null=True, blank=True)
+    owner = fields.ForeignKey(ProfileResource, 'owner', full=True, null=True, blank=True)
+    
+    
+        
     def hydrate_owner(self, bundle):
 
         # owner, created = Profile.objects.get_or_create(
@@ -41,8 +42,8 @@ class ProjectResource(ModelResource):
         # bundle.data['owner'] = owner
         bundle.obj.owner = bundle.request.user
         return bundle
-    def dehydrate_owner(self, bundle):
-        return bundle.obj.owner.username
+    # def dehydrate_owner(self, bundle):
+    #     return bundle.obj.owner.username
     def get_tasks(self, request, **kwargs):
         if request.method == 'DELETE':
             return TaskResource().delete_list(request, project=kwargs['pk'])
@@ -97,12 +98,15 @@ class ProjectResource(ModelResource):
         return bundle.data['user']
 
     def hydrate(self, bundle):
+        print("user", bundle.request.user)
         bundle.obj.created_by = bundle.request.user
         if(bundle.data.get('app')):
                 app_name=bundle.data['app']
                 instance_obj = AppInstance()
                 instance_obj.app = App.objects.get(name=app_name)
+                instance_obj.map = Map.objects.get(id=bundle.data.get('mapid'))
                 bundle.obj.app=instance_obj.app
+                bundle.obj.map=instance_obj.map
 
         return bundle
 
