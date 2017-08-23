@@ -204,6 +204,7 @@ class TaskHistoryResource(ModelResource):
 
         filtering = {
              'assigned_to': ALL_WITH_RELATIONS,
+             'id':ALL_WITH_RELATIONS
         }
         queryset = Task.history.all()
         resource_name = 'task_history'

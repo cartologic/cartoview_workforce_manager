@@ -1,33 +1,24 @@
-{% extends "app_manager/app_install_base.html" %}
-{% load bootstrap_tags staticfiles %}
-{% load i18n %}
-
-{% block title %} {{ block.super }} - {% trans "Basic Viewer" %} {% endblock %}
-{% block head %}
-    {% include "geonode/ext_header.html" %}
-    {% include "geonode/app_header.html" %}
-    {{ block.super }}
-{% endblock %}
-{% block body %}
-    <div id="page-wrapper">
-        <div class="container-fluid">
-          <div class="page-header">
-            <div class="row">
-              <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8"><span class="h3">Workforce Manager</span></div>
-              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><button type="button" class="btn btn-default pull-right" data-toggle="modal" data-target="#myModal" style="border-color:white;border-radius: 50px"><i class="fa fa-info-circle  fa-2x" aria-hidden="true"></i></button></div>
-            </div>
-          </div>
-            <div id="root"></div>
-        </div>
+{% extends "app_manager/app_install_base.html" %} {% load bootstrap_tags staticfiles %} {% load i18n %} {% block title %}
+{{ block.super }} - {% trans "Basic Viewer" %} {% endblock %} {% block head %} {% include "geonode/ext_header.html" %} {%
+include "geonode/app_header.html" %} {{ block.super }} {% endblock %} {% block body %}
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="page-header">
+      <div class="row">
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8"><span class="h3">Workforce Manager</span></div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><button type="button" class="btn btn-default pull-right" data-toggle="modal" data-target="#myModal" style="border-color:white;border-radius: 50px"><i class="fa fa-info-circle  fa-2x" aria-hidden="true"></i></button></div>
+      </div>
     </div>
+    <div id="root"></div>
+  </div>
+</div>
 
-{% endblock %}
-{% block extra_script %}
-    <script src="{{ STATIC_URL }}cartoview_workforce_manager/dist/config.bundle.js"></script>
-    <script>
- var app="{{app}}"
+{% endblock %} {% block extra_script %}
+<script src="{{ STATIC_URL }}cartoview_workforce_manager/dist/config.bundle.js"></script>
+<script>
+  var app = "{{app}}"
   {% if instance %}
-  var id={{id}}
+  var id = {{id }}
  
   // var appConfig = {{ instance.config|escape|safe }};
   // var abstract = " {% spaceless %}{{ instance.abstract|title }}{% endspaceless %} ";
@@ -37,30 +28,31 @@
   // var geoserver_url = "{{ GEOSERVER_BASE_URL }}";
   // var abstract = " {% spaceless %}{{ instance.abstract|title }}{% endspaceless %} ";
   {% endif %}
-    // var username="{{instance.owner.username}}"
-     var username="{{request.user.username}}"
+  // var username="{{instance.owner.username}}"
+  var username = "{{request.user.username}}"
 
-    var viewer=new Viewer('root',{'urls':{'resources_url':"/api/maps","view":"/apps/cartoview_workforce_manager/"+id+"/view/","mapLayers":"/apps/maplayers/api","layerAttributes":"/apps/rest/app_manager/geonodelayerattribute/"},'limit':9},username);
-    viewer.view();
-    </script>
+  var viewer = new Viewer('root', { 'urls': { 'resources_url': "/api/maps", "view": "/apps/cartoview_workforce_manager/" + id + "/view/", "mapLayers": "/apps/maplayers/api", "layerAttributes": "/apps/rest/app_manager/geonodelayerattribute/" }, 'limit': 9 }, username);
+  viewer.view();
+</script>
 <div id="myModal" class="modal fade" role="dialog">
-<div class="modal-dialog">
+  <div class="modal-dialog">
 
-<!-- Modal content-->
-<div class="modal-content">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal">&times;</button>
-    <h4 class="modal-title">Workforce Manager</h4>
-  </div>
-  <div class="modal-body">
-    <p>Cartoview app to manage project/work group tasks. It provides a full management of a task status, priority, location ,attachments, comments</p>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-  </div>
-</div>
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Workforce Manager</h4>
+      </div>
+      <div class="modal-body">
+        <p>Cartoview app to manage project/work group tasks. It provides a full management of a task status, priority, location
+          ,attachments, comments</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
 
-</div>
+  </div>
 </div>
 
 

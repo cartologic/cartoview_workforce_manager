@@ -13,7 +13,7 @@ export default class AddLocationMap extends React.Component {
     this.loaded = false;
     this.map = new ol.Map({
       //controls: [new ol.control.Attribution({collapsible: false}), new ol.control.ScaleLine()],
-      layers: [new ol.layer.Tile({title: 'OpenStreetMap', source: new ol.source.OSM()})],
+      layers: [new ol.layer.Tile({ title: 'OpenStreetMap', source: new ol.source.OSM() })],
       view: new ol.View({
         center: [
           0, 0
@@ -21,7 +21,7 @@ export default class AddLocationMap extends React.Component {
         zoom: 3
       })
     });
-}
+  }
   update(mapId) {
     if (mapId) {
       var url = `/maps/${mapId}/data`
@@ -35,7 +35,7 @@ export default class AddLocationMap extends React.Component {
       }).then((config) => {
         if (config) {
           MapConfigService.load(MapConfigTransformService.transform(config), this.map);
-        //  this.props.onMapReady(this.map)
+          //  this.props.onMapReady(this.map)
 
 
         }
@@ -44,24 +44,24 @@ export default class AddLocationMap extends React.Component {
   }
 
 
-  init=( map )=> {
-    var point_feature = new ol.Feature({ });
-  		map.on('singleclick', ( e ) => {
+  init = (map) => {
+    var point_feature = new ol.Feature({});
+    map.on('singleclick', (e) => {
 
-        console.log( e.coordinate,map.getView().calculateExtent(map.getSize()))
+      console.log(e.coordinate, map.getView().calculateExtent(map.getSize()))
 
-        var point_geom = new ol.geom.Point(e.coordinate)
-        point_feature.setGeometry(point_geom);
-        var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
+      var point_geom = new ol.geom.Point(e.coordinate)
+      point_feature.setGeometry(point_geom);
+      var vector_layer = new ol.layer.Vector({ source: new ol.source.Vector({ features: [point_feature] }) })
 
-        var fill = new ol.style.Fill({
+      var fill = new ol.style.Fill({
         color: [180, 0, 100, 1]
-          });
-        var stroke = new ol.style.Stroke({
-          color: [90, 0, 0, 1],
-          width: 1
-        });
-        var style = new ol.style.Style({
+      });
+      var stroke = new ol.style.Stroke({
+        color: [90, 0, 0, 1],
+        width: 1
+      });
+      var style = new ol.style.Style({
         image: new ol.style.Circle({
           fill: fill,
           stroke: stroke,
@@ -70,13 +70,14 @@ export default class AddLocationMap extends React.Component {
         fill: fill,
         stroke: stroke
       });
-        vector_layer.setStyle(style);
-        map.addLayer(vector_layer);
+      vector_layer.setStyle(style);
+      map.addLayer(vector_layer);
 
 
 
 
-      })}
+    })
+  }
 
 
 
@@ -84,18 +85,19 @@ export default class AddLocationMap extends React.Component {
   componentDidMount() {
     this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
     this.update(this.props.mapId);
-    this.init( this.map )
-    setTimeout(()=>{
+    this.init(this.map)
+    setTimeout(() => {
       this.map.updateSize()
       this.map.render()
-    },3000)
+    }, 3000)
 
   }
   render() {
 
-    var {className=''} = this.props;
-    return (<div  ref="map" className={className + ' map-ct'}>
+    var { className = '' } = this.props;
+    return (<div ref="map" className={className + ' map-ct'}>
 
       {this.props.children}
     </div>);
-  }}
+  }
+}

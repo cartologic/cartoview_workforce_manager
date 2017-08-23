@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Details from './details.jsx';
 import Edit from './edit.jsx';
-
+import TaskHistroy from './taskhistory.jsx'
 export default class TaskDetails extends Component {
     constructor(props) {
         super(props)
@@ -44,6 +44,7 @@ loadTask=()=>{
 
                         <li className="active" onClick={this.loadTask}><a data-toggle="tab" href="#detail">Details</a></li>
                         <li onClick={this.loadTask}><a data-toggle="tab" href="#edit" >Edit</a></li>
+                        <li ><a data-toggle="tab" href="#history" >History</a></li>
 
                     </ul>
 
@@ -55,8 +56,13 @@ loadTask=()=>{
                             <br/>
                              { this.state.task &&<Edit task={this.state.task} mapid={this.props.mapid}/>}
                         </div>
-
+                        <div id="history" className="tab-pane fade">
+                            <br/>
+                             { this.state.task &&<TaskHistroy task={this.state.task}/>}
+                        </div>
+                         
                     </div>
+                    
                 </div>
 
             </div>
