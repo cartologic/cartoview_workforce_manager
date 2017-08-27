@@ -282,7 +282,7 @@ this.setState({pagedTasks:pagedTasks})
                                                             this.setState({"selectedtask": item})
                                                         }} style={{"cursor": "pointer"}}>
                                                             <td>{item.title}</td>
-                                                            <td>{item.short_description}</td>
+                                                            <td>{item.description.substring(0,75) } {item.description.length>75 ? "...":""}</td>
                                                             <td>{item.created_by.username}</td>
                                                             <td>{item.assigned_to.username}</td>
                                                             <td>{item.priority == 1 && <span>High</span>}
@@ -396,7 +396,7 @@ this.setState({pagedTasks:pagedTasks})
                     </div>
                     <div className="panel panel-primary">
                             <div className="panel-heading">Filter By Work Order</div>
-                            <div className="panel-body"><input type="number" className="form-control" ref="work_order" /></div>
+                            <div className="panel-body"><input  className="form-control" ref="work_order" /></div>
                     </div>
                     <div className="panel panel-primary">
                             <div className="panel-heading">Filter By Task creator</div>

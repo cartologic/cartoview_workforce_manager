@@ -96,11 +96,11 @@ export default class Details extends Component {
 
                             </tr>
                               <tr>
-                                <td><b>Task Group</b></td>
+                                <td><b>Task Code</b></td>
                                 <td style={{"width": "70%"}}>
 
-                                    {this.props.task.group == "" ?
-                                        <span>No Group was specified for this task yet</span> : this.props.task.group}
+                                    {this.props.task.code == "" ?
+                                        <span>No code was specified for this task yet</span> : this.props.task.code}
 
                                 </td>
 

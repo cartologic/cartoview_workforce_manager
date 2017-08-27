@@ -13,10 +13,13 @@ class Project(AppInstance):
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     mapid= models.IntegerField(default=0,blank=True, null=True)
-    Project_config = JSONField(blank=True, null=True)
+    Project_config = JSONField(blank=True, null=True) 
+    priority = JSONField(blank=True, null=True) 
+    status = JSONField(blank=True, null=True) 
+    code = JSONField(blank=True, null=True) 
     workers = models.ManyToManyField(User,related_name='%(class)s_requests_workers',through='ProjectWorkers')
     dispatchers = models.ManyToManyField(User,related_name='%(class)s_requests_dispatchers',through='ProjectDispatchers')
-    #app_instance = models.OneToOneField(AppInstance,on_delete=models.CASCADE)
+    permissions = JSONField(blank=True, null=True) 
     
 
 class ProjectDispatchers(models.Model):
@@ -30,7 +33,6 @@ class ProjectWorkers(models.Model):
     
 class Task(models.Model):
     title = models.CharField(max_length=200)
-    short_description = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -39,7 +41,7 @@ class Task(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     due_date = models.DateTimeField(null=True, blank=True)
     work_order=models.TextField(default=0,blank=True, null=True)
-    group= models.TextField(blank=True, null=True)
+    code= models.TextField(blank=True, null=True)
     x=models.DecimalField(blank=True, null=True ,max_digits=19, decimal_places=10)
     y=models.DecimalField(blank=True, null=True,max_digits=19, decimal_places=10)
     extent= models.TextField(blank=True, null=True)

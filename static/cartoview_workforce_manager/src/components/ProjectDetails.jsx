@@ -53,8 +53,8 @@ export default class ProjectDetails extends Component {
                             {this.state.project.abstract}</li>
                         <li className="list-group-item">
                             <div className="headers"><b>Project was created by:</b></div>
-                            {this.state.project.owner}</li>
-                        <li className="list-group-item">
+                            {this.state.project.owner.username}</li>
+                       <li className="list-group-item">
                             <div className="headers"><b>Project Workers:</b></div>
                             <div style={{'padding': '3%'}}>
                                 <ul style={{"listStyleType": "disc"}}>

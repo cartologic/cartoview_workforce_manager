@@ -99,7 +99,7 @@ if(this.refs.worker.value){
                     </div>
                     <div className="panel panel-primary">
                             <div className="panel-heading">Work Order</div>
-                            <div className="panel-body"><input type="number" className="form-control" ref="work_order" /></div>
+                            <div className="panel-body"><input  className="form-control" ref="work_order" /></div>
                     </div>
                     <div className="panel panel-primary">
                             <div className="panel-heading">Task creator</div>

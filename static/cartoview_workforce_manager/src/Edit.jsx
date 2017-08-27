@@ -9,7 +9,7 @@ import Dispatchers from './components/dispatchers.jsx'
 import Workers from './components/workers.jsx'
 import ResourceSelector from './components/ResourceSelector.jsx'
 import Users from './components/users.jsx';
-
+import FormFields from './components/form.jsx'
 export default class Edit extends Component {
     constructor(props) {
         super(props)
@@ -65,7 +65,7 @@ export default class Edit extends Component {
                        
                         this.setState({value:basicConfig,map:basicConfig.map})
                         this.editService.save(basicConfig, id).then((res) => {
-
+                             console.log("res",res,res.id)
                             this.setState({success: true, id: res.id})
                             let {step} = this.state;
                             this.setState({
@@ -107,7 +107,7 @@ console.log(this.state.config)
 		 var url = '/apps/cartoview_workforce_manager/api/v1/project/'+ this.state.id + "/"
 		return fetch( url ,
 			 {
-			method: 'PUT',
+			method: 'Post',
 			credentials: "same-origin",
 			headers: new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken( )}),
 			body: JSON.stringify( {"mapid":this.state.config.map} )
@@ -124,6 +124,29 @@ console.log(this.state.config)
           }
         }
       } ,
+
+
+
+
+      {
+        label: "Form Customization",
+        component: FormFields,
+        props: {
+              
+              onComplete: (conf) => {
+                console.log(conf)
+               
+
+
+        let {step} = this.state;
+        this.goToStep(++step)
+
+           
+
+          }
+        }
+      } ,
+
              {
                 label: "Users",
                 component: Users,

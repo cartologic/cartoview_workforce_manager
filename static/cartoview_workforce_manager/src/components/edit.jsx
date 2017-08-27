@@ -48,14 +48,14 @@ export default class Edit extends Component {
             },
             value: {
                 title: this.props.task.title,
-                short_description: this.props.task.short_description,
+  
                 description: this.props.task.description,
                 assigned_to: "/apps/cartoview_workforce_manager/api/v1/user/"+this.props.task.assigned_to.id+"/",
                 due_date: new Date(this.props.task.due_date),
                 priority: this.props.task.priority,
                 status: this.props.task.status,
                 work_order: this.props.task.work_order,
-                group: this.props.task.group
+                code: this.props.task.code
             }
 }
             this.map = new ol.Map({
@@ -97,11 +97,11 @@ export default class Edit extends Component {
                     )
                     const Task = t.struct({
                         title: t.String,
-                        short_description: t.String,
+                   
                         description: t.String,
                         assigned_to: t.enums(tCombEnum),
                         work_order: t.maybe(t.Integer),
-                        group:t.maybe(t.String),
+                        code:t.maybe(t.String),
                         due_date: t.Date,
                         priority: Priority,
                         status: Status,// enum,

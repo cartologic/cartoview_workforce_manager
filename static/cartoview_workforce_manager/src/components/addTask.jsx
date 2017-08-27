@@ -89,12 +89,11 @@ export default class AddTask extends Component {
     )
                          const Person = t.struct({
                               title: t.String,
-                              short_description: t.String,
                               description: t.String,
                               assigned_to :t.enums(tCombEnum),
                               due_date: t.Date,
                               work_order:t.maybe(t.String),
-                              group:t.maybe(t.String),
+                              code:t.maybe(t.String),
                               priority: Priority ,
                               status: Status,// enum,
 
