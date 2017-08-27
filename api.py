@@ -104,7 +104,7 @@ class ProjectResource(ModelResource):
                 instance_obj.app = App.objects.get(name=app_name)
                 bundle.obj.app=instance_obj.app
         if(bundle.data.get('mapid')):
-                
+                instance_obj = AppInstance()
                 instance_obj.map = Map.objects.get(id=bundle.data.get('mapid'))
                 bundle.obj.map=instance_obj.map
 

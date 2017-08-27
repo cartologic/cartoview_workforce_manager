@@ -107,7 +107,7 @@ console.log(this.state.config)
 		 var url = '/apps/cartoview_workforce_manager/api/v1/project/'+ this.state.id + "/"
 		return fetch( url ,
 			 {
-			method: 'Post',
+			method: 'PUT',
 			credentials: "same-origin",
 			headers: new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken( )}),
 			body: JSON.stringify( {"mapid":this.state.config.map} )
