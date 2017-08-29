@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
-import Comments from './comments';
+// import Comments from './comments';
 import Attachments from './attachments.jsx';
 import ShowLocationMap from './showLocationMap.jsx';
+import DisplayComments from './displayComment';
+import DisplayAttachments from './displayAttachments';
 export default class Details extends Component {
     constructor(props) {
         super(props)
@@ -117,12 +119,12 @@ export default class Details extends Component {
 
                 <div className="panel panel-primary">
                     <div className="panel-heading">Images</div>
-                    <div className="panel-body"><Attachments task={this.props.task.id}/></div>
+                    <div className="panel-body"><DisplayAttachments task={this.props.task.id}/></div>
                 </div>
 
                 <div className="panel panel-primary">
                     <div className="panel-heading">Comments</div>
-                    <div className="panel-body"><Comments task={this.props.task.id}/></div>
+                    <div className="panel-body"><DisplayComments task={this.props.task.id}/></div>
                 </div>
                 <div className="panel panel-primary">
                     <div className="panel-heading">Location</div>

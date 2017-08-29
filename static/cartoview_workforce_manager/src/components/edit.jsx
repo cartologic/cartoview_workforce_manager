@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom';
 import MapConfigTransformService from '@boundlessgeo/sdk/services/MapConfigTransformService';
 import MapConfigService from '@boundlessgeo/sdk//services/MapConfigService';
 const Form = t.form.Form;
+import Comments from './comments';
+import Attachments from './attachments.jsx';
 var tComb = {}
 import ol from 'openlayers';
 const Priority = t.enums({
@@ -33,6 +35,7 @@ export default class Edit extends Component {
             success: false,
             assign: [],
             task: null,
+            loading:true,
             x:this.props.task.x,
             y:this.props.task.y,
       		extent:this.props.task.extent,
@@ -108,7 +111,7 @@ export default class Edit extends Component {
 
                     })
 
-                    this.setState({task: Task})
+                    this.setState({task: Task,loading:false})
 
                 })
             });
@@ -269,22 +272,38 @@ export default class Edit extends Component {
 
                     <div style={{"padding": "2%"}}>
                         {this.state.task &&
-
+                        <div>
                         <Form
                             ref="form"
                             options={this.state.options}
                             type={this.state.task}
                             value={this.state.value}
-                        />}
+                        />
+                        
                         <label>Click to Edit Task Location</label>
                           <div style={{height:"100%"}} ref="map" className={' map-ct'}>
 
                            {this.props.children}
                          </div>
-                        <button className="btn btn-primary" onClick={this.save}>Save</button>
-                    </div>
+                       <div className="row"> <button className="btn btn-default pull-right" style={{"margin":"2%"}} onClick={this.save}>Save Changes</button>
+                      </div>
+                        <div className="panel panel-default">
+                            <div className="panel-heading">Comments</div>
+                            <div className="panel-body"><Comments task={this.props.task.id}/></div>
+                        </div>
+                        <div className="panel panel-default">
+                    <div className="panel-heading">Images</div>
+                    <div className="panel-body"><Attachments task={this.props.task.id}/></div>
                 </div>
 
+
+
+                         </div>
+                        }
+                      
+                    </div>
+                </div>
+                 
 
                 {this.state.success && <div>
                     <br/>
@@ -293,6 +312,7 @@ export default class Edit extends Component {
                     </div>
 
                 </div>}
+                 
 
             </div>
         )

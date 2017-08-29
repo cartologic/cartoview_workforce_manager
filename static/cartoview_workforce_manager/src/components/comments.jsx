@@ -109,7 +109,7 @@ export default class Comments extends Component {
 							  placeholder="add comment"></textarea>
 				</div>
 				<div style={{"paddingTop": 10}}>
-					<button className="btn btn-primary pull-right" onClick={this.sendComment}>Comment</button>
+					<button className="btn btn-default pull-right" onClick={this.sendComment}>Comment</button>
 				</div>
 				<div style={{"marginTop": "5%"}}>
                     {this.state.comments.map((comment, i) => {

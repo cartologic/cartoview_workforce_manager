@@ -86,7 +86,7 @@ export default class Attachments extends Component {
         }
 
         this.getImage()
-
+console.log(this.props)
 
     }
 
