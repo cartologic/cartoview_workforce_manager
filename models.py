@@ -44,31 +44,9 @@ class Task(models.Model):
     code= models.TextField(blank=True, null=True)
     x=models.DecimalField(blank=True, null=True ,max_digits=19, decimal_places=10)
     y=models.DecimalField(blank=True, null=True,max_digits=19, decimal_places=10)
-    extent= models.TextField(blank=True, null=True)
-   
-    PRIORITY_CHOICES = (
-        (0, 'critical'),
-        (1, 'high'),
-        (2, 'medium'),
-        (3, 'low'),
-        (4,'very low')
-    )
-    STATUS_CHOICES = (
-        (1, 'open'),
-        (2, 'reopened'),
-        (3, 'closed'),
-        (4, 'duplicate'),
-        (5, 'resolved')
-    )
-    priority = models.IntegerField(
-        choices=PRIORITY_CHOICES,
-        default=3,
-    )
-    status = models.IntegerField(
-
-        choices=STATUS_CHOICES,
-        default=1,
-    )
+    extent= models.TextField(blank=True, null=True)   
+    priority = models.TextField(blank=True, null=True)
+    status = models.TextField(blank=True, null=True)
 
 class Comment(models.Model):
             commenter = models.ForeignKey(User, related_name='%(class)s_requests_commenter', on_delete=models.CASCADE)
