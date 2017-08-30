@@ -97,6 +97,7 @@ class ProjectResource(ModelResource):
         return bundle.data['user']
 
     def hydrate(self, bundle):
+        print("bundle.request.user",bundle.request.user)
         bundle.obj.created_by = bundle.request.user
         if(bundle.data.get('app')):
                 app_name=bundle.data['app']

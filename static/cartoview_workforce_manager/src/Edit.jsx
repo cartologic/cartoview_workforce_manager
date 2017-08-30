@@ -21,7 +21,7 @@ export default class Edit extends Component {
             selectedResource: this.props.config.instance ? this.props.config.instance.map:undefined,
             value:{},
             map:0,
-            config: {},
+            generalConfig: {},
             selectedResource: this.props.config.instance ? this.props.config.instance.map:undefined,
 
 
@@ -54,34 +54,28 @@ export default class Edit extends Component {
                     value:this.state.value,
                     keywords: this.props.keywords,
                     urls: this.props.config.urls,
+
                     instance: this.state.selectedResource,
 
                     project:this.state.project,
                     config: this.props.config.instance
                         ? this.props.config.instance.config
                         : undefined,
-                    onComplete: (basicConfig) => {
-
-                       
-                        this.setState({value:basicConfig,map:basicConfig.map})
-                        this.editService.save(basicConfig, id).then((res) => {
-                             console.log("res",res,res.id)
-                            this.setState({success: true, id: res.id})
+                    onComplete: (basicConfig) => {                       
+                            this.setState({value:basicConfig,map:basicConfig.map,generalConfig:basicConfig,success: true},()=>{ console.log(this.state.config,this.state.generalConfig)})
                             let {step} = this.state;
-                            this.setState({
-                                config: Object.assign(this.state.config, basicConfig)
-                            })
+                            console.log(this.state.config,this.state.generalConfig)
                              this.goToStep(++step)
 
-                           })
+                
                        
 
-                    },
+                  
 
                 }
+            }
+
             },
-
-
           
              {
         label: "Select Map",
@@ -92,34 +86,23 @@ export default class Edit extends Component {
 
               username:this.props.username,
               selectMap: (resource) => {
-                console.log(resource)
+              
                 this.setState({selectedResource: resource})
               },
               limit: this.props.config.limit,
               onComplete: () => {
+                 
                 var {step} = this.state;
                 this.setState({
-                  config: Object.assign(this.state.config, {map: this.state.selectedResource?this.state.selectedResource.id:this.state.map})
-                },()=>{
-
-
-console.log(this.state.config)
-		 var url = '/apps/cartoview_workforce_manager/api/v1/project/'+ this.state.id + "/"
-		return fetch( url ,
-			 {
-			method: 'PUT',
-			credentials: "same-origin",
-			headers: new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken( )}),
-			body: JSON.stringify( {"mapid":this.state.config.map} )
-		}).then(( response ) => {response.json( )
-
-         let {step} = this.state;
-                        this.goToStep(++step)
-        })
+                  genralConfig: Object.assign(this.state.generalConfig, {"mapid":this.state.selectedResource.id})
+                },()=>{ console.log(this.state.generalConfig)
+                             let {step} = this.state;
+                             this.goToStep(++step)
+                         
 
 
 
-            })
+                                })
 
           }
         }
@@ -133,13 +116,15 @@ console.log(this.state.config)
         component: FormFields,
         props: {
               
-              onComplete: (conf) => {
-                console.log(conf)
-               
+                onComplete: (priority,status,code) => {
+                console.log(priority,status,code)
+                 this.setState({
+                  genralConfig: Object.assign(this.state.generalConfig, {"priority":priority,"status":status,"code":code})
+                },()=>{ console.log(this.state.generalConfig)})
 
 
-        let {step} = this.state;
-        this.goToStep(++step)
+                        let {step} = this.state;
+                        this.goToStep(++step)
 
            
 
@@ -164,110 +149,114 @@ console.log(this.state.config)
                         ? this.props.config.instance.config
                         : undefined,
                     onComplete: (dispatchers,workers) => {
-                        console.log(dispatchers,workers)
-                        this.setState({dispatchers:dispatchers,workers:workers})
-                                if(!isNaN(id)){
-                                    var del_url_dis = '/apps/cartoview_workforce_manager/api/v1/project/'+id+'/dispatchers/'
-                                        fetch(del_url_dis, {
-                                        method: "DELETE",
-                                        credentials: "same-origin",
-                                        headers: new Headers({
-                                            "Content-Type": "application/json; charset=UTF-8",
+                            console.log(dispatchers,workers)
+                            this.setState({dispatchers:dispatchers,workers:workers},()=>{
+                            this.editService.save(this.state.generalConfig, this.state.workers,this.state.dispatchers).then((res) => {
+                            this.setState({success: true})
+                            console.log(res)
+                            // window.location.href = "/apps/cartoview_workforce_manager/" + this.state.id + "/view/"
+
+                         })
+
+
+                        })
+                        //         if(!isNaN(id)){
+                        //             var del_url_dis = '/apps/cartoview_workforce_manager/api/v1/project/'+id+'/dispatchers/'
+                        //                 fetch(del_url_dis, {
+                        //                 method: "DELETE",
+                        //                 credentials: "same-origin",
+                        //                 headers: new Headers({
+                        //                     "Content-Type": "application/json; charset=UTF-8",
                                          
 
-                                        }),
+                        //                 }),
 
-                                    })
-                                        .then(function (response) {
-                                            if (response.status >= 400) {
-                                                throw new Error("Bad response from server");
-                                            }
+                        //             })
+                        //                 .then(function (response) {
+                        //                     if (response.status >= 400) {
+                        //                         throw new Error("Bad response from server");
+                        //                     }
 
-                                        })
+                        //                 })
 
-                                    var del_url_wor = '/apps/cartoview_workforce_manager/api/v1/project/'+id+'/workers/'
-                                        fetch(del_url_wor, {
-                                        method: "DELETE",
-                                        credentials: "same-origin",
-                                        headers: new Headers({
-                                            "Content-Type": "application/json; charset=UTF-8",
+                        //             var del_url_wor = '/apps/cartoview_workforce_manager/api/v1/project/'+id+'/workers/'
+                        //                 fetch(del_url_wor, {
+                        //                 method: "DELETE",
+                        //                 credentials: "same-origin",
+                        //                 headers: new Headers({
+                        //                     "Content-Type": "application/json; charset=UTF-8",
                                        
 
-                                        }),
+                        //                 }),
 
-                                    })
-                                        .then(function (response) {
-                                            if (response.status >= 400) {
-                                                throw new Error("Bad response from server");
-                                            }
+                        //             })
+                        //                 .then(function (response) {
+                        //                     if (response.status >= 400) {
+                        //                         throw new Error("Bad response from server");
+                        //                     }
 
-                                        })
-
-
-
-                                }
-                        var dispatcher_url = '/apps/cartoview_workforce_manager/api/v1/project_dispatchers/'
-                        for (var i = 0; i < dispatchers.length; i++) {
-                            fetch(dispatcher_url, {
-                                method: "POST",
-                                credentials: "same-origin",
-                                headers: new Headers({
-                                    "Content-Type": "application/json; charset=UTF-8",
-                                    "X-CSRFToken": getCRSFToken(),
-
-                                }),
-                                body: JSON.stringify({
-                                    "project": "/apps/cartoview_workforce_manager/api/v1/project/" + this.state.id + "/",
-                                    "dispatcher": {"username":dispatchers[i]}
-                                })
-                            })
-                                .then(function (response) {
-                                    if (response.status >= 400) {
-                                        throw new Error("Bad response from server");
-                                    }
+                        //                 })
 
 
 
+                        //         }
+                        // var dispatcher_url = '/apps/cartoview_workforce_manager/api/v1/project_dispatchers/'
+                        // for (var i = 0; i < dispatchers.length; i++) {
+                        //     fetch(dispatcher_url, {
+                        //         method: "POST",
+                        //         credentials: "same-origin",
+                        //         headers: new Headers({
+                        //             "Content-Type": "application/json; charset=UTF-8",
+                        //             "X-CSRFToken": getCRSFToken(),
 
-
-
-                                })
-
-                        }
-                         var worker_url = '/apps/cartoview_workforce_manager/api/v1/project_workers/'
-                        for (var j = 0; j < workers.length; j++) {
-                            fetch(worker_url, {
-                                method: "POST",
-                                credentials: "same-origin",
-                                headers: new Headers({
-                                    "Content-Type": "application/json; charset=UTF-8",
-                                    "X-CSRFToken": getCRSFToken(),
-
-                                }),
-                                body: JSON.stringify({
-                                    "project": "/apps/cartoview_workforce_manager/api/v1/project/" + this.state.id + "/",
-                                    "worker": {"username":workers[j]}
-                                })
-                            })
-                                .then(function (response) {
-                                    if (response.status >= 400) {
-                                        throw new Error("Bad response from server");
-                                    }
+                        //         }),
+                        //         body: JSON.stringify({
+                        //             "project": "/apps/cartoview_workforce_manager/api/v1/project/" + this.state.id + "/",
+                        //             "dispatcher": {"username":dispatchers[i]}
+                        //         })
+                        //     })
+                        //         .then(function (response) {
+                        //             if (response.status >= 400) {
+                        //                 throw new Error("Bad response from server");
+                        //             }
 
 
 
 
 
 
-                                })
+                        //         })
 
-                        }
-                        
-                      
+                        // }
+                        //  var worker_url = '/apps/cartoview_workforce_manager/api/v1/project_workers/'
+                        // for (var j = 0; j < workers.length; j++) {
+                        //     fetch(worker_url, {
+                        //         method: "POST",
+                        //         credentials: "same-origin",
+                        //         headers: new Headers({
+                        //             "Content-Type": "application/json; charset=UTF-8",
+                        //             "X-CSRFToken": getCRSFToken(),
+
+                        //         }),
+                        //         body: JSON.stringify({
+                        //             "project": "/apps/cartoview_workforce_manager/api/v1/project/" + this.state.id + "/",
+                        //             "worker": {"username":workers[j]}
+                        //         })
+                        //     })
+                        //         .then(function (response) {
+                        //             if (response.status >= 400) {
+                        //                 throw new Error("Bad response from server");
+                        //             }
 
 
-                         this.setState({success: true})
-                         window.location.href = "/apps/cartoview_workforce_manager/" + this.state.id + "/view/"
+
+
+
+
+                        //         })
+
+                        //  this.setState({success: true})
+                        //   window.location.href = "/apps/cartoview_workforce_manager/" + this.state.id + "/view/"
 
                           
                             

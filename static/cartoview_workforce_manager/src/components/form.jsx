@@ -59,7 +59,7 @@ export default class FormFields extends Component {
 
     updateAttribute = ( attribute ) => {
         // let { attributes } = this.state
-        // let currentAtrribute = this.searchById( attribute.id )
+        // let currentAtrribute = this.searchById(  )
         // if ( currentAtrribute ) {
         //     const id = attributes.indexOf( currentAtrribute )
         //     let updatedObj = update( currentAtrribute, { $merge: attribute } )
@@ -69,12 +69,12 @@ export default class FormFields extends Component {
     }
     // searchById = ( id ) => {
     //     let result = this.state.attributes.find( ( attribute, index ) => {
-    //         return attribute.id === id
+    //         return  === id
     //     } )
     //     return result
     // }
     save=()=>{
-        this.props.onComplete()
+        this.props.onComplete(this.state.priority,this.state.status,this.state.code)
     }
     setFormValue=(value,s)=>{
         console.log("ss",s)
@@ -111,7 +111,7 @@ export default class FormFields extends Component {
                     <span className="input-group-addon">
                         <input
                             defaultChecked={true}
-                            onChange={() => this.includeChanged(attribute.id)}
+                            onChange={() => this.includeChanged()}
                             ref="code_check"
                             type="checkbox" />
                     </span>
@@ -125,7 +125,7 @@ export default class FormFields extends Component {
                     <span className="input-group-addon">
                         <input
                             defaultChecked={true}
-                            onChange={() => this.includeChanged(attribute.id)}
+                            onChange={() => this.includeChanged()}
                             ref="status_check"
                             type="checkbox" />
                     </span>
@@ -138,7 +138,7 @@ export default class FormFields extends Component {
                     <span className="input-group-addon">
                         <input
                             defaultChecked={true}
-                            onChange={() => this.includeChanged(attribute.id)}
+                            onChange={() => this.includeChanged()}
                             ref="status_check"
                             type="checkbox" />
                     </span>

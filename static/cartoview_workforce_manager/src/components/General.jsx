@@ -15,14 +15,14 @@ const Form = t.form.Form;
 
 export default class General extends Component {
     constructor(props) {
-        super(props)
-         if(!isNaN(id)){
+            super(props)
+            if(!isNaN(id)){
                 this.loadProject()
                         }
-        this.state = {
-        project:"",
-        value:this.props.value?this.props.value:"",
-        }
+            this.state = {
+            project:"",
+            value:this.props.value?this.props.value:"",
+            }
 
 
 
@@ -58,7 +58,7 @@ loadProject=()=>{
                 title: basicConfig.title,
                 abstract: basicConfig.abstract,
                 app: app,
-                map:this.state.project.mapid
+                
             }
             this.props.onComplete(properConfig)
         }
