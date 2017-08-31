@@ -60,7 +60,7 @@ loadProject=()=>{
                 app: app,
                 
             }
-            this.props.onComplete(properConfig)
+            this.props.onComplete(properConfig,this.state.project)
         }
     }
 

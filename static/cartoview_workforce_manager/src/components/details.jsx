@@ -7,7 +7,9 @@ import DisplayAttachments from './displayAttachments';
 export default class Details extends Component {
     constructor(props) {
         super(props)
-
+console.console.log('====================================');
+console.log(this.props);
+console.log('====================================');
     }
 
     render() {
@@ -44,7 +46,7 @@ export default class Details extends Component {
                             </tr>
                             <tr>
                                 <td><b>Created by</b></td>
-                                <td style={{"width": "70%"}}>{this.props.task.created_by.username}</td>
+                                <td style={{"width": "70%"}}>{this.props.task.created_by}</td>
 
                             </tr>
                             <tr>

@@ -5,7 +5,7 @@ import ShowAllLocationMap from './showAllLocationMap.jsx';
 export default class ProjectDetails extends Component {
     constructor(props) {
         super(props)
-        console.log(this.props)
+      
         this.state = {
             project: "",
 
@@ -53,7 +53,7 @@ export default class ProjectDetails extends Component {
                             {this.state.project.abstract}</li>
                         <li className="list-group-item">
                             <div className="headers"><b>Project was created by:</b></div>
-                            {this.state.project.owner.username}</li>
+                            {this.state.project.owner}</li>
                        <li className="list-group-item">
                             <div className="headers"><b>Project Workers:</b></div>
                             <div style={{'padding': '3%'}}>
