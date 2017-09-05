@@ -79,7 +79,7 @@ var {step} = this.state
         onComplete:() =>  {
             var {step} = this.state; 
             this.setState( {
-            genralConfig:Object.assign(this.state.generalConfig,  {"mapid":this.state.selectedResource.id})
+            genralConfig:Object.assign(this.state.generalConfig,  {"mapid":this.state.selectedResource?this.state.selectedResource.id:""})
             }, () =>  {console.log(this.state.generalConfig)
             let {step} = this.state; 
             this.goToStep(++step)

@@ -7,9 +7,7 @@ import DisplayAttachments from './displayAttachments';
 export default class Details extends Component {
     constructor(props) {
         super(props)
-console.console.log('====================================');
-console.log(this.props);
-console.log('====================================');
+
     }
 
     render() {
@@ -46,7 +44,7 @@ console.log('====================================');
                             </tr>
                             <tr>
                                 <td><b>Created by</b></td>
-                                <td style={{"width": "70%"}}>{this.props.task.created_by}</td>
+                                <td style={{"width": "70%"}}>{this.props.task.created_by.username}</td>
 
                             </tr>
                             <tr>
@@ -58,23 +56,14 @@ console.log('====================================');
                                 <td><b>priority</b></td>
                                 <td style={{"width": "70%"}}>
 
-                                    {this.props.task.priority == 1 && <span>High</span>}
-                                    {this.props.task.priority == 0 && <span>Critical</span>}
-                                    {this.props.task.priority == 2 && <span>Medium</span>}
-                                    {this.props.task.priority == 3 && <span>Low</span>}
-                                    {this.props.task.priority == 4 && <span>Very Low</span>}
-
+                                    {this.props.task.priority }
                                 </td>
 
                             </tr>
                             <tr>
                                 <td><b>Status</b></td>
                                 <td style={{"width": "70%"}}>
-                                    {this.props.task.status == 1 && <span>Open</span>}
-                                    {this.props.task.status == 2 && <span>Reopened</span>}
-                                    {this.props.task.status == 3 && <span>Closed</span>}
-                                    {this.props.task.status == 4 && <span>Duplicate</span>}
-                                    {this.props.task.status == 5 && <span>Resolved</span>}
+                                    {this.props.task.status }
 
                                 </td>
 

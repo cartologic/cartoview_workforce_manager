@@ -10,26 +10,7 @@ import MapConfigService from '@boundlessgeo/sdk/services/MapConfigService';
 import ol from 'openlayers';
 const Form = t.form.Form;
 var tComb={}
-const Priority = t.enums({
-	  0: 'Critical',
-	  1: 'High',
-	  2: 'Medium',
-	  3: 'Low',
-	  4: 'Very Low',
-});
-const Status= t.enums({
 
-	  1: 'Open',
-	  2: 'Re-opened',
-	  3: 'Closed',
-	  4: 'Duplicate',
-	  5: 'Resolved',
-});
-
-const assign= t.enums({
-
-
-});
 
 const options = {
 	fields: {
@@ -47,6 +28,8 @@ const options = {
 export default class AddTask extends Component {
 	constructor( props ) {
 		super( props )
+    console.log(this.props.project.priority)
+    
 		this.state={
 			success: false,
       auth:false,
@@ -54,9 +37,11 @@ export default class AddTask extends Component {
       person:null,
 			point:[],
 			extent:null,
-			value:null
+			value:null,
+      priority:{0:""},
+      code:null,
+      status:null
 		}
-
 
 	      this.map = new ol.Map({
 	        //controls: [new ol.control.Attribution({collapsible: false}), new ol.control.ScaleLine()],
@@ -87,19 +72,42 @@ export default class AddTask extends Component {
                                 }
 
     )
+     var priority={} 
+     var code={}
+     var status={}
+  for(var i=0;i<this.props.project.priority.option.length;i++){
+     priority[this.props.project.priority.option[i].label]=this.props.project.priority.option[i].label
+ 
+  } 
+   for(var j=0;j<this.props.project.code.option.length;j++){
+     code[this.props.project.code.option[j].label]=this.props.project.code.option[j].label
+ 
+  } 
+    for(var z=0;z<this.props.project.status.option.length;z++){
+     status[this.props.project.status.option[z].label]=this.props.project.status.option[z].label
+ 
+  } 
+  this.setState({priority:priority,code:code,status:status},()=>{
+
+  const Priority = t.enums( this.state.priority)
+  const Code = t.enums( this.state.code)
+  const Status = t.enums( this.state.status)
                          const Person = t.struct({
                               title: t.String,
                               description: t.String,
-                              assigned_to :t.enums(tCombEnum),
+                              assigned_to :t.maybe(t.enums(tCombEnum)),
                               due_date: t.Date,
                               work_order:t.maybe(t.String),
-                              code:t.maybe(t.String),
+                              code:Code,
                               priority: Priority ,
                               status: Status,// enum,
 
                         })
 
                             this.setState({person:Person})
+
+  })
+                       
 
 					 })
                     });

@@ -1,5 +1,6 @@
 from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 from tastypie.authorization import Authorization
+from tastypie.fields import DictField
 from tastypie.authentication import BasicAuthentication
 from .models import Task, Project, ProjectDispatchers,ProjectWorkers,Comment,Attachment
 from tastypie import fields
@@ -18,6 +19,7 @@ from tastypie.serializers import Serializer
 from tastypie import fields
 from cartoview.app_manager.models import App, AppInstance
 class UserResource(ModelResource):
+    
     class Meta:
         queryset = User.objects.all()
         authorization = Authorization()
@@ -30,6 +32,9 @@ class UserResource(ModelResource):
 
 
 class ProjectResource(ModelResource):
+    priority = DictField(attribute='priority')
+    code= DictField(attribute='code',null=True)
+    status= DictField(attribute='status',null=True)
     created_by = fields.ForeignKey(UserResource, 'created_by')
     dispatchers = fields.ManyToManyField(UserResource, 'dispatchers', full=True, readonly=True)
     owner = fields.ForeignKey(
@@ -91,7 +96,8 @@ class ProjectResource(ModelResource):
         kwargs = dict(api_name='v1', resource_name=self._meta.resource_name, pk=bundle.data['id'])
         bundle.data['tasks_uri'] = reverse('api_get_tasks_for_project', kwargs=kwargs)
         return bundle
-
+    # def dehydrate_priority(self, bundle):
+    #     return json.dumps(bundle.obj.priority)
     def dehydrate_user(self, bundle):
         bundle.data['user'] = {'username': bundle.obj.created_by.username}
         return bundle.data['user']
