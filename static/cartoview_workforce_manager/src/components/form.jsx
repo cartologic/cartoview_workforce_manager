@@ -4,11 +4,8 @@ import t from 'tcomb-form';
 
 const Code = t.struct({
     label: t.String
-   
-}, )
 
-
-
+})
 export default class FormFields extends Component {
     constructor(props) {
         super(props)
@@ -17,12 +14,12 @@ export default class FormFields extends Component {
             showModal: false,
             selected: "",
             workOrderConf: "",
-            code: null,
-            priority: null,
-            status: null
+            code: "",
+            priority: "",
+            status: "",
+            checkedValues: []
         }
     }
-
 
     includeChanged = (id) => {
 
@@ -66,6 +63,10 @@ export default class FormFields extends Component {
         console.log("obj", obj)
         this.setState(obj, () => { console.log("states", this.state) })
     }
+    check = (value) => {
+        console.log(this.state.checkedValues.includes(value))
+        return this.state.checkedValues.includes(value);
+    }
     render() {
         return (
             <div>
@@ -80,8 +81,9 @@ export default class FormFields extends Component {
                                 display: "inline-block",
                                 margin: "0px 3px 0px 3px"
                             }}
+                            disabled={(this.state.priority == "" && this.check("Ss")) || this.state.code == "" || this.state.status == ""}
                             className="btn btn-primary btn-sm pull-right"
-                            onClick={this.save.bind(this)}>{"next "}
+                            onClick={this.save.bind(this)}>{"next"}
                             <i className="fa fa-arrow-right"></i>
                         </button>
 

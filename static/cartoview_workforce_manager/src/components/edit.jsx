@@ -85,26 +85,24 @@ export default class Edit extends Component {
                         }
                     )
 
-
-
-
-
-
                     var priority={} 
                     var code={}
                     var status={}
-                 for(var i=0;i<this.props.project.priority.priority.length;i++){
-                    priority[this.props.project.priority.priority[i].label]=this.props.project.priority.priority[i].label
-                
-                 } 
-                  for(var j=0;j<this.props.project.code.code.length;j++){
-                    code[this.props.project.code.code[j].label]=this.props.project.code.code[j].label
-                
-                 } 
-                   for(var z=0;z<this.props.project.status.status.length;z++){
-                    status[this.props.project.status.status[z].label]=this.props.project.status.status[z].label
-                
-                 } 
+                    if(this.props.project.priority){
+                        for(var i=0;i<this.props.project.priority.priority.length;i++){
+                           priority[this.props.project.priority.priority[i].label]=this.props.project.priority.priority[i].label
+                       
+                        } }
+                        if(this.props.project.code){
+                         for(var j=0;j<this.props.project.code.code.length;j++){
+                           code[this.props.project.code.code[j].label]=this.props.project.code.code[j].label
+                       
+                        } }
+                        if(this.props.project.status){
+                          for(var z=0;z<this.props.project.status.status.length;z++){
+                           status[this.props.project.status.status[z].label]=this.props.project.status.status[z].label
+                       
+                        } }
                  this.setState({priority:priority,code:code,status:status},()=>{
 
 

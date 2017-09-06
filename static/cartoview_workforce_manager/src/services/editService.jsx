@@ -14,7 +14,7 @@ export default class EditService {
 			}).then((response) => { return response.json() }).then((res) => {
 				console.log("RESS", res.id)
 				var dispatcher_url = '/apps/cartoview_workforce_manager/api/v1/project_dispatchers/'
-		    	for (var i = 0; i < dispatchers.length; i++) {
+				for (var i = 0; i < dispatchers.length; i++) {
 					fetch(dispatcher_url, {
 						method: "POST",
 						credentials: "same-origin",
@@ -37,7 +37,7 @@ export default class EditService {
 
 				}
 
-		        var worker_url = '/apps/cartoview_workforce_manager/api/v1/project_workers/'
+				var worker_url = '/apps/cartoview_workforce_manager/api/v1/project_workers/'
 				for (var j = 0; j < workers.length; j++) {
 					fetch(worker_url, {
 						method: "POST",
@@ -58,18 +58,12 @@ export default class EditService {
 							}
 
 						})
-
 				}
 
 
-				// window.location.href = "/apps/cartoview_workforce_manager/" + res.id + "/view/"
+				window.location.href = "/apps/cartoview_workforce_manager/" + res.id + "/view/"
 			})
 		}
-
-
-
-
-
 		else {
 			const url = this.baseUrl + "apps/cartoview_workforce_manager/api/v1/project/" + id
 			return fetch(url, {
@@ -117,7 +111,7 @@ export default class EditService {
 
 
 
-    		var dispatcher_url = '/apps/cartoview_workforce_manager/api/v1/project_dispatchers/'
+			var dispatcher_url = '/apps/cartoview_workforce_manager/api/v1/project_dispatchers/'
 			for (var i = 0; i < dispatchers.length; i++) {
 				fetch(dispatcher_url, {
 					method: "POST",
@@ -148,20 +142,18 @@ export default class EditService {
 					headers: new Headers({
 						"Content-Type": "application/json; charset=UTF-8",
 						"X-CSRFToken": getCRSFToken(),
-
 					}),
 					body: JSON.stringify({
 						"project": "/apps/cartoview_workforce_manager/api/v1/project/" + id + "/",
 						"worker": { "username": workers[j] }
 					})
+				}).then(function (response) {
+					if (response.status >= 400) {
+						throw new Error("Bad response from server");
+					}
+
+
 				})
-					.then(function (response) {
-						if (response.status >= 400) {
-							throw new Error("Bad response from server");
-						}
-
-
-					})
 
 
 			}

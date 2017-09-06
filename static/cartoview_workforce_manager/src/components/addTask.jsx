@@ -75,18 +75,21 @@ export default class AddTask extends Component {
      var priority={} 
      var code={}
      var status={}
+     if(this.props.project.priority){
   for(var i=0;i<this.props.project.priority.priority.length;i++){
      priority[this.props.project.priority.priority[i].label]=this.props.project.priority.priority[i].label
  
-  } 
+  } }
+  if(this.props.project.code){
    for(var j=0;j<this.props.project.code.code.length;j++){
      code[this.props.project.code.code[j].label]=this.props.project.code.code[j].label
  
-  } 
+  } }
+  if(this.props.project.status){
     for(var z=0;z<this.props.project.status.status.length;z++){
      status[this.props.project.status.status[z].label]=this.props.project.status.status[z].label
  
-  } 
+  } }
   this.setState({priority:priority,code:code,status:status},()=>{
 
   const Priority = t.enums( this.state.priority)
@@ -98,9 +101,9 @@ export default class AddTask extends Component {
                               assigned_to :t.maybe(t.enums(tCombEnum)),
                               due_date: t.Date,
                               work_order:t.maybe(t.String),
-                              code:Code,
-                              priority: Priority ,
-                              status: Status,// enum,
+                              code:t.maybe(Code),
+                              priority:t.maybe( Priority ),
+                              status:t.maybe( Status),// enum,
 
                         })
 
@@ -178,13 +181,13 @@ if (dispatcher.dispatcher.username==username){
     var value = this.refs.form.getValue();
 
     if (value) {
-var project={"project":{"pk":id}}
-if(this.state.point.length){
-var mapconf={"x":this.state.point[0],"y":this.state.point[1],"extent":this.state.extent.toString()}
+          var project={"project":{"pk":id}}
+          if(this.state.point.length){
+          var mapconf={"x":this.state.point[0],"y":this.state.point[1],"extent":this.state.extent.toString()}
 
-var copy1 = Object.assign(mapconf, value);
-var copy = Object.assign(project, copy1);
-}
+          var copy1 = Object.assign(mapconf, value);
+          var copy = Object.assign(project, copy1);
+          }
 else{
 var copy = Object.assign(project, value);}
 console.log(copy)
