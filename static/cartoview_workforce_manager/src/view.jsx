@@ -287,11 +287,7 @@ this.setState({pagedTasks:pagedTasks})
                                                             <td>{item.assigned_to.username}</td>
                                                             <td>{item.priority }
                                                             </td>
-                                                            <td>{item.status == 1 && <span>Open</span>}
-                                                                {item.status == 2 && <span>Reopened</span>}
-                                                                {item.status == 3 && <span>Closed</span>}
-                                                                {item.status == 4 && <span>Duplicate</span>}
-                                                                {item.status == 5 && <span>Resolved</span>}
+                                                            <td>{item.status}
                                                             </td>
 
                                                         </tr>
@@ -463,14 +459,10 @@ this.setState({pagedTasks:pagedTasks})
                                                             this.setState({"selectedtask2": item})
                                                         }} style={{"cursor": "pointer"}}>
                                                             <td>{item.title}</td>
-                                                            <td>{item.short_description}</td>
+                                                            <td>{item.description}</td>
                                                             <td>{item.created_by.username}</td>
                                                             <td>{item.assigned_to.username}</td>
-                                                            <td>{item.priority == 1 && <span>High</span>}
-                                                                {item.priority == 0 && <span>Critical</span>}
-                                                                {item.priority == 2 && <span>Medium</span>}
-                                                                {item.priority == 3 && <span>Low</span>}
-                                                                {item.priority == 4 && <span>Very Low</span>}
+                                                            <td>{item.priority}
 
                                                             </td>
                                                             <td>{item.status }

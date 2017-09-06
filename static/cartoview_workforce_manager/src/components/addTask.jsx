@@ -75,16 +75,16 @@ export default class AddTask extends Component {
      var priority={} 
      var code={}
      var status={}
-  for(var i=0;i<this.props.project.priority.option.length;i++){
-     priority[this.props.project.priority.option[i].label]=this.props.project.priority.option[i].label
+  for(var i=0;i<this.props.project.priority.priority.length;i++){
+     priority[this.props.project.priority.priority[i].label]=this.props.project.priority.priority[i].label
  
   } 
-   for(var j=0;j<this.props.project.code.option.length;j++){
-     code[this.props.project.code.option[j].label]=this.props.project.code.option[j].label
+   for(var j=0;j<this.props.project.code.code.length;j++){
+     code[this.props.project.code.code[j].label]=this.props.project.code.code[j].label
  
   } 
-    for(var z=0;z<this.props.project.status.option.length;z++){
-     status[this.props.project.status.option[z].label]=this.props.project.status.option[z].label
+    for(var z=0;z<this.props.project.status.status.length;z++){
+     status[this.props.project.status.status[z].label]=this.props.project.status.status[z].label
  
   } 
   this.setState({priority:priority,code:code,status:status},()=>{
