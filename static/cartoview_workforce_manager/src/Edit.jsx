@@ -1,3 +1,4 @@
+
 import React,  {Component}from 'react'
 import './css/app.css'
 import Navigator from './components/Navigator.jsx'
@@ -127,11 +128,11 @@ this.goToStep(++step)
         onComplete:(dispatchers, workers) =>  {
             console.log(dispatchers, workers)
             this.setState( {dispatchers:dispatchers, workers:workers}, () =>  {
-            this.editService.save(this.state.generalConfig, this.state.workers, this.state.dispatchers).then((res) =>  {
+            this.editService.save(this.state.generalConfig, this.state.workers, this.state.dispatchers).then(() =>  {
             this.setState( {success:true})
-            console.log(res)
+     
             if (this.state.id) {
-            window.location.href = "/apps/cartoview_workforce_manager/" + this.state.id + "/view/"
+          //  window.location.href = "/apps/cartoview_workforce_manager/" + this.state.id + "/view/"
 
 }
 

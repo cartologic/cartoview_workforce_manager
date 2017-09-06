@@ -32,7 +32,7 @@ class UserResource(ModelResource):
 
 
 class ProjectResource(ModelResource):
-    priority = DictField(attribute='priority')
+    priority = DictField(attribute='priority',null=True)
     code= DictField(attribute='code',null=True)
     status= DictField(attribute='status',null=True)
     created_by = fields.ForeignKey(UserResource, 'created_by')
