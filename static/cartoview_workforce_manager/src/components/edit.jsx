@@ -9,23 +9,9 @@ import Comments from './comments';
 import Attachments from './attachments.jsx';
 var tComb = {}
 import ol from 'openlayers';
-const Priority = t.enums({
-    0: 'Critical',
-    1: 'High',
-    2: 'Medium',
-    3: 'Low',
-    4: 'Very Low',
-});
-const Status = t.enums({
 
-    1: 'Open',
-    2: 'Re-opened',
-    3: 'Closed',
-    4: 'Duplicate',
-    5: 'Resolved',
-});
 
-const assign = t.enums({});
+
 
 
 export default class Edit extends Component {
@@ -98,20 +84,53 @@ export default class Edit extends Component {
                             tCombEnum[user.worker.resource_uri] = user.worker.username
                         }
                     )
+
+
+
+
+
+
+                    var priority={} 
+                    var code={}
+                    var status={}
+                 for(var i=0;i<this.props.project.priority.priority.length;i++){
+                    priority[this.props.project.priority.priority[i].label]=this.props.project.priority.priority[i].label
+                
+                 } 
+                  for(var j=0;j<this.props.project.code.code.length;j++){
+                    code[this.props.project.code.code[j].label]=this.props.project.code.code[j].label
+                
+                 } 
+                   for(var z=0;z<this.props.project.status.status.length;z++){
+                    status[this.props.project.status.status[z].label]=this.props.project.status.status[z].label
+                
+                 } 
+                 this.setState({priority:priority,code:code,status:status},()=>{
+
+
+                 
+                const Priority = t.enums( this.state.priority)
+                const Code = t.enums( this.state.code)
+                const Status = t.enums( this.state.status)
+
+
+
+
                     const Task = t.struct({
                         title: t.String,
-                   
                         description: t.String,
                         assigned_to: t.enums(tCombEnum),
                         work_order: t.maybe(t.Integer),
-                        code:t.maybe(t.String),
+                        code:Code,
                         due_date: t.Date,
                         priority: Priority,
                         status: Status,// enum,
 
                     })
-
                     this.setState({task: Task,loading:false})
+                })
+
+                   
 
                 })
             });

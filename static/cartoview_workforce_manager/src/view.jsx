@@ -13,7 +13,6 @@ import ProjectEdit from './components/projectEdit';
 import MyTasks from './components/myTasks';
 import {getCRSFToken} from './helpers/helpers.jsx'
 import TaskDetails from './components/taskDetails.jsx'
-import FilterTask from './components/filtertask.jsx';
 
 import './css/project.css'
 import ReactPaginate from 'react-paginate';
@@ -71,7 +70,7 @@ if(this.refs.worker.value){
 }
 
  var url = '/apps/cartoview_workforce_manager/api/v1/project/'+id+'/tasks/?'+priority+status+work_order+worker+dispatcher
-
+console.log(url)
         fetch(url, {
             method: "GET",
             credentials: "same-origin",
@@ -88,6 +87,7 @@ if(this.refs.worker.value){
                 }
                    return response.json();
             }).then((data) => {
+                console.log(data)
                       this.setState({"filter":data.objects,"result":true})
 
         })
@@ -321,7 +321,7 @@ this.setState({pagedTasks:pagedTasks})
                                                     <div className="col-md-10">
 
 
-                                                        <TaskDetails task={this.state.selectedtask} mapid={this.state.project.mapid}/>
+                                                        <TaskDetails task={this.state.selectedtask} mapid={this.state.project.mapid} project={this.state.project} />
                                                     </div>
                                                     <div className="col-md-1"></div>
                                                 </div>}
@@ -347,7 +347,7 @@ this.setState({pagedTasks:pagedTasks})
 
 
                         <div  id="mytasks" className="tab-pane fade">
-                        <MyTasks id={id}/></div>
+                        <MyTasks id={id} project={this.state.project} /></div>
 
                         <div id="filter" className="tab-pane fade">
                                                 <div>
@@ -364,12 +364,13 @@ this.setState({pagedTasks:pagedTasks})
                     <div className="panel panel-primary">
                             <div className="panel-heading" >Priority</div>
                             <div className="panel-body">
-                                    <label className="radio"><input type="radio" name="optradio" value="0" onChange={()=>{this.setState({"priority":0})}}/>Critical</label>
-                                    <label className="radio"><input type="radio" name="optradio" value="1" onChange={()=>{this.setState({"priority":1})}}/>High</label>
-                                    <label className="radio"><input type="radio" name="optradio" value="2" onChange={()=>{this.setState({"priority":2})}}/>Medium</label>
-                                     <label className="radio"><input type="radio" name="optradio" value="3" onChange={()=>{this.setState({"priority":3})}}/>Low</label>
-                                    <label className="radio"><input type="radio" name="optradio" value="4" onChange={()=>{this.setState({"priority":4})}}/>Very Low</label>
+                                {this.state.project&& this.state.project.priority.priority.map((pri,i)=>{
 
+                                    return  <label className="radio" key={i}><input type="radio" name="optradio" value={pri.label} onChange={()=>{this.setState({"priority":pri.label})}}/>{pri.label}</label>
+                                })
+                                
+                                   
+                                }
                             </div>
                     </div>
                     <div className="panel panel-primary">
@@ -377,12 +378,13 @@ this.setState({pagedTasks:pagedTasks})
                             <div className="panel-body">
 
 
-                                    <label className="radio"><input type="radio" name="optradio2" value="1" onChange={()=>{this.setState({"status":1})}}/>Open</label>
-                                    <label className="radio"><input type="radio" name="optradio2" value="2" onChange={()=>{this.setState({"status":2})}}/>Re-open</label>
-                                     <label className="radio"><input type="radio" name="optradio2" value="3" onChange={()=>{this.setState({"status":3})}}/>Closed</label>
-                                    <label className="radio"><input type="radio" name="optradio2" value="4" onChange={()=>{this.setState({"status":4})}}/>Resolved</label>
-                                    <label className="radio"><input type="radio" name="optradio2" value="5" onChange={()=>{this.setState({"status":5})}}/>Duplicate</label>
-
+                            {this.state.project&& this.state.project.status.status.map((status,i)=>{
+                                
+                                                                    return  <label className="radio" key={i}><input type="radio" name="optradio2" value={status.label} onChange={()=>{this.setState({"status":status.label})}}/>{status.label}</label>
+                                                                })
+                                                                
+                                                                   
+                                                                }
                             </div>
                     </div>
                     <div className="panel panel-primary">

@@ -50,11 +50,11 @@ loadTask=()=>{
 
                     <div className="tab-content">
                         <div id="detail" className="tab-pane fade in active">
-                           { this.state.task &&<Details task={this.state.task} mapid={this.props.mapid}/>}
+                           { this.state.task &&<Details task={this.state.task} mapid={this.props.mapid} project={this.props.project} />}
                         </div>
                         <div id="edit" className="tab-pane fade">
                             <br/>
-                             { this.state.task &&<Edit task={this.state.task} mapid={this.props.mapid}/>}
+                             { this.state.task &&<Edit task={this.state.task} mapid={this.props.mapid} project={this.props.project} />}
                         </div>
                         <div id="history" className="tab-pane fade">
                             <br/>
