@@ -85,20 +85,23 @@ export default class Edit extends Component {
                         }
                     )
 
-                    var priority={} 
-                    var code={}
-                    var status={}
+                    var priority
+                    var code
+                    var status
                     if(this.props.project.priority){
+                        priority={}
                         for(var i=0;i<this.props.project.priority.priority.length;i++){
                            priority[this.props.project.priority.priority[i].label]=this.props.project.priority.priority[i].label
                        
                         } }
                         if(this.props.project.code){
+                            code={}
                          for(var j=0;j<this.props.project.code.code.length;j++){
                            code[this.props.project.code.code[j].label]=this.props.project.code.code[j].label
                        
                         } }
                         if(this.props.project.status){
+                            status={}
                           for(var z=0;z<this.props.project.status.status.length;z++){
                            status[this.props.project.status.status[z].label]=this.props.project.status.status[z].label
                        
@@ -107,24 +110,37 @@ export default class Edit extends Component {
 
 
                  
-                const Priority = t.enums( this.state.priority)
-                const Code = t.enums( this.state.code)
-                const Status = t.enums( this.state.status)
+              
+               
+               
 
 
 
 
-                    const Task = t.struct({
+                    const TaskObj = {
                         title: t.String,
                         description: t.String,
                         assigned_to: t.enums(tCombEnum),
                         work_order: t.maybe(t.Integer),
-                        code:Code,
+                      
                         due_date: t.Date,
-                        priority: Priority,
-                        status: Status,// enum,
+                      
 
-                    })
+                    }
+
+                    if(this.state.code){
+                             const Code = t.enums( this.state.code)
+                             TaskObj['code']=Code
+                         }
+                          if(this.state.priority){
+                              const Priority = t.enums( this.state.priority)
+                             TaskObj['priority']=Priority
+                         }
+                          if(this.state.status){
+                             const Status = t.enums( this.state.status)
+                             TaskObj['status']=Status
+                         }
+                            const Task=t.struct(TaskObj)
                     this.setState({task: Task,loading:false})
                 })
 
@@ -135,6 +151,7 @@ export default class Edit extends Component {
 
 
         this.save = this.save.bind(this)
+         this.init( this.map )
         console.log(this.state)
     }
 

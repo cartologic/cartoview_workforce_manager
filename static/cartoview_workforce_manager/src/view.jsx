@@ -13,7 +13,6 @@ import ProjectEdit from './components/projectEdit';
 import MyTasks from './components/myTasks';
 import { getCRSFToken } from './helpers/helpers.jsx'
 import TaskDetails from './components/taskDetails.jsx'
-
 import './css/project.css'
 import ReactPaginate from 'react-paginate';
 injectTapEventPlugin();
@@ -269,8 +268,8 @@ export default class ReactClient extends React.Component {
                                             <th>Description</th>
                                             <th> Created By</th>
                                             <th> Assigned To</th>
-                                            <th>Priority</th>
-                                            <th>Status</th>
+                                           {this.state.project.priority&& <th>Priority</th>}
+                                            {this.state.project.status&& <th>Status</th>}
 
 
                                         </tr>
@@ -286,10 +285,10 @@ export default class ReactClient extends React.Component {
                                                 <td>{item.description.substring(0, 75)} {item.description.length > 75 ? "..." : ""}</td>
                                                 <td>{item.created_by.username}</td>
                                                 <td>{item.assigned_to.username}</td>
-                                                <td>{item.priority}
-                                                </td>
-                                                <td>{item.status}
-                                                </td>
+                                                {this.state.project.priority&& <td>{item.priority}
+                                                </td>}
+                                                {this.state.project.status&& <td>{item.status}
+                                                </td>}
 
                                             </tr>
                                         }
@@ -362,7 +361,7 @@ export default class ReactClient extends React.Component {
                                         {!this.state.filter.length && !this.state.result &&
                                             <div className="panel panel-default" style={{ "padding": "0" }}>
                                                 <div className="panel-body" style={{ "padding": "0" }}>
-                                                    <div className="panel panel-primary">
+                                                    {this.state.project.priority && <div className="panel panel-primary">
                                                         <div className="panel-heading" >Priority</div>
                                                         <div className="panel-body">
                                                             {this.state.project.priority && this.state.project.priority.priority.map((pri, i) => {
@@ -373,8 +372,8 @@ export default class ReactClient extends React.Component {
 
                                                             }
                                                         </div>
-                                                    </div>
-                                                    <div className="panel panel-primary">
+                                                    </div>}
+                                                {   this.state.project.status && <div className="panel panel-primary">
                                                         <div className="panel-heading">Status</div>
                                                         <div className="panel-body">
 
@@ -387,7 +386,7 @@ export default class ReactClient extends React.Component {
 
                                                             }
                                                         </div>
-                                                    </div>
+                                                    </div>}
                                                     <div className="panel panel-primary">
                                                         <div className="panel-heading">Work Order</div>
                                                         <div className="panel-body"><input className="form-control" ref="work_order" /></div>
@@ -448,8 +447,8 @@ export default class ReactClient extends React.Component {
                                                         <th>Description</th>
                                                         <th> Created By</th>
                                                         <th> Assigned To</th>
-                                                        <th>Priority</th>
-                                                        <th>Status</th>
+                                                        {this.state.project.priority&& <th>Priority</th>}
+                                                        {this.state.project.status&& <th>Status</th>}
 
 
                                                     </tr>
@@ -465,12 +464,12 @@ export default class ReactClient extends React.Component {
                                                             <td>{item.description}</td>
                                                             <td>{item.created_by.username}</td>
                                                             <td>{item.assigned_to.username}</td>
-                                                            <td>{item.priority}
+                                                            {this.state.project.priority&& <td>{item.priority}
 
-                                                            </td>
-                                                            <td>{item.status}
+                                                            </td>}
+                                                            {this.state.project.status&& <td>{item.status}
 
-                                                            </td>
+                                                            </td>}
 
                                                         </tr>
                                                     }

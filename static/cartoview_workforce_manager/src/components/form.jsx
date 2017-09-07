@@ -17,13 +17,30 @@ export default class FormFields extends Component {
             code: "",
             priority: "",
             status: "",
-            checkedValues: []
+            checkedValues: ["code","priority","status"]
         }
     }
 
-    includeChanged = (id) => {
+    includeChanged = (e) => {
 
-        this.setState({ checked: "false" })
+        
+    { 
+            var checkedArray =this.state.checkedValues;
+            var selectedValue = e.target.value;
+            if (e.target.checked === true) {
+                checkedArray.push(selectedValue);
+                this.setState({
+                checkedValues: checkedArray
+                });
+            } else {
+                let valueIndex = checkedArray.indexOf(selectedValue);
+                checkedArray.splice(valueIndex, 1);
+                this.setState({
+                checkedValues: checkedArray
+                });
+
+    }}
+    
     }
 
 
@@ -64,8 +81,13 @@ export default class FormFields extends Component {
         this.setState(obj, () => { console.log("states", this.state) })
     }
     check = (value) => {
-        console.log(this.state.checkedValues.includes(value))
-        return this.state.checkedValues.includes(value);
+        // console.log(value,this.state.checkedValues,this.state.checkedValues.includes(value))
+        // return this.state.checkedValues.includes(value);
+        if( this.state.checkedValues.includes(value)){
+            if( this.state[value] == ""){ return true}
+            else{return false}
+        }
+        else {return false}
     }
     render() {
         return (
@@ -81,7 +103,7 @@ export default class FormFields extends Component {
                                 display: "inline-block",
                                 margin: "0px 3px 0px 3px"
                             }}
-                            disabled={(this.state.priority == "" && this.check("Ss")) || this.state.code == "" || this.state.status == ""}
+                            disabled={this.check("status") ||this.check("priority")||this.check("code")}
                             className="btn btn-primary btn-sm pull-right"
                             onClick={this.save.bind(this)}>{"next"}
                             <i className="fa fa-arrow-right"></i>
@@ -94,9 +116,10 @@ export default class FormFields extends Component {
                 <div className="col-lg-6">
                     <div className="input-group">
                         <span className="input-group-addon">
-                            <input
+                            <input  
+                                value='code'
                                 defaultChecked={true}
-                                onChange={() => this.includeChanged()}
+                                onChange={(e) => this.includeChanged(e)}
                                 ref="code_check"
                                 type="checkbox" />
                         </span>
@@ -109,8 +132,9 @@ export default class FormFields extends Component {
                     <div className="input-group">
                         <span className="input-group-addon">
                             <input
+                                value='priority'
                                 defaultChecked={true}
-                                onChange={() => this.includeChanged()}
+                                onChange={(e) => this.includeChanged(e)}
                                 ref="status_check"
                                 type="checkbox" />
                         </span>
@@ -122,8 +146,9 @@ export default class FormFields extends Component {
                     <div className="input-group">
                         <span className="input-group-addon">
                             <input
+                                value='status'
                                 defaultChecked={true}
-                                onChange={() => this.includeChanged()}
+                                onChange={(e) => this.includeChanged(e)}
                                 ref="status_check"
                                 type="checkbox" />
                         </span>

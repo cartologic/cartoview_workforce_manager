@@ -52,22 +52,15 @@ export default class Details extends Component {
                                 <td style={{"width": "70%"}}>{day2 + "/" + month2 + "/" + year2}</td>
 
                             </tr>
-                            <tr>
-                                <td><b>priority</b></td>
-                                <td style={{"width": "70%"}}>
-
-                                    {this.props.task.priority }
-                                </td>
-
-                            </tr>
-                            <tr>
+                            {this.props.task.priority&&<tr>
+                                <td><b>Priority</b></td>
+                                <td style={{"width": "70%"}}>{this.props.task.priority}</td>                              
+                            </tr>}
+                             {this.props.task.status &&<tr>
                                 <td><b>Status</b></td>
-                                <td style={{"width": "70%"}}>
-                                    {this.props.task.status }
-
-                                </td>
-
-                            </tr>
+                                <td style={{"width": "70%"}}>{this.props.task.status}</td>
+                                                    
+                            </tr>}
                             <tr>
                                 <td><b>Due Date</b></td>
                                 <td style={{"width": "70%"}}>{day + "/" + month + "/" + year}</td>
@@ -80,24 +73,14 @@ export default class Details extends Component {
                             </tr>
                             <tr>
                                 <td><b>Work Order</b></td>
-                                <td style={{"width": "70%"}}>
-
-                                    {this.props.task.work_order == 0 ?
-                                        <span>No work order was specified for this task </span> : this.props.task.work_order}
-
+                                <td style={{"width": "70%"}}>{this.props.task.work_order == 0 ?<span>No work order was specified for this task </span> : this.props.task.work_order}
                                 </td>
 
                             </tr>
-                              <tr>
+                               {this.props.task.code &&<tr>
                                 <td><b>Task Code</b></td>
-                                <td style={{"width": "70%"}}>
-
-                                    {this.props.task.code == "" ?
-                                        <span>No code was specified for this task yet</span> : this.props.task.code}
-
-                                </td>
-
-                            </tr>
+                                <td style={{"width": "70%"}}>{this.props.task.code}</td>
+                                            </tr>}
                             </tbody>
                         </table>
 

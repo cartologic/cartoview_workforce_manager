@@ -23,6 +23,13 @@ const options = {
 				}
 		}
 	}
+
+,
+i18n: {
+   
+    optional: '',   
+                  
+  }
 };
 
 export default class AddTask extends Component {
@@ -95,19 +102,29 @@ export default class AddTask extends Component {
   const Priority = t.enums( this.state.priority)
   const Code = t.enums( this.state.code)
   const Status = t.enums( this.state.status)
-                         const Person = t.struct({
-                              title: t.String,
-                              description: t.String,
+                         const PersonObj = {
+                              title: t.maybe(t.String),
+                              description: t.maybe(t.String),
                               assigned_to :t.maybe(t.enums(tCombEnum)),
-                              due_date: t.Date,
+                              due_date: t.maybe(t.Date),
                               work_order:t.maybe(t.String),
-                              code:t.maybe(Code),
-                              priority:t.maybe( Priority ),
-                              status:t.maybe( Status),// enum,
+                            
+                         
 
-                        })
-
-                            this.setState({person:Person})
+                        }
+                   
+                        if(this.props.project.code){
+                            PersonObj['code']=t.maybe(Code)
+                        }
+                        if(this.props.project.priority){
+                          
+                            PersonObj['priority']=t.maybe(Priority)
+                        }
+                        if(this.props.project.status){
+                            PersonObj['status']=t.maybe(Status)
+                        }
+                          const Person=t.struct(PersonObj)
+                            this.setState({person:Person},()=>console.log(this.state.person))
 
   })
                        
