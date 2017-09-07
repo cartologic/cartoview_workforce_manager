@@ -17,9 +17,39 @@ export default class FormFields extends Component {
             code: "",
             priority: "",
             status: "",
-            checkedValues: ["code","priority","status"]
+            checkedValues: ["code","priority","status"],
+            value:""
         }
+   
+    if(!isNaN(id)){
+                this.loadProject()
+                        }
+   
     }
+    loadProject=()=>{
+      var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id
+
+        fetch(url, {
+            method: "GET",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8",
+
+
+            })
+        })
+            .then(function (response) {
+                if (response.status >= 400) {
+                    throw new Error("Bad response from server");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log(data)
+                this.setState({"project": data,"code":data.code?data.code:"","priority":data.priority?data.priority:"","status":data.status?data.status:"", "value":{code:data.code?data.code:"",
+               status: data.status?data.status:"", priority: data.priority?data.priority:""
+               }})
+            });
+}
 
     includeChanged = (e) => {
 
@@ -90,6 +120,7 @@ export default class FormFields extends Component {
         else {return false}
     }
     render() {
+        console.log(this.state)
         return (
             <div>
 
@@ -168,6 +199,7 @@ export default class FormFields extends Component {
                         fieldConfig={this.state.fieldConfig}
                         onComplete={this.props.onComplete}
                         setFormValue={this.setFormValue}
+                        defaultValue={this.state.value}
                         handleHideModal={this.handleHideModal} updateAttribute={this.updateAttribute} />
                 }
             </div>

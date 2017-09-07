@@ -27,7 +27,7 @@ export default class FieldConfigModal extends Component {
     constructor(props) {
         super(props)
         console.log(this.props)
-
+console.log("DDDDD",this.props.defaultValue[this.props.selected])
     }
     componentDidMount() {
         $(ReactDOM.findDOMNode(this)).modal('show');
@@ -62,7 +62,7 @@ export default class FieldConfigModal extends Component {
 
                                 ref="form"
                                 type={this.props.fieldConfig}
-                                value={this.props.defaultValue}
+                                value={this.props.defaultValue[this.props.selected]}
                                 options={options} />
                         </div>
                         <div className="modal-footer">

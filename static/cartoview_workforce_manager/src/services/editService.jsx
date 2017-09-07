@@ -71,9 +71,9 @@ export default class EditService {
 				credentials: "same-origin",
 				headers: new Headers({ "Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken() }),
 				body: JSON.stringify(instanceConfig)
-			}).then((response) => response.json())
-
-			var del_url_dis = '/apps/cartoview_workforce_manager/api/v1/project/' + id + '/dispatchers/'
+			}).then((response) =>{
+				  console.log("hello")
+				  	var del_url_dis = '/apps/cartoview_workforce_manager/api/v1/project/' + id + '/dispatchers/'
 			fetch(del_url_dis, {
 				method: "DELETE",
 				credentials: "same-origin",
@@ -122,7 +122,7 @@ export default class EditService {
 
 					}),
 					body: JSON.stringify({
-						"project": "/apps/cartoview_workforce_manager/api/v1/project/" + this.state.id + "/",
+						"project": "/apps/cartoview_workforce_manager/api/v1/project/" + id + "/",
 						"dispatcher": { "username": dispatchers[i] }
 					})
 				})
@@ -158,8 +158,14 @@ export default class EditService {
 
 			}
 
-			// window.location.href = "/apps/cartoview_workforce_manager/" + id + "/view/"
+				 window.location.href = "/apps/cartoview_workforce_manager/" + id + "/view/"
 
+			})
+
+
+          
+		
+			 
 		}
 
 	}
