@@ -2,7 +2,7 @@ from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 from tastypie.authorization import Authorization
 from tastypie.fields import DictField
 from tastypie.authentication import BasicAuthentication
-from .models import Task, Project, ProjectDispatchers,ProjectWorkers,Comment,Attachment
+from .models import Task, Project, ProjectDispatchers,ProjectWorkers,Comment,Attachment,History
 from tastypie import fields
 from django.core.urlresolvers import reverse
 from tastypie.utils import trailing_slash
@@ -242,7 +242,19 @@ class CommentResource(ModelResource):
         # authentication = BasicAuthentication()
         allowed_methods = ['get', 'post', 'put', 'delete']
 
+class HistoryResource(ModelResource):
+    task=fields.ForeignKey(TaskResource, 'task')
+    class Meta:
 
+        filtering = 
+        {
+            'task':ALL_WITH_RELATIONS
+        }
+        queryset = History.objects.all()
+        resource_name = 'history'
+        authorization = Authorization()
+        # authentication = BasicAuthentication()
+        allowed_methods = ['get', 'post','delete']
 class MultipartFormSerializer(Serializer):
 
     def __init__(self, *args, **kwargs):

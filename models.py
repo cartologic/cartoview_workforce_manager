@@ -55,10 +55,14 @@ class Comment(models.Model):
             created_at = models.DateTimeField(auto_now_add=True)
             
 class Attachment(models.Model):
-    task =models.ForeignKey(Task, on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
     user = models.ForeignKey(User, related_name='%(class)s_requests_user', on_delete=models.CASCADE)
     image = models.FileField()
-    
+
+class History(models.Model):
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    text = models.TextField(default=0,blank=True, null=True)
+
 def appinstance_post_save(instance, *args, **kwargs):
     if not isinstance(instance, AppInstance):
         return True
