@@ -17,10 +17,10 @@ export default class FormFields extends Component {
             code: "",
             priority: "",
             status: "",
-            checkedValues: ["code","priority","status"],
+            checkedValues:isNaN(id)? ["code","priority","status"]:[],
             value:""
         }
-   
+   console.log("checked",this.state.checkedValues)
     if(!isNaN(id)){
                 this.loadProject()
                         }
@@ -48,6 +48,11 @@ export default class FormFields extends Component {
                 this.setState({"project": data,"code":data.code?data.code:"","priority":data.priority?data.priority:"","status":data.status?data.status:"", "value":{code:data.code?data.code:"",
                status: data.status?data.status:"", priority: data.priority?data.priority:""
                }})
+            
+               if(this.state.priority!=""){this.state.checkedValues.push("priority")}
+               if(this.state.status!=""){this.state.checkedValues.push("status")}
+               if(this.state.code!=""){this.state.checkedValues.push("code")}
+               console.log("ssassss",this.state.checkedValues)
             });
 }
 
@@ -149,7 +154,7 @@ export default class FormFields extends Component {
                         <span className="input-group-addon">
                             <input  
                                 value='code'
-                                defaultChecked={true}
+                                defaultChecked={this.props.checkedValues.includes("code")}
                                 onChange={(e) => this.includeChanged(e)}
                                 ref="code_check"
                                 type="checkbox" />
@@ -164,7 +169,7 @@ export default class FormFields extends Component {
                         <span className="input-group-addon">
                             <input
                                 value='priority'
-                                defaultChecked={true}
+                                defaultChecked={this.props.checkedValues.includes("priority")}
                                 onChange={(e) => this.includeChanged(e)}
                                 ref="status_check"
                                 type="checkbox" />
@@ -178,7 +183,7 @@ export default class FormFields extends Component {
                         <span className="input-group-addon">
                             <input
                                 value='status'
-                                defaultChecked={true}
+                                defaultChecked={this.props.checkedValues.includes("status")}
                                 onChange={(e) => this.includeChanged(e)}
                                 ref="status_check"
                                 type="checkbox" />

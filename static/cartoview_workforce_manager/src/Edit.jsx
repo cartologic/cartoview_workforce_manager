@@ -22,11 +22,43 @@ export default class Edit extends Component {
             map: 0,
             generalConfig: {},
             selectedResource: this.props.config.instance ? this.props.config.instance.map : undefined,
-
+            checkedValues:isNaN(id)? ["code","priority","status"]:[],
         }
+            if(!isNaN(id)){
+                this.loadProject()
+                        }
         this.editService = new EditService({ baseUrl: '/' })
 
     }
+ loadProject=()=>{
+      var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id
+
+        fetch(url, {
+            method: "GET",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8",
+
+
+            })
+        })
+            .then(function (response) {
+                if (response.status >= 400) {
+                    throw new Error("Bad response from server");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log(data)
+                this.setState({"project": data,"code":data.code?data.code:"","priority":data.priority?data.priority:"","status":data.status?data.status:"", "value":{code:data.code?data.code:"",
+               status: data.status?data.status:"", priority: data.priority?data.priority:""
+               }})
+            
+               if(this.state.priority!=""){this.state.checkedValues.push("priority")}
+               if(this.state.status!=""){this.state.checkedValues.push("status")}
+               if(this.state.code!=""){this.state.checkedValues.push("code")}
+               console.log("ssassss",this.state.checkedValues)
+            });
+}
 
     goToStep(step) {
         this.setState({ step });
@@ -86,7 +118,7 @@ export default class Edit extends Component {
             label: "Form Customization",
             component: FormFields,
             props: {
-
+                checkedValues:this.state.checkedValues,
                 onComplete: (priority, status, code) => {
                     console.log(priority, status, code)
                     this.setState({ genralConfig: Object.assign(this.state.generalConfig, { "priority": priority, "status": status, "code": code }) }, () => { console.log(this.state.generalConfig) })
