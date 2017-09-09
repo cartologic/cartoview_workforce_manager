@@ -10,10 +10,6 @@ import Attachments from './attachments.jsx';
 var tComb = {}
 import ol from 'openlayers';
 
-
-
-
-
 export default class Edit extends Component {
     constructor(props) {
         super(props)
@@ -25,6 +21,7 @@ export default class Edit extends Component {
             x:this.props.task.x,
             y:this.props.task.y,
       		extent:this.props.task.extent,
+            history:"",
             options: {
                 "fields": {
                     "description": {
@@ -37,7 +34,6 @@ export default class Edit extends Component {
             },
             value: {
                 title: this.props.task.title,
-  
                 description: this.props.task.description,
                 assigned_to: "/apps/cartoview_workforce_manager/api/v1/user/"+this.props.task.assigned_to.id+"/",
                 due_date: new Date(this.props.task.due_date),
@@ -58,16 +54,12 @@ export default class Edit extends Component {
               })
             });
 
-
-
-
         var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + "/workers"
         fetch(url, {
             method: "GET",
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
                 "X-CSRFToken": getCRSFToken(),
-
             })
         })
             .then(function (response) {
@@ -77,14 +69,14 @@ export default class Edit extends Component {
                 return response.json();
             })
             .then((data) => {
-
                 this.setState({assign: data.objects}, () => {
                     var tCombEnum = {}
                     this.state.assign.forEach((user) => {
                             tCombEnum[user.worker.resource_uri] = user.worker.username
                         }
-                    )
 
+                    )
+                    this.setState({tCombEnum})
                     var priority
                     var code
                     var status
@@ -106,28 +98,14 @@ export default class Edit extends Component {
                            status[this.props.project.status.status[z].label]=this.props.project.status.status[z].label
                        
                         } }
-                 this.setState({priority:priority,code:code,status:status},()=>{
-
-
-                 
-              
-               
-               
-
-
-
-
+                 this.setState({priority:priority,code:code,status:status},()=>{                          
                     const TaskObj = {
                         title: t.String,
                         description: t.String,
                         assigned_to: t.enums(tCombEnum),
                         work_order: t.maybe(t.Integer),
-                      
-                        due_date: t.Date,
-                      
-
+                        due_date: t.Date,                      
                     }
-
                     if(this.state.code){
                              const Code = t.enums( this.state.code)
                              TaskObj['code']=Code
@@ -143,20 +121,37 @@ export default class Edit extends Component {
                             const Task=t.struct(TaskObj)
                     this.setState({task: Task,loading:false})
                 })
-
-                   
-
                 })
             });
-
-
-        this.save = this.save.bind(this)
+         this.save = this.save.bind(this)
          this.init( this.map )
-        console.log(this.state)
     }
+sendHistory=()=>{
+       
+        var text = {"text": this.state.history, "task": {"pk": this.props.task.id}}
+        var url = '/apps/cartoview_workforce_manager/api/v1/history/'
 
+        fetch(url, {
+            method: "POST",
+            credentials: "same-origin",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8",
+
+            }),
+            body: JSON.stringify(text)
+        })
+            .then(function (response) {
+                if (response.status >= 400) {
+                    throw new Error("Bad response from server");
+                }
+
+            }).then(() => {
+
+           
+        })
+       
+    }
     update(mapId) {
-      console.log("mapid",mapId);
       if (mapId) {
         var url = `/maps/${mapId}/data`
         fetch(url, {
@@ -180,56 +175,43 @@ export default class Edit extends Component {
     init=( map )=> {
       var point_feature = new ol.Feature({ });
     		map.on('singleclick', ( e ) => {
-
-
-          this.setState({x:e.coordinate[0],y:e.coordinate[1],extent:map.getView().calculateExtent(map.getSize()),value:this.state.value})
-          var point_geom = new ol.geom.Point(e.coordinate)
-          console.log( this.state)
-
-          point_feature.setGeometry(point_geom);
-          var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
-
-           var style = new ol.style.Style({
-          image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
-          anchor: [0.5, 10],
-          anchorXUnits: 'fraction',
-          anchorYUnits: 'pixels',
-          src: URLS.static +'marker.png'
-      }))
-      });
-          vector_layer.setStyle(style);
-          map.addLayer(vector_layer);
-
-
-
-
+                this.setState({x:e.coordinate[0],y:e.coordinate[1],extent:map.getView().calculateExtent(map.getSize()),value:this.state.value})
+                var point_geom = new ol.geom.Point(e.coordinate)
+                point_feature.setGeometry(point_geom);
+                var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
+                var style = new ol.style.Style({
+                        image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+                        anchor: [0.5, 10],
+                        anchorXUnits: 'fraction',
+                        anchorYUnits: 'pixels',
+                        src: URLS.static +'marker.png'
+                            }))
+                            });
+                vector_layer.setStyle(style);
+                map.addLayer(vector_layer);
 
         })
-
-
         if(this.state.x&&this.state.y) {
-
           //postrender because feature doesnt appear on componentDidMount
-       
    setTimeout(()=>{
           var point_geom = new ol.geom.Point([this.state.x,this.state.y])
           point_feature.setGeometry(point_geom);
           // console.log(point_feature)
-          var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
+            var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
             map.setView(new ol.View({
             center:  [parseInt(this.state.x),parseInt(this.state.y)],
             zoom: 6
                                         }));
            var style = new ol.style.Style({
-          image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
-          anchor: [0.5, 10],
-          anchorXUnits: 'fraction',
-          anchorYUnits: 'pixels',
-          src: URLS.static +'marker.png'
-      }))
-      });
-          vector_layer.setStyle(style);
-         map.addLayer(vector_layer);
+            image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+            anchor: [0.5, 10],
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'pixels',
+            src: URLS.static +'marker.png'
+        }))
+        });
+            vector_layer.setStyle(style);
+            map.addLayer(vector_layer);
 
 
 
@@ -237,33 +219,51 @@ export default class Edit extends Component {
       },500)}}
 
         
-
-
+    
     save() {
-        // call getValue() to get the values of the form
+        var date=new Date()
+        var dt=date.toUTCString()
+        if(this.state.value.status&&this.state.value.status!=this.refs.form.getValue().status){
+           this.state['history']=this.state['history']+ username+"  changed the status from "+this.state.value.status +" to "+ this.refs.form.getValue().status +" at "+dt
+           this.sendHistory()
+       }
+     if(this.state.value.priority&&this.state.value.priority!=this.refs.form.getValue().priority){
+           this.state['history']= username+"  changed the priority from "+this.state.value.priority +" to "+ this.refs.form.getValue().priority +" at "+dt
+           this.sendHistory()
+    
+       }
+         if(this.state.value.code&&this.state.value.code!=this.refs.form.getValue().code){
+           this.state['history']= username+"  changed the code from "+this.state.value.code +" to "+ this.refs.form.getValue().code +" at "+dt
+           this.sendHistory()
+    
+       }
+       if(this.state.value.due_date!=this.refs.form.getValue().due_date){
+           this.state['history']= username+"  changed the due date from "+this.state.value.due_date.toUTCString() +" to "+ this.refs.form.getValue().due_date.toUTCString() +" at "+dt
+           this.sendHistory()
+    
+       }
+       if(this.state.value.assigned_to!=this.refs.form.getValue().assigned_to){
+           this.state['history']= username+"  reassigned the task to "+ this.state.tCombEnum[this.refs.form.getValue().assigned_to] +" at "+dt
+           this.sendHistory()
+    
+       }
         var value = this.refs.form.getValue();
-
         if (value) {
             var project = {"project": {"pk": id}}
-
             if(this.state.x&&this.state.y){
             var mapconf={"x":this.state.x,"y":this.state.y,"extent":this.state.extent.toString()}
-
             var copy1 = Object.assign(mapconf, value);
             var copy = Object.assign(project, copy1);
             }
             else{
             var copy = Object.assign(project, value);}
-
             var url = '/apps/cartoview_workforce_manager/api/v1/task/' + this.props.task.id
-
             fetch(url, {
                 method: "PUT",
                 credentials: "same-origin",
                 headers: new Headers({
                     "Content-Type": "application/json; charset=UTF-8",
                     "X-CSRFToken": getCRSFToken(),
-
                 }),
                 body: JSON.stringify(copy)
             })
@@ -273,9 +273,10 @@ export default class Edit extends Component {
                     }
 
                 }).then((res) => {
+                // 
                 this.setState({"success": true})
+               
             })
-
 
         }
     }
@@ -287,17 +288,11 @@ export default class Edit extends Component {
         this.map.updateSize()
         // this.map.render()
       },3000)
-
-
-
-
     }
   componentWillReceiveProps(nextProps){
   	if(nextProps.children != this.props.children){
-
   	}
   }
-
     render() {
         return (
             <div>

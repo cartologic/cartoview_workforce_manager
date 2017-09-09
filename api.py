@@ -246,8 +246,7 @@ class HistoryResource(ModelResource):
     task=fields.ForeignKey(TaskResource, 'task')
     class Meta:
 
-        filtering = 
-        {
+        filtering = {
             'task':ALL_WITH_RELATIONS
         }
         queryset = History.objects.all()
