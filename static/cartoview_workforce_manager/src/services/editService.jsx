@@ -65,6 +65,7 @@ export default class EditService {
 			})
 		}
 		else {
+			console.log("edititnf",instanceConfig)
 			const url = this.baseUrl + "apps/cartoview_workforce_manager/api/v1/project/" + id
 			return fetch(url, {
 				method: 'PUT',
@@ -158,7 +159,7 @@ export default class EditService {
 
 			}
 
-				 window.location.href = "/apps/cartoview_workforce_manager/" + id + "/view/"
+				 //window.location.href = "/apps/cartoview_workforce_manager/" + id + "/view/"
 
 			})
 

@@ -81,7 +81,7 @@ export default class FormFields extends Component {
 
     generateForm = () => {
         let x = {
-            required: t.Boolean
+            required_input: t.Boolean
         }
         x[this.state.selected] = t.list(Code)
         const fieldConfig = t.struct(x)

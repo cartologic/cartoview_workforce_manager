@@ -48,9 +48,9 @@ export default class Edit extends Component {
                 return response.json();
             })
             .then((data) => {
-                console.log(data)
+                console.log("load peor",data)
                 this.setState({"project": data,"code":data.code?data.code:"","priority":data.priority?data.priority:"","status":data.status?data.status:"", "value":{code:data.code?data.code:"",
-               status: data.status?data.status:"", priority: data.priority?data.priority:""
+               status: data.status?data.status:"", priority: data.priority?data.priority:"",mapid:data.mapid?data.mapid:""
                }})
             
                if(this.state.priority!=""){this.state.checkedValues.push("priority")}
@@ -105,7 +105,7 @@ export default class Edit extends Component {
                 onComplete: () => {
                     var { step } = this.state;
                     this.setState({
-                        genralConfig: Object.assign(this.state.generalConfig, { "mapid": this.state.selectedResource ? this.state.selectedResource.id : "" })
+                        genralConfig: Object.assign(this.state.generalConfig, { "mapid": this.state.selectedResource ? this.state.selectedResource.id : this.state.mapid })
                     }, () => {
                         console.log(this.state.generalConfig)
                         let { step } = this.state;

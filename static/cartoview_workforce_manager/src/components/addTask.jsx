@@ -87,7 +87,7 @@ export default class AddTask extends Component {
      priority[this.props.project.priority.priority[i].label]=this.props.project.priority.priority[i].label
  
   } }
-  if(this.props.project.code){
+  if(this.props.project.code.code){
    for(var j=0;j<this.props.project.code.code.length;j++){
      code[this.props.project.code.code[j].label]=this.props.project.code.code[j].label
  
@@ -113,14 +113,14 @@ export default class AddTask extends Component {
 
                         }
                    
-                        if(this.props.project.code){
+                        if(this.props.project.code.code){
                             PersonObj['code']=t.maybe(Code)
                         }
-                        if(this.props.project.priority){
+                        if(this.props.project.priority.priority){
                           
                             PersonObj['priority']=t.maybe(Priority)
                         }
-                        if(this.props.project.status){
+                        if(this.props.project.status.status){
                             PersonObj['status']=t.maybe(Status)
                         }
                           const Person=t.struct(PersonObj)
