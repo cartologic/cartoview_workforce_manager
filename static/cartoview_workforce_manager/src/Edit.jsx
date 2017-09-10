@@ -22,7 +22,7 @@ export default class Edit extends Component {
             map: 0,
             generalConfig: {},
             selectedResource: this.props.config.instance ? this.props.config.instance.map : undefined,
-            checkedValues:isNaN(id)? ["Category","priority","status"]:[],
+            checkedValues:isNaN(id)? ["category","priority","status","work_order","description","due_date"]:[],
         }
             if(!isNaN(id)){
                 this.loadProject()
@@ -48,14 +48,14 @@ export default class Edit extends Component {
                 return response.json();
             })
             .then((data) => {
-               
+              
+               this.setState({"checkedValues":data.Project_config})
                 this.setState({"project": data,"Category":data.Category?data.Category:"","priority":data.priority?data.priority:"","status":data.status?data.status:"", "value":{Category:data.Category?data.Category:"",
-               status: data.status?data.status:"", priority: data.priority?data.priority:"",mapid:data.mapid?data.mapid:""
-               }})
-            
-               if(this.state.priority!=""){this.state.checkedValues.push("priority")}
-               if(this.state.status!=""){this.state.checkedValues.push("status")}
-               if(this.state.Category!=""){this.state.checkedValues.push("Category")}
+               status: data.status?data.status:"", priority: data.priority?data.priority:"",mapid:data.mapid?data.mapid:"",
+               }})            
+            //    if(this.state.priority!=""){this.state.checkedValues.push("priority")}
+            //    if(this.state.status!=""){this.state.checkedValues.push("status")}
+            //    if(this.state.Category!=""){this.state.checkedValues.push("Category")}
 
             });
 }
@@ -82,10 +82,8 @@ export default class Edit extends Component {
                 project: this.state.project,
                 config: this.props.config.instance ? this.props.config.instance.config : undefined,
                 onComplete: (basicConfig, project) => {
-                    console.log("project", project)
-                    this.setState({ value: basicConfig, map: project.mapid, generalConfig: basicConfig, success: true, id: project.id }, () => { console.log(this.state.config, this.state.generalConfig) })
+                    this.setState({ value: basicConfig, map: project.mapid, generalConfig: basicConfig, success: true, id: project.id })
                     let { step } = this.state;
-                    console.log(this.state.config, this.state.generalConfig)
                     this.goToStep(++step)
 
                 }
@@ -107,7 +105,7 @@ export default class Edit extends Component {
                     this.setState({
                         genralConfig: Object.assign(this.state.generalConfig, { "mapid": this.state.selectedResource ? this.state.selectedResource.id : this.state.mapid })
                     }, () => {
-                        console.log(this.state.generalConfig)
+                      
                         let { step } = this.state;
                         this.goToStep(++step)
                     })
@@ -119,9 +117,9 @@ export default class Edit extends Component {
             component: FormFields,
             props: {
                 checkedValues:this.state.checkedValues,
-                onComplete: (priority, status, Category) => {
-                    console.log(priority, status, Category)
-                    this.setState({ genralConfig: Object.assign(this.state.generalConfig, { "priority": priority, "status": status, "Category": Category }) }, () => { console.log(this.state.generalConfig) })
+                onComplete: (priority, status, Category,checked) => {
+                   
+                    this.setState({ genralConfig: Object.assign(this.state.generalConfig, { "priority": priority, "status": status, "Category": Category ,"Project_config":checked}) })
                     let { step } = this.state;
                     this.goToStep(++step)
 
@@ -144,8 +142,7 @@ export default class Edit extends Component {
                 project: this.state.project,
                 config: this.props.config.instance ? this.props.config.instance.config : undefined,
                 onComplete: (dispatchers, workers) => {
-                    console.log(dispatchers, workers)
-                    this.setState({ dispatchers: dispatchers, workers: workers }, () => {
+                        this.setState({ dispatchers: dispatchers, workers: workers }, () => {
                         this.editService.save(this.state.generalConfig, this.state.workers, this.state.dispatchers).then(() => {
                             this.setState({ success: true })
 

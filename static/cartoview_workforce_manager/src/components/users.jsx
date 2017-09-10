@@ -74,7 +74,7 @@ fetch(url,  {
                 return response.json(); 
                 })
                 .then((data) =>  {
-                 console.log(data)
+                
                 this.setState( {selectedDis:data.objects},
                 ()=>{this.state.selectedDis.map((user)=>{
                     this.state.selectedDispatchers.push(user.dispatcher.username)})
@@ -104,7 +104,7 @@ fetch(url,  {
                 return response.json(); 
                 })
                 .then((data) =>  {
-                 console.log(data)
+                
                 this.setState( {selectedwor:data.objects},
                 ()=>{this.state.selectedwor.map((user)=>{
                     this.state.selectedworkers.push(user.worker.username)})

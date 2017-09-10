@@ -196,7 +196,7 @@ sendHistory=()=>{
    setTimeout(()=>{
           var point_geom = new ol.geom.Point([this.state.x,this.state.y])
           point_feature.setGeometry(point_geom);
-          // console.log(point_feature)
+          
             var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
             map.setView(new ol.View({
             center:  [parseInt(this.state.x),parseInt(this.state.y)],

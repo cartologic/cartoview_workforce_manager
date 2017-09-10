@@ -45,7 +45,7 @@ export default class ResourceSelector extends Component {
         loading: false
       })
     }).catch((error) => {
-      console.error(error);
+   
     });
   }
 
@@ -99,7 +99,7 @@ export default class ResourceSelector extends Component {
       fetch(this.props.resourcesUrl + "?" + "title__icontains" + "=" + this.refs.search.value + userMapsFilter).then((response) => response.json()).then((data) => {
         this.setState({resources: data.objects, loading: false})
       }).catch((error) => {
-        console.error(error);
+       
       });
     }
   }

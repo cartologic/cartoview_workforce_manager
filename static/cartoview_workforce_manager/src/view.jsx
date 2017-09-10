@@ -50,7 +50,7 @@ export default class ReactClient extends React.Component {
 
         var priority = "", status = "", work_order = "", worker = "", dispatcher = ""
         if (this.state.priority) {
-            console.log("in prioirt")
+            
             priority = "priority=" + this.state.priority + "&"
         }
         if (this.state.status) {
@@ -60,8 +60,6 @@ export default class ReactClient extends React.Component {
             work_order = "work_order=" + this.refs.work_order.value + "&"
         }
         if (this.refs.dispatcher.value) {
-            console.log(this.refs.dispatcher)
-            console.log(this.refs.dispatcher.value)
             dispatcher = "created_by__username=" + this.refs.dispatcher.value + "&"
         }
         if (this.refs.worker.value) {
@@ -69,7 +67,7 @@ export default class ReactClient extends React.Component {
         }
 
         var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + '/tasks/?' + priority + status + work_order + worker + dispatcher
-        console.log(url)
+      
         fetch(url, {
             method: "GET",
             credentials: "same-origin",
@@ -86,7 +84,7 @@ export default class ReactClient extends React.Component {
                 }
                 return response.json();
             }).then((data) => {
-                console.log(data)
+               
                 this.setState({ "filter": data.objects, "result": true })
 
             })
@@ -168,8 +166,6 @@ export default class ReactClient extends React.Component {
             });
     }
     handlePageClick = (data) => {
-        console.log(data.selected)
-
         var pagedTasks = this.state.tasks.slice(data.selected * this.state.perPage, (data.selected + 1) * this.state.perPage);
         this.setState({ pagedTasks: pagedTasks })
 

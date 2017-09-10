@@ -10,12 +10,12 @@ const Color = t.enums({
     red: 'red',
     green: 'green',
     blue: 'blue',
-    black:'black',
-    yellow:'yellow'
-  });
+    black: 'black',
+    yellow: 'yellow'
+});
 const cat = t.struct({
     label: t.String,
-    status_color:t.maybe(Color)
+    status_color: t.maybe(Color)
 
 })
 
@@ -30,17 +30,20 @@ export default class FormFields extends Component {
             category: "",
             priority: "",
             status: "",
-            checkedValues:isNaN(id)? ["category","priority","status"]:[],
-            value:""
+            due_date:"",
+            work_order:"",
+            description:"",
+            checkedValues: isNaN(id) ?  ["Category","priority","status","work_order","description","due_date"]:[],
+            value: ""
         }
-   console.log("checked",this.state.checkedValues)
-    if(!isNaN(id)){
-                this.loadProject()
-                        }
-   
+       
+        if (!isNaN(id)) {
+            this.loadProject()
+        }
+
     }
-    loadProject=()=>{
-      var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id
+    loadProject = () => {
+        var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id
 
         fetch(url, {
             method: "GET",
@@ -57,60 +60,63 @@ export default class FormFields extends Component {
                 return response.json();
             })
             .then((data) => {
-                console.log(data)
-                this.setState({"project": data,"category":data.category?data.category:"","priority":data.priority?data.priority:"","status":data.status?data.status:"", "value":{category:data.category?data.category:"",
-               status: data.status?data.status:"", priority: data.priority?data.priority:""
-               }})
-            
-               if(this.state.priority!=""){this.state.checkedValues.push("priority")}
-               if(this.state.status!=""){this.state.checkedValues.push("status")}
-               if(this.state.category!=""){this.state.checkedValues.push("category")}
-               console.log("ssassss",this.state.checkedValues)
+                
+                this.setState({
+                    "project": data, "category": data.category ? data.category : "", "priority": data.priority ? data.priority : "", "status": data.status ? data.status : "", "value": {
+                        category: data.category ? data.category : "",
+                        status: data.status ? data.status : "", priority: data.priority ? data.priority : "",checkedValues:data.Project_config
+                    }
+                })
+                // if (this.state.priority != "") { this.state.checkedValues.push("priority") }
+                // if (this.state.status != "") { this.state.checkedValues.push("status") }
+                // if (this.state.category != "") { this.state.checkedValues.push("category") }
+
             });
-}
+    }
 
     includeChanged = (e) => {
 
-        
-    { 
-            var checkedArray =this.state.checkedValues;
+
+        {
+            var checkedArray = this.state.checkedValues;
             var selectedValue = e.target.value;
             if (e.target.checked === true) {
                 checkedArray.push(selectedValue);
                 this.setState({
-                checkedValues: checkedArray
+                    checkedValues: checkedArray
                 });
             } else {
                 let valueIndex = checkedArray.indexOf(selectedValue);
                 checkedArray.splice(valueIndex, 1);
                 this.setState({
-                checkedValues: checkedArray
+                    checkedValues: checkedArray
                 });
 
-    }}
-    
+            }
+        }
+
     }
 
 
     generateForm = () => {
-        console.log("selected",this.state.selected)
+    
         let x = {
             required_input: t.Boolean
         }
-        if(this.state.selected=='status')
-            {x[this.state.selected] = t.list(cat)}
-        else{x[this.state.selected] = t.list(category)}
-        
+        if (this.state.selected == 'status')
+        { x[this.state.selected] = t.list(cat) }
+        else if(this.state.selected == 'priority'||this.state.selected == 'category'){
+        x[this.state.selected] = t.list(category)
+        }
+        // else {  }
         const fieldConfig = t.struct(x)
-
-
         this.setState({ fieldConfig, showModal: true })
 
 
     }
 
     openModal = (selected) => {
-        console.log(selected)
+       
         this.setState({ selected: selected }, () => this.generateForm())
     }
     handleHideModal = () => {
@@ -123,30 +129,28 @@ export default class FormFields extends Component {
     }
 
     save = () => {
-        this.props.onComplete(this.state.priority, this.state.status, this.state.category)
+        this.props.onComplete(this.state.priority, this.state.status, this.state.category,this.state.checkedValues)
     }
     setFormValue = (value, s) => {
-        console.log("ss", s)
+       
         var obj = {}
         obj[s] = value
-        console.log("obj", obj)
-        this.setState(obj, () => { console.log("states", this.state) })
+       
+        this.setState(obj)
     }
     check = (value) => {
-        // console.log(value,this.state.checkedValues,this.state.checkedValues.includes(value))
-        // return this.state.checkedValues.includes(value);
-        if( this.state.checkedValues.includes(value)){
-            if( this.state[value] == ""){ return true}
-            else{return false}
+        if (this.state.checkedValues.includes(value)) {
+            if (this.state[value] == "") { return true }
+            else { return false }
         }
-        else {return false}
+        else { return false }
     }
     render() {
-        console.log(this.state)
+      
         return (
             <div>
 
-                <div className="row">
+                <div>
                     <div className="col-xs-5 col-md-4">
 
                     </div>
@@ -156,7 +160,7 @@ export default class FormFields extends Component {
                                 display: "inline-block",
                                 margin: "0px 3px 0px 3px"
                             }}
-                            disabled={this.check("status") ||this.check("priority")||this.check("category")}
+                            disabled={this.check("status") || this.check("priority") || this.check("category")}
                             className="btn btn-primary btn-sm pull-right"
                             onClick={this.save.bind(this)}>{"next"}
                             <i className="fa fa-arrow-right"></i>
@@ -169,14 +173,14 @@ export default class FormFields extends Component {
                 <div className="col-lg-6">
                     <div className="input-group">
                         <span className="input-group-addon">
-                            <input  
+                            <input
                                 value='category'
                                 defaultChecked={this.props.checkedValues.includes("category")}
                                 onChange={(e) => this.includeChanged(e)}
                                 ref="category_check"
                                 type="checkbox" />
                         </span>
-                        <input type="text" value="category" className="form-control" disabled />
+                        <input type="text" value="Category" className="form-control" disabled />
                         <span className="input-group-addon" id="basic-addon2">
                             <i className="fa fa-cog" onClick={() => this.openModal("category")}></i>
                         </span>
@@ -191,7 +195,7 @@ export default class FormFields extends Component {
                                 ref="status_check"
                                 type="checkbox" />
                         </span>
-                        <input type="text" value="priority" className="form-control" disabled />
+                        <input type="text" value="Priority" className="form-control" disabled />
                         <span className="input-group-addon" id="basic-addon2">
                             <i className="fa fa-cog" onClick={() => this.openModal("priority")}></i>
                         </span>
@@ -205,9 +209,52 @@ export default class FormFields extends Component {
                                 ref="status_check"
                                 type="checkbox" />
                         </span>
-                        <input type="text" value="status" className="form-control" disabled />
+                        <input type="text" value="Status" className="form-control" disabled />
                         <span className="input-group-addon" id="basic-addon2">
                             <i className="fa fa-cog" onClick={() => this.openModal("status")}></i>
+                        </span>
+                    </div>
+
+                    <div className="input-group">
+                        <span className="input-group-addon">
+                            <input
+                                value='work_order'
+                                defaultChecked={this.props.checkedValues.includes("work_order")}
+                                onChange={(e) => this.includeChanged(e)}
+                                ref="work_order_check"
+                                type="checkbox" />
+                        </span>
+                        <input type="text" value="Work Order" className="form-control" disabled />
+                        <span className="input-group-addon" id="basic-addon2">
+                            <i className="fa fa-cog" onClick={() => this.openModal("work_order")}></i>
+                        </span>
+                    </div>
+                    <div className="input-group">
+                        <span className="input-group-addon">
+                            <input
+                                value='description'
+                                defaultChecked={this.props.checkedValues.includes("description")}
+                                onChange={(e) => this.includeChanged(e)}
+                                ref="work_order_check"
+                                type="checkbox" />
+                        </span>
+                        <input type="text" value="Description" className="form-control" disabled />
+                        <span className="input-group-addon" id="basic-addon2">
+                            <i className="fa fa-cog" onClick={() => this.openModal("description")}></i>
+                        </span>
+                    </div>
+                    <div className="input-group">
+                        <span className="input-group-addon">
+                            <input
+                                value='due_date'
+                                defaultChecked={this.props.checkedValues.includes("due_date")}
+                                onChange={(e) => this.includeChanged(e)}
+                                ref="work_order_check"
+                                type="checkbox" />
+                        </span>
+                        <input type="text" value="Due Date" className="form-control" disabled />
+                        <span className="input-group-addon" id="basic-addon2">
+                            <i className="fa fa-cog" onClick={() => this.openModal("due_date")}></i>
                         </span>
                     </div>
 

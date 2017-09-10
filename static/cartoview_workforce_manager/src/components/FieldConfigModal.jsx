@@ -26,8 +26,7 @@ const options = {
 export default class FieldConfigModal extends Component {
     constructor(props) {
         super(props)
-        console.log(this.props)
-console.log("DDDDD",this.props.defaultValue[this.props.selected])
+       
     }
     componentDidMount() {
         $(ReactDOM.findDOMNode(this)).modal('show');

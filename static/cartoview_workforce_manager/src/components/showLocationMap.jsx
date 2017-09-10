@@ -9,7 +9,7 @@ import ol from 'openlayers';
 export default class ShowLocationMap extends React.Component {
   constructor(props) {
     super(props);
-console.log(props)
+
     this.loaded = false;
     this.map = new ol.Map({
       //controls: [new ol.control.Attribution({collapsible: false}), new ol.control.ScaleLine()],
@@ -53,9 +53,7 @@ console.log(props)
       
         var point_geom = new ol.geom.Point([this.props.x,this.props.y])
         point_feature.setGeometry(point_geom);
-    
-        var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
-        console.log(this.props.extent)
+        var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})       
         map.setView(new ol.View({
         center:  [parseInt(this.props.x),parseInt(this.props.y)],
         zoom: 6
@@ -70,10 +68,6 @@ console.log(props)
         });
         vector_layer.setStyle(style);
        map.addLayer(vector_layer);
-
-
-
-
       },500)}}
 
 

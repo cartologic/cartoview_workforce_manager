@@ -11,7 +11,7 @@ export default class Tasks extends Component {
             tasks: [],
             selectedtask: null
         }
-          console.log("wiil mount")
+          
         var url = '/apps/cartoview_workforce_manager/api/v1/project/' + this.props.id + '/tasks/?assigned_to__username='+username
         fetch(url, {
             method: "GET",
