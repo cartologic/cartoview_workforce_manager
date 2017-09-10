@@ -159,7 +159,7 @@ export default class EditService {
 
 			}
 
-				 //window.location.href = "/apps/cartoview_workforce_manager/" + id + "/view/"
+				 window.location.href = "/apps/cartoview_workforce_manager/" + id + "/view/"
 
 			})
 

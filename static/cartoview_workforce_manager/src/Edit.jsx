@@ -48,7 +48,7 @@ export default class Edit extends Component {
                 return response.json();
             })
             .then((data) => {
-                console.log("load peor",data)
+               
                 this.setState({"project": data,"code":data.code?data.code:"","priority":data.priority?data.priority:"","status":data.status?data.status:"", "value":{code:data.code?data.code:"",
                status: data.status?data.status:"", priority: data.priority?data.priority:"",mapid:data.mapid?data.mapid:""
                }})
@@ -56,7 +56,7 @@ export default class Edit extends Component {
                if(this.state.priority!=""){this.state.checkedValues.push("priority")}
                if(this.state.status!=""){this.state.checkedValues.push("status")}
                if(this.state.code!=""){this.state.checkedValues.push("code")}
-               console.log("ssassss",this.state.checkedValues)
+
             });
 }
 
