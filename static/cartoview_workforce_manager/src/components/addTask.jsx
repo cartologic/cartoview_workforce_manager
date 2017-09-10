@@ -46,7 +46,7 @@ export default class AddTask extends Component {
 			extent:null,
 			value:null,
       priority:{0:""},
-      code:null,
+      Category:null,
       status:null
 		}
 
@@ -80,16 +80,16 @@ export default class AddTask extends Component {
 
     )
      var priority={} 
-     var code={}
+     var Category={}
      var status={}
      if(this.props.project.priority){
   for(var i=0;i<this.props.project.priority.priority.length;i++){
      priority[this.props.project.priority.priority[i].label]=this.props.project.priority.priority[i].label
  
   } }
-  if(this.props.project.code.code){
-   for(var j=0;j<this.props.project.code.code.length;j++){
-     code[this.props.project.code.code[j].label]=this.props.project.code.code[j].label
+  if(this.props.project.Category.category){
+   for(var j=0;j<this.props.project.Category.category.length;j++){
+     Category[this.props.project.Category.category[j].label]=this.props.project.Category.category[j].label
  
   } }
   if(this.props.project.status){
@@ -97,10 +97,10 @@ export default class AddTask extends Component {
      status[this.props.project.status.status[z].label]=this.props.project.status.status[z].label
  
   } }
-  this.setState({priority:priority,code:code,status:status},()=>{
+  this.setState({priority:priority,Category:Category,status:status},()=>{
 
   const Priority = t.enums( this.state.priority)
-  const Code = t.enums( this.state.code)
+  const Category = t.enums( this.state.Category)
   const Status = t.enums( this.state.status)
                          const PersonObj = {
                               title: t.maybe(t.String),
@@ -112,9 +112,9 @@ export default class AddTask extends Component {
                          
 
                         }
-                   
-                        if(this.props.project.code.code){
-                            PersonObj['code']=t.maybe(Code)
+                        console.log(this.props.project)
+                        if(this.props.project.Category.category){
+                            PersonObj['Category']=t.maybe(Category)
                         }
                         if(this.props.project.priority.priority){
                           

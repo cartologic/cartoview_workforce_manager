@@ -40,7 +40,7 @@ export default class Edit extends Component {
                 priority: this.props.task.priority,
                 status: this.props.task.status,
                 work_order: this.props.task.work_order,
-                code: this.props.task.code
+                Category: this.props.task.Category
             }
 }
             this.map = new ol.Map({
@@ -78,7 +78,7 @@ export default class Edit extends Component {
                     )
                     this.setState({tCombEnum})
                     var priority
-                    var code
+                    var Category
                     var status
                     if(this.props.project.priority){
                         priority={}
@@ -86,10 +86,10 @@ export default class Edit extends Component {
                            priority[this.props.project.priority.priority[i].label]=this.props.project.priority.priority[i].label
                        
                         } }
-                        if(this.props.project.code){
-                            code={}
-                         for(var j=0;j<this.props.project.code.code.length;j++){
-                           code[this.props.project.code.code[j].label]=this.props.project.code.code[j].label
+                        if(this.props.project.Category){
+                            Category={}
+                         for(var j=0;j<this.props.project.Category.category.length;j++){
+                           Category[this.props.project.Category.category[j].label]=this.props.project.Category.category[j].label
                        
                         } }
                         if(this.props.project.status){
@@ -98,7 +98,7 @@ export default class Edit extends Component {
                            status[this.props.project.status.status[z].label]=this.props.project.status.status[z].label
                        
                         } }
-                 this.setState({priority:priority,code:code,status:status},()=>{                          
+                 this.setState({priority:priority,Category:Category,status:status},()=>{                          
                     const TaskObj = {
                         title: t.String,
                         description: t.String,
@@ -106,9 +106,9 @@ export default class Edit extends Component {
                         work_order: t.maybe(t.Integer),
                         due_date: t.Date,                      
                     }
-                    if(this.state.code){
-                             const Code = t.enums( this.state.code)
-                             TaskObj['code']=Code
+                    if(this.state.Category){
+                             const Category = t.enums( this.state.Category)
+                             TaskObj['Category']=Category
                          }
                           if(this.state.priority){
                               const Priority = t.enums( this.state.priority)
@@ -232,8 +232,8 @@ sendHistory=()=>{
            this.sendHistory()
     
        }
-         if(this.state.value.code&&this.state.value.code!=this.refs.form.getValue().code){
-           this.state['history']= username+"  changed the code from "+this.state.value.code +" to "+ this.refs.form.getValue().code +" at "+dt
+         if(this.state.value.Category&&this.state.value.Category!=this.refs.form.getValue().Category){
+           this.state['history']= username+"  changed the Category from "+this.state.value.Category +" to "+ this.refs.form.getValue().Category +" at "+dt
            this.sendHistory()
     
        }

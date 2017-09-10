@@ -77,9 +77,9 @@ export default class Details extends Component {
                                 </td>
 
                             </tr>
-                               {this.props.task.code &&<tr>
-                                <td><b>Task Code</b></td>
-                                <td style={{"width": "70%"}}>{this.props.task.code}</td>
+                               {this.props.task.Category &&<tr>
+                                <td><b>Task Category</b></td>
+                                <td style={{"width": "70%"}}>{this.props.task.Category}</td>
                                             </tr>}
                             </tbody>
                         </table>

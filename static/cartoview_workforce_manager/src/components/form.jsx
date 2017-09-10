@@ -2,10 +2,23 @@ import React, { Component } from 'react'
 import FieldConfigModal from "./FieldConfigModal"
 import t from 'tcomb-form';
 
-const Code = t.struct({
+const category = t.struct({
     label: t.String
 
 })
+const Color = t.enums({
+    red: 'red',
+    green: 'green',
+    blue: 'blue',
+    black:'black',
+    yellow:'yellow'
+  });
+const cat = t.struct({
+    label: t.String,
+    status_color:t.maybe(Color)
+
+})
+
 export default class FormFields extends Component {
     constructor(props) {
         super(props)
@@ -14,10 +27,10 @@ export default class FormFields extends Component {
             showModal: false,
             selected: "",
             workOrderConf: "",
-            code: "",
+            category: "",
             priority: "",
             status: "",
-            checkedValues:isNaN(id)? ["code","priority","status"]:[],
+            checkedValues:isNaN(id)? ["category","priority","status"]:[],
             value:""
         }
    console.log("checked",this.state.checkedValues)
@@ -45,13 +58,13 @@ export default class FormFields extends Component {
             })
             .then((data) => {
                 console.log(data)
-                this.setState({"project": data,"code":data.code?data.code:"","priority":data.priority?data.priority:"","status":data.status?data.status:"", "value":{code:data.code?data.code:"",
+                this.setState({"project": data,"category":data.category?data.category:"","priority":data.priority?data.priority:"","status":data.status?data.status:"", "value":{category:data.category?data.category:"",
                status: data.status?data.status:"", priority: data.priority?data.priority:""
                }})
             
                if(this.state.priority!=""){this.state.checkedValues.push("priority")}
                if(this.state.status!=""){this.state.checkedValues.push("status")}
-               if(this.state.code!=""){this.state.checkedValues.push("code")}
+               if(this.state.category!=""){this.state.checkedValues.push("category")}
                console.log("ssassss",this.state.checkedValues)
             });
 }
@@ -80,10 +93,14 @@ export default class FormFields extends Component {
 
 
     generateForm = () => {
+        console.log("selected",this.state.selected)
         let x = {
             required_input: t.Boolean
         }
-        x[this.state.selected] = t.list(Code)
+        if(this.state.selected=='status')
+            {x[this.state.selected] = t.list(cat)}
+        else{x[this.state.selected] = t.list(category)}
+        
         const fieldConfig = t.struct(x)
 
 
@@ -106,7 +123,7 @@ export default class FormFields extends Component {
     }
 
     save = () => {
-        this.props.onComplete(this.state.priority, this.state.status, this.state.code)
+        this.props.onComplete(this.state.priority, this.state.status, this.state.category)
     }
     setFormValue = (value, s) => {
         console.log("ss", s)
@@ -139,7 +156,7 @@ export default class FormFields extends Component {
                                 display: "inline-block",
                                 margin: "0px 3px 0px 3px"
                             }}
-                            disabled={this.check("status") ||this.check("priority")||this.check("code")}
+                            disabled={this.check("status") ||this.check("priority")||this.check("category")}
                             className="btn btn-primary btn-sm pull-right"
                             onClick={this.save.bind(this)}>{"next"}
                             <i className="fa fa-arrow-right"></i>
@@ -153,15 +170,15 @@ export default class FormFields extends Component {
                     <div className="input-group">
                         <span className="input-group-addon">
                             <input  
-                                value='code'
-                                defaultChecked={this.props.checkedValues.includes("code")}
+                                value='category'
+                                defaultChecked={this.props.checkedValues.includes("category")}
                                 onChange={(e) => this.includeChanged(e)}
-                                ref="code_check"
+                                ref="category_check"
                                 type="checkbox" />
                         </span>
-                        <input type="text" value="code" className="form-control" disabled />
+                        <input type="text" value="category" className="form-control" disabled />
                         <span className="input-group-addon" id="basic-addon2">
-                            <i className="fa fa-cog" onClick={() => this.openModal("code")}></i>
+                            <i className="fa fa-cog" onClick={() => this.openModal("category")}></i>
                         </span>
                     </div>
 
