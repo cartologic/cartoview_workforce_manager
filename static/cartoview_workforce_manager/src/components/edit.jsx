@@ -22,6 +22,7 @@ export default class Edit extends Component {
             y:this.props.task.y,
       		extent:this.props.task.extent,
             history:"",
+            checked:this.props.project.Project_config,
             options: {
                 "fields": {
                     "description": {
@@ -36,7 +37,7 @@ export default class Edit extends Component {
                 title: this.props.task.title,
                 description: this.props.task.description,
                 assigned_to: "/apps/cartoview_workforce_manager/api/v1/user/"+this.props.task.assigned_to.id+"/",
-                due_date: new Date(this.props.task.due_date),
+                due_date:this.props.task.due_date?new Date(this.props.task.due_date):null,
                 priority: this.props.task.priority,
                 status: this.props.task.status,
                 work_order: this.props.task.work_order,
@@ -53,7 +54,7 @@ export default class Edit extends Component {
                 zoom: 3
               })
             });
-
+     
         var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + "/workers"
         fetch(url, {
             method: "GET",
@@ -88,8 +89,8 @@ export default class Edit extends Component {
                         } }
                         if(this.props.project.Category){
                             Category={}
-                         for(var j=0;j<this.props.project.Category.category.length;j++){
-                           Category[this.props.project.Category.category[j].label]=this.props.project.Category.category[j].label
+                         for(var j=0;j<this.props.project.Category.Category.length;j++){
+                           Category[this.props.project.Category.Category[j].label]=this.props.project.Category.Category[j].label
                        
                         } }
                         if(this.props.project.status){
@@ -99,32 +100,45 @@ export default class Edit extends Component {
                        
                         } }
                  this.setState({priority:priority,Category:Category,status:status},()=>{                          
+                const Priority = t.enums(this.state.priority)
+                const Category = t.enums(this.state.Category)
+                const Status = t.enums(this.state.status)
+            
                     const TaskObj = {
                         title: t.String,
-                        description: t.String,
-                        assigned_to: t.enums(tCombEnum),
-                        work_order: t.maybe(t.Integer),
-                        due_date: t.Date,                      
+                        // description: t.String,
+                        // assigned_to: t.enums(tCombEnum),
+                        // work_order: t.maybe(t.Integer),
+                        // due_date: t.Date,                      
                     }
-                    if(this.state.Category){
-                             const Category = t.enums( this.state.Category)
-                             TaskObj['Category']=Category
-                         }
-                          if(this.state.priority){
-                              const Priority = t.enums( this.state.priority)
-                             TaskObj['priority']=Priority
-                         }
-                          if(this.state.status){
-                             const Status = t.enums( this.state.status)
-                             TaskObj['status']=Status
-                         }
+                     if (this.state.checked.includes("description")) {
+              TaskObj['description'] = this.props.project.Description.required_input?t.String:t.maybe(t.String)
+            }
+            if (this.state.checked.includes("assigned_to")) {
+              TaskObj['assigned_to'] = this.props.project.assigned_to.required_input?t.enums(tCombEnum):t.maybe(t.enums(tCombEnum))
+            }
+            if (this.state.checked.includes("Category")) {
+              TaskObj['Category'] =this.props.project.Category.required_input?Category: t.maybe(Category)
+            }
+            if (this.state.checked.includes("priority")) {
+              TaskObj['priority'] = this.props.project.priority.required_input?Priority:t.maybe(Priority)
+            }
+            if (this.state.checked.includes("status")) {
+              TaskObj['status'] = this.props.project.status.required_input?Status:t.maybe(Status)
+            }
+            if (this.state.checked.includes("due_date")) {
+              TaskObj['due_date'] = this.props.project.due_date.required_input?t.Date:t.maybe(t.Date)
+            }
+            if (this.state.checked.includes("work_order")) {
+              TaskObj['work_order'] = this.props.project.work_order.required_input?t.String:t.maybe(t.String)
+            }
                             const Task=t.struct(TaskObj)
                     this.setState({task: Task,loading:false})
                 })
                 })
             });
          this.save = this.save.bind(this)
-         this.init( this.map )
+        //  this.init( this.map )
     }
 sendHistory=()=>{
        
@@ -151,7 +165,11 @@ sendHistory=()=>{
         })
        
     }
+  
+   
+   
     update(mapId) {
+      console.log("mapid",mapId);
       if (mapId) {
         var url = `/maps/${mapId}/data`
         fetch(url, {
@@ -175,49 +193,61 @@ sendHistory=()=>{
     init=( map )=> {
       var point_feature = new ol.Feature({ });
     		map.on('singleclick', ( e ) => {
-                this.setState({x:e.coordinate[0],y:e.coordinate[1],extent:map.getView().calculateExtent(map.getSize()),value:this.state.value})
-                var point_geom = new ol.geom.Point(e.coordinate)
-                point_feature.setGeometry(point_geom);
-                var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
-                var style = new ol.style.Style({
-                        image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
-                        anchor: [0.5, 10],
-                        anchorXUnits: 'fraction',
-                        anchorYUnits: 'pixels',
-                        src: URLS.static +'marker.png'
-                            }))
-                            });
-                vector_layer.setStyle(style);
-                map.addLayer(vector_layer);
+
+
+          this.setState({x:e.coordinate[0],y:e.coordinate[1],extent:map.getView().calculateExtent(map.getSize()),value:this.state.value})
+          var point_geom = new ol.geom.Point(e.coordinate)
+          console.log( this.state)
+
+          point_feature.setGeometry(point_geom);
+          var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
+
+           var style = new ol.style.Style({
+          image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+          anchor: [0.5, 10],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          src: URLS.static +'marker.png'
+      }))
+      });
+          vector_layer.setStyle(style);
+          map.addLayer(vector_layer);
+
+
+
+
 
         })
+
+
         if(this.state.x&&this.state.y) {
+
           //postrender because feature doesnt appear on componentDidMount
+       
    setTimeout(()=>{
           var point_geom = new ol.geom.Point([this.state.x,this.state.y])
           point_feature.setGeometry(point_geom);
-          
-            var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
+          // console.log(point_feature)
+          var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
             map.setView(new ol.View({
             center:  [parseInt(this.state.x),parseInt(this.state.y)],
             zoom: 6
                                         }));
            var style = new ol.style.Style({
-            image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
-            anchor: [0.5, 10],
-            anchorXUnits: 'fraction',
-            anchorYUnits: 'pixels',
-            src: URLS.static +'marker.png'
-        }))
-        });
-            vector_layer.setStyle(style);
-            map.addLayer(vector_layer);
+          image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+          anchor: [0.5, 10],
+          anchorXUnits: 'fraction',
+          anchorYUnits: 'pixels',
+          src: URLS.static +'marker.png'
+      }))
+      });
+          vector_layer.setStyle(style);
+         map.addLayer(vector_layer);
 
 
 
 
       },500)}}
-
         
     
     save() {
@@ -238,6 +268,7 @@ sendHistory=()=>{
     
        }
        if(this.state.value.due_date!=this.refs.form.getValue().due_date){
+           console.log(this.state.value.due_date,this.refs.form.getValue().due_date)
            this.state['history']= username+"  changed the due date from "+this.state.value.due_date.toUTCString() +" to "+ this.refs.form.getValue().due_date.toUTCString() +" at "+dt
            this.sendHistory()
     
@@ -280,20 +311,29 @@ sendHistory=()=>{
 
         }
     }
-    componentDidMount() {
-      this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
-      this.update(this.props.mapid);
-      this.init( this.map )
+   componentDidMount() {
+     
+    //   this.update(this.props.mapid);
+     
       setTimeout(()=>{
-        this.map.updateSize()
-        // this.map.render()
+         this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
+         this.init( this.map )
+      
       },3000)
+
+
+
+
     }
   componentWillReceiveProps(nextProps){
   	if(nextProps.children != this.props.children){
+
   	}
+  
   }
     render() {
+    
+  
         return (
             <div>
 
@@ -301,17 +341,16 @@ sendHistory=()=>{
 
                     <div style={{"padding": "2%"}}>
                         {this.state.task &&
-                        <div>
+                     
                         <Form
                             ref="form"
                             options={this.state.options}
                             type={this.state.task}
                             value={this.state.value}
-                        />
+                        />}
                         
                         <label>Click to Edit Task Location</label>
                           <div style={{height:"100%"}} ref="map" className={' map-ct'}>
-
                            {this.props.children}
                          </div>
                        <div className="row"> <button className="btn btn-default pull-right" style={{"margin":"2%"}} onClick={this.save}>Save Changes</button>
@@ -324,11 +363,8 @@ sendHistory=()=>{
                     <div className="panel-heading">Images</div>
                     <div className="panel-body"><Attachments task={this.props.task.id}/></div>
                 </div>
-
-
-
-                         </div>
-                        }
+                         
+                        
                       
                     </div>
                 </div>

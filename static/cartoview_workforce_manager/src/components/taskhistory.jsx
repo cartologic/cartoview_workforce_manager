@@ -11,7 +11,7 @@ this.loadTaskHistory()
 
 }
 loadTaskHistory = () =>  {
-        this.setState( {task:false})
+        // this.setState( {task:false})
         var url = '/apps/cartoview_workforce_manager/api/v1/history/?task__id=' + this.props.task.id 
                 fetch(url,  {method:"GET", 
         headers:new Headers( {
@@ -29,7 +29,7 @@ loadTaskHistory = () =>  {
         .then((data) =>  {
 
 
-        this.setState( {taskhistory:data.objects})
+        this.setState({taskhistory:data.objects})
         }); 
 
 

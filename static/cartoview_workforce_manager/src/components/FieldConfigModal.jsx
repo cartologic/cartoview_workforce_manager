@@ -35,7 +35,9 @@ export default class FieldConfigModal extends Component {
     }
     save = () => {
         // call getValue() to get the values of the form
+        
         var value = this.refs.form.getValue()
+        console.log(value)
         this.props.setFormValue(value, this.props.selected)
 
         // if validation fails, value will be null

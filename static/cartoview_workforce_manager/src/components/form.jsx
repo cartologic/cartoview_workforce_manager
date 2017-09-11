@@ -2,9 +2,8 @@ import React, { Component } from 'react'
 import FieldConfigModal from "./FieldConfigModal"
 import t from 'tcomb-form';
 
-const category = t.struct({
+const Category = t.struct({
     label: t.String
-
 })
 const Color = t.enums({
     red: 'red',
@@ -16,9 +15,7 @@ const Color = t.enums({
 const cat = t.struct({
     label: t.String,
     status_color: t.maybe(Color)
-
 })
-
 export default class FormFields extends Component {
     constructor(props) {
         super(props)
@@ -27,13 +24,14 @@ export default class FormFields extends Component {
             showModal: false,
             selected: "",
             workOrderConf: "",
-            category: "",
+            Category: "",
             priority: "",
             status: "",
-            due_date:"",
-            work_order:"",
-            description:"",
-            checkedValues: isNaN(id) ?  ["Category","priority","status","work_order","description","due_date"]:[],
+            due_date:isNaN(id) ?{"required_input":false}:this.props.due_date,
+            work_order:isNaN(id) ?{"required_input":false}:this.props.work_order,
+            description: isNaN(id) ?{"required_input":false}:this.props.description,
+            assigned_to:isNaN(id) ?{"required_input":false}:this.props.assigned_to,
+            checkedValues: isNaN(id) ?  ["Category","priority","status","work_order","description","due_date"]:this.props.checkedValues,
             value: ""
         }
        
@@ -44,13 +42,10 @@ export default class FormFields extends Component {
     }
     loadProject = () => {
         var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id
-
         fetch(url, {
             method: "GET",
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
-
-
             })
         })
             .then(function (response) {
@@ -60,23 +55,23 @@ export default class FormFields extends Component {
                 return response.json();
             })
             .then((data) => {
-                
+                console.log(data)
                 this.setState({
-                    "project": data, "category": data.category ? data.category : "", "priority": data.priority ? data.priority : "", "status": data.status ? data.status : "", "value": {
-                        category: data.category ? data.category : "",
-                        status: data.status ? data.status : "", priority: data.priority ? data.priority : "",checkedValues:data.Project_config
+                    "project": data, "Category": data.Category ? data.Category : "", "priority": data.priority ? data.priority : "", "status": data.status ? data.status : "", 
+                    "value": {
+                        Category: data.Category ? data.Category : "",
+                        status: data.status ? data.status : "", 
+                        priority: data.priority ? data.priority : "",
+                        checkedValues:data.Project_config,
+                        description:data.Description?data.Description:"",
+                        due_date:data.due_date?data.due_date:"",
+                        work_order:data.work_order?data.work_order:"",
+                        assigned_to:data.assigned_to?data.assigned_to:""
                     }
                 })
-                // if (this.state.priority != "") { this.state.checkedValues.push("priority") }
-                // if (this.state.status != "") { this.state.checkedValues.push("status") }
-                // if (this.state.category != "") { this.state.checkedValues.push("category") }
-
             });
     }
-
     includeChanged = (e) => {
-
-
         {
             var checkedArray = this.state.checkedValues;
             var selectedValue = e.target.value;
@@ -99,43 +94,32 @@ export default class FormFields extends Component {
 
 
     generateForm = () => {
-    
         let x = {
             required_input: t.Boolean
         }
         if (this.state.selected == 'status')
         { x[this.state.selected] = t.list(cat) }
-        else if(this.state.selected == 'priority'||this.state.selected == 'category'){
-        x[this.state.selected] = t.list(category)
+        else if(this.state.selected == 'priority'||this.state.selected == 'Category'){
+        x[this.state.selected] = t.list(Category)
         }
-        // else {  }
         const fieldConfig = t.struct(x)
         this.setState({ fieldConfig, showModal: true })
-
-
     }
-
     openModal = (selected) => {
-       
         this.setState({ selected: selected }, () => this.generateForm())
     }
     handleHideModal = () => {
         this.setState({ showModal: false })
     }
-
     updateAttribute = (attribute) => {
         this.setState({ attribute: attribute })
-
     }
-
     save = () => {
-        this.props.onComplete(this.state.priority, this.state.status, this.state.category,this.state.checkedValues)
+        this.props.onComplete(this.state.priority, this.state.status, this.state.Category,this.state.checkedValues,this.state.due_date,this.state.work_order,this.state.description,this.state.assigned_to)
     }
-    setFormValue = (value, s) => {
-       
+    setFormValue = (value, s) => {  
         var obj = {}
         obj[s] = value
-       
         this.setState(obj)
     }
     check = (value) => {
@@ -146,13 +130,10 @@ export default class FormFields extends Component {
         else { return false }
     }
     render() {
-      
         return (
             <div>
-
                 <div>
                     <div className="col-xs-5 col-md-4">
-
                     </div>
                     <div className="col-xs-7 col-md-8">
                         <button
@@ -160,7 +141,7 @@ export default class FormFields extends Component {
                                 display: "inline-block",
                                 margin: "0px 3px 0px 3px"
                             }}
-                            disabled={this.check("status") || this.check("priority") || this.check("category")}
+                            disabled={this.check("status") || this.check("priority") || this.check("Category")}
                             className="btn btn-primary btn-sm pull-right"
                             onClick={this.save.bind(this)}>{"next"}
                             <i className="fa fa-arrow-right"></i>
@@ -174,15 +155,15 @@ export default class FormFields extends Component {
                     <div className="input-group">
                         <span className="input-group-addon">
                             <input
-                                value='category'
-                                defaultChecked={this.props.checkedValues.includes("category")}
+                                value='Category'
+                                defaultChecked={this.props.checkedValues.includes("Category")}
                                 onChange={(e) => this.includeChanged(e)}
-                                ref="category_check"
+                                ref="Category_check"
                                 type="checkbox" />
                         </span>
                         <input type="text" value="Category" className="form-control" disabled />
                         <span className="input-group-addon" id="basic-addon2">
-                            <i className="fa fa-cog" onClick={() => this.openModal("category")}></i>
+                            <i className="fa fa-cog" onClick={() => this.openModal("Category")}></i>
                         </span>
                     </div>
 
@@ -257,11 +238,22 @@ export default class FormFields extends Component {
                             <i className="fa fa-cog" onClick={() => this.openModal("due_date")}></i>
                         </span>
                     </div>
+                    <div className="input-group">
+                        <span className="input-group-addon">
+                            <input
+                                value='assigned_to'
+                                defaultChecked={this.props.checkedValues.includes("assigned_to")}
+                                onChange={(e) => this.includeChanged(e)}
+                                ref="work_order_check"
+                                type="checkbox" />
+                        </span>
+                        <input type="text" value="Assigned to" className="form-control" disabled />
+                        <span className="input-group-addon" id="basic-addon2">
+                            <i className="fa fa-cog" onClick={() => this.openModal("assigned_to")}></i>
+                        </span>
+                    </div>
 
                 </div>
-
-
-
                 {this.state.showModal
                     && <FieldConfigModal
                         selected={this.state.selected}

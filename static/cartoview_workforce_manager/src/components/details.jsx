@@ -37,11 +37,11 @@ export default class Details extends Component {
                                 <td style={{"width": "70%"}}>{this.props.task.title}</td>
 
                             </tr>
-                            <tr>
+                           {this.props.project.Project_config.includes("description") && <tr>
                                 <td><b>Description</b></td>
                                 <td style={{"width": "70%"}}>{this.props.task.description}</td>
 
-                            </tr>
+                            </tr>}
                             <tr>
                                 <td><b>Created by</b></td>
                                 <td style={{"width": "70%"}}>{this.props.task.created_by.username}</td>
@@ -52,32 +52,32 @@ export default class Details extends Component {
                                 <td style={{"width": "70%"}}>{day2 + "/" + month2 + "/" + year2}</td>
 
                             </tr>
-                            {this.props.task.priority&&<tr>
+                            {this.props.project.Project_config.includes("priority") &&<tr>
                                 <td><b>Priority</b></td>
                                 <td style={{"width": "70%"}}>{this.props.task.priority}</td>                              
                             </tr>}
-                             {this.props.task.status &&<tr>
+                           {this.props.project.Project_config.includes("status")  &&<tr>
                                 <td><b>Status</b></td>
                                 <td style={{"width": "70%"}}>{this.props.task.status}</td>
                                                     
                             </tr>}
-                            <tr>
+                           {this.props.project.Project_config.includes("due_date") && <tr>
                                 <td><b>Due Date</b></td>
                                 <td style={{"width": "70%"}}>{day + "/" + month + "/" + year}</td>
 
-                            </tr>
-                            <tr>
+                            </tr>}
+                           {this.props.project.Project_config.includes("assigned_to") && <tr>
                                 <td><b>Assigned To</b></td>
                                 <td style={{"width": "70%"}}>{this.props.task.assigned_to.username}</td>
 
-                            </tr>
-                            <tr>
+                            </tr>}
+                          {this.props.project.Project_config.includes("work_order") &&  <tr>
                                 <td><b>Work Order</b></td>
                                 <td style={{"width": "70%"}}>{this.props.task.work_order == 0 ?<span>No work order was specified for this task </span> : this.props.task.work_order}
                                 </td>
 
-                            </tr>
-                               {this.props.task.Category &&<tr>
+                            </tr>}
+                             {this.props.project.Project_config.includes("Category")  &&<tr>
                                 <td><b>Task Category</b></td>
                                 <td style={{"width": "70%"}}>{this.props.task.Category}</td>
                                             </tr>}

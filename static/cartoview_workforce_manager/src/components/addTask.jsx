@@ -19,12 +19,8 @@ const options = {
       }
     }
   }
-  ,
-  i18n: {
-
-    optional: '',
-
-  }
+  
+ 
 };
 export default class AddTask extends Component {
   constructor(props) {
@@ -40,7 +36,8 @@ export default class AddTask extends Component {
       value: null,
       priority: { 0: "" },
       Category: null,
-      status: null
+      status: null,
+      checked:this.props.project.Project_config
     }
 
     this.map = new ol.Map({
@@ -80,9 +77,9 @@ export default class AddTask extends Component {
               priority[this.props.project.priority.priority[i].label] = this.props.project.priority.priority[i].label
             }
           }
-          if (this.props.project.Category.category) {
-            for (var j = 0; j < this.props.project.Category.category.length; j++) {
-              Category[this.props.project.Category.category[j].label] = this.props.project.Category.category[j].label
+          if (this.props.project.Category) {
+            for (var j = 0; j < this.props.project.Category.Category.length; j++) {
+              Category[this.props.project.Category.Category[j].label] = this.props.project.Category.Category[j].label
             }
           }
           if (this.props.project.status) {
@@ -95,20 +92,30 @@ export default class AddTask extends Component {
             const Category = t.enums(this.state.Category)
             const Status = t.enums(this.state.status)
             const PersonObj = {
-              title: t.maybe(t.String),
-              description: t.maybe(t.String),
-              assigned_to: t.maybe(t.enums(tCombEnum)),
-              due_date: t.maybe(t.Date),
-              work_order: t.maybe(t.String),
+              title:t.String,
+              // assigned_to: t.enums(tCombEnum),
+        
             }
-            if (this.props.project.Category.category) {
-              PersonObj['Category'] = t.maybe(Category)
+            if (this.state.checked.includes("description")) {
+              PersonObj['description'] = this.props.project.Description.required_input?t.String:t.maybe(t.String)
             }
-            if (this.props.project.priority.priority) {
-              PersonObj['priority'] = t.maybe(Priority)
+            if (this.state.checked.includes("assigned_to")) {
+              PersonObj['assigned_to'] = this.props.project.assigned_to.required_input?t.enums(tCombEnum):t.maybe(t.enums(tCombEnum))
             }
-            if (this.props.project.status.status) {
-              PersonObj['status'] = t.maybe(Status)
+            if (this.state.checked.includes("Category")) {
+              PersonObj['Category'] =this.props.project.Category.required_input?Category: t.maybe(Category)
+            }
+            if (this.state.checked.includes("priority")) {
+              PersonObj['priority'] = this.props.project.priority.required_input?Priority:t.maybe(Priority)
+            }
+            if (this.state.checked.includes("status")) {
+              PersonObj['status'] = this.props.project.status.required_input?Status:t.maybe(Status)
+            }
+            if (this.state.checked.includes("due_date")) {
+              PersonObj['due_date'] = this.props.project.due_date.required_input?t.Date:t.maybe(t.Date)
+            }
+            if (this.state.checked.includes("work_order")) {
+              PersonObj['work_order'] = this.props.project.work_order.required_input?t.String:t.maybe(t.String)
             }
             const Person = t.struct(PersonObj)
             this.setState({ person: Person })

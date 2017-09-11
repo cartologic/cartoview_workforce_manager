@@ -22,7 +22,7 @@ export default class ReactClient extends React.Component {
         super(props)
         this.state = {
             loading: true,
-            project: "",
+            project: {Project_config:[]},
             tasks: "",
             workers: "",
             dispatchers: "",
@@ -218,6 +218,7 @@ export default class ReactClient extends React.Component {
 
     render() {
         let { currentComponent } = this.state
+        // this.state.project['Project_config']=[]
         return (
             <div className="container ">
                 <br />
@@ -237,10 +238,6 @@ export default class ReactClient extends React.Component {
 
 
                     <li ><a href={'/apps/appinstances/?app__title=Cartoview%20Workforce%20Manager&limit=100&offset=0&owner__username=' + username}>My Projects </a></li>
-
-
-
-
                 </ul>
                 <hr />
                 <div className="tab-content">
@@ -261,13 +258,11 @@ export default class ReactClient extends React.Component {
                                     <thead>
                                         <tr>
                                             <th>Title</th>
-                                            <th>Description</th>
+                                            {this.state.project.Project_config.includes("description") && <th>Description</th>}
                                             <th> Created By</th>
-                                            <th> Assigned To</th>
-                                           {this.state.project.priority&& <th>Priority</th>}
-                                            {this.state.project.status&& <th>Status</th>}
-
-
+                                            {this.state.project.Project_config.includes("assigned_to") &&<th> Assigned To</th>}
+                                            {this.state.project.Project_config.includes("priority") && <th>Priority</th>}
+                                            {this.state.project.Project_config.includes("status")&& <th>Status</th>}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -278,12 +273,12 @@ export default class ReactClient extends React.Component {
                                                 this.setState({ "selectedtask": item })
                                             }} style={{ "cursor": "pointer" }}>
                                                 <td>{item.title}</td>
-                                                <td>{item.description.substring(0, 75)} {item.description.length > 75 ? "..." : ""}</td>
+                                                 {this.state.project.Project_config.includes("description") &&<td>{item.description.substring(0, 75)} {item.description.length > 75 ? "..." : ""}</td>}
                                                 <td>{item.created_by.username}</td>
-                                                <td>{item.assigned_to.username}</td>
-                                                {this.state.project.priority&& <td>{item.priority}
+                                                 {this.state.project.Project_config.includes("assigned_to") &&<td>{item.assigned_to.username}</td>}
+                                                 {this.state.project.Project_config.includes("priority") && <td>{item.priority}
                                                 </td>}
-                                                {this.state.project.status&& <td>{item.status}
+                                                {this.state.project.Project_config.includes("status") &&<td>{item.status}
                                                 </td>}
 
                                             </tr>
@@ -360,7 +355,7 @@ export default class ReactClient extends React.Component {
                                                     {this.state.project.priority && <div className="panel panel-primary">
                                                         <div className="panel-heading" >Priority</div>
                                                         <div className="panel-body">
-                                                            {this.state.project.priority && this.state.project.priority.priority.map((pri, i) => {
+                                                            { this.state.project.Project_config.includes("priority")  && this.state.project.priority.priority.map((pri, i) => {
 
                                                                 return <label className="radio" key={i}><input type="radio" name="optradio" value={pri.label} onChange={() => { this.setState({ "priority": pri.label }) }} />{pri.label}</label>
                                                             })
@@ -369,7 +364,8 @@ export default class ReactClient extends React.Component {
                                                             }
                                                         </div>
                                                     </div>}
-                                                {   this.state.project.status && <div className="panel panel-primary">
+                                                    console.log("aa",this.state.project)
+                                                {    this.state.project.Project_config.includes("status")  && <div className="panel panel-primary">
                                                         <div className="panel-heading">Status</div>
                                                         <div className="panel-body">
 
@@ -383,10 +379,11 @@ export default class ReactClient extends React.Component {
                                                             }
                                                         </div>
                                                     </div>}
-                                                    <div className="panel panel-primary">
+                                                    
+                                                     {this.state.project.Project_config.includes("work_order") &&<div className="panel panel-primary">
                                                         <div className="panel-heading">Work Order</div>
                                                         <div className="panel-body"><input className="form-control" ref="work_order" /></div>
-                                                    </div>
+                                                    </div>}
                                                     <div className="panel panel-primary">
                                                         <div className="panel-heading">Task creator</div>
                                                         <div className="panel-body">
@@ -404,6 +401,7 @@ export default class ReactClient extends React.Component {
 
                                                         </div>
                                                     </div>
+                                                     {this.state.project.Project_config.includes("assigned_to") &&
                                                     <div className="panel panel-primary">
                                                         <div className="panel-heading">Assignee</div>
                                                         <div className="panel-body">
@@ -420,7 +418,7 @@ export default class ReactClient extends React.Component {
                                                             </div>
 
                                                         </div>
-                                                    </div>
+                                                    </div>}
 
                                                     <button className="btn btn-primary pull-right" style={{ "margin": "2%" }} onClick={this.sendFilter} >Filter</button>
 
@@ -437,18 +435,16 @@ export default class ReactClient extends React.Component {
 
 
                                             <table className="table table-hover table-bordered table-responsive">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Title</th>
-                                                        <th>Description</th>
-                                                        <th> Created By</th>
-                                                        <th> Assigned To</th>
-                                                        {this.state.project.priority&& <th>Priority</th>}
-                                                        {this.state.project.status&& <th>Status</th>}
-
-
-                                                    </tr>
-                                                </thead>
+                                                 <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            {this.state.project.Project_config.includes("description") && <th>Description</th>}
+                                            <th> Created By</th>
+                                            {this.state.project.Project_config.includes("assigned_to") &&<th> Assigned To</th>}
+                                            {this.state.project.Project_config.includes("priority") && <th>Priority</th>}
+                                            {this.state.project.Project_config.includes("status")&& <th>Status</th>}
+                                        </tr>
+                                    </thead>
                                                 <tbody>
 
                                                     {this.state.filter.map((item, i) => {
@@ -456,16 +452,15 @@ export default class ReactClient extends React.Component {
                                                         return <tr key={i} onClick={() => {
                                                             this.setState({ "selectedtask2": item })
                                                         }} style={{ "cursor": "pointer" }}>
-                                                            <td>{item.title}</td>
-                                                            <td>{item.description}</td>
-                                                            <td>{item.created_by.username}</td>
-                                                            <td>{item.assigned_to.username}</td>
-                                                            {this.state.project.priority&& <td>{item.priority}
+                                                             <td>{item.title}</td>
+                                                 {this.state.project.Project_config.includes("description") &&<td>{item.description.substring(0, 75)} {item.description.length > 75 ? "..." : ""}</td>}
+                                                <td>{item.created_by.username}</td>
+                                                 {this.state.project.Project_config.includes("assigned_to") &&<td>{item.assigned_to.username}</td>}
+                                                 {this.state.project.Project_config.includes("priority") && <td>{item.priority}
+                                                </td>}
+                                                {this.state.project.Project_config.includes("status") &&<td>{item.status}
+                                                </td>}
 
-                                                            </td>}
-                                                            {this.state.project.status&& <td>{item.status}
-
-                                                            </td>}
 
                                                         </tr>
                                                     }
@@ -485,7 +480,7 @@ export default class ReactClient extends React.Component {
                                             <div>
 
 
-                                                <TaskDetails task={this.state.selectedtask2} mapid={this.state.project.mapid} />
+                                                <TaskDetails task={this.state.selectedtask2} mapid={this.state.project.mapid} project={this.state.project}/>
 
 
                                             </div>}

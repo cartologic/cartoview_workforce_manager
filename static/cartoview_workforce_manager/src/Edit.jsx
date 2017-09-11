@@ -22,7 +22,7 @@ export default class Edit extends Component {
             map: 0,
             generalConfig: {},
             selectedResource: this.props.config.instance ? this.props.config.instance.map : undefined,
-            checkedValues:isNaN(id)? ["category","priority","status","work_order","description","due_date"]:[],
+            checkedValues:isNaN(id)? ["Category","priority","status","work_order","description","due_date"]:[],
         }
             if(!isNaN(id)){
                 this.loadProject()
@@ -52,7 +52,7 @@ export default class Edit extends Component {
                this.setState({"checkedValues":data.Project_config})
                 this.setState({"project": data,"Category":data.Category?data.Category:"","priority":data.priority?data.priority:"","status":data.status?data.status:"", "value":{Category:data.Category?data.Category:"",
                status: data.status?data.status:"", priority: data.priority?data.priority:"",mapid:data.mapid?data.mapid:"",
-               }})            
+               work_order:data.work_order,assigned_to:data.assigned_to,due_date:data.due_date,description:data.Description}})            
             //    if(this.state.priority!=""){this.state.checkedValues.push("priority")}
             //    if(this.state.status!=""){this.state.checkedValues.push("status")}
             //    if(this.state.Category!=""){this.state.checkedValues.push("Category")}
@@ -117,9 +117,13 @@ export default class Edit extends Component {
             component: FormFields,
             props: {
                 checkedValues:this.state.checkedValues,
-                onComplete: (priority, status, Category,checked) => {
+                work_order:this.state.work_order,
+                due_date:this.state.due_date,
+                assigned_to:this.state.assigned_to,
+                description:this.state.description,
+                onComplete: (priority, status, Category,checked,due_date,work_order,description,assigned_to) => {
                    
-                    this.setState({ genralConfig: Object.assign(this.state.generalConfig, { "priority": priority, "status": status, "Category": Category ,"Project_config":checked}) })
+                    this.setState({ genralConfig: Object.assign(this.state.generalConfig, { "priority": priority, "status": status, "Category": Category ,"Project_config":checked,"due_date":due_date,"work_order":work_order,"Description":description,"assigned_to":assigned_to}) })
                     let { step } = this.state;
                     this.goToStep(++step)
 

@@ -7,8 +7,6 @@ from cartoview.app_manager.models import AppInstance
 User = settings.AUTH_USER_MODEL
 from jsonfield import JSONField
 class Project(AppInstance):
-    #project_name = models.CharField(max_length=200)
-    #project_description = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -16,7 +14,10 @@ class Project(AppInstance):
     Project_config = JSONField(blank=True, null=True) 
     priority = JSONField(blank=True, null=True) 
     status = JSONField(blank=True, null=True) 
-    
+    assigned_to= JSONField(blank=True, null=True) 
+    Description=JSONField(blank=True, null=True) 
+    due_date=JSONField(blank=True, null=True) 
+    work_order=JSONField(blank=True, null=True) 
     Category = JSONField(blank=True, null=True) 
     workers = models.ManyToManyField(User,related_name='%(class)s_requests_workers',through='ProjectWorkers')
     dispatchers = models.ManyToManyField(User,related_name='%(class)s_requests_dispatchers',through='ProjectDispatchers')

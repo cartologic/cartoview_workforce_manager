@@ -49,14 +49,12 @@ componentDidMount(){
 				<table className="table table-hover table-bordered table-responsive">
 					<thead>
 					<tr>
-						<th>Title</th>
-						<th>Description</th>
-						<th> Created By</th>
-						<th> Assigned To</th>
-						<th>Priority</th>
-						<th>Status</th>
-
-
+                    <th>Title</th>
+                    {this.props.project.Project_config.includes("description") && <th>Description</th>}
+                    <th> Created By</th>
+                    {this.props.project.Project_config.includes("assigned_to") &&<th> Assigned To</th>}
+                    {this.props.project.Project_config.includes("priority") && <th>Priority</th>}
+                    {this.props.project.Project_config.includes("status")&& <th>Status</th>}
 					</tr>
 					</thead>
 					<tbody>
@@ -66,15 +64,16 @@ componentDidMount(){
                             return <tr key={i} onClick={() => {
                                 this.setState({"selectedtask": item})
                             }} style={{"cursor": "pointer"}}>
-								<td>{item.title}</td>
-								<td>{item.description.substring(0,75) } {item.description.length>75 ? "...":""}</td>
-								<td>{item.created_by.username}</td>
-								<td>{item.assigned_to.username}</td>
-								<td>{item.priority}
+								 <td>{item.title}</td>
+                                {this.props.project.Project_config.includes("description") &&<td>{item.description.substring(0, 75)} {item.description.length > 75 ? "..." : ""}</td>}
+                                <td>{item.created_by.username}</td>
+                                {this.props.project.Project_config.includes("assigned_to") &&<td>{item.assigned_to.username}</td>}
+                                {this.props.project.Project_config.includes("priority") && <td>{item.priority}
+                                 </td>}
+                                {this.props.project.Project_config.includes("status") &&<td>{item.status}
+                                </td>}
 
-								</td>
-								<td>{item.status}
-								</td>
+                                            
 
 							</tr>
                         }
@@ -94,7 +93,7 @@ componentDidMount(){
                             }}><span className="glyphicon glyphicon-chevron-left"></span>Back To List View
 							</button>
 
-							<TaskDetails task={this.state.selectedtask}/>
+							<TaskDetails task={this.state.selectedtask} project={this.props.project}/>
 						</div>
 						<div className="col-md-1"></div>
 					</div>}

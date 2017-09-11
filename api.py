@@ -32,6 +32,10 @@ class UserResource(ModelResource):
 class ProjectResource(ModelResource):
     priority = DictField(attribute='priority',null=True)
     Category= DictField(attribute='Category',null=True)
+    work_order= DictField(attribute='work_order',null=True)
+    due_date= DictField(attribute='due_date',null=True)
+    assigned_to= DictField(attribute='assigned_to',null=True)
+    Description= DictField(attribute='Description',null=True)
     status= DictField(attribute='status',null=True)
     Project_config=ListField(attribute='Project_config',null=True)
     created_by = fields.ForeignKey(UserResource, 'created_by')
@@ -133,7 +137,7 @@ class ProjectResource(ModelResource):
 
 class TaskResource(ModelResource):
     created_by = fields.ForeignKey(UserResource, 'created_by')
-    assigned_to = fields.ForeignKey(UserResource, 'assigned_to',full=True)
+    assigned_to = fields.ForeignKey(UserResource, 'assigned_to',full=True,null=True)
     project = fields.ForeignKey(ProjectResource, 'project', full=True)
 
     def hydrate_created_by(self, bundle):
