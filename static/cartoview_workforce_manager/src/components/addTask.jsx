@@ -78,23 +78,19 @@ export default class AddTask extends Component {
           if (this.props.project.priority) {
             for (var i = 0; i < this.props.project.priority.priority.length; i++) {
               priority[this.props.project.priority.priority[i].label] = this.props.project.priority.priority[i].label
-
             }
           }
           if (this.props.project.Category.category) {
             for (var j = 0; j < this.props.project.Category.category.length; j++) {
               Category[this.props.project.Category.category[j].label] = this.props.project.Category.category[j].label
-
             }
           }
           if (this.props.project.status) {
             for (var z = 0; z < this.props.project.status.status.length; z++) {
               status[this.props.project.status.status[z].label] = this.props.project.status.status[z].label
-
             }
           }
           this.setState({ priority: priority, Category: Category, status: status }, () => {
-
             const Priority = t.enums(this.state.priority)
             const Category = t.enums(this.state.Category)
             const Status = t.enums(this.state.status)
@@ -109,7 +105,6 @@ export default class AddTask extends Component {
               PersonObj['Category'] = t.maybe(Category)
             }
             if (this.props.project.priority.priority) {
-
               PersonObj['priority'] = t.maybe(Priority)
             }
             if (this.props.project.status.status) {
@@ -117,10 +112,7 @@ export default class AddTask extends Component {
             }
             const Person = t.struct(PersonObj)
             this.setState({ person: Person })
-
           })
-
-
         })
       });
 

@@ -1,6 +1,6 @@
 from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 from tastypie.authorization import Authorization
-from tastypie.fields import DictField
+from tastypie.fields import DictField,ListField
 from tastypie.authentication import BasicAuthentication
 from .models import Task, Project, ProjectDispatchers,ProjectWorkers,Comment,Attachment,History
 from tastypie import fields
@@ -13,9 +13,7 @@ User = get_user_model()
 from geonode.api.api import ProfileResource
 from geonode.people.models import Profile
 from geonode.maps.models import Map
-
 from tastypie.serializers import Serializer
-
 from tastypie import fields
 from cartoview.app_manager.models import App, AppInstance
 class UserResource(ModelResource):
@@ -33,8 +31,9 @@ class UserResource(ModelResource):
 
 class ProjectResource(ModelResource):
     priority = DictField(attribute='priority',null=True)
-    code= DictField(attribute='code',null=True)
+    Category= DictField(attribute='Category',null=True)
     status= DictField(attribute='status',null=True)
+    Project_config=ListField(attribute='Project_config',null=True)
     created_by = fields.ForeignKey(UserResource, 'created_by')
     dispatchers = fields.ManyToManyField(UserResource, 'dispatchers', full=True, readonly=True)
     owner = fields.ForeignKey(

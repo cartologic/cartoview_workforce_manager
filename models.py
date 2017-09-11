@@ -16,7 +16,8 @@ class Project(AppInstance):
     Project_config = JSONField(blank=True, null=True) 
     priority = JSONField(blank=True, null=True) 
     status = JSONField(blank=True, null=True) 
-    code = JSONField(blank=True, null=True) 
+    
+    Category = JSONField(blank=True, null=True) 
     workers = models.ManyToManyField(User,related_name='%(class)s_requests_workers',through='ProjectWorkers')
     dispatchers = models.ManyToManyField(User,related_name='%(class)s_requests_dispatchers',through='ProjectDispatchers')
     permissions = JSONField(blank=True, null=True) 
@@ -41,7 +42,7 @@ class Task(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     due_date = models.DateTimeField(null=True, blank=True)
     work_order=models.TextField(default=0,blank=True, null=True)
-    code= models.TextField(blank=True, null=True)
+    Category= models.TextField(blank=True, null=True)
     x=models.DecimalField(blank=True, null=True ,max_digits=19, decimal_places=10)
     y=models.DecimalField(blank=True, null=True,max_digits=19, decimal_places=10)
     extent= models.TextField(blank=True, null=True)   
