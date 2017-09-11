@@ -31,7 +31,7 @@ export default class FormFields extends Component {
             work_order:isNaN(id) ?{"required_input":false}:this.props.work_order,
             description: isNaN(id) ?{"required_input":false}:this.props.description,
             assigned_to:isNaN(id) ?{"required_input":false}:this.props.assigned_to,
-            checkedValues: isNaN(id) ?  ["Category","priority","status","work_order","description","due_date"]:this.props.checkedValues,
+            checkedValues: isNaN(id) ?  ["work_order","description","due_date","assigned_to"]:this.props.checkedValues,
             value: ""
         }
        

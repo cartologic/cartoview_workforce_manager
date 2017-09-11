@@ -150,9 +150,11 @@ class TaskResource(ModelResource):
 
     def dehydrate_assigned_to(self, bundle):
         #print("assignto deh",bundle.obj.assigned_to.__dict__)
-         bundle.data['assigned_to'] = {'username': bundle.obj.assigned_to.username,'id':bundle.obj.assigned_to.id}
+         if(bundle.obj.assigned_to):
+            bundle.data['assigned_to'] = {'username': bundle.obj.assigned_to.username,'id':bundle.obj.assigned_to.id}
+         else:   
+            bundle.data['assigned_to']={'username':None}
          return bundle.data['assigned_to']
-
     def get_comments(self, request, **kwargs):
 
 
@@ -187,7 +189,8 @@ class TaskResource(ModelResource):
             'priority': ALL,
             'description': ALL,
             'id':ALL,
-            'work_order':ALL
+            'work_order':ALL,
+            'Category':ALL
         }
 
         queryset = Task.objects.all()

@@ -39,7 +39,7 @@ class Task(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, related_name='%(class)s_requests_created_by', on_delete=models.CASCADE)
-    assigned_to = models.ForeignKey(User, related_name='%(class)s_requests_assigned_to', on_delete=models.CASCADE)
+    assigned_to = models.ForeignKey(User, related_name='%(class)s_requests_assigned_to', on_delete=models.CASCADE,null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     due_date = models.DateTimeField(null=True, blank=True)
     work_order=models.TextField(default=0,blank=True, null=True)

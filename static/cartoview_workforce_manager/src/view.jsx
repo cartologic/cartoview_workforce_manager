@@ -35,7 +35,8 @@ export default class ReactClient extends React.Component {
             selectedtask2: "", currentComponent: "list",
             pageCount: 0,
             perPage: 5,
-            pagedTasks: []
+            pagedTasks: [],
+            category:""
         }
         this.loadTasks()
         this.loadProject()
@@ -48,10 +49,14 @@ export default class ReactClient extends React.Component {
 
     sendFilter = () => {
 
-        var priority = "", status = "", work_order = "", worker = "", dispatcher = ""
+        var priority = "", status = "", work_order = "", worker = "", dispatcher = "",category=""
         if (this.state.priority) {
             
             priority = "priority=" + this.state.priority + "&"
+        }
+         if (this.state.category) {
+            console.log("yes",)
+            category = "Category=" + this.state.category + "&"
         }
         if (this.state.status) {
             status = "status=" + this.state.status + "&"
@@ -66,7 +71,7 @@ export default class ReactClient extends React.Component {
             worker = "assigned_to__username=" + this.refs.worker.value + "&"
         }
 
-        var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + '/tasks/?' + priority + status + work_order + worker + dispatcher
+        var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + '/tasks/?' + priority + status + work_order + worker + dispatcher+category
       
         fetch(url, {
             method: "GET",
@@ -352,10 +357,11 @@ export default class ReactClient extends React.Component {
                                         {!this.state.filter.length && !this.state.result &&
                                             <div className="panel panel-default" style={{ "padding": "0" }}>
                                                 <div className="panel-body" style={{ "padding": "0" }}>
-                                                    {this.state.project.priority && <div className="panel panel-primary">
+                                                    {this.state.project.Project_config.includes("priority")  && <div className="panel panel-default">
                                                         <div className="panel-heading" >Priority</div>
                                                         <div className="panel-body">
-                                                            { this.state.project.Project_config.includes("priority")  && this.state.project.priority.priority.map((pri, i) => {
+                                                        {console.log(this.state.project)}
+                                                            { this.state.project.priority.priority.map((pri, i) => {
 
                                                                 return <label className="radio" key={i}><input type="radio" name="optradio" value={pri.label} onChange={() => { this.setState({ "priority": pri.label }) }} />{pri.label}</label>
                                                             })
@@ -364,8 +370,8 @@ export default class ReactClient extends React.Component {
                                                             }
                                                         </div>
                                                     </div>}
-                                                    console.log("aa",this.state.project)
-                                                {    this.state.project.Project_config.includes("status")  && <div className="panel panel-primary">
+                                                 
+                                                {    this.state.project.Project_config.includes("status")  && <div className="panel panel-default">
                                                         <div className="panel-heading">Status</div>
                                                         <div className="panel-body">
 
@@ -379,12 +385,24 @@ export default class ReactClient extends React.Component {
                                                             }
                                                         </div>
                                                     </div>}
-                                                    
-                                                     {this.state.project.Project_config.includes("work_order") &&<div className="panel panel-primary">
+                                                    {    this.state.project.Project_config.includes("Category")  && <div className="panel panel-default">
+                                                        <div className="panel-heading">Category</div>
+                                                        <div className="panel-body">
+
+
+                                                            {this.state.project.Category && this.state.project.Category.Category.map((cat, i) => {
+                                                                return <label className="radio" key={i}><input type="radio" name="optradio3" value={cat.label} onChange={() => { this.setState({ "category": cat.label }) }} />{cat.label}</label>
+                                                            })
+
+
+                                                            }
+                                                        </div>
+                                                    </div>}
+                                                     {this.state.project.Project_config.includes("work_order") &&<div className="panel panel-default">
                                                         <div className="panel-heading">Work Order</div>
                                                         <div className="panel-body"><input className="form-control" ref="work_order" /></div>
                                                     </div>}
-                                                    <div className="panel panel-primary">
+                                                    <div className="panel panel-default">
                                                         <div className="panel-heading">Task creator</div>
                                                         <div className="panel-body">
                                                             <div className="form-group">
@@ -402,7 +420,7 @@ export default class ReactClient extends React.Component {
                                                         </div>
                                                     </div>
                                                      {this.state.project.Project_config.includes("assigned_to") &&
-                                                    <div className="panel panel-primary">
+                                                    <div className="panel panel-default">
                                                         <div className="panel-heading">Assignee</div>
                                                         <div className="panel-body">
                                                             <div className="form-group">
@@ -420,7 +438,7 @@ export default class ReactClient extends React.Component {
                                                         </div>
                                                     </div>}
 
-                                                    <button className="btn btn-primary pull-right" style={{ "margin": "2%" }} onClick={this.sendFilter} >Filter</button>
+                                                    <button className="btn btn-default pull-right" style={{ "margin": "2%" }} onClick={this.sendFilter} >Filter</button>
 
 
                                                 </div>
