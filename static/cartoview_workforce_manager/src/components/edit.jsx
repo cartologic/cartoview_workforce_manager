@@ -78,27 +78,27 @@ export default class Edit extends Component {
 
                     )
                     this.setState({tCombEnum})
-                    var priority
-                    var Category
-                    var status
-                    if(this.props.project.priority){
-                        priority={}
+                    var priority={}
+                    var Category={}
+                    var status={}
+                    
+                    if(this.state.checked.includes("priority")){
                         for(var i=0;i<this.props.project.priority.priority.length;i++){
                            priority[this.props.project.priority.priority[i].label]=this.props.project.priority.priority[i].label
                        
                         } }
-                        if(this.props.project.Category){
-                            Category={}
-                         for(var j=0;j<this.props.project.Category.Category.length;j++){
+                         
+                    if(this.state.checked.includes("Category")){
+                        for(var j=0;j<this.props.project.Category.Category.length;j++){
                            Category[this.props.project.Category.Category[j].label]=this.props.project.Category.Category[j].label
-                       
-                        } }
-                        if(this.props.project.status){
-                            status={}
-                          for(var z=0;z<this.props.project.status.status.length;z++){
-                           status[this.props.project.status.status[z].label]=this.props.project.status.status[z].label
-                       
-                        } }
+                    
+                    } }
+                    if(this.state.checked.includes("status")){
+                        
+                        for(var z=0;z<this.props.project.status.status.length;z++){
+                        status[this.props.project.status.status[z].label]=this.props.project.status.status[z].label
+                    
+                    } }
                  this.setState({priority:priority,Category:Category,status:status},()=>{                          
                 const Priority = t.enums(this.state.priority)
                 const Category = t.enums(this.state.Category)
@@ -213,17 +213,12 @@ sendHistory=()=>{
           vector_layer.setStyle(style);
           map.addLayer(vector_layer);
 
-
-
-
-
         })
-
 
         if(this.state.x&&this.state.y) {
 
           //postrender because feature doesnt appear on componentDidMount
-       
+    
    setTimeout(()=>{
           var point_geom = new ol.geom.Point([this.state.x,this.state.y])
           point_feature.setGeometry(point_geom);
@@ -243,13 +238,8 @@ sendHistory=()=>{
       });
           vector_layer.setStyle(style);
          map.addLayer(vector_layer);
-
-
-
-
       },500)}}
         
-    
     save() {
         var date=new Date()
         var dt=date.toUTCString()
@@ -260,51 +250,50 @@ sendHistory=()=>{
      if(this.state.value.priority&&this.state.value.priority!=this.refs.form.getValue().priority){
            this.state['history']= username+"  changed the priority from "+this.state.value.priority +" to "+ this.refs.form.getValue().priority +" at "+dt
            this.sendHistory()
-    
        }
-         if(this.state.value.Category&&this.state.value.Category!=this.refs.form.getValue().Category){
-           this.state['history']= username+"  changed the Category from "+this.state.value.Category +" to "+ this.refs.form.getValue().Category +" at "+dt
-           this.sendHistory()
-    
-       }
-       if(this.state.value.due_date!=this.refs.form.getValue().due_date){
-           console.log(this.state.value.due_date,this.refs.form.getValue().due_date)
-           this.state['history']= username+"  changed the due date from "+this.state.value.due_date.toUTCString() +" to "+ this.refs.form.getValue().due_date.toUTCString() +" at "+dt
-           this.sendHistory()
-    
-       }
-       if(this.state.value.assigned_to!=this.refs.form.getValue().assigned_to){
-           this.state['history']= username+"  reassigned the task to "+ this.state.tCombEnum[this.refs.form.getValue().assigned_to] +" at "+dt
-           this.sendHistory()
-    
-       }
-        var value = this.refs.form.getValue();
-        if (value) {
-            var project = {"project": {"pk": id}}
-            if(this.state.x&&this.state.y){
-            var mapconf={"x":this.state.x,"y":this.state.y,"extent":this.state.extent.toString()}
-            var copy1 = Object.assign(mapconf, value);
-            var copy = Object.assign(project, copy1);
-            }
-            else{
-            var copy = Object.assign(project, value);}
-            var url = '/apps/cartoview_workforce_manager/api/v1/task/' + this.props.task.id
-            fetch(url, {
-                method: "PUT",
-                credentials: "same-origin",
-                headers: new Headers({
-                    "Content-Type": "application/json; charset=UTF-8",
-                    "X-CSRFToken": getCRSFToken(),
-                }),
-                body: JSON.stringify(copy)
-            })
-                .then(function (response) {
-                    if (response.status >= 400) {
-                        throw new Error("Bad response from server");
-                    }
+     if(this.state.value.Category&&this.state.value.Category!=this.refs.form.getValue().Category){
+     this.state['history']= username+"  changed the Category from "+this.state.value.Category +" to "+ this.refs.form.getValue().Category +" at "+dt
+     this.sendHistory()
 
-                }).then((res) => {
-                // 
+     }
+    if(this.state.value.due_date!=this.refs.form.getValue().due_date){
+        console.log(this.state.value.due_date,this.refs.form.getValue().due_date)
+        this.state['history']= username+"  changed the due date from "+this.state.value.due_date.toUTCString() +" to "+ this.refs.form.getValue().due_date.toUTCString() +" at "+dt
+        this.sendHistory()
+
+    }
+    if(this.state.value.assigned_to!=this.refs.form.getValue().assigned_to){
+        this.state['history']= username+"  reassigned the task to "+ this.state.tCombEnum[this.refs.form.getValue().assigned_to] +" at "+dt
+        this.sendHistory()
+
+    }
+    var value = this.refs.form.getValue();
+    if (value) {
+        var project = {"project": {"pk": id}}
+        if(this.state.x&&this.state.y){
+        var mapconf={"x":this.state.x,"y":this.state.y,"extent":this.state.extent.toString()}
+        var copy1 = Object.assign(mapconf, value);
+        var copy = Object.assign(project, copy1);
+        }
+    else{
+    var copy = Object.assign(project, value);}
+    var url = '/apps/cartoview_workforce_manager/api/v1/task/' + this.props.task.id
+    fetch(url, {
+        method: "PUT",
+        credentials: "same-origin",
+        headers: new Headers({
+            "Content-Type": "application/json; charset=UTF-8",
+            "X-CSRFToken": getCRSFToken(),
+        }),
+        body: JSON.stringify(copy)
+    })
+        .then(function (response) {
+            if (response.status >= 400) {
+                throw new Error("Bad response from server");
+            }
+
+        }).then((res) => {
+        // 
                 this.setState({"success": true})
                
             })
@@ -312,10 +301,8 @@ sendHistory=()=>{
         }
     }
    componentDidMount() {
-     
-    //   this.update(this.props.mapid);
-     
-      setTimeout(()=>{
+    
+    setTimeout(()=>{
          this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
          this.init( this.map )
       

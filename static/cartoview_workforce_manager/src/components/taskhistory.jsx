@@ -38,10 +38,10 @@ loadTaskHistory = () =>  {
 render() {
         return ( 
         <div>  
-            <p>  &nbsp;- Task was created by {this.props.task.created_by.username}at < Moment  format = "DD/MM/YYYY"date =  {this.props.task.created_at}/></p>  
-            {this.state.taskhistory.map ((history) =>  {
+            <p>  &nbsp;- Task was created by {this.props.task.created_by.username} at < Moment  format = "DD/MM/YYYY"date =  {this.props.task.created_at}/></p>  
+            {this.state.taskhistory.map ((history,i) =>  {
                 if(history.text){
-             return <p>  &nbsp;-  {history.text} </p > }
+             return <p key={i}>  &nbsp;-  {history.text} </p > }
                  })} </div> )
         }
 }

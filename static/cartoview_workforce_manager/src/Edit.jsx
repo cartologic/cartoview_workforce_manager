@@ -4,8 +4,7 @@ import Navigator from './components/Navigator.jsx'
 import General from './components/General.jsx'
 import EditService from './services/editService'
 import { getCRSFToken } from './helpers/helpers.jsx'
-import Dispatchers from './components/dispatchers.jsx'
-import Workers from './components/workers.jsx'
+
 import ResourceSelector from './components/ResourceSelector.jsx'
 import Users from './components/users.jsx';
 import FormFields from './components/form.jsx'

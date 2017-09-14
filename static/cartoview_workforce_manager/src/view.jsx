@@ -9,7 +9,6 @@ import CustomTheme from './theme';
 import './app.css';
 import AddTask from './components/addTask';
 import ProjectDetails from './components/ProjectDetails';
-import ProjectEdit from './components/projectEdit';
 import MyTasks from './components/myTasks';
 import { getCRSFToken } from './helpers/helpers.jsx'
 import TaskDetails from './components/taskDetails.jsx'
@@ -336,10 +335,7 @@ export default class ReactClient extends React.Component {
                         {this.state.workers && this.state.project && currentComponent === "details" &&
                             <ProjectDetails id={id} project={this.state.project} mapid={this.state.project.mapid} workers={this.state.workers} />}
                     </div>
-                    <div id="menu3" className="tab-pane fade">
-                        {this.state.workers && this.state.project &&
-                            <ProjectEdit project={this.state.project} workers={this.state.workers} />}
-                    </div>
+                    
 
 
                     <div id="mytasks" className="tab-pane fade">

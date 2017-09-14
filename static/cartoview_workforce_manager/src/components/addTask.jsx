@@ -72,17 +72,17 @@ export default class AddTask extends Component {
           var priority = {}
           var Category = {}
           var status = {}
-          if (this.props.project.priority.priority) {
+          if (this.state.checked.includes("priority")) {
             for (var i = 0; i < this.props.project.priority.priority.length; i++) {
               priority[this.props.project.priority.priority[i].label] = this.props.project.priority.priority[i].label
             }
           }
-          if (this.props.project.Category.Category) {
+          if (this.state.checked.includes("Category")) {
             for (var j = 0; j < this.props.project.Category.Category.length; j++) {
               Category[this.props.project.Category.Category[j].label] = this.props.project.Category.Category[j].label
             }
           }
-          if (this.props.project.status.status) {
+          if (this.state.checked.includes("status")) {
             for (var z = 0; z < this.props.project.status.status.length; z++) {
               status[this.props.project.status.status[z].label] = this.props.project.status.status[z].label
             }
