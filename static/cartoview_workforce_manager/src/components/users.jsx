@@ -158,7 +158,7 @@ return (
           value={this.state.selectedDispatchers}
           onChange={this.onChangeDispatcher}
           suggestions={this.state.usernames}
- 
+          fromSuggestionsOnly={true}
         />
          <label>Choose Project&#39;s Workers</label>
        <Chips
