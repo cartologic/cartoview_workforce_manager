@@ -4,6 +4,14 @@ import ReactDOM from 'react-dom';
 import t from 'tcomb-form';
 
 const Form = t.form.Form;
+t.form.Form.i18n = {
+    optional: ''
+,   required: ''
+,   add: '➕'
+,   remove: '✖'
+,   up: '▲'
+,   down: '▼'
+}
 const options = {
     fields: {
         name: {

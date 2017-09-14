@@ -16,6 +16,7 @@ const cat = t.struct({
     label: t.String,
     status_color: t.maybe(Color)
 })
+
 export default class FormFields extends Component {
     constructor(props) {
         super(props)
