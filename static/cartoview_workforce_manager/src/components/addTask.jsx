@@ -6,6 +6,7 @@ import AddLocationMap from './addLocationMap.jsx';
 import MapConfigTransformService from '@boundlessgeo/sdk/services/MapConfigTransformService';
 import MapConfigService from '@boundlessgeo/sdk/services/MapConfigService';
 import ol from 'openlayers';
+import Button from 'react-bootstrap-button-loader';
 const Form = t.form.Form;
 var tComb = {}
 const options = {
@@ -19,13 +20,10 @@ const options = {
       }
     }
   }
-  
- 
 };
 export default class AddTask extends Component {
   constructor(props) {
     super(props)
-
     this.state = {
       success: false,
       auth: false,
@@ -37,7 +35,8 @@ export default class AddTask extends Component {
       priority:null,
       Category: null,
       status: null,
-      checked:this.props.project.Project_config
+      checked:this.props.project.Project_config,
+      loading:false
     }
 
     this.map = new ol.Map({
@@ -50,7 +49,6 @@ export default class AddTask extends Component {
         zoom: 3
       })
     });
-
 
     var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + "/workers"
     fetch(url, { method: "GET", headers: new Headers({ "Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken() }) })
@@ -159,7 +157,6 @@ export default class AddTask extends Component {
       var point_geom = new ol.geom.Point(e.coordinate)
       point_feature.setGeometry(point_geom);
       var vector_layer = new ol.layer.Vector({ source: new ol.source.Vector({ features: [point_feature] }) })
-
       var style = new ol.style.Style({
         image: new ol.style.Icon(/** @type {olx.style.IconOptions} */({
           anchor: [0.5, 10],
@@ -168,17 +165,15 @@ export default class AddTask extends Component {
           src: URLS.static + 'marker.png'
         }))
       });
-
       vector_layer.setStyle(style);
       map.addLayer(vector_layer);
-
-
-
-
     })
   }
 
   save() {
+  
+
+
     var value = this.refs.form.getValue();
     if (value) {
       var project = { "project": { "pk": id } }
@@ -191,6 +186,7 @@ export default class AddTask extends Component {
         var copy = Object.assign(project, value);
       }
 
+   this.setState({loading:true})
       var url = '/apps/cartoview_workforce_manager/api/v1/task/'
       fetch(url, {
         method: "POST",
@@ -205,7 +201,7 @@ export default class AddTask extends Component {
 
         }).then(() => {
           console.log("then")
-          this.setState({ "success": true }, () => {
+          this.setState({ "success": true,"loading":false }, () => {
 
             setTimeout(() => {
               this.setState({ "success": false })
@@ -219,6 +215,7 @@ export default class AddTask extends Component {
     this.checkDispatcher()
   }
   componentDidMount() {
+  
     this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
     this.update(this.props.mapid);
     this.init(this.map)
@@ -238,7 +235,7 @@ export default class AddTask extends Component {
       <div>
         <div className="col-md-2"></div>
         <div className="col-md-8 ">
-          {this.state.auth && < div className="well">
+          {this.state.auth && < div className="well" style={{"paddingBottom": "10%"}}>
             <br />
             {this.state.person &&
               <Form
@@ -251,7 +248,9 @@ export default class AddTask extends Component {
             <div style={{ height: "100%" }} ref="map" className={' map-ct'}>
               {this.props.children}
             </div>
-            <button className="btn btn-primary" onClick={this.save}>Save</button>
+             
+          <Button loading={this.state.loading} className="btn btn-primary pull-right" style={{"margin":"2%"}}onClick={this.save}>Save</Button>
+          
           </div>
           }
           {this.state.success &&
@@ -273,3 +272,4 @@ export default class AddTask extends Component {
     )
   }
 }
+

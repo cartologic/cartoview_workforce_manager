@@ -9,6 +9,7 @@ import Comments from './comments';
 import Attachments from './attachments.jsx';
 var tComb = {}
 import ol from 'openlayers';
+import Button from 'react-bootstrap-button-loader';
 
 export default class Edit extends Component {
     constructor(props) {
@@ -18,6 +19,7 @@ export default class Edit extends Component {
             assign: [],
             task: null,
             loading:true,
+            btnLoading:false,
             x:this.props.task.x,
             y:this.props.task.y,
       		extent:this.props.task.extent,
@@ -107,16 +109,14 @@ export default class Edit extends Component {
                     const TaskObj = {
                         title: t.String,
                         // description: t.String,
-                        // assigned_to: t.enums(tCombEnum),
+                        //  assigned_to: maybe(t.enums(tCombEnum)),
                         // work_order: t.maybe(t.Integer),
                         // due_date: t.Date,                      
                     }
                      if (this.state.checked.includes("description")) {
               TaskObj['description'] = this.props.project.Description.required_input?t.String:t.maybe(t.String)
             }
-            if (this.state.checked.includes("assigned_to")) {
-              TaskObj['assigned_to'] = this.props.project.assigned_to.required_input?t.enums(tCombEnum):t.maybe(t.enums(tCombEnum))
-            }
+           
             if (this.state.checked.includes("Category")) {
               TaskObj['Category'] =this.props.project.Category.required_input?Category: t.maybe(Category)
             }
@@ -132,6 +132,9 @@ export default class Edit extends Component {
             if (this.state.checked.includes("work_order")) {
               TaskObj['work_order'] = this.props.project.work_order.required_input?t.String:t.maybe(t.String)
             }
+             if (this.state.checked.includes("assigned_to")) {
+              TaskObj['assigned_to'] = this.props.project.assigned_to.required_input?t.enums(tCombEnum):t.maybe(t.enums(tCombEnum))
+            } 
                             const Task=t.struct(TaskObj)
                     this.setState({task: Task,loading:false})
                 })
@@ -241,8 +244,10 @@ sendHistory=()=>{
       },500)}}
         
     save() {
+        
         var date=new Date()
         var dt=date.toUTCString()
+        console.log("reff",this.refs.form)
         if(this.state.value.status&&this.state.value.status!=this.refs.form.getValue().status){
            this.state['history']=this.state['history']+ username+"  changed the status from "+this.state.value.status +" to "+ this.refs.form.getValue().status +" at "+dt
            this.sendHistory()
@@ -256,19 +261,20 @@ sendHistory=()=>{
      this.sendHistory()
 
      }
-    if(this.state.value.due_date!=this.refs.form.getValue().due_date){
+    if(this.state.value.due_date&&this.state.value.due_date!=this.refs.form.getValue().due_date){
         console.log(this.state.value.due_date,this.refs.form.getValue().due_date)
         this.state['history']= username+"  changed the due date from "+this.state.value.due_date.toUTCString() +" to "+ this.refs.form.getValue().due_date.toUTCString() +" at "+dt
         this.sendHistory()
 
     }
-    if(this.state.value.assigned_to!=this.refs.form.getValue().assigned_to){
+    if(this.state.value.assigned_to!="/apps/cartoview_workforce_manager/api/v1/user/undefined/"&&this.state.value.assigned_to!=this.refs.form.getValue().assigned_to){
         this.state['history']= username+"  reassigned the task to "+ this.state.tCombEnum[this.refs.form.getValue().assigned_to] +" at "+dt
         this.sendHistory()
 
     }
     var value = this.refs.form.getValue();
     if (value) {
+        this.setState({btnLoading:true})
         var project = {"project": {"pk": id}}
         if(this.state.x&&this.state.y){
         var mapconf={"x":this.state.x,"y":this.state.y,"extent":this.state.extent.toString()}
@@ -277,6 +283,7 @@ sendHistory=()=>{
         }
     else{
     var copy = Object.assign(project, value);}
+    this.setState({btnLoading:true})
     var url = '/apps/cartoview_workforce_manager/api/v1/task/' + this.props.task.id
     fetch(url, {
         method: "PUT",
@@ -294,7 +301,7 @@ sendHistory=()=>{
 
         }).then((res) => {
         // 
-                this.setState({"success": true})
+                this.setState({"success": true,"btnLoading":false})
                
             })
 
@@ -340,8 +347,18 @@ sendHistory=()=>{
                           <div style={{height:"100%"}} ref="map" className={' map-ct'}>
                            {this.props.children}
                          </div>
-                       <div className="row"> <button className="btn btn-default pull-right" style={{"margin":"2%"}} onClick={this.save}>Save Changes</button>
+                       <div className="row"> 
+                       <Button loading={this.state.btnLoading} className="btn btn-primary pull-right" style={{"margin":"2%"}}  onClick={this.save}>Save</Button>
+
                       </div>
+                        {this.state.success && <div>
+                    <br/>
+                    <div className="alert alert-info">
+                        Your changes were saved successfully.
+                    </div>
+
+                </div>}
+                 
                         <div className="panel panel-default">
                             <div className="panel-heading">Comments</div>
                             <div className="panel-body"><Comments task={this.props.task.id}/></div>
@@ -357,14 +374,7 @@ sendHistory=()=>{
                 </div>
                  
 
-                {this.state.success && <div>
-                    <br/>
-                    <div className="alert alert-info">
-                        Your changes were saved successfully.
-                    </div>
-
-                </div>}
-                 
+              
 
             </div>
         )

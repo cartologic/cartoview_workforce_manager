@@ -19,6 +19,8 @@
     "react-addons-css-transition-group": "^15.5.2",
     "react-addons-transition-group": "^15.5.2",
     "react-autocomplete": "^1.7.1",
+    "react-bootstrap": "^0.31.3",
+    "react-bootstrap-button-loader": "^1.0.8",
     "react-chips": "^0.6.2",
     "react-dom": "^15.5.4",
     "react-image": "^1.0.1",

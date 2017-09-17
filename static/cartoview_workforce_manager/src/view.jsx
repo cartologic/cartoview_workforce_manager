@@ -339,7 +339,12 @@ export default class ReactClient extends React.Component {
 
 
                     <div id="mytasks" className="tab-pane fade">
-                        <MyTasks id={id} project={this.state.project} /></div>
+                        <MyTasks id={id} project={this.state.project} />
+                        
+                        
+                        
+                        
+                        </div>
 
                     <div id="filter" className="tab-pane fade">
                         <div>

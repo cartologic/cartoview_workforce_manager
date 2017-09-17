@@ -124,8 +124,13 @@ export default class FormFields extends Component {
         this.setState(obj)
     }
     check = (value) => {
+    console.log(this.state)
+    console.log(this.state.checkedValues)
         if (this.state.checkedValues.includes(value)) {
-            if (this.state[value] == "") { return true }
+            console.log("inside if",value)
+            if (this.state[value] == "") { 
+                console.log("btn should be disabled")
+                return true }
             else { return false }
         }
         else { return false }
