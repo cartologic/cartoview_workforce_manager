@@ -204,6 +204,7 @@ export default class AddTask extends Component {
           }
 
         }).then(() => {
+          console.log("then")
           this.setState({ "success": true }, () => {
 
             setTimeout(() => {

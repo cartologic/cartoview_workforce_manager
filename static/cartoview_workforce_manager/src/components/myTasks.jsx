@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {getCRSFToken} from '../helpers/helpers.jsx'
 import TaskDetails from './taskDetails.jsx'
-
+import TaskHistroy from './taskhistory.jsx'
 export default class MyTasks extends Component {
     constructor(props) {
         super(props)
@@ -62,7 +62,7 @@ componentDidMount(){
                     {this.state.tasks.map((item, i) => {
 
                             return <tr key={i} onClick={() => {
-                                this.setState({"selectedtask": item})
+                                // this.setState({"selectedtask": item})
                             }} style={{"cursor": "pointer"}}>
 								 <td>{item.title}</td>
                                 {this.props.project.Project_config.includes("description") &&<td>{item.description.substring(0, 75)} {item.description.length > 75 ? "..." : ""}</td>}
@@ -83,7 +83,7 @@ componentDidMount(){
 					</tbody>
 				</table>}
 
-                {
+                {/*
                     this.state.selectedtask &&
 					<div>
 						<div className="col-md-1"></div>
@@ -96,7 +96,7 @@ componentDidMount(){
 							<TaskDetails task={this.state.selectedtask} project={this.props.project}/>
 						</div>
 						<div className="col-md-1"></div>
-					</div>}
+					</div> */}
 
                 {!this.state.tasks.length && !this.state.loading &&
                 <div>

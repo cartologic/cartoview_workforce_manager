@@ -25,7 +25,7 @@ export default class Details extends Component {
         return (
 
             <div style={{"padding": "2%"}}>
-                <div className="panel panel-primary">
+                <div className="panel panel-default">
                     <div className="panel-heading">Basic Details</div>
                     <div className="panel-body" style={{"padding": 0}}>
 
@@ -91,16 +91,16 @@ export default class Details extends Component {
                 </div>
 
 
-                <div className="panel panel-primary">
+                <div className="panel panel-default">
                     <div className="panel-heading">Images</div>
                     <div className="panel-body"><DisplayAttachments task={this.props.task.id}/></div>
                 </div>
 
-                <div className="panel panel-primary">
+                <div className="panel panel-default">
                     <div className="panel-heading">Comments</div>
                     <div className="panel-body"><DisplayComments task={this.props.task.id}/></div>
                 </div>
-                <div className="panel panel-primary">
+                <div className="panel panel-default">
                     <div className="panel-heading">Location</div>
                     <div className="panel-body"><ShowLocationMap mapId={this.props.mapid} x={this.props.task.x} y={this.props.task.y} extent={this.props.task.extent}/></div>
                 </div>
