@@ -168,8 +168,8 @@ export default class FormFields extends Component {
                                 type="checkbox" />
                         </span>
                         <input type="text" value="Category" className="form-control" disabled />
-                        <span className="input-group-addon" id="basic-addon2">
-                            <i className="fa fa-cog" onClick={() => this.openModal("Category")}></i>
+                        <span className="input-group-addon" id="basic-addon2" onClick={() => this.openModal("Category")}>
+                            <i className="fa fa-cog" ></i>
                         </span>
                     </div>
 
@@ -183,8 +183,8 @@ export default class FormFields extends Component {
                                 type="checkbox" />
                         </span>
                         <input type="text" value="Priority" className="form-control" disabled />
-                        <span className="input-group-addon" id="basic-addon2">
-                            <i className="fa fa-cog" onClick={() => this.openModal("priority")}></i>
+                        <span className="input-group-addon" id="basic-addon2" onClick={() => this.openModal("priority")}>
+                            <i className="fa fa-cog" ></i>
                         </span>
                     </div>
                     <div className="input-group">
@@ -197,8 +197,8 @@ export default class FormFields extends Component {
                                 type="checkbox" />
                         </span>
                         <input type="text" value="Status" className="form-control" disabled />
-                        <span className="input-group-addon" id="basic-addon2">
-                            <i className="fa fa-cog" onClick={() => this.openModal("status")}></i>
+                        <span className="input-group-addon" id="basic-addon2" onClick={() => this.openModal("status")}>
+                            <i className="fa fa-cog" ></i>
                         </span>
                     </div>
 
@@ -212,8 +212,8 @@ export default class FormFields extends Component {
                                 type="checkbox" />
                         </span>
                         <input type="text" value="Work Order" className="form-control" disabled />
-                        <span className="input-group-addon" id="basic-addon2">
-                            <i className="fa fa-cog" onClick={() => this.openModal("work_order")}></i>
+                        <span className="input-group-addon" id="basic-addon2"  onClick={() => this.openModal("work_order")}>
+                            <i className="fa fa-cog"></i>
                         </span>
                     </div>
                     <div className="input-group">
@@ -226,8 +226,8 @@ export default class FormFields extends Component {
                                 type="checkbox" />
                         </span>
                         <input type="text" value="Description" className="form-control" disabled />
-                        <span className="input-group-addon" id="basic-addon2">
-                            <i className="fa fa-cog" onClick={() => this.openModal("description")}></i>
+                        <span className="input-group-addon" id="basic-addon2" onClick={() => this.openModal("description")}>
+                            <i className="fa fa-cog" ></i>
                         </span>
                     </div>
                     <div className="input-group">
@@ -240,8 +240,8 @@ export default class FormFields extends Component {
                                 type="checkbox" />
                         </span>
                         <input type="text" value="Due Date" className="form-control" disabled />
-                        <span className="input-group-addon" id="basic-addon2">
-                            <i className="fa fa-cog" onClick={() => this.openModal("due_date")}></i>
+                        <span className="input-group-addon" id="basic-addon2" onClick={() => this.openModal("due_date")}>
+                            <i className="fa fa-cog" ></i>
                         </span>
                     </div>
                     <div className="input-group">
@@ -254,8 +254,8 @@ export default class FormFields extends Component {
                                 type="checkbox" />
                         </span>
                         <input type="text" value="Assigned to" className="form-control" disabled />
-                        <span className="input-group-addon" id="basic-addon2">
-                            <i className="fa fa-cog" onClick={() => this.openModal("assigned_to")}></i>
+                        <span className="input-group-addon" id="basic-addon2" onClick={() => this.openModal("assigned_to")}>
+                            <i className="fa fa-cog" ></i>
                         </span>
                     </div>
 
