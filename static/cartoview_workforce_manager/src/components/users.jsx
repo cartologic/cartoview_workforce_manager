@@ -146,7 +146,8 @@ return (
                                 margin: "0px 3px 0px 3px"
                             }}
 							className="btn btn-primary btn-sm pull-right"
-							onClick={this.save.bind(this)}>{"Save"}
+							onClick={this.save.bind(this)}
+                            disabled={this.state.selectedDispatchers.length==0||this.state.selectedworkers.length==0}>{"Save"}
 							
 						</button>
 					
