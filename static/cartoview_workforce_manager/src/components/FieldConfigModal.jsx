@@ -34,28 +34,33 @@ const options = {
 export default class FieldConfigModal extends Component {
     constructor(props) {
         super(props)
-       
+        this.state = {
+            value:this.props.val!=''? this.props.val:[]
+        }
     }
     componentDidMount() {
+        console.log("st")
         $(ReactDOM.findDOMNode(this)).modal('show');
         $(ReactDOM.findDOMNode(this)).on('hidden.bs.modal', this.props
             .handleHideModal);
     }
     save = () => {
-        // call getValue() to get the values of the form
+    
         
-        var value = this.refs.form.getValue()
-        console.log(value)
-        this.props.setFormValue(value, this.props.selected)
-
-        // if validation fails, value will be null
-        if (value) {
-            // value here is an instance of Person
-            this.props.updateAttribute(value)
+        var valu = this.refs.form.getValue()
+        console.log(valu)
+        var value = {}
+        value[ this.props.selected] = valu
+        this.setState({value})
+        this.props.setFormValue(valu, this.props.selected)
+        
+        if (valu) {
+            this.props.updateAttribute(valu)
             $(ReactDOM.findDOMNode(this)).modal('hide')
         }
     }
     render() {
+        console.log("stateeeeeeeeee",this.state.value,this.props)
         return (
             <div className="modal fade" tabIndex="-1" role="dialog">
                 <div className="modal-dialog" role="document">
@@ -68,10 +73,9 @@ export default class FieldConfigModal extends Component {
                         </div>
                         <div className="modal-body">
                             <Form
-
                                 ref="form"
                                 type={this.props.fieldConfig}
-                                value={this.props.defaultValue[this.props.selected]}
+                                value={this.props.defaultValue[this.props.selected]?this.props.defaultValue[this.props.selected]:this.state.value}
                                 options={options} />
                         </div>
                         <div className="modal-footer">

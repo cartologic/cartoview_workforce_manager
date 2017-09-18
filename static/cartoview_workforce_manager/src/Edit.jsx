@@ -16,6 +16,10 @@ export default class Edit extends Component {
             workers: "",
             dispatchers: "",
             step: 0,
+            Category: [],
+            priority: [],
+            status: [],
+           
             selectedResource: this.props.config.instance ? this.props.config.instance.map : undefined,
             value: {},
             map: 0,
@@ -105,7 +109,7 @@ export default class Edit extends Component {
                         genralConfig: Object.assign(this.state.generalConfig, { "mapid": this.state.selectedResource ? this.state.selectedResource.id : this.state.mapid })
                     }, () => {
                       
-                        let { step } = this.state;
+                        let {step} = this.state;
                         this.goToStep(++step)
                     })
 
@@ -120,12 +124,15 @@ export default class Edit extends Component {
                 due_date:this.state.due_date,
                 assigned_to:this.state.assigned_to,
                 description:this.state.description,
+                priority:this.state.priority,
+                status:this.state.status,
+                Category:this.state.Category,
                 onComplete: (priority, status, Category,checked,due_date,work_order,description,assigned_to) => {
-                   
-                    this.setState({ genralConfig: Object.assign(this.state.generalConfig, { "priority": priority, "status": status, "Category": Category ,"Project_config":checked,"due_date":due_date,"work_order":work_order,"Description":description,"assigned_to":assigned_to}) })
+                   this.setState({"priority": priority, "status": status, "Category": Category})
+                    this.setState({ genralConfig: Object.assign(this.state.generalConfig, {"priority": priority, "status": status, "Category": Category ,"Project_config":checked,"due_date":due_date,"work_order":work_order,"Description":description,"assigned_to":assigned_to}) })
                     let { step } = this.state;
                     this.goToStep(++step)
-
+ 
                 }
             }
         },

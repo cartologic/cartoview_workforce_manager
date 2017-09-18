@@ -25,15 +25,15 @@ export default class FormFields extends Component {
             showModal: false,
             selected: "",
             workOrderConf: "",
-            Category: "",
-            priority: "",
-            status: "",
+            Category: this.props.Category?this.props.Category:[],
+            priority: this.props.priority?this.props.priority:[],
+            status: this.props.status?this.props.status:[],
             due_date:isNaN(id) ?{"required_input":false}:this.props.due_date,
             work_order:isNaN(id) ?{"required_input":false}:this.props.work_order,
             description: isNaN(id) ?{"required_input":false}:this.props.description,
             assigned_to:isNaN(id) ?{"required_input":false}:this.props.assigned_to,
             checkedValues: isNaN(id) ?  ["work_order","description","due_date","assigned_to"]:this.props.checkedValues,
-            value: ""
+            value: []
         }
        
         if (!isNaN(id)) {
@@ -116,6 +116,7 @@ export default class FormFields extends Component {
         this.setState({ attribute: attribute })
     }
     save = () => {
+      
         this.props.onComplete(this.state.priority, this.state.status, this.state.Category,this.state.checkedValues,this.state.due_date,this.state.work_order,this.state.description,this.state.assigned_to)
     }
     setFormValue = (value, s) => {  
@@ -267,6 +268,7 @@ export default class FormFields extends Component {
                         onComplete={this.props.onComplete}
                         setFormValue={this.setFormValue}
                         defaultValue={this.state.value}
+                        val={this.state[this.state.selected]}
                         handleHideModal={this.handleHideModal} updateAttribute={this.updateAttribute} />
                 }
             </div>
