@@ -165,7 +165,7 @@ return (
           value={this.state.selectedworkers}
           onChange={this.onChangeWorker}
           suggestions={this.state.usernames}
- 
+          fromSuggestionsOnly={true}
         />
         </div>
         }

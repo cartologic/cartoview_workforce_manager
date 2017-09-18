@@ -58,7 +58,7 @@ export default class FormFields extends Component {
             .then((data) => {
                 console.log(data)
                 this.setState({
-                    "project": data, "Category": data.Category ? data.Category : "", "priority": data.priority ? data.priority : "", "status": data.status ? data.status : "", 
+                    "project": data, "Category": data.Category&&data.Category.Category ? data.Category : "", "priority": data.priority&&data.priority.priority ? data.priority : "", "status": data.status&&data.status.status ? data.status : "", 
                     "value": {
                         Category: data.Category ? data.Category : "",
                         status: data.status ? data.status : "", 
