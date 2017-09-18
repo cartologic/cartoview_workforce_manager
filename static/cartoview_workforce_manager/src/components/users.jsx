@@ -36,8 +36,10 @@ fetch(url,  {
                 .then((data) =>  {
 
                 this.setState({users:data.objects},()=>{
+                    
                     this.state.users.map((user)=>
-                      {this.state.usernames.push(user.username)})
+                      { if(user.id>0){
+                          this.state.usernames.push(user.username)}})
                   
                       })
                                 }); 
@@ -107,6 +109,7 @@ fetch(url,  {
                 
                 this.setState( {selectedwor:data.objects},
                 ()=>{this.state.selectedwor.map((user)=>{
+                    
                     this.state.selectedworkers.push(user.worker.username)})
                         this.setState({selectedworkers:this.state.selectedworkers})
                     })
