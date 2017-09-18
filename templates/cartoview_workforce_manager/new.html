@@ -25,7 +25,7 @@
 
 {% endblock %}
 {% block extra_script %}
-    <script src="{{ STATIC_URL }}cartoview_workforce_manager/dist/config.bundle.js"></script>
+    <script src="{{ STATIC_URL }}cartoview_workforce_manager/dist/config.bundle.js?v={v}"></script>
     <script>
     var username="{{request.user.username}}"
      var app="{{app}}"

@@ -44,6 +44,7 @@ self.addEventListener('fetch', function(event) {
     console.log("fetch")
   event.respondWith(
     caches.open('my-site-cache-v1').then(function(cache) {
+      console.log("cache opened in fetch")
       return cache.match(event.request).then(function (response) {
         return response || fetch(event.request).then(function(response) {
           cache.put(event.request, response.clone());

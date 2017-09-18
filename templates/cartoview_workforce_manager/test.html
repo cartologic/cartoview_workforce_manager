@@ -1,38 +1,24 @@
 <html>
-        <head>
-            <title>Getting started with Service Worker</title>
-        </head>
-        <body >
-        
-        <script type="text/javascript">
-        
-        if ('serviceWorker' in navigator) {
-          window.addEventListener('load', function() {
-            navigator.serviceWorker.register('http://localhost/static/cartoview_workforce_manager/sw.js').then(function(registration) {
-              // Registration was successful
-              console.log('ServiceWorker registration successful with scope: ', registration.scope);
-            }, function(err) {
-              // registration failed :(
-              console.log('ServiceWorker registration failed: ', err);
-            });
-          });
-       
-       
-       
-       
-       
-       
-       
-       
-       
-       
-          
-       
-       
-       
-        }    
-        
-        </script>
-        
-        </body>
-        </html>
+
+<head>
+  <title>Getting started with Service Worker</title>
+</head>
+
+<body>
+
+  <script type="text/javascript">
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('http://localhost/static/cartoview_workforce_manager/sw.js').then(function (registration) {
+          // Registration was successful
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function (err) {
+          // registration failed :(
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      });
+    }
+  </script>
+
+</body>
+</html>

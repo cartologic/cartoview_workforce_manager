@@ -38,14 +38,15 @@ export default class Edit extends Component {
             value: {
                 title: this.props.task.title,
                 description: this.props.task.description,
-                assigned_to: "/apps/cartoview_workforce_manager/api/v1/user/"+this.props.task.assigned_to.id+"/",
+                assigned_to:this.props.task.assigned_to.id,
                 due_date:this.props.task.due_date?new Date(this.props.task.due_date):null,
                 priority: this.props.task.priority,
                 status: this.props.task.status,
                 work_order: this.props.task.work_order,
                 Category: this.props.task.Category
             }
-}
+} 
+console.log("poeee",this.props)
             this.map = new ol.Map({
               //controls: [new ol.control.Attribution({collapsible: false}), new ol.control.ScaleLine()],
               layers: [new ol.layer.Tile({title: 'OpenStreetMap', source: new ol.source.OSM()})],
@@ -75,11 +76,13 @@ export default class Edit extends Component {
                 this.setState({assign: data.objects}, () => {
                     var tCombEnum = {}
                     this.state.assign.forEach((user) => {
-                            tCombEnum[user.worker.resource_uri] = user.worker.username
+
+                            tCombEnum[user.worker.id] = user.worker.username
                         }
 
                     )
                     this.setState({tCombEnum})
+                    console.log(tCombEnum)
                     var priority={}
                     var Category={}
                     var status={}
@@ -133,9 +136,10 @@ export default class Edit extends Component {
               TaskObj['work_order'] = this.props.project.work_order.required_input?t.String:t.maybe(t.String)
             }
              if (this.state.checked.includes("assigned_to")) {
+              console.log(this.props.project.assigned_to)
               TaskObj['assigned_to'] = this.props.project.assigned_to.required_input?t.enums(tCombEnum):t.maybe(t.enums(tCombEnum))
             } 
-                            const Task=t.struct(TaskObj)
+                    const Task=t.struct(TaskObj)
                     this.setState({task: Task,loading:false})
                 })
                 })
@@ -274,17 +278,20 @@ sendHistory=()=>{
     }
     var value = this.refs.form.getValue();
     if (value) {
+        let newValue=value.assigned_to?{...value,assigned_to:`/apps/cartoview_workforce_manager/api/v1/user/${value.assigned_to}/`}:value
+        console.log(newValue)
         this.setState({btnLoading:true})
         var project = {"project": {"pk": id}}
         if(this.state.x&&this.state.y){
         var mapconf={"x":this.state.x,"y":this.state.y,"extent":this.state.extent.toString()}
-        var copy1 = Object.assign(mapconf, value);
+        var copy1 = Object.assign(mapconf, newValue);
         var copy = Object.assign(project, copy1);
         }
     else{
-    var copy = Object.assign(project, value);}
+    var copy = Object.assign(project, newValue)}
+    console.log("valueeeeeeeeeeeee",copy)
     this.setState({btnLoading:true})
-    var url = '/apps/cartoview_workforce_manager/api/v1/task/' + this.props.task.id
+    var url = '/apps/cartoview_workforce_manager/api/v1/task/'+this.props.task.id+'/'
     fetch(url, {
         method: "PUT",
         credentials: "same-origin",
@@ -300,7 +307,7 @@ sendHistory=()=>{
             }
 
         }).then((res) => {
-        // 
+     
                 this.setState({"success": true,"btnLoading":false})
                
             })
