@@ -46,7 +46,7 @@ export default class Edit extends Component {
                 Category: this.props.task.Category
             }
 } 
-console.log("poeee",this.props)
+
             this.map = new ol.Map({
               //controls: [new ol.control.Attribution({collapsible: false}), new ol.control.ScaleLine()],
               layers: [new ol.layer.Tile({title: 'OpenStreetMap', source: new ol.source.OSM()})],

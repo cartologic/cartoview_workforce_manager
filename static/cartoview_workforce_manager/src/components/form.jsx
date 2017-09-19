@@ -25,14 +25,14 @@ export default class FormFields extends Component {
             showModal: false,
             selected: "",
             workOrderConf: "",
-            Category: this.props.Category?this.props.Category:[],
-            priority: this.props.priority?this.props.priority:[],
-            status: this.props.status?this.props.status:[],
+            Category: this.props.Category?this.props.Category:"",
+            priority: this.props.priority?this.props.priority:"",
+            status: this.props.status?this.props.status:"",
             due_date:isNaN(id) ?{"required_input":false}:this.props.due_date,
             work_order:isNaN(id) ?{"required_input":false}:this.props.work_order,
             description: isNaN(id) ?{"required_input":false}:this.props.description,
             assigned_to:isNaN(id) ?{"required_input":false}:this.props.assigned_to,
-            checkedValues: this.props.checkedValues ? this.props.checkedValues: ["work_order","description","due_date","assigned_to"],
+            checkedValues: this.props.checkedValues ? this.props.checkedValues: ["work_order","description","due_date","assigned_to","Category","priority","status"],
             value: []
         }
        
@@ -116,8 +116,18 @@ export default class FormFields extends Component {
         this.setState({ attribute: attribute })
     }
     save = () => {
-      
-        this.props.onComplete(this.state.priority, this.state.status, this.state.Category,this.state.checkedValues,this.state.due_date,this.state.work_order,this.state.description,this.state.assigned_to)
+        var priority= {
+         "priority": [{"label": "Low"},{"label": "Medium"},{"label":"High"}], "required_input": false,
+        }
+       
+       var status= {
+         "status": [{"label": "Opened"},{"label": "Resolved"},{"label":"Closed"}], "required_input": false
+        }
+        var Category= {"Category": [{"label": "Health"},{"label": "Enviroment"}],"required_input": false,
+        
+        }
+        console.log(this.state)
+        this.props.onComplete(this.state.priority!=""?this.state.priority:priority, this.state.status!=""?this.state.status:status, this.state.Category!=""?this.state.Category:Category,this.state.checkedValues,this.state.due_date,this.state.work_order,this.state.description,this.state.assigned_to)
     }
     setFormValue = (value, s) => {  
         var obj = {}
@@ -148,7 +158,7 @@ export default class FormFields extends Component {
                                 display: "inline-block",
                                 margin: "0px 3px 0px 3px"
                             }}
-                            disabled={this.check("status") || this.check("priority") || this.check("Category")}
+                            // disabled={this.check("status") || this.check("priority") || this.check("Category")}
                             className="btn btn-primary btn-sm pull-right"
                             onClick={this.save.bind(this)}>{"next"}
                             <i className="fa fa-arrow-right"></i>

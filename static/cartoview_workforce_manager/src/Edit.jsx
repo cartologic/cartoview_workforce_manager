@@ -25,7 +25,7 @@ export default class Edit extends Component {
             map: 0,
             generalConfig: {},
             selectedResource: this.props.config.instance ? this.props.config.instance.map : undefined,
-            checkedValues:isNaN(id)? ["work_order","description","due_date","assigned_to"]:[],
+            checkedValues:isNaN(id)? ["work_order","description","due_date","assigned_to","Category","priority","status"]:[],
         }
             if(!isNaN(id)){
                 this.loadProject()

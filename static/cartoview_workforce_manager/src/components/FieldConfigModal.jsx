@@ -34,15 +34,19 @@ const options = {
 export default class FieldConfigModal extends Component {
     constructor(props) {
         super(props)
+        var deafaultValues=
+        {"Category": [{"label": "Health"},{"label": "Enviroment"}],"required_input": false,
+         "priority": [{"label": "Low"},{"label": "Medium"},{"label":"High"}], "required_input": false,
+         "status": [{"label": "Opened"},{"label": "Resolved"},{"label":"Closed"}], "required_input": false
+        }
         this.state = {
-            value:this.props.val!=''? this.props.val:[]
+            value:this.props.val!=''? this.props.val:deafaultValues
         }
     }
     componentDidMount() {
         console.log("st")
         $(ReactDOM.findDOMNode(this)).modal('show');
-        $(ReactDOM.findDOMNode(this)).on('hidden.bs.modal', this.props
-            .handleHideModal);
+        $(ReactDOM.findDOMNode(this)).on('hidden.bs.modal', this.props.handleHideModal);
     }
     save = () => {
     
