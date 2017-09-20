@@ -230,7 +230,7 @@ export default class ReactClient extends React.Component {
 
 <div className="media">
   <div className="media-left">
-   {this.state.project.logo&& <img src={this.state.project.logo.base64} className="media-object img-rounded" style={{"width":"100px"}}/>}
+<img src={this.state.project.logo?this.state.project.logo.base64: URLS.static+'nologo.png'} className="media-object img-rounded" style={{"width":"100px"}}/>
   </div>
   <div className="media-body">
     <h4 className="media-heading">{this.state.project.title}</h4>

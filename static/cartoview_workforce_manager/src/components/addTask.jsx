@@ -36,7 +36,8 @@ export default class AddTask extends Component {
       Category: null,
       status: null,
       checked:this.props.project.Project_config,
-      loading:false
+      loading:false,
+      next:false
     }
 
     this.map = new ol.Map({
@@ -153,7 +154,7 @@ export default class AddTask extends Component {
   init = (map) => {
     var point_feature = new ol.Feature({});
     map.on('singleclick', (e) => {
-      this.setState({ point: e.coordinate, extent: map.getView().calculateExtent(map.getSize()), value: this.refs.form.getValue() })
+      this.setState({ point: e.coordinate, extent: map.getView().calculateExtent(map.getSize()), value: this.state.value })
       var point_geom = new ol.geom.Point(e.coordinate)
       point_feature.setGeometry(point_geom);
       var vector_layer = new ol.layer.Vector({ source: new ol.source.Vector({ features: [point_feature] }) })
@@ -174,7 +175,7 @@ export default class AddTask extends Component {
   
 
 
-    var value = this.refs.form.getValue();
+    var value = this.state.value;
     if (value) {
       var project = { "project": { "pk": id } }
       if (this.state.point.length) {
@@ -203,10 +204,12 @@ export default class AddTask extends Component {
           console.log("then")
           this.setState({ "success": true,"loading":false }, () => {
 
-            setTimeout(() => {
-              this.setState({ "success": false })
+            // setTimeout(() => {
+            //   this.setState({ "success": false})
+              
+            // }, 5000)
 
-            }, 5000)
+
           })
         })
     }
@@ -215,8 +218,10 @@ export default class AddTask extends Component {
     this.checkDispatcher()
   }
   componentDidMount() {
-  
-    this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
+  console.log(this.props.children)
+   if(this.state.next){ this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
+   console.log("nect")}
+    console.log(this.refs.map)
     this.update(this.props.mapid);
     this.init(this.map)
     setTimeout(() => {
@@ -225,34 +230,63 @@ export default class AddTask extends Component {
     }, 3000)
 
   }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.children != this.props.children) {
+  next=()=>{
+   var value=this.refs.form.getValue()
+if(value){
+    this.setState({next:true,value:this.refs.form.getValue()},()=>{
+   
+      this.map.setTarget(ReactDOM.findDOMNode(this.refs.map))})
+}
 
-    }
+  }
+  prev=()=>{
+     
+    this.setState({next:false})
+  
+  }
+  check=()=>{
+
+  }
+  componentWillReceiveProps(nextProps) {
+    // if (nextProps.children != this.props.children) {
+
+    // }
+      this.setState({success:false,value:"",next:false,})
+    // console.log(nextProps,"propsss")
   }
   render() {
+    
     return (
       <div>
-        <div className="col-md-2"></div>
+        <div className="col-md-2" ></div>
         <div className="col-md-8 ">
-          {this.state.auth && < div className="well" style={{"paddingBottom": "10%"}}>
+          {this.state.auth &&!this.state.next&& <div className="well" style={{"paddingBottom": "10%"}}>
             <br />
             {this.state.person &&
-              <Form
+              <div><Form
                 ref="form"
                 options={options}
                 type={this.state.person}
                 value={this.state.value}
-              />}
-            <label>Click to Add Task Location</label>{!this.state.point.length && <small> ( loctaion is not set)</small>}
-            <div style={{ height: "100%" }} ref="map" className={' map-ct'}>
+              />
+               <button className="btn btn-default pull-right" style={{"margin":"2%"}}onClick={this.next} disabled={this.check()}>Next <i className="fa fa-arrow-right"></i></button>
+     
+              </div>
+              } 
+              </div>
+             }
+            { this.state.next&&!this.state.success&& <div className="well" style={{"paddingBottom": "10%"}}>
+            <label>Click to Add Task Location</label>
+            {!this.state.point.length && <small>(loctaion is not set)</small>}
+              
+            <div style={{ height: "100%" }} ref="map" className={'map-ct'}>
               {this.props.children}
+              
             </div>
-             
-          <Button loading={this.state.loading} className="btn btn-primary pull-right" style={{"margin":"2%"}}onClick={this.save}>Save</Button>
-          
-          </div>
-          }
+           <Button loading={this.state.loading} className="btndefault pull-right" style={{"margin":"2%"}} spinColor="#444" onClick={this.save}  >Save</Button>
+           <Button className="btn btn-default pull-right" style={{"margin":"2%"}}onClick={this.prev}> <i className="fa fa-arrow-left"></i>Back</Button>  
+            
+          </div>}
           {this.state.success &&
             <div className="alert alert-info">
               Your Task was created successfully.
