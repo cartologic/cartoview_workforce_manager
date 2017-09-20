@@ -19,7 +19,7 @@ export default class Edit extends Component {
             Category: [],
             priority: [],
             status: [],
-           
+            logo:"",
             selectedResource: this.props.config.instance ? this.props.config.instance.map : undefined,
             value: {},
             map: 0,
@@ -83,9 +83,14 @@ export default class Edit extends Component {
                 urls: this.props.config.urls,
                 instance: this.state.selectedResource,
                 project: this.state.project,
+                logo:this.state.logo,
                 config: this.props.config.instance ? this.props.config.instance.config : undefined,
-                onComplete: (basicConfig, project) => {
-                    this.setState({ value: basicConfig, map: project.mapid, generalConfig: basicConfig, success: true, id: project.id })
+                onComplete: (basicConfig, project,logo) => {
+                    console.log(logo)
+                    var conf=Object.assign(basicConfig, { "logo":logo})
+                    console.log(basicConfig)
+                    console.log(conf)
+                    this.setState({ value: basicConfig, map: project.mapid, generalConfig: conf, success: true, id: project.id ,logo:logo})
                     let { step } = this.state;
                     this.goToStep(++step)
 

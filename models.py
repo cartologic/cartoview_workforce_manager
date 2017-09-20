@@ -22,7 +22,7 @@ class Project(AppInstance):
     workers = models.ManyToManyField(User,related_name='%(class)s_requests_workers',through='ProjectWorkers')
     dispatchers = models.ManyToManyField(User,related_name='%(class)s_requests_dispatchers',through='ProjectDispatchers')
     permissions = JSONField(blank=True, null=True) 
-    
+    logo = JSONField(blank=True, null=True)
 
 class ProjectDispatchers(models.Model):
      dispatcher = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -225,9 +225,20 @@ export default class ReactClient extends React.Component {
         // this.state.project['Project_config']=[]
         return (
             <div className="container ">
-                <br />
-                <span className="h4">{this.state.project.title}</span>
-                <hr />
+           
+<br/>
+
+<div className="media">
+  <div className="media-left">
+   {this.state.project.logo&& <img src={this.state.project.logo.base64} className="media-object img-rounded" style={{"width":"100px"}}/>}
+  </div>
+  <div className="media-body">
+    <h4 className="media-heading">{this.state.project.title}</h4>
+    <p>{this.state.project.abstract}</p>
+  </div>
+</div>
+<hr/>
+
                 <ul className="nav nav-pills">
                     <li className="active"><a data-toggle="tab" href="#home" onClick={() => {
                         this.setState({ "selectedtask": null })

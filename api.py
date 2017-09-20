@@ -16,6 +16,12 @@ from geonode.maps.models import Map
 from tastypie.serializers import Serializer
 from tastypie import fields
 from cartoview.app_manager.models import App, AppInstance
+import json
+import os
+import shutil
+import tempfile
+from base64 import b64decode, b64encode
+from PIL import Image
 class UserResource(ModelResource):
     
     class Meta:
@@ -32,6 +38,7 @@ class UserResource(ModelResource):
 class ProjectResource(ModelResource):
     priority = DictField(attribute='priority',null=True)
     Category= DictField(attribute='Category',null=True)
+    logo= DictField(attribute='logo',null=True)
     work_order= DictField(attribute='work_order',null=True)
     due_date= DictField(attribute='due_date',null=True)
     assigned_to= DictField(attribute='assigned_to',null=True)
@@ -117,7 +124,28 @@ class ProjectResource(ModelResource):
                 instance_obj = AppInstance()
                 instance_obj.map = Map.objects.get(id=bundle.data.get('mapid'))
                 bundle.obj.map=instance_obj.map
-
+        if(bundle.data.get('logo')):
+                base64_image=bundle.data.get('logo')
+                base64_image=base64_image.get('base64',None)
+                format, image = base64_image.split(';base64,')
+                image = b64decode(image)
+                dirpath = tempfile.mkdtemp()
+                original_path = os.path.join(dirpath, 'original.png')
+                thumbnail_path = os.path.join(dirpath, 'thumbnail.png')
+                with open(original_path, 'wb') as f:
+                    f.write(image)
+                im = Image.open(original_path)
+                size=(250,250)
+                im.thumbnail(size)
+                im.save(thumbnail_path, "PNG")
+                with open(thumbnail_path, "rb") as image_file:
+                    print(thumbnail_path, "in withopen")
+                    encoded_image = b64encode(image_file.read())
+                    print(encoded_image, "encoded")
+                shutil.rmtree(dirpath)
+                logo= format + ';base64,' + encoded_image
+                bundle.obj.logo={"logo":logo}
+                
         return bundle
 
     class Meta:
