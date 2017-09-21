@@ -29,7 +29,7 @@ export default class Attachments extends Component {
         data.append('action', 'ADD');
         data.append('task', `/apps/cartoview_workforce_manager/api/v1/task/${this.props.task}/`);
         data.append('image', this.refs.img.files[0])
-
+console.log(data)
 // this works
 // let request = new XMLHttpRequest();
 // request.open('POST', url);

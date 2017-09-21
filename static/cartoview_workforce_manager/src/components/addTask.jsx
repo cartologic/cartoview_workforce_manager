@@ -37,7 +37,11 @@ export default class AddTask extends Component {
       status: null,
       checked:this.props.project.Project_config,
       loading:false,
-      next:false
+      step:1,
+      comment:"",
+      image:"",
+      commentDone:false,
+      imageDone:false
     }
 
     this.map = new ol.Map({
@@ -173,8 +177,12 @@ export default class AddTask extends Component {
 
   save() {
   
-
-
+   if(this.refs.comment){
+     this.setState({comment:this.refs.comment.value})
+   }
+if(this.refs.image){
+     this.setState({image:this.refs.image.value})
+   }
     var value = this.state.value;
     if (value) {
       var project = { "project": { "pk": id } }
@@ -197,23 +205,102 @@ export default class AddTask extends Component {
       })
         .then(function (response) {
           if (response.status >= 400) {
-            throw new Error("Bad response from server");
+            throw new Error("Bad response from server",response);
           }
+           return response.json()
+        }).then((data) => {
+             
+          if(this.state.comment!=""){
+              var comment = {"comment": this.refs.comment.value, "task": {"pk": data.id}}
+              var url = '/apps/cartoview_workforce_manager/api/v1/comment/'
+              fetch(url, {
+                  method: "POST",
+                  credentials: "same-origin",
+                  headers: new Headers({
+                      "Content-Type": "application/json; charset=UTF-8",
+                  }),
+                  body: JSON.stringify(comment)
+                 })
+                  .then(function (response) {
+                    
+                      if (response.status >= 400) {
+                          throw new Error("Bad response from server");
+                      }
 
-        }).then(() => {
-          console.log("then")
-          this.setState({ "success": true,"loading":false }, () => {
+                  }).then(() => {
+                     this.setState({ commentDone:true }, () => {
+        
+                         })
+                  
+                       })
 
-            // setTimeout(() => {
-            //   this.setState({ "success": false})
+                    }
+          else{
+             this.setState({ commentDone:true })
+          }
+       
+
+        if(this.state.image!=""){
+                console.log("image not empty")
+                var formdata = new FormData();
               
-            // }, 5000)
+                formdata.append('task', "/apps/cartoview_workforce_manager/api/v1/task/"+data.id+"/");
+                formdata.append('image', this.refs.image.files[0])
+               
+                var url = '/apps/cartoview_workforce_manager/api/v1/attachment/'
+                fetch(url, {
+                    method: "POST",
+                    credentials: "same-origin",
+                    headers: new Headers({ }),
+                    body: formdata
+                })
+                    .then(function (response) {
+                        if (response.status >= 400) {
+                            throw new Error("Bad response from server");
+                        }
+                        return response
 
+                    }).then(() => {
+                      console.log("done")
+                      this.setState({ imageDone:true })
+                  
+                })            
+                    }
+          else
+          {
+             this.setState({ imageDone:true })
+             }
 
-          })
+     this.setState({ "success": true,"loading":false })
+       
+      
         })
     }
   }
+ sendImg = () => {
+        let data = new FormData();
+        data.append('action', 'ADD');
+        data.append('task', `/apps/cartoview_workforce_manager/api/v1/task/${this.props.task}/`);
+        data.append('image', this.refs.img.files[0])
+        var url = '/apps/cartoview_workforce_manager/api/v1/attachment/'
+        fetch(url, {
+            method: "POST",
+            credentials: "same-origin",
+            headers: new Headers({ }),
+            body: data
+        })
+            .then(function (response) {
+                if (response.status >= 400) {
+                    throw new Error("Bad response from server");
+                }
+                return response
+
+            }).then(() => {
+          
+        })
+
+
+    }
   componentWillMount() {
     this.checkDispatcher()
   }
@@ -230,29 +317,78 @@ export default class AddTask extends Component {
     }, 3000)
 
   }
+
   next=()=>{
-   var value=this.refs.form.getValue()
-if(value){
-    this.setState({next:true,value:this.refs.form.getValue()},()=>{
+    console.log(this.state.step)
+    var value=""
+    if(this.refs.form)
+       {  
+         value=this.refs.form.getValue()
+         
+       if(value)
+       {
+           var step=this.state.step+1
+           this.setState({step:step,value:this.refs.form.getValue()},()=>{
+           this.map.setTarget(ReactDOM.findDOMNode(this.refs.map))})
+                }
+       }
+       
+        if(this.state.step==2){
+          var step=this.state.step+1
+           this.setState({step:step,value:this.state.value})
+        }
+        
    
-      this.map.setTarget(ReactDOM.findDOMNode(this.refs.map))})
-}
+ console.log(this.state)
 
   }
   prev=()=>{
-     
-    this.setState({next:false})
+     if(this.state.step==3){
+        if(this.refs.comment){
+          this.setState({comment:this.refs.comment.value})
+        }
+        if(this.refs.image){
+          console.log("resssssssssss",this.refs.image.value)
+          this.setState({image:this.refs.image.value},console.log(this.state))
+        }
+      }
+     this.setState({step:--this.state.step},()=>
+     {console.log("dec step") 
+       if(this.state.step==2){ 
+       this.map.setTarget(ReactDOM.findDOMNode(this.refs.map))}
+      
   
-  }
+})
+
+}
   check=()=>{
 
   }
   componentWillReceiveProps(nextProps) {
-    // if (nextProps.children != this.props.children) {
+    
+    console.log("will")
+      this.setState({success:false,value:"",step:1,point:[],comment:null})
+   
+  }
+ 
+  renderComments(){
+    return(<div>
+              <div>
+                <label>Add comment </label>
+                <textarea ref="comment" className="form-control" rows="3" id="comment" defaultValue={this.state.comment} ></textarea>
+              </div>
+				
+          </div>
+    )
+  }
 
-    // }
-      this.setState({success:false,value:"",next:false,})
-    // console.log(nextProps,"propsss")
+
+  renderImage(){
+    return( <div>
+                <label> Add Photo </label>
+                <input type="file" className="form-control" ref="image" name="image" defaultValue={this.state.image} style={{"marginBottom": "2%"}}/>
+            </div>
+            )
   }
   render() {
     
@@ -260,7 +396,7 @@ if(value){
       <div>
         <div className="col-md-2" ></div>
         <div className="col-md-8 ">
-          {this.state.auth &&!this.state.next&& <div className="well" style={{"paddingBottom": "10%"}}>
+          {this.state.auth &&this.state.step==1&& <div className="well" style={{"paddingBottom": "10%"}}>
             <br />
             {this.state.person &&
               <div><Form
@@ -269,20 +405,33 @@ if(value){
                 type={this.state.person}
                 value={this.state.value}
               />
-               <button className="btn btn-default pull-right" style={{"margin":"2%"}}onClick={this.next} disabled={this.check()}>Next <i className="fa fa-arrow-right"></i></button>
+               <button className="btn btn-default pull-right" style={{"margin":"2%"}} onClick={this.next} >Next <i className="fa fa-arrow-right"></i></button>
      
               </div>
               } 
               </div>
              }
-            { this.state.next&&!this.state.success&& <div className="well" style={{"paddingBottom": "10%"}}>
+            { this.state.step==2&&!this.state.success&& <div className="well" style={{"paddingBottom": "10%"}}>
             <label>Click to Add Task Location</label>
-            {!this.state.point.length && <small>(loctaion is not set)</small>}
+            {!this.state.point.length && <small> (loctaion is not set)</small>}
               
             <div style={{ height: "100%" }} ref="map" className={'map-ct'}>
               {this.props.children}
               
             </div>
+           <button className="btn btn-default pull-right" style={{"margin":"2%"}}  onClick={this.next} > Next <i className="fa fa-arrow-right"></i></button>
+           <Button className="btn btn-default pull-right" style={{"margin":"2%"}} onClick={this.prev}> <i className="fa fa-arrow-left"></i>Back</Button>  
+            
+          </div>}
+                 { this.state.step==3&&!this.state.success&& <div className="well" style={{"paddingBottom": "10%"}}>
+          
+              
+          
+          {this.renderComments()}
+          {this.renderImage()}
+
+              
+            
            <Button loading={this.state.loading} className="btndefault pull-right" style={{"margin":"2%"}} spinColor="#444" onClick={this.save}  >Save</Button>
            <Button className="btn btn-default pull-right" style={{"margin":"2%"}}onClick={this.prev}> <i className="fa fa-arrow-left"></i>Back</Button>  
             

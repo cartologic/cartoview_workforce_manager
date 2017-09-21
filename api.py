@@ -209,6 +209,7 @@ class TaskResource(ModelResource):
 
 
     class Meta:
+        always_return_data = True
         filtering = {
             'created_by': ALL_WITH_RELATIONS,
             'assigned_to': ALL_WITH_RELATIONS,
