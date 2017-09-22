@@ -394,8 +394,7 @@ if(this.refs.image){
     
     return (
       <div>
-        <div className="col-md-2" ></div>
-        <div className="col-md-8 ">
+        
           {this.state.auth &&this.state.step==1&& <div className="well" style={{"paddingBottom": "10%"}}>
             <br />
             {this.state.person &&
@@ -440,8 +439,7 @@ if(this.refs.image){
             <div className="alert alert-info">
               Your Task was created successfully.
 			 </div>}
-        </div>
-         <div className="col-md-2"></div>
+        
         {!this.state.auth && <div className="col-md-8">
             <br />
             <div className="alert alert-info">

@@ -33,10 +33,13 @@ export default class ReactClient extends React.Component {
             result: false,
             selectedtask2: "", currentComponent: "list",
             pageCount: 0,
-            perPage: 5,
+            perPage: 10,
             pagedTasks: [],
             category:"",
-            selected:null
+            selected:null,
+            filtertask:null,
+            flag:false,
+
         }
         this.loadTasks()
         this.loadProject()
@@ -49,17 +52,17 @@ export default class ReactClient extends React.Component {
 
     sendFilter = () => {
 
-        var priority = "", status = "", work_order = "", worker = "", dispatcher = "",category=""
-        if (this.state.priority) {
+var priority = "", status = "", work_order = "", worker = "", dispatcher = "",category=""
+        if (this.refs.priority.value) {
             
-            priority = "priority=" + this.state.priority + "&"
+            priority = "priority=" + this.refs.priority.value+ "&"
         }
-         if (this.state.category) {
-            console.log("yes",)
-            category = "Category=" + this.state.category + "&"
+         if (this.refs.category.value) {
+           
+            category = "Category=" + this.refs.category.value+ "&"
         }
-        if (this.state.status) {
-            status = "status=" + this.state.status + "&"
+        if (this.refs.status.value) {
+            status = "status=" + this.refs.status.value+ "&"
         }
         if (this.refs.work_order.value) {
             work_order = "work_order=" + this.refs.work_order.value + "&"
@@ -89,13 +92,25 @@ export default class ReactClient extends React.Component {
                 }
                 return response.json();
             }).then((data) => {
+                                 if(data.objects.length==0){ 
+                                    console.log("empty")
+                                    this.setState({result: true})}
+                                 else{
+                                     this.setState({result: false})
+                                     }
+                                 this.setState({ tasks: data.objects,filtertask:data.objects, loading: false, pageCount: Math.ceil(data.objects.length / this.state.perPage) }, () => {
+                                 var pagedTasks = this.state.tasks.slice(0, this.state.perPage);
+                                 this.setState({ pagedTasks: pagedTasks })
+
+                console.log(data.objects.length)
                
-                this.setState({ "filter": data.objects, "result": true })
+              
+              
 
             })
-
-
-    }
+})
+    }   
+    
     loadTasks = () => {
         var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + '/tasks'
         fetch(url, {
@@ -115,7 +130,7 @@ export default class ReactClient extends React.Component {
             })
             .then((data) => {
 
-                this.setState({ tasks: data.objects, loading: false, pageCount: Math.ceil(data.objects.length / this.state.perPage) }, () => {
+                this.setState({ tasks: data.objects,filtertask:data.objects, loading: false, pageCount: Math.ceil(data.objects.length / this.state.perPage) }, () => {
                     var pagedTasks = this.state.tasks.slice(0, this.state.perPage);
                     this.setState({ pagedTasks: pagedTasks })
                 })
@@ -227,7 +242,7 @@ export default class ReactClient extends React.Component {
         return (
             <div className="container " style={{"marginLeft":"-5%"}}>
            
-<br/>
+                <br/>
 
                 <div className="media">
                 <div className="media-left">
@@ -242,13 +257,11 @@ export default class ReactClient extends React.Component {
 
                 <ul className="nav nav-pills">
                     <li className="active"><a data-toggle="tab" href="#home" onClick={() => {
-                        this.setState({ "selectedtask": null })
+                        this.setState({ "selectedtask": null,result:false })
                         this.loadTasks()
-                    }}>Tasks</a></li>
+                    }}>Tasks </a></li>
                     <li onClick={() => this.setState({ currentComponent: "add" })}><a data-toggle="tab" href="#menu1">New Task</a></li>
-                    <li><a data-toggle="tab" href="#filter" onClick={() => {
-                        this.setState({ "selectedtask2": null, "result": false, "filter": [] })
-                    }}>Filter Task </a></li>
+                   
                     <li onClick={() => this.setState({ currentComponent: "details" })}><a data-toggle="tab" href="#menu2">Project Details </a></li>
                    
 
@@ -262,7 +275,7 @@ export default class ReactClient extends React.Component {
                     <div id="home" className="tab-pane fade in active">
                         <ul className="nav nav-tabs">
                                 <li className="active" onClick={() => {
-                        this.setState({ "selectedtask": null })
+                        this.setState({ "selectedtask": null,result:false })
                         this.loadTasks()
                     }}><a data-toggle="tab" href="#all">All Tasks</a></li>
                                 <li onClick={() => {
@@ -282,13 +295,17 @@ export default class ReactClient extends React.Component {
                                 </div>
                             }
                             <br />
-                            {this.state.tasks.length != 0 && !this.state.selectedtask && !this.state.loading &&
-                                <div>  <table className="table table-hover table-bordered table-responsive">
+
+                            {this.state.pagedTasks.length != 0 && !this.state.selectedtask && !this.state.loading &&
+                                <div className="container">
+                                <div className="col-md-8">  
+                                
+                                <table className="table table-hover table-bordered table-responsive">
                                     <thead>
                                         <tr>
                                             <th>Title</th>
-                                            {this.state.project.Project_config.includes("description") && <th>Description</th>}
-                                            <th> Created By</th>
+
+                                          
                                             {this.state.project.Project_config.includes("assigned_to") &&<th> Assigned To</th>}
                                             {this.state.project.Project_config.includes("priority") && <th>Priority</th>}
                                             {this.state.project.Project_config.includes("status")&& <th>Status</th>}
@@ -302,8 +319,7 @@ export default class ReactClient extends React.Component {
                                                 this.setState({ "selectedtask": item })
                                             }} style={{ "cursor": "pointer" }}>
                                                 <td>{item.title}</td>
-                                                 {this.state.project.Project_config.includes("description") &&<td>{item.description.substring(0, 75)} {item.description.length > 75 ? "..." : ""}</td>}
-                                                <td>{item.created_by.username}</td>
+
                                                  {this.state.project.Project_config.includes("assigned_to") &&<td>{item.assigned_to.username}</td>}
                                                  {this.state.project.Project_config.includes("priority") && <td>{item.priority}
                                                 </td>}
@@ -331,8 +347,131 @@ export default class ReactClient extends React.Component {
                                             subContainerClassName={"pages pagination"}
                                             activeClassName={"active"} />
                                     </div>}
+                                       
+                                       </div>
+                                        <div className="col-md-4">
+                                        
+                                       
+                                       
+                                                
+                                        
+                                        
+                                        
+                                        
+                                        
+                                          {this.state.pagedTasks&&
+                                            <div className="panel panel-default" style={{ "padding": "0" }}>
+                                                <div className="panel-body" style={{ "padding": "0" }}>
+                                                    {this.state.project.Project_config.includes("priority")  && <div className="panel panel-default">
+                                                        <div className="panel-heading" >Filter By Priority</div>
+                                                        <div className="panel-body">
+                                                        <select className="form-control" ref="priority">
+                                                             <option value=""></option>
+                                                            { this.state.project.priority.priority.map((pri, i) => {
+
+                                                                return <option key={i} value={pri.label}>{pri.label}</option>
+                                                            })
+
+
+                                                            }
+                                                            </select>
+                                                        </div>
+                                                    </div>}
+                                                 
+                                                {    this.state.project.Project_config.includes("status")  && <div className="panel panel-default">
+                                                        <div className="panel-heading">Filter By Status</div>
+                                                        <div className="panel-body">
+
+                                                         <select className="form-control" ref="status">
+                                                             <option value=""></option>
+                                                                {this.state.project.status && this.state.project.status.status.map((status, i) => {
+                                                    
+
+                                                                return <option key={i} value={status.label}>{status.label}</option>
+                                                                })
+                                                                        
+                                                            }
+                                                             </select>
+                                                        </div>
+                                                    </div>}
+                                                    {    this.state.project.Project_config.includes("Category")  && <div className="panel panel-default">
+                                                        <div className="panel-heading">Filter By Category</div>
+                                                        <div className="panel-body">
+
+                                                          <select className="form-control" ref="category">
+                                                             <option value=""></option>
+                                                            {this.state.project.Category && this.state.project.Category.Category.map((cat, i) => {
+                                                                return <option key={i} value={cat.label}>{cat.label}</option>
+                                                            })
+
+
+                                                            }
+                                                            </select>
+                                                        </div>
+                                                    </div>}
+                                                     {this.state.project.Project_config.includes("work_order") &&<div className="panel panel-default">
+                                                        <div className="panel-heading">Filter By Work Order</div>
+                                                        <div className="panel-body"><input className="form-control" ref="work_order" /></div>
+                                                    </div>}
+                                                    <div className="panel panel-default">
+                                                        <div className="panel-heading">Filter By  Task creator</div>
+                                                        <div className="panel-body">
+                                                            <div className="form-group">
+
+                                                                <select className="form-control" ref="dispatcher">
+                                                                    <option value=""></option>
+                                                                    {this.state.dispatchers.map((dispatcher, i) => {
+
+                                                                        return <option key={i} value={dispatcher.dispatcher.username}>{dispatcher.dispatcher.username}</option>
+                                                                    })}
+
+                                                                </select>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                     {this.state.project.Project_config.includes("assigned_to") &&
+                                                    <div className="panel panel-default">
+                                                        <div className="panel-heading"> Filter By Assignee</div>
+                                                        <div className="panel-body">
+                                                            <div className="form-group">
+
+                                                                <select className="form-control" id="sel1" ref="worker">
+                                                                    <option value=""></option>
+                                                                    {this.state.workers.map((worker, i) => {
+
+                                                                        return <option key={i} value={worker.worker.username}>{worker.worker.username}</option>
+                                                                    })}
+
+                                                                </select>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>}
+
+                                                    <button className="btn btn-default pull-right" style={{ "margin": "2%" }} onClick={this.sendFilter} >Filter</button>
+
+  
+                                                </div>
+                                            </div>}
+                                            
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        </div>
+                              
+                            
                                 </div>
                             }
+                            {console.log("cc",this.state.result)}
+ {this.state.pagedTasks.length == 0 &&this.state.result&& <p>No result found</p>}
+
 
                             {
                                 this.state.selectedtask &&
@@ -386,178 +525,11 @@ export default class ReactClient extends React.Component {
 
 
                  
-                    <div id="filter" className="tab-pane fade">
-                        <div>
-                            <div className="col-md-2"></div>
-                            <div className="col-md-8">
-                                {this.state.dispatchers && this.state.workers &&
+                  
 
 
 
-                                    <div>
-                                        {!this.state.filter.length && !this.state.result &&
-                                            <div className="panel panel-default" style={{ "padding": "0" }}>
-                                                <div className="panel-body" style={{ "padding": "0" }}>
-                                                    {this.state.project.Project_config.includes("priority")  && <div className="panel panel-default">
-                                                        <div className="panel-heading" >Priority</div>
-                                                        <div className="panel-body">
-                                                        {console.log(this.state.project)}
-                                                            { this.state.project.priority.priority.map((pri, i) => {
-
-                                                                return <label className="radio" key={i}><input type="radio" name="optradio" value={pri.label} onChange={() => { this.setState({ "priority": pri.label }) }} />{pri.label}</label>
-                                                            })
-
-
-                                                            }
-                                                        </div>
-                                                    </div>}
-                                                 
-                                                {    this.state.project.Project_config.includes("status")  && <div className="panel panel-default">
-                                                        <div className="panel-heading">Status</div>
-                                                        <div className="panel-body">
-
-
-                                                            {this.state.project.status && this.state.project.status.status.map((status, i) => {
-
-                                                                return <label className="radio" key={i}><input type="radio" name="optradio2" value={status.label} onChange={() => { this.setState({ "status": status.label }) }} />{status.label}</label>
-                                                            })
-
-
-                                                            }
-                                                        </div>
-                                                    </div>}
-                                                    {    this.state.project.Project_config.includes("Category")  && <div className="panel panel-default">
-                                                        <div className="panel-heading">Category</div>
-                                                        <div className="panel-body">
-
-
-                                                            {this.state.project.Category && this.state.project.Category.Category.map((cat, i) => {
-                                                                return <label className="radio" key={i}><input type="radio" name="optradio3" value={cat.label} onChange={() => { this.setState({ "category": cat.label }) }} />{cat.label}</label>
-                                                            })
-
-
-                                                            }
-                                                        </div>
-                                                    </div>}
-                                                     {this.state.project.Project_config.includes("work_order") &&<div className="panel panel-default">
-                                                        <div className="panel-heading">Work Order</div>
-                                                        <div className="panel-body"><input className="form-control" ref="work_order" /></div>
-                                                    </div>}
-                                                    <div className="panel panel-default">
-                                                        <div className="panel-heading">Task creator</div>
-                                                        <div className="panel-body">
-                                                            <div className="form-group">
-
-                                                                <select className="form-control" ref="dispatcher">
-                                                                    <option value=""></option>
-                                                                    {this.state.dispatchers.map((dispatcher, i) => {
-
-                                                                        return <option key={i} value={dispatcher.dispatcher.username}>{dispatcher.dispatcher.username}</option>
-                                                                    })}
-
-                                                                </select>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                     {this.state.project.Project_config.includes("assigned_to") &&
-                                                    <div className="panel panel-default">
-                                                        <div className="panel-heading">Assignee</div>
-                                                        <div className="panel-body">
-                                                            <div className="form-group">
-
-                                                                <select className="form-control" id="sel1" ref="worker">
-                                                                    <option value=""></option>
-                                                                    {this.state.workers.map((worker, i) => {
-
-                                                                        return <option key={i} value={worker.worker.username}>{worker.worker.username}</option>
-                                                                    })}
-
-                                                                </select>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>}
-
-                                                    <button className="btn btn-default pull-right" style={{ "margin": "2%" }} onClick={this.sendFilter} >Filter</button>
-
-
-                                                </div>
-                                            </div>}
-                                        {this.state.result && this.state.filter.length == 0 && <p>No result found</p>}
-                                        {this.state.result && this.state.filter.length > 0 && !this.state.selectedtask2 &&
-
-
-
-
-
-
-
-                                            <table className="table table-hover table-bordered table-responsive">
-                                                 <thead>
-                                        <tr>
-                                            <th>Title</th>
-                                            {this.state.project.Project_config.includes("description") && <th>Description</th>}
-                                            <th> Created By</th>
-                                            {this.state.project.Project_config.includes("assigned_to") &&<th> Assigned To</th>}
-                                            {this.state.project.Project_config.includes("priority") && <th>Priority</th>}
-                                            {this.state.project.Project_config.includes("status")&& <th>Status</th>}
-                                        </tr>
-                                    </thead>
-                                                <tbody>
-
-                                                    {this.state.filter.map((item, i) => {
-
-                                                        return <tr key={i} onClick={() => {
-                                                            this.setState({ "selectedtask2": item })
-                                                        }} style={{ "cursor": "pointer" }}>
-                                                             <td>{item.title}</td>
-                                                 {this.state.project.Project_config.includes("description") &&<td>{item.description.substring(0, 75)} {item.description.length > 75 ? "..." : ""}</td>}
-                                                <td>{item.created_by.username}</td>
-                                                 {this.state.project.Project_config.includes("assigned_to") &&<td>{item.assigned_to.username}</td>}
-                                                 {this.state.project.Project_config.includes("priority") && <td>{item.priority}
-                                                </td>}
-                                                {this.state.project.Project_config.includes("status") &&<td>{item.status}
-                                                </td>}
-
-
-                                                        </tr>
-                                                    }
-                                                    )}
-
-
-                                                </tbody>
-                                            </table>
-
-
-
-
-
-                                        }
-                                        {
-                                            this.state.selectedtask2 &&
-                                            <div>
-
-
-                                                <TaskDetails task={this.state.selectedtask2} mapid={this.state.project.mapid} project={this.state.project}/>
-
-
-                                            </div>}
-
-
-                                    </div>
-
-
-
-
-                                }
-                                <div className="col-md-2"></div>
-                            </div>
-                        </div>
-
-
-
-                    </div>
+                 
                 </div>
             </div>
         )
