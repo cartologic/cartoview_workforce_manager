@@ -240,7 +240,7 @@ var priority = "", status = "", work_order = "", worker = "", dispatcher = "",ca
         let { currentComponent } = this.state
         // this.state.project['Project_config']=[]
         return (
-            <div className="container " style={{"marginLeft":"-5%"}}>
+            <div className="container " >
            
                 <br/>
 
