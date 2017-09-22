@@ -35,7 +35,8 @@ export default class ReactClient extends React.Component {
             pageCount: 0,
             perPage: 5,
             pagedTasks: [],
-            category:""
+            category:"",
+            selected:null
         }
         this.loadTasks()
         this.loadProject()
@@ -224,20 +225,20 @@ export default class ReactClient extends React.Component {
         let { currentComponent } = this.state
         // this.state.project['Project_config']=[]
         return (
-            <div className="container ">
+            <div className="container " style={{"marginLeft":"-5%"}}>
            
 <br/>
 
-<div className="media">
-  <div className="media-left">
-<img src={this.state.project.logo?this.state.project.logo.base64: URLS.static+'nologo.png'} className="media-object img-rounded" style={{"width":"100px"}}/>
-  </div>
-  <div className="media-body">
-    <h4 className="media-heading">{this.state.project.title}</h4>
-    <p>{this.state.project.abstract}</p>
-  </div>
-</div>
-<hr/>
+                <div className="media">
+                <div className="media-left">
+                <img src={this.state.project.logo?this.state.project.logo.base64: URLS.static+'nologo.png'} className="media-object img-rounded" style={{"width":"100px"}}/>
+                </div>
+                <div className="media-body">
+                    <h4 className="media-heading">{this.state.project.title}</h4>
+                    <p>{this.state.project.abstract}</p>
+                </div>
+                </div>
+                <hr/>
 
                 <ul className="nav nav-pills">
                     <li className="active"><a data-toggle="tab" href="#home" onClick={() => {
@@ -249,15 +250,28 @@ export default class ReactClient extends React.Component {
                         this.setState({ "selectedtask2": null, "result": false, "filter": [] })
                     }}>Filter Task </a></li>
                     <li onClick={() => this.setState({ currentComponent: "details" })}><a data-toggle="tab" href="#menu2">Project Details </a></li>
-                    <li><a data-toggle="tab" href="#mytasks">My Tasks </a></li>
+                   
 
 
                     <li ><a href={'/apps/appinstances/?app__title=Cartoview%20Workforce%20Manager&limit=100&offset=0&owner__username=' + username}>My Projects </a></li>
                 </ul>
                 <hr />
                 <div className="tab-content">
+                    
+                    
                     <div id="home" className="tab-pane fade in active">
-
+                        <ul className="nav nav-tabs">
+                                <li className="active" onClick={() => {
+                        this.setState({ "selectedtask": null })
+                        this.loadTasks()
+                    }}><a data-toggle="tab" href="#all">All Tasks</a></li>
+                                <li onClick={() => {
+                        this.setState({ "selected": null })
+                        
+                    }}><a data-toggle="tab" href="#mine">My Tasks</a></li> 
+                            </ul>
+                    <div className="tab-content">
+                        <div id="all" className="tab-pane fade in active">
                         <div className="container">
                             {this.state.loading &&
                                 <div>
@@ -323,13 +337,11 @@ export default class ReactClient extends React.Component {
                             {
                                 this.state.selectedtask &&
                                 <div>
-                                    <div className="col-md-1"></div>
-                                    <div className="col-md-10">
+                                    
 
 
                                         <TaskDetails task={this.state.selectedtask} mapid={this.state.project.mapid} project={this.state.project} />
-                                    </div>
-                                    <div className="col-md-1"></div>
+                                    
                                 </div>}
 
                             {!this.state.tasks.length && !this.state.loading && <div>
@@ -339,6 +351,30 @@ export default class ReactClient extends React.Component {
                             }
                         </div>
                     </div>
+
+
+ <div id="mine" className="tab-pane fade">
+         <MyTasks id={id} project={this.state.project} selected={this.state.selected} />
+       </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     <div id="menu1" className="tab-pane fade">
                         {this.state.project && this.state.dispatchers && currentComponent === "add" && <AddTask project={this.state.project} mapid={this.state.project.mapid} dispatchers={this.state.dispatchers} />}
                     </div>
@@ -349,14 +385,7 @@ export default class ReactClient extends React.Component {
                     
 
 
-                    <div id="mytasks" className="tab-pane fade">
-                        <MyTasks id={id} project={this.state.project} />
-                        
-                        
-                        
-                        
-                        </div>
-
+                 
                     <div id="filter" className="tab-pane fade">
                         <div>
                             <div className="col-md-2"></div>

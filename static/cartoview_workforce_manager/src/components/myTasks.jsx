@@ -9,7 +9,7 @@ export default class MyTasks extends Component {
 
             loading:true,
             tasks: [],
-            selectedtask: null
+            selectedtask:this.props.selected
         }
          
         var url = '/apps/cartoview_workforce_manager/api/v1/project/' + this.props.id + '/tasks/?assigned_to__username='+username
@@ -35,11 +35,12 @@ export default class MyTasks extends Component {
 
     }
 
-
+componentWillReceiveProps(nextprops)
+{this.setState({selectedtask:null})}
 componentDidMount(){
 
 }
-    render() {
+  render() {
         return (
 
 			<div className="container">
@@ -62,7 +63,7 @@ componentDidMount(){
                     {this.state.tasks.map((item, i) => {
 
                             return <tr key={i} onClick={() => {
-                                // this.setState({"selectedtask": item})
+                             this.setState({"selectedtask": item})
                             }} style={{"cursor": "pointer"}}>
 								 <td>{item.title}</td>
                                 {this.props.project.Project_config.includes("description") &&<td>{item.description.substring(0, 75)} {item.description.length > 75 ? "..." : ""}</td>}
@@ -83,20 +84,15 @@ componentDidMount(){
 					</tbody>
 				</table>}
 
-                {/*
+                {
                     this.state.selectedtask &&
 					<div>
-						<div className="col-md-1"></div>
-						<div className="col-md-10">
-							<button className="btn btn-link" onClick={() => {
-                                this.setState({"selectedtask": null})
-                            }}><span className="glyphicon glyphicon-chevron-left"></span>Back To List View
-							</button>
+						
+							
 
 							<TaskDetails task={this.state.selectedtask} project={this.props.project}/>
-						</div>
-						<div className="col-md-1"></div>
-					</div> */}
+						
+					</div> }
 
                 {!this.state.tasks.length && !this.state.loading &&
                 <div>
