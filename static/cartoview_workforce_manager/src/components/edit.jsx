@@ -233,7 +233,7 @@ sendHistory=()=>{
           var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
             map.setView(new ol.View({
             center:  [parseInt(this.state.x),parseInt(this.state.y)],
-            zoom: 6
+            zoom: 3
                                         }));
            var style = new ol.style.Style({
           image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
@@ -315,12 +315,14 @@ sendHistory=()=>{
         }
     }
    componentDidMount() {
-    
-    setTimeout(()=>{
          this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
          this.init( this.map )
-      
-      },3000)
+         setTimeout(() => {
+             this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
+            this.map.updateSize()
+            this.map.render()
+            }, 2000)
+
 
 
 
@@ -337,10 +339,20 @@ sendHistory=()=>{
   
         return (
             <div>
+              {!this.state.task &&
+                                <div>
+                                    <div className="col-md-4"></div>
+                                    <div className="col-md-4"><img src={URLS.static + 'cartoview_workforce_manager/loader'} />
+                                    </div>
+                                    <div className="col-md-4"></div>
+                                </div>
+                            }
 
                 < div className=" ">
 
                     <div style={{"padding": "2%"}}>
+
+                             
                         {this.state.task &&
                      
                         <Form
@@ -349,15 +361,18 @@ sendHistory=()=>{
                             type={this.state.task}
                             value={this.state.value}
                         />}
-                        
+                        {this.state.task &&
+                        <div>
                         <label>Click to Edit Task Location</label>
                           <div style={{height:"100%"}} ref="map" className={' map-ct'}>
                            {this.props.children}
                          </div>
+                         
                        <div className="row"> 
                        <Button loading={this.state.btnLoading} className="btn btn-primary pull-right" style={{"margin":"2%"}}  onClick={this.save}>Save</Button>
 
                       </div>
+                      </div>}
                         {this.state.success && <div>
                     <br/>
                     <div className="alert alert-info">
@@ -365,7 +380,8 @@ sendHistory=()=>{
                     </div>
 
                 </div>}
-                 
+                 {this.state.task &&
+                        <div>
                         <div className="panel panel-default">
                             <div className="panel-heading">Comments</div>
                             <div className="panel-body"><Comments task={this.props.task.id}/></div>
@@ -375,7 +391,7 @@ sendHistory=()=>{
                     <div className="panel-body"><Attachments task={this.props.task.id}/></div>
                 </div>
                          
-                        
+                 </div>}
                       
                     </div>
                 </div>

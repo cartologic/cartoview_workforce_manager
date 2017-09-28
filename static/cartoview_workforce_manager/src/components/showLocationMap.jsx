@@ -21,6 +21,7 @@ export default class ShowLocationMap extends React.Component {
         zoom: 3,
       })
     });
+   
 }
   update(mapId) {
     if (mapId) {
@@ -45,6 +46,8 @@ export default class ShowLocationMap extends React.Component {
 
 
   init=( map )=> {
+    console.log("hheee")
+
     var point_feature = new ol.Feature({ });
   		if(this.props.x&&this.props.y) {
 
@@ -56,7 +59,7 @@ export default class ShowLocationMap extends React.Component {
         var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})       
         map.setView(new ol.View({
         center:  [parseInt(this.props.x),parseInt(this.props.y)],
-        zoom: 6
+        zoom: 3
                                   }));
           var style = new ol.style.Style({
             image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
@@ -74,17 +77,29 @@ export default class ShowLocationMap extends React.Component {
 
 
   componentDidMount() {
+    console.log("did ni")
     this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
     this.update(this.props.mapId);
     this.init( this.map )
-   
+   setTimeout(() => {
+      this.map.updateSize()
+      this.map.render()
+    }, 1000)
 
   }
-  render() {
+ componentWillReceiveProps(nextProps){
+    console.log("show will pre")
+  }
 
+  render() {
+console.log("render")
     var {className=''} = this.props;
     return (<div  ref="map" className={className + ' map-ct'}>
 
       {this.props.children}
     </div>);
-  }}
+      this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
+        this.update(this.props.mapId);
+    this.init( this.map )
+  }
+  }

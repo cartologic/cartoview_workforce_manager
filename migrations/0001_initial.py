@@ -53,6 +53,7 @@ class Migration(migrations.Migration):
                 ('work_order', jsonfield.fields.JSONField(null=True, blank=True)),
                 ('Category', jsonfield.fields.JSONField(null=True, blank=True)),
                 ('permissions', jsonfield.fields.JSONField(null=True, blank=True)),
+                ('logo', jsonfield.fields.JSONField(null=True, blank=True)),
                 ('created_by', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
             options={

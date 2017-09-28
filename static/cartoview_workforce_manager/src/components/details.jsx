@@ -23,8 +23,17 @@ export default class Details extends Component {
 
 
         return (
+            
 
             <div style={{"padding": "2%"}}>
+             {!this.props.task &&
+                                <div>
+                                    <div className="col-md-4"></div>
+                                    <div className="col-md-4"><img src={URLS.static + 'cartoview_workforce_manager/loader'} />
+                                    </div>
+                                    <div className="col-md-4"></div>
+                                </div>
+                            }
                 <div className="panel panel-default">
                     <div className="panel-heading">Basic Details</div>
                     <div className="panel-body" style={{"padding": 0}}>
