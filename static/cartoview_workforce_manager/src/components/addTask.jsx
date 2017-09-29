@@ -395,7 +395,7 @@ if(this.refs.image){
     return (
       <div>
         
-          {this.state.auth &&this.state.step==1&& <div className="well" style={{"paddingBottom": "10%"}}>
+          {this.state.auth &&this.state.step==1&& <div className="well" style={{"paddingBottom": "10%" ,"paddingRight": "5%"}}>
             <br />
             {this.state.person &&
               <div><Form
@@ -436,14 +436,16 @@ if(this.refs.image){
             
           </div>}
           {this.state.success &&
-            <div className="alert alert-info">
-              Your Task was created successfully.
-			 </div>}
+<div className="succ">
+  <p> Your Task was created successfully.</p>
+</div>
+
+            }
         
         {!this.state.auth && <div className="col-md-8">
             <br />
-            <div className="alert alert-info">
-              Only Dispatchers can create new task.
+            <div className="danger">
+             <p> Only Dispatchers can create new task </p>
           </div>
         </div>}
 

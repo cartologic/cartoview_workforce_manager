@@ -375,7 +375,7 @@ sendHistory=()=>{
                       </div>}
                         {this.state.success && <div>
                     <br/>
-                    <div className="alert alert-info">
+                    <div className="succ">
                         Your changes were saved successfully.
                     </div>
 

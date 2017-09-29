@@ -36,18 +36,22 @@ export default class MyTasks extends Component {
     }
 
 componentWillReceiveProps(nextprops)
-{this.setState({selectedtask:null})}
+{
+    this.setState({selectedtask:null})
+
+console.log("will reciedbde")
+}
 componentDidMount(){
 
 }
   render() {
         return (
-
-			<div className="container">
+<div style={{"padding":"1%"}}>
+			<div className="" style={{"overflowX":"auto"}}>
 {this.state.loading && <img src={URLS.static +'marker.png'}/>}
 				<br/>
                 {this.state.tasks.length != 0 && !this.state.selectedtask && !this.state.loading&&
-				<table className="table table-hover table-bordered table-responsive">
+				<table className="table table-hover ">
 					<thead>
 					<tr>
                     <th>Title</th>
@@ -102,7 +106,7 @@ componentDidMount(){
                 }
 			</div>
 
-
+</div>
         )
     }
 }

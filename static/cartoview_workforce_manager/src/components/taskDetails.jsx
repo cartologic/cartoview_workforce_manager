@@ -34,11 +34,32 @@ loadTask=()=>{
 
 }
 
+
     render() {
         return (
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
             <div>
 
-                <div className="panel panel-default  ">
+             
                     <br/>
                     <ul className="nav nav-tabs">
 
@@ -48,7 +69,7 @@ loadTask=()=>{
 
                     </ul>
 
-                    <div className="tab-content">
+                    <div className="tab-content" style={{"padding":0}}>
                         <div id="detail" className="tab-pane fade in active">
                            { this.state.task &&<Details task={this.state.task} mapid={this.props.mapid} project={this.props.project} />}
                         </div>
@@ -63,8 +84,7 @@ loadTask=()=>{
                          
                     </div>
                     
-                </div>
-
+               
             </div>
         )
     }

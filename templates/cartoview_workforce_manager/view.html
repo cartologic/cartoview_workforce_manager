@@ -1,16 +1,11 @@
-     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-{% extends "app_manager/app_install_base.html" %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 {% load bootstrap_tags staticfiles %}
 {% load i18n %}
 
-{% block title %} {{ block.super }} - {% trans "Basic Viewer" %} {% endblock %}
-{% block head %}
-    {% include "geonode/ext_header.html" %}
-    {% include "geonode/app_header.html" %}
-    {{ block.super }}
 
-{% endblock %}
-{% block body %}
     <div id="page-wrapper">
         <div class="container-fluid">
 
@@ -18,9 +13,40 @@
         </div>
     </div>
 
-{% endblock %}
 {% block extra_script %}
 
+<script>
+
+        $(document).ready(function () {
+            var trigger = $('.hamburger'),
+                overlay = $('.overlay'),
+               isClosed = false;
+          
+              trigger.click(function () {
+                  console.log("hiieelo")
+                hamburger_cross();      
+              });
+          
+              function hamburger_cross() {
+          
+                if (isClosed == true) {          
+                  overlay.hide();
+                  trigger.removeClass('is-open');
+                  trigger.addClass('is-closed');
+                  isClosed = false;
+                } else {   
+                 
+                  trigger.removeClass('is-closed');
+                  trigger.addClass('is-open');
+                  isClosed = true;
+                }
+            }
+            
+            $('[data-toggle="offcanvas"]').click(function () {
+                  $('#wrapper').toggleClass('toggled');
+            });  
+          });
+</script>
     <script>
      var username="{{request.user.username}}"
 
@@ -35,6 +61,8 @@
       }
 
     </script>
+   
   <script src="{{ STATIC_URL }}cartoview_workforce_manager/dist/ReactClient.bundle.js"></script>
-
+ 
 {% endblock %}
+

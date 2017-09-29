@@ -41,10 +41,10 @@ export default class ProjectDetails extends Component {
     render() {
         return (
             <div>
-                <div className="col-md-2"></div>
+               
 
-                {this.state.project && < div className="col-md-8">
-                    <ul className="list-group">
+                {this.state.project && <div className="tab-content" >
+                    <ul className="list-group"  style={{"borderTop": "5px solid #e74c3c","borderBottom": "5px solid #e74c3c",   "boxShadow": "10px 10px 5px #888888"}}>
                         <li className="list-group-item">
                             <div className="headers"><b>Project Title:</b></div>
                             {this.state.project.title}</li>
@@ -89,7 +89,7 @@ export default class ProjectDetails extends Component {
 
                 </div>
                 }
-                <div className="col-md-2"></div>
+               
             </div> )
     }
 }

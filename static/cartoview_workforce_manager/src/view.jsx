@@ -39,6 +39,7 @@ export default class ReactClient extends React.Component {
             selected:null,
             filtertask:null,
             flag:false,
+            page:"tasks"
 
         }
         this.loadTasks()
@@ -240,52 +241,81 @@ var priority = "", status = "", work_order = "", worker = "", dispatcher = "",ca
         let { currentComponent } = this.state
         // this.state.project['Project_config']=[]
         return (
-            <div className="container " >
-           
-                <br/>
 
-                <div className="media">
-                <div className="media-left">
-                <img src={this.state.project.logo?this.state.project.logo.base64: URLS.static+'nologo.png'} className="media-object img-rounded" style={{"width":"100px"}}/>
-                </div>
-                <div className="media-body">
-                    <h4 className="media-heading">{this.state.project.title}</h4>
-                    <p>{this.state.project.abstract}</p>
-                </div>
-                </div>
+<div id="wrapper">
+
+        <div className="overlay "></div>
+        <nav className="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
+            <ul className="nav sidebar-nav ">
+                <li className="sidebar-brand">
+                            
+                    <a >
+                      <img src={this.state.project.logo?this.state.project.logo.base64: URLS.static+'nologo.png'} className="img-circle" style={{"width":"50px","marginRight":"3%"}}/>
+                      {this.state.project.title}
+                    </a>
+                </li>
                 <hr/>
+                <li onClick={() => {
+                        this.setState({ "selectedtask": null,result:false,page:"tasks" })
+                        this.loadTasks()
+                    }} className="active"><a 
+                    href="#home">Tasks</a>
+                </li>
+                <li onClick={() => this.setState({ currentComponent: "add",page:"new" })}
+              ><a 
+                    href="#menu1" >New Task</a>
+                </li>
+                <li onClick={() => this.setState({ currentComponent: "details",page:"details" })}>
+                    <a href="#menu2"  >Project Details</a>
+                </li>
+                <li>
+                    <a href={'/apps/appinstances/?app__title=Cartoview%20Workforce%20Manager&limit=100&offset=0&owner__username=' + username}>My Project</a>
+                </li>
+              
+                <li  onClick={() => this.setState({page:"about" })}>
+                    <a href="#about">About</a>
+                </li>
+     
+              
+            </ul>
+        </nav>
+       
 
-                <ul className="nav nav-pills">
-                    <li className="active"><a data-toggle="tab" href="#home" onClick={() => {
+
+        <div id="page-content-wrapper">
+            <button type="button" className="hamburger is-closed" data-toggle="offcanvas">
+                <span className="hamb-top"></span>
+    			<span className="hamb-middle"></span>
+				<span className="hamb-bottom"></span>
+            </button>
+            <div className="">
+                <div className="">
+                    <div className="col-md-9 col-md-offset-1">
+           
+             {!this.state.loading &&   <div className="tab-content">
+<div className="container">
+    <div className="row">
+        <div className="col-md-8">
+            <div className="tab" role="tabpanel">
+            
+                  {this.state.tasks.length>0 && !this.state.loading &&  this.state.page=="tasks" &&<ul className="nav nav-tabs" role="tablist">
+                    <li role="presentation" className="active" onClick={() => {
                         this.setState({ "selectedtask": null,result:false })
                         this.loadTasks()
-                    }}>Tasks </a></li>
-                    <li onClick={() => this.setState({ currentComponent: "add" })}><a data-toggle="tab" href="#menu1">New Task</a></li>
-                   
-                    <li onClick={() => this.setState({ currentComponent: "details" })}><a data-toggle="tab" href="#menu2">Project Details </a></li>
-                   
-
-
-                    <li ><a href={'/apps/appinstances/?app__title=Cartoview%20Workforce%20Manager&limit=100&offset=0&owner__username=' + username}>My Projects </a></li>
-                </ul>
-                <hr />
-                <div className="tab-content">
-                    
-                    
-                    <div id="home" className="tab-pane fade in active">
-                        <ul className="nav nav-tabs">
-                                <li className="active" onClick={() => {
+                    }}><a href="#all" aria-controls="home" role="tab" data-toggle="tab"><i className="fa fa-envelope-o"></i>All Tasks</a></li>
+                 <li onClick={() => {
                         this.setState({ "selectedtask": null,result:false })
                         this.loadTasks()
-                    }}><a data-toggle="tab" href="#all">All Tasks</a></li>
-                                <li onClick={() => {
-                        this.setState({ "selected": null })
                         
-                    }}><a data-toggle="tab" href="#mine">My Tasks</a></li> 
-                            </ul>
+                    }}role="presentation"><a href="#mine" aria-controls="profile" role="tab" data-toggle="tab"><i className="fa fa-cube"></i>My tasks</a></li>
+
+                </ul>}
+                               
+                  {this.state.page=="tasks" && <div  id="home" className="tab-pane fade in active">
+                     
                     <div className="tab-content">
-                        <div id="all" className="tab-pane fade in active">
-                        <div className="container">
+                        <div id="all" className="tab-pane fade in active"  role="tabpanel">
+                        <div className="">
                             {this.state.loading &&
                                 <div>
                                     <div className="col-md-4"></div>
@@ -297,10 +327,10 @@ var priority = "", status = "", work_order = "", worker = "", dispatcher = "",ca
                             <br />
 
                             {this.state.pagedTasks.length != 0 && !this.state.selectedtask && !this.state.loading &&
-                                <div className="container">
-                                <div className="col-md-8">  
+                                <div className="" style={{"padding":"1%"}}>
+                                <div className="" style={{"overflow-x":"auto"}}>  
                                 
-                                <table className="table table-hover table-bordered table-responsive">
+                                <table className="table table-hover ">
                                     <thead>
                                         <tr>
                                             <th>Title</th>
@@ -349,16 +379,10 @@ var priority = "", status = "", work_order = "", worker = "", dispatcher = "",ca
                                     </div>}
                                        
                                        </div>
-                                        <div className="col-md-4">
+                                        <div className="">
                                         
                                        
-                                       
-                                                
-                                        
-                                        
-                                        
-                                        
-                                        
+                                    
                                           {this.state.pagedTasks&&
                                             <div className="panel panel-default" style={{ "padding": "0" }}>
                                                 <div className="panel-body" style={{ "padding": "0" }}>
@@ -457,19 +481,15 @@ var priority = "", status = "", work_order = "", worker = "", dispatcher = "",ca
                                             
                                         
                                         
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
+                                      
+                                                                   
+                                             
                                         </div>
                               
                             
                                 </div>
                             }
-                            {console.log("cc",this.state.result)}
+                           
  {this.state.pagedTasks.length == 0 &&this.state.result&& <p>No result found</p>}
 
 
@@ -483,22 +503,30 @@ var priority = "", status = "", work_order = "", worker = "", dispatcher = "",ca
                                     
                                 </div>}
 
-                            {!this.state.tasks.length && !this.state.loading && <div>
-                                <p>No tasks yet for this project</p>
+                            {!this.state.tasks.length && !this.state.loading && <div style={{    "padding": "5%", "textAlign": "center"}}>
+                                <p style={{"fontSize": "25px",
+    "fontStyle": "oblique"}}>No tasks yet for this project</p>
                             </div>
 
                             }
                         </div>
+                    
+                    
                     </div>
 
 
- <div id="mine" className="tab-pane fade">
+ <div id="mine" className="tab-pane fade"  role="tabpanel">
          <MyTasks id={id} project={this.state.project} selected={this.state.selected} />
        </div>
     </div>
 
 
+</div>}
+ </div>
+        </div>
+    </div>
 </div>
+ 
 
 
 
@@ -514,16 +542,37 @@ var priority = "", status = "", work_order = "", worker = "", dispatcher = "",ca
 
 
 
-                    <div id="menu1" className="tab-pane fade">
-                        {this.state.project && this.state.dispatchers && currentComponent === "add" && <AddTask project={this.state.project} mapid={this.state.project.mapid} dispatchers={this.state.dispatchers} />}
-                    </div>
-                    <div id="menu2" className="tab-pane fade">
+                   {this.state.page=="new" && <div id="menu1">
+                        {this.state.project && this.state.dispatchers && currentComponent === "add" && 
+                        <AddTask project={this.state.project} mapid={this.state.project.mapid} dispatchers={this.state.dispatchers} />
+                        }
+                    </div>}
+                    {this.state.page=="details" &&<div id="menu2">
                         {this.state.workers && this.state.project && currentComponent === "details" &&
-                            <ProjectDetails id={id} project={this.state.project} mapid={this.state.project.mapid} workers={this.state.workers} />}
-                    </div>
+                            <ProjectDetails id={id} project={this.state.project} mapid={this.state.project.mapid} workers={this.state.workers} />
+                            }
+                    </div>}
                     
 
+{this.state.page=="about" &&
 
+<div id="about">
+
+
+<section className="success" id="about">
+      <div className="">
+        <h2 className="text-center">About</h2>
+        <hr className="star-light" />
+        <div className="text-center">
+         
+  <p className="para"> Cartoview app to manage project/work group tasks. It provides a full management of a task status, priority, location ,attachments and comments
+         </p>
+        </div>
+      </div>
+    </section>
+
+</div>
+}
                  
                   
 
@@ -531,7 +580,15 @@ var priority = "", status = "", work_order = "", worker = "", dispatcher = "",ca
 
                  
                 </div>
-            </div>
+             }
+
+
+    
+</div>
+</div>
+</div>
+	</div>
+</div>
         )
     }
 }
@@ -542,3 +599,4 @@ render(
     <IntlProvider locale='en' messages={enMessages}>
         <ReactClient></ReactClient>
     </IntlProvider>, document.getElementById('root'))
+
