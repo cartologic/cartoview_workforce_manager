@@ -1,7 +1,7 @@
 import React,  {Component}from 'react'; 
 import {getCRSFToken}from '../helpers/helpers.jsx'
 import Chips, { Chip } from 'react-chips';
-
+import Button from 'react-bootstrap-button-loader';
 export default class Users extends Component {
 constructor(props) {
 super(props)
@@ -10,7 +10,7 @@ users:"",
 usernames:[], 
 selectedDispatchers:[], 
 selectedworkers:[],
-
+loading:false
 
     
 
@@ -140,16 +140,19 @@ return (
 
 					</div>
 					<div className="col-xs-7 col-md-8">
-						<button
+						<Button loading={this.state.loading} 
 							style={{
                                 display: "inline-block",
                                 margin: "0px 3px 0px 3px"
                             }}
 							className="btn btn-primary btn-sm pull-right"
-							onClick={this.save.bind(this)}
+							onClick={
+                                ()=>{
+                                this.setState({loading:true},this.save.bind(this))
+                                }}
                             disabled={this.state.selectedDispatchers.length==0||this.state.selectedworkers.length==0}>{"Save"}
 							
-						</button>
+						</Button>
 					
 
 

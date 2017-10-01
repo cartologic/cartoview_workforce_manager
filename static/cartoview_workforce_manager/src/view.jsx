@@ -33,13 +33,14 @@ export default class ReactClient extends React.Component {
             result: false,
             selectedtask2: "", currentComponent: "list",
             pageCount: 0,
-            perPage: 10,
+            perPage: 7,
             pagedTasks: [],
             category:"",
             selected:null,
             filtertask:null,
             flag:false,
-            page:"tasks"
+            page:"tasks",
+            filterMenu:false
 
         }
         this.loadTasks()
@@ -102,11 +103,14 @@ var priority = "", status = "", work_order = "", worker = "", dispatcher = "",ca
                                  this.setState({ tasks: data.objects,filtertask:data.objects, loading: false, pageCount: Math.ceil(data.objects.length / this.state.perPage) }, () => {
                                  var pagedTasks = this.state.tasks.slice(0, this.state.perPage);
                                  this.setState({ pagedTasks: pagedTasks })
-
+console.log(url,data)
                 console.log(data.objects.length)
-               
-              
-              
+               this.refs.priority.value?this.refs.priority.value="":false
+               this.refs.category.value ?this.refs.category.value="" :false
+               this.refs.status.value?this.refs.status.value="" :false           
+               this.refs.worker.value?this.refs.worker.value="":false
+               this.refs.work_order.value?this.refs.work_order.value="":false
+               this.refs.dispatcher.value?this.refs.dispatcher.value="":false
 
             })
 })
@@ -236,13 +240,16 @@ var priority = "", status = "", work_order = "", worker = "", dispatcher = "",ca
         e.preventDefault()
 
     }
+toggle=()=>{
+    this.setState({filterMenu:!this.state.filterMenu})
+}
 
     render() {
         let { currentComponent } = this.state
         // this.state.project['Project_config']=[]
         return (
 
-<div id="wrapper">
+<div id="wrapper" className="toggled">
 
         <div className="overlay "></div>
         <nav className="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
@@ -258,13 +265,90 @@ var priority = "", status = "", work_order = "", worker = "", dispatcher = "",ca
                 <li onClick={() => {
                         this.setState({ "selectedtask": null,result:false,page:"tasks" })
                         this.loadTasks()
-                    }} className="active"><a 
+                    }} className="active"><a
                     href="#home">Tasks</a>
                 </li>
                 <li onClick={() => this.setState({ currentComponent: "add",page:"new" })}
               ><a 
                     href="#menu1" >New Task</a>
                 </li>
+
+
+
+
+             <li className="dropdown" >
+                  <a onClick={this.toggle}>Filters <span className="caret"></span></a> </li>
+                {this.state.filterMenu&&  <ul role="menu" >
+            
+             {this.state.project.priority&&this.state.project.Project_config.includes("priority") &&
+            
+              <select className="form-control" ref="priority">
+                    <option value="">priority</option>
+                { this.state.project.priority.priority.map((pri, i) => {
+
+                    return <option key={i} value={pri.label}>{pri.label}</option>
+                })
+                }
+                </select>
+                    }
+                  {this.state.project.status&&this.state.project.Project_config.includes("status") &&  
+                     <select className="form-control" ref="status">
+                                                             <option value="">status</option>
+                                                                {this.state.project.status && this.state.project.status.status.map((status, i) => {
+                                                    
+
+                                                                return <option key={i} value={status.label}>{status.label}</option>
+                                                                })
+                                                                        
+                                                            }
+                                                             </select>
+                    
+                    }
+                    {this.state.project.Category&&this.state.project.Project_config.includes("Category") &&  <select className="form-control" ref="category">
+                                                             <option value="">category</option>
+                                                            {this.state.project.Category && this.state.project.Category.Category.map((cat, i) => {
+                                                                return <option key={i} value={cat.label}>{cat.label}</option>
+                                                            })
+
+
+                                                            }
+                                                            </select>}
+                                                             {this.state.project.Project_config.includes("work_order") &&
+                                                      <input placeholder="work order" className="form-control" ref="work_order"  style={{ "margin": "5px","width": "82%"}}/>
+                                                    }
+                   { this.state.dispatchers &&
+                                                                <select className="form-control" ref="dispatcher">
+                                                                    <option value="">task creator</option>
+                                                                    {this.state.dispatchers.map((dispatcher, i) => {
+
+                                                                        return <option key={i} value={dispatcher.dispatcher.username}>{dispatcher.dispatcher.username}</option>
+                                                                    })}
+
+                                                                </select>}
+                    
+
+
+
+
+{this.state.project.Project_config.includes("assigned_to") &&this.state.project&& 
+                     <select className="form-control" id="sel1" ref="worker">
+                                                                    <option value=""> Assignee</option>
+                                                                    {this.state.workers.map((worker, i) => {
+
+                                                                        return <option key={i} value={worker.worker.username}>{worker.worker.username}</option>
+                                                                    })}
+
+                                                                </select>}
+ <button className="btn btn-default pull-right" style={{     "marginRight": "19px" }} onClick={this.sendFilter} >Filter</button>
+
+                  </ul>}
+
+
+
+
+
+
+
                 <li onClick={() => this.setState({ currentComponent: "details",page:"details" })}>
                     <a href="#menu2"  >Project Details</a>
                 </li>
@@ -283,7 +367,7 @@ var priority = "", status = "", work_order = "", worker = "", dispatcher = "",ca
 
 
         <div id="page-content-wrapper">
-            <button type="button" className="hamburger is-closed" data-toggle="offcanvas">
+            <button type="button" className="hamburger is-open" data-toggle="offcanvas">
                 <span className="hamb-top"></span>
     			<span className="hamb-middle"></span>
 				<span className="hamb-bottom"></span>
@@ -291,7 +375,14 @@ var priority = "", status = "", work_order = "", worker = "", dispatcher = "",ca
             <div className="">
                 <div className="">
                     <div className="col-md-9 col-md-offset-1">
-           
+            {this.state.loading &&
+                                <div>
+                                    <div className="col-md-4"></div>
+                                    <div className="col-md-4"><img src={URLS.static + 'cartoview_workforce_manager/loader'} />
+                                    </div>
+                                    <div className="col-md-4"></div>
+                                </div>
+                            } 
              {!this.state.loading &&   <div className="tab-content">
 <div className="container">
     <div className="row">
@@ -310,25 +401,18 @@ var priority = "", status = "", work_order = "", worker = "", dispatcher = "",ca
                     }}role="presentation"><a href="#mine" aria-controls="profile" role="tab" data-toggle="tab"><i className="fa fa-cube"></i>My tasks</a></li>
 
                 </ul>}
-                               
+                             
                   {this.state.page=="tasks" && <div  id="home" className="tab-pane fade in active">
                      
                     <div className="tab-content">
                         <div id="all" className="tab-pane fade in active"  role="tabpanel">
                         <div className="">
-                            {this.state.loading &&
-                                <div>
-                                    <div className="col-md-4"></div>
-                                    <div className="col-md-4"><img src={URLS.static + 'cartoview_workforce_manager/loader'} />
-                                    </div>
-                                    <div className="col-md-4"></div>
-                                </div>
-                            }
+                            
                             <br />
 
                             {this.state.pagedTasks.length != 0 && !this.state.selectedtask && !this.state.loading &&
                                 <div className="" style={{"padding":"1%"}}>
-                                <div className="" style={{"overflow-x":"auto"}}>  
+                                <div className="" style={{"overflowX":"auto"}}>  
                                 
                                 <table className="table table-hover ">
                                     <thead>
@@ -379,118 +463,14 @@ var priority = "", status = "", work_order = "", worker = "", dispatcher = "",ca
                                     </div>}
                                        
                                        </div>
-                                        <div className="">
-                                        
-                                       
-                                    
-                                          {this.state.pagedTasks&&
-                                            <div className="panel panel-default" style={{ "padding": "0" }}>
-                                                <div className="panel-body" style={{ "padding": "0" }}>
-                                                    {this.state.project.Project_config.includes("priority")  && <div className="panel panel-default">
-                                                        <div className="panel-heading" >Filter By Priority</div>
-                                                        <div className="panel-body">
-                                                        <select className="form-control" ref="priority">
-                                                             <option value=""></option>
-                                                            { this.state.project.priority.priority.map((pri, i) => {
-
-                                                                return <option key={i} value={pri.label}>{pri.label}</option>
-                                                            })
-
-
-                                                            }
-                                                            </select>
-                                                        </div>
-                                                    </div>}
-                                                 
-                                                {    this.state.project.Project_config.includes("status")  && <div className="panel panel-default">
-                                                        <div className="panel-heading">Filter By Status</div>
-                                                        <div className="panel-body">
-
-                                                         <select className="form-control" ref="status">
-                                                             <option value=""></option>
-                                                                {this.state.project.status && this.state.project.status.status.map((status, i) => {
-                                                    
-
-                                                                return <option key={i} value={status.label}>{status.label}</option>
-                                                                })
-                                                                        
-                                                            }
-                                                             </select>
-                                                        </div>
-                                                    </div>}
-                                                    {    this.state.project.Project_config.includes("Category")  && <div className="panel panel-default">
-                                                        <div className="panel-heading">Filter By Category</div>
-                                                        <div className="panel-body">
-
-                                                          <select className="form-control" ref="category">
-                                                             <option value=""></option>
-                                                            {this.state.project.Category && this.state.project.Category.Category.map((cat, i) => {
-                                                                return <option key={i} value={cat.label}>{cat.label}</option>
-                                                            })
-
-
-                                                            }
-                                                            </select>
-                                                        </div>
-                                                    </div>}
-                                                     {this.state.project.Project_config.includes("work_order") &&<div className="panel panel-default">
-                                                        <div className="panel-heading">Filter By Work Order</div>
-                                                        <div className="panel-body"><input className="form-control" ref="work_order" /></div>
-                                                    </div>}
-                                                    <div className="panel panel-default">
-                                                        <div className="panel-heading">Filter By  Task creator</div>
-                                                        <div className="panel-body">
-                                                            <div className="form-group">
-
-                                                                <select className="form-control" ref="dispatcher">
-                                                                    <option value=""></option>
-                                                                    {this.state.dispatchers.map((dispatcher, i) => {
-
-                                                                        return <option key={i} value={dispatcher.dispatcher.username}>{dispatcher.dispatcher.username}</option>
-                                                                    })}
-
-                                                                </select>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                     {this.state.project.Project_config.includes("assigned_to") &&
-                                                    <div className="panel panel-default">
-                                                        <div className="panel-heading"> Filter By Assignee</div>
-                                                        <div className="panel-body">
-                                                            <div className="form-group">
-
-                                                                <select className="form-control" id="sel1" ref="worker">
-                                                                    <option value=""></option>
-                                                                    {this.state.workers.map((worker, i) => {
-
-                                                                        return <option key={i} value={worker.worker.username}>{worker.worker.username}</option>
-                                                                    })}
-
-                                                                </select>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>}
-
-                                                    <button className="btn btn-default pull-right" style={{ "margin": "2%" }} onClick={this.sendFilter} >Filter</button>
-
-  
-                                                </div>
-                                            </div>}
-                                            
-                                        
-                                        
-                                      
-                                                                   
-                                             
-                                        </div>
+                                   
                               
                             
                                 </div>
                             }
                            
- {this.state.pagedTasks.length == 0 &&this.state.result&& <p>No result found</p>}
+ {this.state.pagedTasks.length == 0 &&this.state.result&& <p style={{"fontSize": "25px",
+    "fontStyle": "oblique","padding":"2%"}}>No result found !</p>}
 
 
                             {
@@ -503,7 +483,7 @@ var priority = "", status = "", work_order = "", worker = "", dispatcher = "",ca
                                     
                                 </div>}
 
-                            {!this.state.tasks.length && !this.state.loading && <div style={{    "padding": "5%", "textAlign": "center"}}>
+                            {!this.state.tasks.length && !this.state.loading  &&!this.state.result&& <div style={{    "padding": "5%", "textAlign": "center"}}>
                                 <p style={{"fontSize": "25px",
     "fontStyle": "oblique"}}>No tasks yet for this project</p>
                             </div>

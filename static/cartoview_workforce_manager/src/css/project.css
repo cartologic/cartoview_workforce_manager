@@ -68,16 +68,16 @@ html { height: 100%;}
 }
 
 #wrapper.toggled {
-    padding-left: 220px;
+    padding-left: 300px;
 
 }
 
 #sidebar-wrapper {
     z-index: 1000;
-    left: 220px;
+    left: 300px;
     width: 0;
     height: 100%;
-    margin-left: -220px;
+    margin-left: -300px;
     overflow-y: auto;
     overflow-x: hidden;
     background: #1a1a1a;
@@ -92,7 +92,7 @@ html { height: 100%;}
 }
 
 #wrapper.toggled #sidebar-wrapper {
-    width: 220px;
+    width: 300px;
 }
 
 #page-content-wrapper {
@@ -102,7 +102,7 @@ html { height: 100%;}
 
 #wrapper.toggled #page-content-wrapper {
   
-    margin-right: -220px;
+    margin-right: -300px;
 }
 
 /*-------------------------------*/
@@ -112,7 +112,7 @@ html { height: 100%;}
 .sidebar-nav {
     position: absolute;
     top: 0;
-    width: 220px;
+    width: 300px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -151,7 +151,7 @@ html { height: 100%;}
     background-color: #79aefe;   
 }
 .sidebar-nav li:nth-child(5):before {
-    background-color: #314190;   
+    background-color: #828387;   
 }
 .sidebar-nav li:nth-child(6):before {
     background-color: #279636;   
@@ -221,7 +221,7 @@ html { height: 100%;}
   top: 20px;  
   z-index: 999;
   display: block;
-  width: 32px;
+  width:20px;
   height: 32px;
   margin-left: 15px;
   background: transparent;
@@ -446,10 +446,13 @@ select.form-control{
     padding: 0px !important
 }
 input.form-control{
-    padding: 2px !important
+    height: 25px;
+    margin: 4;
+    width: 90%
 }
 textarea.form-control{
-    padding: .4%!important
+    padding: .4%!important;
+    width: 93%;
 }
 .well{
 
@@ -515,3 +518,8 @@ textarea.form-control{
         
     border-top: 5px solid #e74c3c !important; 
     border-bottom: 5px solid #e74c3c;}
+
+    select{
+        margin: 5px;
+        width: 92%!important;
+    }

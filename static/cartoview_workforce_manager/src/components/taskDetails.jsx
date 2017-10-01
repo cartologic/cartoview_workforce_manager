@@ -38,29 +38,8 @@ loadTask=()=>{
     render() {
         return (
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
-            <div>
-
-             
-                    <br/>
+            <div>    
+                <br/>
                     <ul className="nav nav-tabs">
 
                         <li className="active" onClick={this.loadTask}><a data-toggle="tab" href="#detail">Details</a></li>
