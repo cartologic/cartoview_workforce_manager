@@ -60,11 +60,11 @@ export default class FormFields extends Component {
                 this.setState({
                     "project": data, "Category": data.Category&&data.Category.Category ? data.Category : "", "priority": data.priority&&data.priority.priority ? data.priority : "", "status": data.status&&data.status.status ? data.status : "", 
                     "value": {
-                        Category: data.Category ? data.Category : "",
-                        status: data.status ? data.status : "", 
-                        priority: data.priority ? data.priority : "",
+                         Category: data.Category ? Object.assign(data.Category,this.props.Category) :  Object.assign("",this.props.Category) ,
+                        status: data.status ? Object.assign(data.status,this.props.status) :Object.assign( "",this.props.status),
+                        priority: data.priority ? Object.assign(data.priority,this.props.priority) :Object.assign( "",this.props.priority),
                         checkedValues:data.Project_config,
-                        description:data.Description?data.Description:"",
+                        description:this.props.Description?this.props.Description:data.description,
                         due_date:data.due_date?data.due_date:"",
                         work_order:data.work_order?data.work_order:"",
                         assigned_to:data.assigned_to?data.assigned_to:""

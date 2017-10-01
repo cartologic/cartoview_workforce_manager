@@ -79,7 +79,7 @@ export default class FieldConfigModal extends Component {
                             <Form
                                 ref="form"
                                 type={this.props.fieldConfig}
-                                value={this.props.defaultValue[this.props.selected]?this.props.defaultValue[this.props.selected]:this.state.value}
+                                value={this.state.value}
                                 options={options} />
                         </div>
                         <div className="modal-footer">
