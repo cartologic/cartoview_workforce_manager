@@ -53,7 +53,7 @@ export default class ReactClient extends React.Component {
 
 
     sendFilter = () => {
-
+        this.setState({page: "tasks"})
         var priority = "", status = "", work_order = "", worker = "", dispatcher = "", category = ""
         if (this.refs.priority.value) {
 
