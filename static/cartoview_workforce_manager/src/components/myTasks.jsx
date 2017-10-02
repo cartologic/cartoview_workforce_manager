@@ -72,10 +72,10 @@ componentDidMount(){
 								 <td>{item.title}</td>
                                 {this.props.project.Project_config.includes("description") &&<td>{item.description.substring(0, 75)} {item.description.length > 75 ? "..." : ""}</td>}
                                 <td>{item.created_by.username}</td>
-                                {this.props.project.Project_config.includes("assigned_to") &&<td>{item.assigned_to.username}</td>}
-                                {this.props.project.Project_config.includes("priority") && <td>{item.priority}
+                                {this.props.project.Project_config.includes("assigned_to") &&<td>{item.assigned_to.username?item.assigned_to.username:'-'}</td>}
+                                {this.props.project.Project_config.includes("priority") && <td>{item.priority?item.priority:'-'}
                                  </td>}
-                                {this.props.project.Project_config.includes("status") &&<td>{item.status}
+                                {this.props.project.Project_config.includes("status") &&<td>{item.status?item.status:'-'}
                                 </td>}
 
                                             
