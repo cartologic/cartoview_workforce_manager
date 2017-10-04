@@ -108,8 +108,8 @@ export default class Comments extends Component {
                         return <div key={i} className="well ">
 							<div className="media">
 								<div className="media-body">
-									<h4 className="media-heading">{comment.commenter.username}
-										<small><i>Posted on <Moment
+									<h4 className="media-heading"><img src={URLS.static+'user'} style={{"width": "5%","marginRight":"1%"}}/>{comment.commenter.username}
+										<small><i> Posted on <Moment
 											format="YYYY/MM/DD">{comment.created_at}</Moment></i></small>
 									</h4>
 									<p>{comment.comment}</p>

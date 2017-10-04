@@ -266,11 +266,11 @@ toggle=()=>{
                         this.setState({ "selectedtask": null,result:false,page:"tasks" })
                         this.loadTasks()
                     }} className="active"><a
-                    href="#home">Tasks</a>
+                    >Tasks</a>
                 </li>
                 <li onClick={() => this.setState({ currentComponent: "add",page:"new" })}
               ><a 
-                    href="#menu1" >New Task</a>
+                     >New Task</a>
                 </li>
 
 
@@ -350,14 +350,14 @@ toggle=()=>{
 
 
                 <li onClick={() => this.setState({ currentComponent: "details",page:"details" })}>
-                    <a href="#menu2"  >Project Details</a>
+                    <a  >Project Details</a>
                 </li>
                 <li>
                     <a href={'/apps/appinstances/?app__title=Cartoview%20Workforce%20Manager&limit=100&offset=0&owner__username=' + username}>My Project</a>
                 </li>
               
                 <li  onClick={() => this.setState({page:"about" })}>
-                    <a href="#about">About</a>
+                    <a>About</a>
                 </li>
      
               

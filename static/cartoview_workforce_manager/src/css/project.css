@@ -460,7 +460,13 @@ textarea.form-control{
     border-top:5px solid #e74c3c;
     border-bottom:5px solid #e74c3c;
     background-color: rgba(241, 241, 241, 0.27) !important;
-    box-shadow: 10px 10px 5px #888888;
+    box-shadow:5px 5px 5px rgba(136, 136, 136, 0.73);
+    border-radius: 10px;
+
+
+
+
+
 }
 
 
@@ -501,7 +507,13 @@ textarea.form-control{
     border-top:5px solid #e74c3c;
     border-bottom:5px solid #e74c3c;
     /* padding:30px 25px; */
-    box-shadow: 10px 10px 5px #888888;
+    box-shadow: 5px 5px 5px rgba(136, 136, 136, 0.73);
+
+
+
+
+
+
 }
 @media only screen and (max-width: 480px){
     .tab > .nav-tabs li{
