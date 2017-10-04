@@ -82,7 +82,7 @@ export default class Edit extends Component {
 
                     )
                     this.setState({tCombEnum})
-                    console.log(tCombEnum)
+              
                     var priority={}
                     var Category={}
                     var status={}
@@ -136,7 +136,7 @@ export default class Edit extends Component {
               TaskObj['work_order'] = this.props.project.work_order.required_input?t.String:t.maybe(t.String)
             }
              if (this.state.checked.includes("assigned_to")) {
-              console.log(this.props.project.assigned_to)
+            
               TaskObj['assigned_to'] = this.props.project.assigned_to.required_input?t.enums(tCombEnum):t.maybe(t.enums(tCombEnum))
             } 
                     const Task=t.struct(TaskObj)
@@ -167,16 +167,13 @@ sendHistory=()=>{
                 }
 
             }).then(() => {
-
-           
-        })
-       
+ 
+        })     
     }
   
    
-   
     update(mapId) {
-      console.log("mapid",mapId);
+
       if (mapId) {
         var url = `/maps/${mapId}/data`
         fetch(url, {
@@ -189,9 +186,6 @@ sendHistory=()=>{
         }).then((config) => {
           if (config) {
             MapConfigService.load(MapConfigTransformService.transform(config), this.map);
-          //  this.props.onMapReady(this.map)
-
-
           }
         });
       }
@@ -200,21 +194,16 @@ sendHistory=()=>{
     init=( map )=> {
       var point_feature = new ol.Feature({ });
     		map.on('singleclick', ( e ) => {
-
-
-          this.setState({x:e.coordinate[0],y:e.coordinate[1],extent:map.getView().calculateExtent(map.getSize()),value:this.state.value})
-          var point_geom = new ol.geom.Point(e.coordinate)
-          console.log( this.state)
-
-          point_feature.setGeometry(point_geom);
-          var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
-
-           var style = new ol.style.Style({
-          image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
-          anchor: [0.5, 45],
-          anchorXUnits: 'fraction',
-          anchorYUnits: 'pixels',
-          src: URLS.static +'marker.png'
+                this.setState({x:e.coordinate[0],y:e.coordinate[1],extent:map.getView().calculateExtent(map.getSize()),value:this.state.value})
+                var point_geom = new ol.geom.Point(e.coordinate)
+                point_feature.setGeometry(point_geom);
+                var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
+                var style = new ol.style.Style({
+                image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+                anchor: [0.5, 45],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'pixels',
+                src: URLS.static +'marker.png'
       }))
       });
           vector_layer.setStyle(style);
@@ -222,64 +211,93 @@ sendHistory=()=>{
 
         })
 
-        if(this.state.x&&this.state.y) {
-
-          //postrender because feature doesnt appear on componentDidMount
-    
-   setTimeout(()=>{
-          var point_geom = new ol.geom.Point([this.state.x,this.state.y])
-          point_feature.setGeometry(point_geom);
-          // console.log(point_feature)
-          var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
-            map.setView(new ol.View({
-            center:  [parseInt(this.state.x),parseInt(this.state.y)],
-            zoom: 3
-                                        }));
-           var style = new ol.style.Style({
-          image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
-          anchor: [0.5, 45],
-          anchorXUnits: 'fraction',
-          anchorYUnits: 'pixels',
-          src: URLS.static +'marker.png'
-      }))
-      });
-          vector_layer.setStyle(style);
-         map.addLayer(vector_layer);
-      },500)}}
+        if(this.state.x&&this.state.y) {    
+            setTimeout(()=>{
+                    var point_geom = new ol.geom.Point([this.state.x,this.state.y])
+                    point_feature.setGeometry(point_geom);
+                    var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})
+                    map.setView(new ol.View({
+                        center:  [parseInt(this.state.x),parseInt(this.state.y)],
+                        zoom: 3
+                                                    }));
+                    var style = new ol.style.Style({
+                            image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+                            anchor: [0.5, 45],
+                            anchorXUnits: 'fraction',
+                            anchorYUnits: 'pixels',
+                            src: URLS.static +'marker.png'
+                }))
+                });
+                    vector_layer.setStyle(style);
+                    map.addLayer(vector_layer);
+                },500)}
+    }
         
+        historyCheck=()=>{
+           
+                    var date=new Date()
+                    var dt=date.toUTCString()
+                    if(this.state.value.status&&this.state.value.status!=this.props.task.status)
+                    {
+                                if(this.props.task.status){
+                                this.state['history']=this.state['history']+ username+"  changed the status from "+this.props.task.status +" to "+ this.state.value.status  +" at "+dt
+                                }
+                                else{
+                                this.state['history']=this.state['history']+ username+"  changed the status to "+ this.state.value.status  +" at "+dt   
+                                } 
+                                this.sendHistory()
+                    }
+                    if(this.state.value.priority&&this.state.value.priority!=this.props.task.priority)
+                    {
+                                if(this.props.task.priority ){
+                                this.state['history']= username+"  changed the priority from "+this.props.task.priority +" to "+ this.state.value.priority +" at "+dt
+                                
+                                }
+                                else {
+                                this.state['history']= username+"  changed the priority to "+ this.state.value.priority +" at "+dt
+                                    
+                                }
+                            this.sendHistory()
+                    }
+                    if(this.state.value.Category&&this.state.value.Category!=this.props.task.Category)
+                    {
+                                if(this.props.task.Category )
+                                {
+                                    this.state['history']= username+"  changed the Category from "+this.props.task.Category +" to "+ this.state.value.Category +" at "+dt
+                                }
+                                else
+                                {
+                                    this.state['history']= username+"  changed the Category to "+ this.state.value.Category +" at "+dt
+                                }
+                                this.sendHistory()
+
+                    }
+                    if(this.state.value.due_date&&this.state.value.due_date!=this.props.task.due_date)
+                    {
+                                if(this.props.task.due_date)
+                                {
+                                this.state['history']= username+"  changed the due date from "+this.props.task.due_date.toUTCString() +" to "+ this.state.value.due_date.toUTCString() +" at "+dt
+                                }
+                                else{
+                                this.state['history']= username+"  changed the due date to "+ this.state.value.due_date.toUTCString() +" at "+dt
+                                    
+                                }
+                                this.sendHistory()
+
+                    }
+                    if(this.state.value.assigned_to!="/apps/cartoview_workforce_manager/api/v1/user/undefined/"&&this.state.value.assigned_to!=this.props.task.assigned_to.username){
+                        this.state['history']= username+"  reassigned the task to "+ this.state.tCombEnum[this.state.value.assigned_to] +" at "+dt
+                        this.sendHistory()
+                    }
+        }
     save() {
         
-        var date=new Date()
-        var dt=date.toUTCString()
-        console.log("reff",this.refs.form)
-        if(this.state.value.status&&this.state.value.status!=this.refs.form.getValue().status){
-           this.state['history']=this.state['history']+ username+"  changed the status from "+this.state.value.status +" to "+ this.refs.form.getValue().status +" at "+dt
-           this.sendHistory()
-       }
-     if(this.state.value.priority&&this.state.value.priority!=this.refs.form.getValue().priority){
-           this.state['history']= username+"  changed the priority from "+this.state.value.priority +" to "+ this.refs.form.getValue().priority +" at "+dt
-           this.sendHistory()
-       }
-     if(this.state.value.Category&&this.state.value.Category!=this.refs.form.getValue().Category){
-     this.state['history']= username+"  changed the Category from "+this.state.value.Category +" to "+ this.refs.form.getValue().Category +" at "+dt
-     this.sendHistory()
-
-     }
-    if(this.state.value.due_date&&this.state.value.due_date!=this.refs.form.getValue().due_date){
-        console.log(this.state.value.due_date,this.refs.form.getValue().due_date)
-        this.state['history']= username+"  changed the due date from "+this.state.value.due_date.toUTCString() +" to "+ this.refs.form.getValue().due_date.toUTCString() +" at "+dt
-        this.sendHistory()
-
-    }
-    if(this.state.value.assigned_to!="/apps/cartoview_workforce_manager/api/v1/user/undefined/"&&this.state.value.assigned_to!=this.refs.form.getValue().assigned_to){
-        this.state['history']= username+"  reassigned the task to "+ this.state.tCombEnum[this.refs.form.getValue().assigned_to] +" at "+dt
-        this.sendHistory()
-
-    }
+     
     var value = this.refs.form.getValue();
+    this.setState({value:this.refs.form.getValue()})
     if (value) {
         let newValue=value.assigned_to?{...value,assigned_to:`/apps/cartoview_workforce_manager/api/v1/user/${value.assigned_to}/`}:value
-        console.log(newValue)
+ 
         this.setState({btnLoading:true})
         var project = {"project": {"pk": id}}
         if(this.state.x&&this.state.y){
@@ -289,7 +307,6 @@ sendHistory=()=>{
         }
     else{
     var copy = Object.assign(project, newValue)}
-    console.log("valueeeeeeeeeeeee",copy)
     this.setState({btnLoading:true})
     var url = '/apps/cartoview_workforce_manager/api/v1/task/'+this.props.task.id+'/'
     fetch(url, {
@@ -307,7 +324,7 @@ sendHistory=()=>{
             }
 
         }).then((res) => {
-     
+                this.historyCheck()
                 this.setState({"success": true,"btnLoading":false})
                
             })
