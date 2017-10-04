@@ -164,7 +164,8 @@ export default class AddTask extends Component {
       var vector_layer = new ol.layer.Vector({ source: new ol.source.Vector({ features: [point_feature] }) })
       var style = new ol.style.Style({
         image: new ol.style.Icon(/** @type {olx.style.IconOptions} */({
-          anchor: [0.5, 10],
+          anchor: [0.5, 45],
+          // offset: [0, 20],
           anchorXUnits: 'fraction',
           anchorYUnits: 'pixels',
           src: URLS.static + 'marker.png'

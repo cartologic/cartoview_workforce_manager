@@ -79,7 +79,7 @@ preparePoints=()=>{
                             var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: this.state.points})})
                             var style = new ol.style.Style({
                             image: new ol.style.Icon(({
-                            anchor: [0.5, 10],
+                             anchor: [0.5, 45],
                             anchorXUnits: 'fraction',
                             anchorYUnits: 'pixels',
                             src: URLS.static +'marker.png'
