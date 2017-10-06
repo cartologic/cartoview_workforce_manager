@@ -2,6 +2,18 @@ import React, {Component} from 'react';
 
 
 export default class Attachments extends Component {
+     constructor(props) {
+        super(props)
+        this.state = {
+            attachments: null,
+            flag: null,
+            success: false
+        }
+        this.getImage()
+    }
+getNext=()=>{
+
+}
     getImage = () => {
         var url = '/apps/cartoview_workforce_manager/api/v1/attachment/?task__id=' + this.props.task
         fetch(url, {
@@ -85,16 +97,7 @@ sendHistory=()=>{
         })
        
     }
-    constructor(props) {
-        super(props)
-        this.state = {
-            attachments: null,
-            flag: null,
-            success: false
-        }
-        this.getImage()
-    }
-
+   
     componentWillMount() {
         this.setState({"flag": false})
     }
@@ -111,17 +114,17 @@ sendHistory=()=>{
 
                 {this.state.attachments && <div className="container col-md-10">
 
-                    <div id="myCarousel" className="carousel slide" data-ride="carousel">
+                    <div id="myCarousel2" className="carousel slide" data-ride="carousel"  style={{"width":"350px","height": "300px"}}>
 
 
-                        <div className="carousel-inner">
+                        <div className="carousel-inner"  style={{"width":"350px","height": "300px"}}>
                             {this.state.attachments.length>0 && <div className="item active">
-                                <img src={this.state.attachments[0].image} style={{"width": "100%"}}/>
+                                <img src={this.state.attachments[0].image}  style={{"width":"350px","height": "300px"}}/>
                             </div>}
                             {this.state.attachments.map((attach, i) => {
                                 if (i > 0) {
                                     return <div className="item " key={i}>
-                                        <img src={attach.image} style={{"width": "100%"}}/>
+                                        <img src={attach.image}  style={{"width":"350px","height": "300px"}}/>
                                     </div>
                                 }
 
@@ -130,11 +133,11 @@ sendHistory=()=>{
                         </div>
 
 
-                        {this.state.flag && <a className="left carousel-control" href="#myCarousel" data-slide="prev">
+                        {this.state.flag && <a className="left carousel-control" href="#myCarousel2" data-slide="prev">
                             <span className="glyphicon glyphicon-chevron-left"></span>
 
                         </a>}
-                        {this.state.flag && <a className="right carousel-control" href="#myCarousel" data-slide="next">
+                        {this.state.flag && <a className="right carousel-control" href="#myCarousel2" data-slide="next">
                             <span className="glyphicon glyphicon-chevron-right"></span>
 
                         </a>}

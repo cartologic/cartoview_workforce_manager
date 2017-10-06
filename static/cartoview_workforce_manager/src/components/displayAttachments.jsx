@@ -103,17 +103,17 @@ console.log(this.props)
 
                 {this.state.attachments && <div className="container col-md-10">
 
-                    <div id="myCarousel" className="carousel slide" data-ride="carousel">
+                    <div id="myCarousel" className="carousel slide" data-ride="carousel"  style={{"height": "300px","width":"350px"}}>
 
 
-                        <div className="carousel-inner">
+                        <div className="carousel-inner"  style={{"width":"350px","height": "300px"}}>
                             {this.state.attachments.length>0 && <div className="item active">
-                                <img src={this.state.attachments[0].image} style={{"width": "100%"}}/>
+                                <img src={this.state.attachments[0].image} style={{"height": "300px","width":"350px"}}/>
                             </div>}
                             {this.state.attachments.map((attach, i) => {
                                 if (i > 0) {
                                     return <div className="item " key={i}>
-                                        <img src={attach.image} style={{"width": "100%"}}/>
+                                        <img src={attach.image}  style={{"height": "300px"}}/>
                                     </div>
                                 }
 

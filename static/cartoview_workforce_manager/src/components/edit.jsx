@@ -404,12 +404,12 @@ sendHistory=()=>{
                             <div className="panel-body"><Comments task={this.props.task.id}/></div>
                         </div>
                         <div className="panel panel-default">
-                    <div className="panel-heading">Images</div>
-                    <div className="panel-body"><Attachments task={this.props.task.id}/></div>
-                </div>
-                         
-                 </div>}
-                      
+                            <div className="panel-heading">Images</div>
+                            <div className="panel-body"><Attachments task={this.props.task.id}/></div>
+                        </div>
+                            
+                        </div>}
+                    
                     </div>
                 </div>
                  
