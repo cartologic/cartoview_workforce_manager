@@ -1,6 +1,11 @@
 import React,  {Component}from 'react'; 
 import Moment from 'react-moment'; 
-
+import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui/styles';
+import Button from 'material-ui/Button';
+import Paper from 'material-ui/Paper';
+import Grid from 'material-ui/Grid';
+import DeleteIcon from 'material-ui-icons/Delete';
 export default class TaskHistroy extends Component {
 constructor(props) {
 super(props)
@@ -57,13 +62,34 @@ this.loadTaskHistory()
 }
 render() {
         return ( 
-        <div> 
-                <div> <button className="btn btn-danger pull-right" onClick={this.clearHistory}> clear history</button>
-           </div>
-            <p>  &nbsp;- Task was created by {this.props.task.created_by.username} at < Moment  format = "DD/MM/YYYY"date =  {this.props.task.created_at}/></p>  
+
+
+
+                <div> 
+
+
+                <Grid container >
+                <Grid item xs={9}>
+                  <Grid
+                    container
+                   
+                    align="flex-start"
+
+                    justify="flex-end"
+                  >
+                  <Button raised color="accent" onClick={this.clearHistory}><DeleteIcon/>clear history
+                     
+                        </Button>
+                  </Grid>
+                  </Grid>
+                <p>  &nbsp;- Task was created by {this.props.task.created_by.username} at < Moment  format = "DD/MM/YYYY"date =  {this.props.task.created_at}/></p>  
             {this.state.taskhistory.map ((history,i) =>  {
                 if(history.text){
              return <p key={i}>  &nbsp;-  {history.text} </p > }
-                 })} </div> )
+                 })} 
+               
+               
+           
+                 </Grid>  </div> )
         }
 }
