@@ -3,9 +3,7 @@ import { render } from 'react-dom';
 import { addLocaleData, IntlProvider } from 'react-intl';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import enLocaleData from 'react-intl/locale-data/en';
-import enMessages from '@boundlessgeo/sdk/locale/en';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import CustomTheme from './theme';
+
 import './app.css';
 import AddTask from './components/addTask';
 import ProjectDetails from './components/ProjectDetails';
@@ -214,7 +212,7 @@ export default class ReactClient extends React.Component {
     }
 
     getChildContext() {
-        return { muiTheme: getMuiTheme(CustomTheme) };
+        // return { muiTheme: getMuiTheme(CustomTheme) };
     }
 
     componentDidMount() {
@@ -464,7 +462,7 @@ ReactClient.childContextTypes = {
     muiTheme: React.PropTypes.object
 };
 render(
-    <IntlProvider locale='en' messages={enMessages}>
+
         <ReactClient></ReactClient>
-    </IntlProvider>, document.getElementById('root'))
+   , document.getElementById('root'))
 
