@@ -285,7 +285,8 @@ sendHistory=()=>{
                                 this.sendHistory()
 
                     }
-                    if(this.state.value.assigned_to!="/apps/cartoview_workforce_manager/api/v1/user/undefined/"&&this.state.value.assigned_to!=this.props.task.assigned_to.username){
+                    // console.log("assign",this.state.value.assigned_to,this.props.task.assigned_to.id)
+                    if(this.state.value.assigned_to!="/apps/cartoview_workforce_manager/api/v1/user/undefined/"&&this.state.value.assigned_to!=this.props.task.assigned_to.id){
                         this.state['history']= username+"  reassigned the task to "+ this.state.tCombEnum[this.state.value.assigned_to] +" at "+dt
                         this.sendHistory()
                     }
