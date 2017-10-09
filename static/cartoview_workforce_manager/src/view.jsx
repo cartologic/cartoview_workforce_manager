@@ -3,7 +3,6 @@ import { render } from 'react-dom';
 import { addLocaleData, IntlProvider } from 'react-intl';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import enLocaleData from 'react-intl/locale-data/en';
-
 import './app.css';
 import AddTask from './components/addTask';
 import ProjectDetails from './components/ProjectDetails';
@@ -11,10 +10,133 @@ import MyTasks from './components/myTasks';
 import { getCRSFToken } from './helpers/helpers.jsx'
 import TaskDetails from './components/taskDetails.jsx'
 import './css/project.css'
+import { withStyles } from 'material-ui/styles';
+import Drawer from 'material-ui/Drawer';
+import Button from 'material-ui/Button';
+import Divider from 'material-ui/Divider';
 import ReactPaginate from 'react-paginate';
+import AppBar from 'material-ui/AppBar';
+import Toolbar from 'material-ui/Toolbar';
+import Typography from 'material-ui/Typography';
+import IconButton from 'material-ui/IconButton';
+import MenuIcon from 'material-ui-icons/Menu';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
+import Avatar from 'material-ui/Avatar';
+import List, { ListItem, ListItemSecondaryAction,ListItemIcon, ListItemText } from 'material-ui/List';
+import AssignmentIcon from 'material-ui-icons/Assignment';
+import AddIcon from 'material-ui-icons/PlaylistAdd';
+import InfoIcon from 'material-ui-icons/InfoOutline';
+import WorkIcon from 'material-ui-icons/Work';
+import FindIcon from 'material-ui-icons/FindInPage';
+import DetailsIcon from 'material-ui-icons/ChromeReaderMode';
+import ExpandLess from 'material-ui-icons/ExpandLess';
+import ExpandMore from 'material-ui-icons/ExpandMore';
+import StarBorder from 'material-ui-icons/StarBorder';
+import Collapse from 'material-ui/transitions/Collapse';
+import TextField from 'material-ui/TextField';
+import MenuItem from 'material-ui/Menu/MenuItem';
 injectTapEventPlugin();
 addLocaleData(enLocaleData);
-export default class ReactClient extends React.Component {
+const drawerWidth = 240;
+
+const styles = theme => ({
+  root: {
+    width: '100%',
+    height: 430,
+    marginTop: theme.spacing.unit * 3,
+    zIndex: 1,
+    overflow: 'hidden',
+  },
+    row: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  avatar: {
+    margin: 10,
+  },
+  bigAvatar: {
+    width: 60,
+    height: 60,
+  },
+
+
+  appFrame: {
+    position: 'relative',
+    display: 'flex',
+    width: '100%',
+    height: '100%',
+  },
+  appBar: {
+    position: 'absolute',
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  menu: {
+    width: 200,
+  },
+  appBarShift: {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  menuButton: {
+    marginLeft: 12,
+    marginRight: 20,
+  },
+  hide: {
+    display: 'none',
+  },
+  drawerPaper: {
+    position: 'relative',
+    height: '100%',
+    width: '25%',
+  },
+  drawerHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: '0 8px',
+    ...theme.mixins.toolbar,
+  },
+   nested: {
+    paddingLeft: theme.spacing.unit * 4,
+  },
+  content: {
+    width: '100%',
+    marginLeft: -drawerWidth,
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.default,
+    padding: theme.spacing.unit * 3,
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    height: 'calc(100% - 56px)',
+    marginTop: 56,
+    [theme.breakpoints.up('sm')]: {
+      content: {
+        height: 'calc(100% - 64px)',
+        marginTop: 64,
+      },
+    },
+  },
+  contentShift: {
+    marginLeft: 0,
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+});
+
+class ReactClient extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -38,7 +160,10 @@ export default class ReactClient extends React.Component {
             filtertask: null,
             flag: false,
             page: "tasks",
-            filterMenu: false
+            filterMenu: false,
+            open:false,
+            filterOpen:false,
+
 
         }
         this.loadTasks()
@@ -48,14 +173,16 @@ export default class ReactClient extends React.Component {
 
     }
 
-
+openFilterMenu = () => {
+    this.setState({ page:"tasks",filterOpen: !this.state.filterOpen });
+  };
 
     sendFilter = () => {
         this.setState({page: "tasks"})
         var priority = "", status = "", work_order = "", worker = "", dispatcher = "", category = ""
-        if (this.refs.priority.value) {
+        if (this.state.priority) {
 
-            priority = "priority=" + this.refs.priority.value + "&"
+            priority = "priority=" + this.state.priority + "&"
         }
         if (this.refs.category.value) {
 
@@ -104,12 +231,12 @@ export default class ReactClient extends React.Component {
                     this.setState({ pagedTasks: pagedTasks })
                     console.log(url, data)
                     console.log(data.objects.length)
-                    this.refs.priority.value ? this.refs.priority.value = "" : false
-                    this.refs.category.value ? this.refs.category.value = "" : false
-                    this.refs.status.value ? this.refs.status.value = "" : false
-                    this.refs.worker.value ? this.refs.worker.value = "" : false
-                    this.refs.work_order.value ? this.refs.work_order.value = "" : false
-                    this.refs.dispatcher.value ? this.refs.dispatcher.value = "" : false
+                    // this.state.priority ? this.refs.priority.value = "" : false
+                    // this.refs.category.value ? this.refs.category.value = "" : false
+                    // this.refs.status.value ? this.refs.status.value = "" : false
+                    // this.refs.worker.value ? this.refs.worker.value = "" : false
+                    // this.refs.work_order.value ? this.refs.work_order.value = "" : false
+                    // this.refs.dispatcher.value ? this.refs.dispatcher.value = "" : false
 
                 })
             })
@@ -229,43 +356,127 @@ export default class ReactClient extends React.Component {
     toggle = () => {
         this.setState({ filterMenu: !this.state.filterMenu })
     }
+    handlePriority =name=> event => {
+        console.log(event.target.value)
+    this.setState({
+     [name]: event.target.value,
+    });
+  };
+     
+          
 
-    render() {
-        let { currentComponent } = this.state
-        // this.state.project['Project_config']=[]
-        return (
-            <div id="wrapper" className="toggled">
-                <div className="overlay "></div>
-                <nav className="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
-                    <ul className="nav sidebar-nav ">
-                        <li className="sidebar-brand">
-                            <a >
-                                <img src={this.state.project.logo ? this.state.project.logo.base64 : URLS.static + 'nologo.png'} className="img-circle" style={{ "width": "50px", "marginRight": "3%" }} />
-                                {this.state.project.title}
-                            </a>
-                        </li>
-                        <hr />
-                        <li onClick={() => {
+           
+
+
+            myProjects=()=>{
+                window.location.href='/apps/appinstances/?app__title=Cartoview%20Workforce%20Manager&limit=100&offset=0&owner__username='+username
+            }
+            handleDrawerOpen = () => {
+                    this.setState({ open: true });
+                };
+
+            handleDrawerClose = () => {
+                this.setState({ open: false });
+            };
+            renderAppBar=()=>{
+                return( <div className={styles.root}>
+                            <div className={styles.appFrame}>
+                            <AppBar className={classNames(styles.appBar, this.state.open && styles.appBarShift)}>
+                                <Toolbar disableGutters={!this.state.open}>
+                                <IconButton
+                                    color="contrast"
+                                    aria-label="open drawer"
+                                    onClick={this.handleDrawerOpen}
+                                    className={classNames(styles.menuButton, this.state.open && styles.hide)}
+                                >
+                                    <MenuIcon />
+                                </IconButton>
+                               
+                                </Toolbar>
+                            </AppBar>
+                            <Drawer
+                                type="persistent"
+                                style={{
+                                paper: styles.drawerPaper,"width":"200px"
+                                }}
+                                open={this.state.open}
+                            >
+                                <div className={styles.drawerInner}>
+                                
+                                <Divider />
+                          <List>
+                        <ListItem  dense button  style={{
+                                paper: styles.drawerPaper,"width":"250px"
+                                }}>
+                                    <Avatar  src={this.state.project.logo ? this.state.project.logo.base64 : URLS.static + 'nologo.png'} />
+                                    <ListItemText primary={this.state.project.title} />
+                                    <ListItemSecondaryAction>
+                                        <IconButton onClick={this.handleDrawerClose}>
+                                        
+                                            <ChevronLeftIcon />
+                                        </IconButton>
+                                    </ListItemSecondaryAction>
+                                    </ListItem>
+                                        <Divider />
+                          
+                        <ListItem  dense button onClick={() => {
                             this.setState({ "selectedtask": null, result: false, page: "tasks" })
                             this.loadTasks()
-                        }} className="active"><a
-                            href="#home">Tasks</a>
-                        </li>
-                        <li onClick={() => this.setState({ currentComponent: "add", page: "new" })}
-                        ><a
-                            href="#menu1" >New Task</a>
-                        </li>
-                        <li className="dropdown" >
-                            <a onClick={this.toggle}>Filters <span className="caret"></span></a> </li>
-                        {this.state.filterMenu && <ul role="menu" >
+                        }} >  
+                         <ListItemIcon>
+                               <AssignmentIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary="Tasks"/>
+                        </ListItem>
+
+                   
+                         
+                        <ListItem   dense button onClick={() => this.setState({ currentComponent: "add", page: "new" })}
+                        >   
+                          <ListItemIcon>
+                               <AddIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary='New Task'/>
+                        </ListItem>
+                        
+                        
+                       
+
+<ListItem dense button onClick={this.openFilterMenu}>
+ <ListItemIcon>
+                               <FindIcon/>
+                        </ListItemIcon>
+                           <ListItemText primary="Filters"/>
+          {this.state.filterOpen ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={this.state.filterOpen} transitionDuration="auto" unmountOnExit>
+          <ListItem className={styles.nested}>
+             { <ul  >
                             {this.state.project.priority && this.state.project.Project_config.includes("priority") &&
-                                <select className="form-control" ref="priority">
-                                    <option value="">priority</option>
-                                    {this.state.project.priority.priority.map((pri, i) => {
-                                      return <option key={i} value={pri.label}>{pri.label}</option>
-                                    })
-                                    }
-                                </select>
+    
+                                  <TextField
+                                        style={{"width":"200px"}}
+                                        id="priority"
+                                        select
+                                            SelectProps={{
+                                            MenuProps: {
+                                            className: styles.menu,
+                                            },
+                                        }}
+                                        className={styles.textField}
+                                        value="ss"
+                                        
+                                        value={this.state.priority}
+                                        onChange={this.handlePriority('priority')}
+                                        helperText="Filter By Priority"
+                                        margin="normal">
+                                                                       
+          {this.state.project.priority.priority.map(option => (
+            <MenuItem key={option.label} value={option.label}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </TextField>
                             }
                             {this.state.project.status && this.state.project.Project_config.includes("status") &&
                                 <select className="form-control" ref="status">
@@ -301,30 +512,68 @@ export default class ReactClient extends React.Component {
                                     })}
 
                                 </select>}
-                            <button className="btn btn-default pull-right" style={{ "marginRight": "19px" }} onClick={this.sendFilter} >Filter</button>
-
+                                    <Button raised color="primary" style={{ "marginLeft": "50%" }} onClick={this.sendFilter} >Filter </Button>
+      
                         </ul>}
+          </ListItem>
+        </Collapse>
 
-                        <li onClick={() => this.setState({ currentComponent: "details", page: "details" })}>
-                            <a href="#menu2"  >Project Details</a>
-                        </li>
-                        <li>
-                            <a href={'/apps/appinstances/?app__title=Cartoview%20Workforce%20Manager&limit=100&offset=0&owner__username=' + username}>My Project</a>
-                        </li>
-                        <li onClick={() => this.setState({ page: "about" })}>
-                            <a href="#about">About</a>
-                        </li>
-                    </ul>
-                </nav>
+
+                        
+                        <ListItem  dense button onClick={() => this.setState({ currentComponent: "details", page: "details" })}>
+                            <ListItemIcon>
+                               <AssignmentIcon/>
+                            </ListItemIcon>
+                              <ListItemText primary='Project Details'/>
+                        </ListItem>
+                  
+                        <ListItem dense button onClick={this.myProjects}>
+                         <ListItemIcon>
+                               <WorkIcon/>
+                        </ListItemIcon>
+                          <ListItemText primary='My Projects'/>
+                        </ListItem>
+                      
+                        <ListItem dense button onClick={() => this.setState({ page: "about" })}>
+                              <ListItemIcon>
+                               <InfoIcon/>
+                        </ListItemIcon>
+                             <ListItemText primary='About'/>
+                        </ListItem>
+                   
+
+</List>
+
+
+
+
+
+
+
+
+
+
+
+
+                                </div>
+                            </Drawer>
+                         
+                            </div>
+                        </div>)
+            }
+    render() {
+        
+        let { currentComponent } = this.state
+        // this.state.project['Project_config']=[]
+        return (
+            <div >
+              {this.renderAppBar()}
+            
                 <div id="page-content-wrapper">
-                    <button type="button" className="hamburger is-open" data-toggle="offcanvas">
-                        <span className="hamb-top"></span>
-                        <span className="hamb-middle"></span>
-                        <span className="hamb-bottom"></span>
-                    </button>
+                   
                     <div className="">
                         <div className="">
-                            <div className="col-md-9 col-md-offset-1">
+                            <div className="col-md-6 col-md-offset-3">
                                 {this.state.loading &&
                                     <div>
                                         <div className="col-md-4"></div>
@@ -458,9 +707,11 @@ export default class ReactClient extends React.Component {
         )
     }
 }
+
 ReactClient.childContextTypes = {
     muiTheme: React.PropTypes.object
 };
+
 render(
 
         <ReactClient></ReactClient>
