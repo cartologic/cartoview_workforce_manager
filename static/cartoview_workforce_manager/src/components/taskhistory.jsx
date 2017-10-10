@@ -62,30 +62,20 @@ this.loadTaskHistory()
 }
 render() {
         return ( 
+                 <div>
 
 
-
-                <div> 
-
-
-                <Grid container >
-                <Grid item xs={9}>
-                  <Grid
-                    container
-                   
-                    align="flex-start"
-
-                    justify="flex-end"
-                  >
-                  <Button raised color="accent" onClick={this.clearHistory}><DeleteIcon/>clear history
-                     
-                        </Button>
-                  </Grid>
-                  </Grid>
+                        <Grid container >
+                                <Grid item xs={9}>
+                                        <Grid container align="flex-start" justify="flex-end">
+                                                <Button raised color="accent" onClick={this.clearHistory}><DeleteIcon/>clear history
+                                                </Button>
+                                        </Grid>
+                                </Grid>
                 <p>  &nbsp;- Task was created by {this.props.task.created_by.username} at < Moment  format = "DD/MM/YYYY"date =  {this.props.task.created_at}/></p>  
-            {this.state.taskhistory.map ((history,i) =>  {
-                if(history.text){
-             return <p key={i}>  &nbsp;-  {history.text} </p > }
+                     {this.state.taskhistory.map ((history,i) =>  {
+                 if(history.text){
+                     return <p key={i}>  &nbsp;-  {history.text} </p > }
                  })} 
                
                
