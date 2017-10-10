@@ -44,9 +44,9 @@ addLocaleData(enLocaleData);
 const drawerWidth = 250;
 
 const styles = theme => {
-   
-    return({
-        
+
+    return ({
+
         root: {
             width: '100%',
             height: 430,
@@ -65,10 +65,10 @@ const styles = theme => {
             width: 60,
             height: 60,
         },
-    
-    
+
+
         appFrame: {
-           
+
             display: 'flex',
             width: '100%',
             height: '100%',
@@ -84,8 +84,8 @@ const styles = theme => {
             width: 200,
         },
         appBarShift: {
-            marginLeft: drawerWidth+100,
-            width: `calc(100% - ${drawerWidth+50}px)`,
+            marginLeft: drawerWidth + 100,
+            width: `calc(100% - ${drawerWidth + 50}px)`,
             transition: theme.transitions.create(['margin', 'width'], {
                 easing: theme.transitions.easing.easeOut,
                 duration: theme.transitions.duration.enteringScreen,
@@ -377,11 +377,6 @@ class ReactClient extends React.Component {
         }, console.log(this.state));
     };
 
-
-
-
-
-
     myProjects = () => {
         window.location.href = '/apps/appinstances/?app__title=Cartoview%20Workforce%20Manager&limit=100&offset=0&owner__username=' + username
     }
@@ -407,7 +402,7 @@ class ReactClient extends React.Component {
                             <MenuIcon />
                         </IconButton>
                         <Typography type="title" color="inherit" noWrap>
-                Responsive drawer
+                            Responsive drawer
               </Typography>
                     </Toolbar>
                 </AppBar>
@@ -632,439 +627,419 @@ class ReactClient extends React.Component {
     }
 
 
-    renderResponsiveDrawer=()=>{  const { classes, theme } = this.props;
-    
+    renderResponsiveDrawer = () => {
+        const { classes, theme } = this.props;
+
         const drawer = (
             <div className={classes.drawerInner}>
 
+                <Divider />
+                <List>
+                    <ListItem dense button style={{
+                        paper: classes.drawerPaper,
+                    }}>
+                        <Avatar src={this.state.project.logo ? this.state.project.logo.base64 : URLS.static + 'nologo.png'} />
+                        <ListItemText primary={this.state.project.title} />
+                        <ListItemSecondaryAction>
+                            <IconButton onClick={this.handleDrawerClose}>
+
+                                <ChevronLeftIcon />
+                            </IconButton>
+                        </ListItemSecondaryAction>
+                    </ListItem>
                     <Divider />
-                    <List>
-                        <ListItem dense button style={{
-                            paper: classes.drawerPaper, 
-                        }}>
-                            <Avatar src={this.state.project.logo ? this.state.project.logo.base64 : URLS.static + 'nologo.png'} />
-                            <ListItemText primary={this.state.project.title} />
-                            <ListItemSecondaryAction>
-                                <IconButton onClick={this.handleDrawerClose}>
 
-                                    <ChevronLeftIcon />
-                                </IconButton>
-                            </ListItemSecondaryAction>
+                    <ListItem dense button onClick={() => {
+                        this.setState({ "selectedtask": null, result: false, page: "tasks" })
+                        this.loadTasks()
+                    }} >
+                        <ListItemIcon>
+                            <AssignmentIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Tasks" />
+                    </ListItem>
+                    <ListItem dense button onClick={() => this.setState({ currentComponent: "add", page: "new" })}
+                    >
+                        <ListItemIcon>
+                            <AddIcon />
+                        </ListItemIcon>
+                        <ListItemText primary='New Task' />
+                    </ListItem>
+                    <ListItem dense button onClick={this.openFilterMenu}>
+                        <ListItemIcon>
+                            <FindIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Filters" />
+                        {this.state.filterOpen ? <ExpandLess /> : <ExpandMore />}
+                    </ListItem>
+                    <Collapse in={this.state.filterOpen} transitionDuration="auto" unmountOnExit>
+                        <ListItem className={classes.nested}>
+                            {<ul  >
+                                {this.state.project.priority && this.state.project.Project_config.includes("priority") &&
+
+                                    <TextField
+                                        style={{ "width": "200px" }}
+                                        id="priority"
+                                        value={this.state.priority}
+                                        select
+                                        SelectProps={{
+                                            MenuProps: {
+                                                className: classes.menu,
+                                            },
+                                        }}
+                                        className={styles.textField}
+                                        onChange={this.handleFilter('priority')}
+                                        helperText="Filter By Priority"
+                                        margin="normal">
+
+                                        {this.state.project.priority.priority.map(option => (
+                                            <MenuItem key={option.label} value={option.label}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                }
+                                <br />
+                                {this.state.project.status && this.state.project.Project_config.includes("status") &&
+                                    <TextField
+                                        style={{ "width": "200px" }}
+                                        id="status"
+                                        select
+                                        SelectProps={{
+                                            MenuProps: {
+                                                className: styles.menu,
+                                            },
+                                        }}
+                                        className={styles.textField}
+
+
+                                        value={this.state.status}
+                                        onChange={this.handleFilter('status')}
+                                        helperText="Filter By Status"
+                                        margin="normal">
+
+                                        {this.state.project.status.status.map(option => (
+                                            <MenuItem key={option.label} value={option.label}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                }  <br />
+                                {this.state.project.Category && this.state.project.Project_config.includes("Category") &&
+
+                                    <TextField
+                                        style={{ "width": "200px" }}
+                                        id="category"
+                                        select
+                                        SelectProps={{
+                                            MenuProps: {
+                                                className: styles.menu,
+                                            },
+                                        }}
+                                        className={styles.textField}
+
+
+                                        value={this.state.category}
+                                        onChange={this.handleFilter('category')}
+                                        helperText="Filter By Category"
+                                        margin="normal">
+
+                                        {this.state.project.Category.Category.map(option => (
+                                            <MenuItem key={option.label} value={option.label}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>}
+
+                                <br />
+                                {this.state.project.Project_config.includes("work_order") &&
+
+
+                                    <TextField
+                                        id="workorder"
+                                        label="work_order"
+                                        className={classes.textField}
+                                        value={this.state.work_order}
+                                        onChange={this.handleFilter('Work_order')}
+                                        margin="normal"
+                                    />
+                                }
+                                <br />
+                                {this.state.dispatchers &&
+                                    <TextField
+                                        style={{ "width": "200px" }}
+                                        id="dispatcher"
+                                        select
+                                        SelectProps={{
+                                            MenuProps: {
+                                                className: styles.menu,
+                                            },
+                                        }}
+                                        className={styles.textField}
+                                        value={this.state.created_by}
+                                        onChange={this.handleFilter('created_by')}
+                                        helperText="Filter By Creator "
+                                        margin="normal">
+
+                                        {this.state.dispatchers.map(option => (
+                                            <MenuItem key={option.dispatcher.username} value={option.dispatcher.username}>
+                                                {option.dispatcher.username}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                }
+                                <br />
+                                {this.state.project.Project_config.includes("assigned_to") && this.state.project &&
+                                    <TextField
+                                        style={{ "width": "200px" }}
+                                        id="assignee"
+                                        select
+                                        SelectProps={{
+                                            MenuProps: {
+                                                className: styles.menu,
+                                            },
+                                        }}
+                                        className={styles.textField}
+                                        value={this.state.assigned_to}
+                                        onChange={this.handleFilter('assigned_to')}
+                                        helperText="Filter By assignee "
+                                        margin="normal">
+                                        {this.state.workers.map(option => (
+                                            <MenuItem key={option.worker.username} value={option.worker.username}>
+                                                {option.worker.username}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                }
+                                <Button raised color="primary" style={{ "marginLeft": "50%" }} onClick={this.sendFilter} >Filter </Button>
+
+                            </ul>}
                         </ListItem>
-                        <Divider />
+                    </Collapse>
+                    <ListItem dense button onClick={() => this.setState({ currentComponent: "details", page: "details" })}>
+                        <ListItemIcon>
+                            <AssignmentIcon />
+                        </ListItemIcon>
+                        <ListItemText primary='Project Details' />
+                    </ListItem>
 
-                        <ListItem dense button onClick={() => {
-                            this.setState({ "selectedtask": null, result: false, page: "tasks" })
-                            this.loadTasks()
-                        }} >
-                            <ListItemIcon>
-                                <AssignmentIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Tasks" />
-                        </ListItem>
-                        <ListItem dense button onClick={() => this.setState({ currentComponent: "add", page: "new" })}
-                        >
-                            <ListItemIcon>
-                                <AddIcon />
-                            </ListItemIcon>
-                            <ListItemText primary='New Task' />
-                        </ListItem>
-                        <ListItem dense button onClick={this.openFilterMenu}>
-                            <ListItemIcon>
-                                <FindIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Filters" />
-                            {this.state.filterOpen ? <ExpandLess /> : <ExpandMore />}
-                        </ListItem>
-                        <Collapse in={this.state.filterOpen} transitionDuration="auto" unmountOnExit>
-                            <ListItem className={classes.nested}>
-                                {<ul  >
-                                    {this.state.project.priority && this.state.project.Project_config.includes("priority") &&
+                    <ListItem dense button onClick={this.myProjects}>
+                        <ListItemIcon>
+                            <WorkIcon />
+                        </ListItemIcon>
+                        <ListItemText primary='My Projects' />
+                    </ListItem>
 
-                                        <TextField
-                                            style={{ "width": "200px" }}
-                                            id="priority"
-                                            value={this.state.priority}
-                                            select
-                                            SelectProps={{
-                                                MenuProps: {
-                                                    className: classes.menu,
-                                                },
-                                            }}
-                                            className={styles.textField}
-                                            onChange={this.handleFilter('priority')}
-                                            helperText="Filter By Priority"
-                                            margin="normal">
-
-                                            {this.state.project.priority.priority.map(option => (
-                                                <MenuItem key={option.label} value={option.label}>
-                                                    {option.label}
-                                                </MenuItem>
-                                            ))}
-                                        </TextField>
-                                    }
-                                    <br />
-                                    {this.state.project.status && this.state.project.Project_config.includes("status") &&
-                                        <TextField
-                                            style={{ "width": "200px" }}
-                                            id="status"
-                                            select
-                                            SelectProps={{
-                                                MenuProps: {
-                                                    className: styles.menu,
-                                                },
-                                            }}
-                                            className={styles.textField}
-
-
-                                            value={this.state.status}
-                                            onChange={this.handleFilter('status')}
-                                            helperText="Filter By Status"
-                                            margin="normal">
-
-                                            {this.state.project.status.status.map(option => (
-                                                <MenuItem key={option.label} value={option.label}>
-                                                    {option.label}
-                                                </MenuItem>
-                                            ))}
-                                        </TextField>
-                                    }  <br />
-                                    {this.state.project.Category && this.state.project.Project_config.includes("Category") &&
-
-                                        <TextField
-                                            style={{ "width": "200px" }}
-                                            id="category"
-                                            select
-                                            SelectProps={{
-                                                MenuProps: {
-                                                    className: styles.menu,
-                                                },
-                                            }}
-                                            className={styles.textField}
-
-
-                                            value={this.state.category}
-                                            onChange={this.handleFilter('category')}
-                                            helperText="Filter By Category"
-                                            margin="normal">
-
-                                            {this.state.project.Category.Category.map(option => (
-                                                <MenuItem key={option.label} value={option.label}>
-                                                    {option.label}
-                                                </MenuItem>
-                                            ))}
-                                        </TextField>}
-
-                                    <br />
-                                    {this.state.project.Project_config.includes("work_order") &&
-
-
-                                        <TextField
-                                            id="workorder"
-                                            label="work_order"
-                                            className={classes.textField}
-                                            value={this.state.work_order}
-                                            onChange={this.handleFilter('Work_order')}
-                                            margin="normal"
-                                        />
-                                    }
-                                    <br />
-                                    {this.state.dispatchers &&
-                                        <TextField
-                                            style={{ "width": "200px" }}
-                                            id="dispatcher"
-                                            select
-                                            SelectProps={{
-                                                MenuProps: {
-                                                    className: styles.menu,
-                                                },
-                                            }}
-                                            className={styles.textField}
-                                            value={this.state.created_by}
-                                            onChange={this.handleFilter('created_by')}
-                                            helperText="Filter By Creator "
-                                            margin="normal">
-
-                                            {this.state.dispatchers.map(option => (
-                                                <MenuItem key={option.dispatcher.username} value={option.dispatcher.username}>
-                                                    {option.dispatcher.username}
-                                                </MenuItem>
-                                            ))}
-                                        </TextField>
-                                    }
-                                    <br />
-                                    {this.state.project.Project_config.includes("assigned_to") && this.state.project &&
-                                        <TextField
-                                            style={{ "width": "200px" }}
-                                            id="assignee"
-                                            select
-                                            SelectProps={{
-                                                MenuProps: {
-                                                    className: styles.menu,
-                                                },
-                                            }}
-                                            className={styles.textField}
-                                            value={this.state.assigned_to}
-                                            onChange={this.handleFilter('assigned_to')}
-                                            helperText="Filter By assignee "
-                                            margin="normal">
-                                            {this.state.workers.map(option => (
-                                                <MenuItem key={option.worker.username} value={option.worker.username}>
-                                                    {option.worker.username}
-                                                </MenuItem>
-                                            ))}
-                                        </TextField>
-                                    }
-                                    <Button raised color="primary" style={{ "marginLeft": "50%" }} onClick={this.sendFilter} >Filter </Button>
-
-                                </ul>}
-                            </ListItem>
-                        </Collapse>
-                        <ListItem dense button onClick={() => this.setState({ currentComponent: "details", page: "details" })}>
-                            <ListItemIcon>
-                                <AssignmentIcon />
-                            </ListItemIcon>
-                            <ListItemText primary='Project Details' />
-                        </ListItem>
-
-                        <ListItem dense button onClick={this.myProjects}>
-                            <ListItemIcon>
-                                <WorkIcon />
-                            </ListItemIcon>
-                            <ListItemText primary='My Projects' />
-                        </ListItem>
-
-                        <ListItem dense button onClick={() => this.setState({ page: "about" })}>
-                            <ListItemIcon>
-                                <InfoIcon />
-                            </ListItemIcon>
-                            <ListItemText primary='About' />
-                        </ListItem>
-                    </List>
-                </div>
-        );
-    
-        return (
-          <div className={classes.root}>
-            <div className={classes.appFrame}>
-            <AppBar className={classNames(classes.appBar, this.state.open && classes.appBarShift)}>
-            <Toolbar disableGutters={!this.state.open}>
-                <IconButton
-                    color="contrast"
-                    aria-label="open drawer"
-                    onClick={this.handleDrawerOpen}
-                    className={classNames(classes.menuButton, this.state.open && classes.hide)}
-                >
-                    <MenuIcon />
-                </IconButton>
-                <Typography type="title" color="inherit" noWrap>
-        
-      </Typography>
-            </Toolbar>
-        </AppBar>
-              <Hidden mdUp>
-                <Drawer
-                  type="temporary"
-                  
-                  open={this.state.open}
-                  classes={{
-                    paper: classes.drawerPaper,
-                  }}
-                  onRequestClose={this.handleDrawerClose}
-                  ModalProps={{
-                    keepMounted: true, // Better open performance on mobile.
-                  }}
-                >
-                  {drawer}
-                </Drawer>
-              </Hidden>
-              <Hidden mdDown implementation="css">
-                <Drawer
-                type="persistent"
-                style={{
-                    paper: classes.drawerPaper,
-                }}
-                open={this.state.open
-                  }
-                >
-                  {drawer}
-                </Drawer>
-              </Hidden>
-              <main className={classes.content}>
-                <Typography type="body1" noWrap>
-                {this.renderAll()}
-                </Typography>
-              </main>
+                    <ListItem dense button onClick={() => this.setState({ page: "about" })}>
+                        <ListItemIcon>
+                            <InfoIcon />
+                        </ListItemIcon>
+                        <ListItemText primary='About' />
+                    </ListItem>
+                </List>
             </div>
-          </div>
         );
 
+        return (
+            <div className={classes.root}>
+                <div className={classes.appFrame}>
+                    <AppBar className={classNames(classes.appBar, this.state.open && classes.appBarShift)}>
+                        <Toolbar disableGutters={!this.state.open}>
+                            <IconButton
+                                color="contrast"
+                                aria-label="open drawer"
+                                onClick={this.handleDrawerOpen}
+                                className={classNames(classes.menuButton, this.state.open && classes.hide)}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography type="title" color="inherit" noWrap>
 
+                            </Typography>
+                        </Toolbar>
+                    </AppBar>
+                    <Hidden mdUp>
+                        <Drawer
+                            type="temporary"
 
+                            open={this.state.open}
+                            classes={{
+                                paper: classes.drawerPaper,
+                            }}
+                            onRequestClose={this.handleDrawerClose}
+                            ModalProps={{
+                                keepMounted: true, // Better open performance on mobile.
+                            }}
+                        >
+                            {drawer}
+                        </Drawer>
+                    </Hidden>
+                    <Hidden mdDown implementation="css">
+                        <Drawer
+                            type="persistent"
+                            style={{
+                                paper: classes.drawerPaper,
+                            }}
+                            open={this.state.open
+                            }
+                        >
+                            {drawer}
+                        </Drawer>
+                    </Hidden>
+                    <main className={classes.content}>
+                        <Typography type="body1" noWrap>
+                            {this.renderAll()}
+                        </Typography>
+                    </main>
+                </div>
+            </div>
+        );
+    }
 
+    renderAll = () => {
+        return (<div id="">
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
-
-renderAll=()=>{
-    return(<div id="">
-    
-                        <div className="">
-                            <div className="">
-                                <div className="col-md-6 col-md-offset-3">
-                                    {this.state.loading &&
-                                        <div>
-                                            <div className="col-md-4"></div>
-                                            <div className="col-md-4"><img src={URLS.static + 'cartoview_workforce_manager/loader'} />
-                                            </div>
-                                            <div className="col-md-4"></div>
-                                        </div>
-                                    }
-                                    {!this.state.loading && <div className="tab-content">
-                                        <div className="container" style={{    "marginTop": "-250"}}>
-                                            <div className="row">
-                                                <div className="col-md-8">
-                                                    <div className="tab" role="tabpanel">
-                                                        {this.state.tasks.length > 0 && !this.state.loading && this.state.page == "tasks" && <ul className="nav nav-tabs" role="tablist">
-                                                            <li role="presentation" className="active" onClick={() => {
-                                                                this.setState({ "selectedtask": null, result: false })
-                                                                this.loadTasks()
-                                                            }}><a href="#all" aria-controls="home" role="tab" data-toggle="tab"><i className="fa fa-envelope-o"></i>All Tasks</a></li>
-                                                            <li onClick={() => {
-                                                                this.setState({ "selectedtask": null, result: false })
-                                                                this.loadTasks()
-                                                            }} role="presentation"><a href="#mine" aria-controls="profile" role="tab" data-toggle="tab"><i className="fa fa-cube"></i>My tasks</a></li>
-                                                        </ul>}
-                                                        {this.state.page == "tasks" && <div id="home" className="tab-pane fade in active">
-                                                            <div className="tab-content">
-                                                                <div id="all" className="tab-pane fade in active" role="tabpanel">
-                                                                    <div className="">
-                                                                        <br />
-                                                                        {this.state.pagedTasks.length != 0 && !this.state.selectedtask && !this.state.loading &&
-                                                                            <div className="" style={{ "padding": "1%" }}>
-                                                                                <div className="" style={{ "overflowX": "auto" }}>
-                                                                                    <table className="table table-hover ">
-                                                                                        <thead>
-                                                                                            <tr>
-                                                                                                <th>Title</th>
-                                                                                                {this.state.project.Project_config.includes("assigned_to") && <th> Assigned To</th>}
-                                                                                                {this.state.project.Project_config.includes("priority") && <th>Priority</th>}
-                                                                                                {this.state.project.Project_config.includes("status") && <th>Status</th>}
-                                                                                            </tr>
-                                                                                        </thead>
-                                                                                        <tbody>
-                                                                                            {this.state.pagedTasks.map((item, i) => {
-                                                                                                return <tr key={i} onClick={() => {
-                                                                                                    this.setState({ "selectedtask": item })
-                                                                                                }} style={{ "cursor": "pointer" }}>
-                                                                                                    <td>{item.title}</td>
-                                                                                                    {this.state.project.Project_config.includes("assigned_to") && <td>{item.assigned_to.username ? item.assigned_to.username : "-"}</td>}
-                                                                                                    {this.state.project.Project_config.includes("priority") && <td>{item.priority ? item.priority : '-'}
-                                                                                                    </td>}
-                                                                                                    {this.state.project.Project_config.includes("status") && <td>{item.status ? item.status : '-'}
-                                                                                                    </td>}
-                                                                                                </tr>
-                                                                                            }
-                                                                                            )}
-                                                                                        </tbody>
-                                                                                    </table>
-                                                                                    {this.state.pageCount > 1 && <div className="commentBox">
-                                                                                        <ReactPaginate previousLabel={"previous"}
-                                                                                            nextLabel={"next"}
-                                                                                            breakLabel={<a href="">...</a>}
-                                                                                            breakClassName={"break-me"}
-                                                                                            pageCount={this.state.pageCount}
-                                                                                            marginPagesDisplayed={2}
-                                                                                            pageRangeDisplayed={5}
-                                                                                            onPageChange={this.handlePageClick}
-                                                                                            containerClassName={"pagination"}
-                                                                                            subContainerClassName={"pages pagination"}
-                                                                                            activeClassName={"active"} />
-                                                                                    </div>}
-                                                                                </div>
-                                                                            </div>
-                                                                        }
-                                                                        {this.state.pagedTasks.length == 0 && this.state.result && <p style={{
-                                                                            "fontSize": "25px",
-                                                                            "fontStyle": "oblique", "padding": "2%"
-                                                                        }}>No result found !</p>}
-                                                                        {
-                                                                            this.state.selectedtask &&
-                                                                            <div>
-                                                                                <TaskDetails task={this.state.selectedtask} mapid={this.state.project.mapid} project={this.state.project} />
-                                                                            </div>}
-                                                                        {!this.state.tasks.length && !this.state.loading && !this.state.result && <div style={{ "padding": "5%", "textAlign": "center" }}>
-                                                                            <p style={{
-                                                                                "fontSize": "25px",
-                                                                                "fontStyle": "oblique"
-                                                                            }}>No tasks yet for this project</p>
-                                                                        </div>
-                                                                        }
+            <div className="">
+                <div className="">
+                    <div className="col-md-6 col-md-offset-3">
+                        {this.state.loading &&
+                            <div>
+                                <div className="col-md-4"></div>
+                                <div className="col-md-4"><img src={URLS.static + 'cartoview_workforce_manager/loader'} />
+                                </div>
+                                <div className="col-md-4"></div>
+                            </div>
+                        }
+                        {!this.state.loading && <div className="tab-content">
+                            <div className="container" style={{ "marginTop": "-250" }}>
+                                <div className="row">
+                                    <div className="col-md-8">
+                                        <div className="tab" role="tabpanel">
+                                            {this.state.tasks.length > 0 && !this.state.loading && this.state.page == "tasks" && <ul className="nav nav-tabs" role="tablist">
+                                                <li role="presentation" className="active" onClick={() => {
+                                                    this.setState({ "selectedtask": null, result: false })
+                                                    this.loadTasks()
+                                                }}><a href="#all" aria-controls="home" role="tab" data-toggle="tab"><i className="fa fa-envelope-o"></i>All Tasks</a></li>
+                                                <li onClick={() => {
+                                                    this.setState({ "selectedtask": null, result: false })
+                                                    this.loadTasks()
+                                                }} role="presentation"><a href="#mine" aria-controls="profile" role="tab" data-toggle="tab"><i className="fa fa-cube"></i>My tasks</a></li>
+                                            </ul>}
+                                            {this.state.page == "tasks" && <div id="home" className="tab-pane fade in active">
+                                                <div className="tab-content">
+                                                    <div id="all" className="tab-pane fade in active" role="tabpanel">
+                                                        <div className="">
+                                                            <br />
+                                                            {this.state.pagedTasks.length != 0 && !this.state.selectedtask && !this.state.loading &&
+                                                                <div className="" style={{ "padding": "1%" }}>
+                                                                    <div className="" style={{ "overflowX": "auto" }}>
+                                                                        <table className="table table-hover ">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Title</th>
+                                                                                    {this.state.project.Project_config.includes("assigned_to") && <th> Assigned To</th>}
+                                                                                    {this.state.project.Project_config.includes("priority") && <th>Priority</th>}
+                                                                                    {this.state.project.Project_config.includes("status") && <th>Status</th>}
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                {this.state.pagedTasks.map((item, i) => {
+                                                                                    return <tr key={i} onClick={() => {
+                                                                                        this.setState({ "selectedtask": item })
+                                                                                    }} style={{ "cursor": "pointer" }}>
+                                                                                        <td>{item.title}</td>
+                                                                                        {this.state.project.Project_config.includes("assigned_to") && <td>{item.assigned_to.username ? item.assigned_to.username : "-"}</td>}
+                                                                                        {this.state.project.Project_config.includes("priority") && <td>{item.priority ? item.priority : '-'}
+                                                                                        </td>}
+                                                                                        {this.state.project.Project_config.includes("status") && <td>{item.status ? item.status : '-'}
+                                                                                        </td>}
+                                                                                    </tr>
+                                                                                }
+                                                                                )}
+                                                                            </tbody>
+                                                                        </table>
+                                                                        {this.state.pageCount > 1 && <div className="commentBox">
+                                                                            <ReactPaginate previousLabel={"previous"}
+                                                                                nextLabel={"next"}
+                                                                                breakLabel={<a href="">...</a>}
+                                                                                breakClassName={"break-me"}
+                                                                                pageCount={this.state.pageCount}
+                                                                                marginPagesDisplayed={2}
+                                                                                pageRangeDisplayed={5}
+                                                                                onPageChange={this.handlePageClick}
+                                                                                containerClassName={"pagination"}
+                                                                                subContainerClassName={"pages pagination"}
+                                                                                activeClassName={"active"} />
+                                                                        </div>}
                                                                     </div>
                                                                 </div>
-                                                                <div id="mine" className="tab-pane fade" role="tabpanel">
-                                                                    <MyTasks id={id} project={this.state.project} selected={this.state.selected} />
-                                                                </div>
+                                                            }
+                                                            {this.state.pagedTasks.length == 0 && this.state.result && <p style={{
+                                                                "fontSize": "25px",
+                                                                "fontStyle": "oblique", "padding": "2%"
+                                                            }}>No result found !</p>}
+                                                            {
+                                                                this.state.selectedtask &&
+                                                                <div>
+                                                                    <TaskDetails task={this.state.selectedtask} mapid={this.state.project.mapid} project={this.state.project} />
+                                                                </div>}
+                                                            {!this.state.tasks.length && !this.state.loading && !this.state.result && <div style={{ "padding": "5%", "textAlign": "center" }}>
+                                                                <p style={{
+                                                                    "fontSize": "25px",
+                                                                    "fontStyle": "oblique"
+                                                                }}>No tasks yet for this project</p>
                                                             </div>
-                                                        </div>}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {this.state.page == "new" && <div id="menu1">
-                                            {this.state.project && this.state.dispatchers && currentComponent === "add" &&
-                                                <AddTask project={this.state.project} mapid={this.state.project.mapid} dispatchers={this.state.dispatchers} />
-                                            }
-                                        </div>}
-                                        {this.state.page == "details" && <div id="menu2">
-                                            {this.state.workers && this.state.project && currentComponent === "details" &&
-                                                <ProjectDetails id={id} project={this.state.project} mapid={this.state.project.mapid} workers={this.state.workers} />
-                                            }
-                                        </div>}
-                                        {this.state.page == "about" &&
-                                            <div id="about">
-                                                <section className="success" id="about">
-                                                    <div className="">
-                                                        <h2 className="text-center">About</h2>
-                                                        <hr className="star-light" />
-                                                        <div className="text-center">
-                                                            <p className="para"> Cartoview app to manage project/work group tasks. It provides a full management of a task status, priority, location ,attachments and comments
-                                                            </p>
+                                                            }
                                                         </div>
                                                     </div>
-                                                </section>
-                                            </div>
-                                        }
+                                                    <div id="mine" className="tab-pane fade" role="tabpanel">
+                                                        <MyTasks id={id} project={this.state.project} selected={this.state.selected} />
+                                                    </div>
+                                                </div>
+                                            </div>}
+                                        </div>
                                     </div>
-                                    }
                                 </div>
                             </div>
+                            {this.state.page == "new" && <div id="menu1">
+                                {this.state.project && this.state.dispatchers && currentComponent === "add" &&
+                                    <AddTask project={this.state.project} mapid={this.state.project.mapid} dispatchers={this.state.dispatchers} />
+                                }
+                            </div>}
+                            {this.state.page == "details" && <div id="menu2">
+                                {this.state.workers && this.state.project && currentComponent === "details" &&
+                                    <ProjectDetails id={id} project={this.state.project} mapid={this.state.project.mapid} workers={this.state.workers} />
+                                }
+                            </div>}
+                            {this.state.page == "about" &&
+                                <div id="about">
+                                    <section className="success" id="about">
+                                        <div className="">
+                                            <h2 className="text-center">About</h2>
+                                            <hr className="star-light" />
+                                            <div className="text-center">
+                                                <p className="para"> Cartoview app to manage project/work group tasks. It provides a full management of a task status, priority, location ,attachments and comments
+                                                            </p>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            }
                         </div>
-                    </div>)
-}
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>)
+    }
     render() {
         console.log(this.props)
         let { currentComponent } = this.state
-        // this.state.project['Project_config']=[]
         return (
             <div >
                 {this.renderAppBar()}
-                 {this.renderAll()}
-               
+                {this.renderAll()}
+
             </div>
         )
     }
@@ -1076,11 +1051,11 @@ ReactClient.childContextTypes = {
 ReactClient.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-let App=withStyles(styles)(ReactClient)
+let App = withStyles(styles)(ReactClient)
 export default withStyles(styles)(ReactClient)
 render(
     <MuiThemeProvider >
-        <App/>
+        <App />
     </MuiThemeProvider>
     , document.getElementById('root'))
 
