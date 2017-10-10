@@ -460,7 +460,7 @@ class ReactClient extends React.Component {
                                         {this.state.project.priority && this.state.project.Project_config.includes("priority") &&
 
                                             <TextField
-                                                style={{ "width": "200px" }}
+                         
                                                 id="priority"
                                                 value={this.state.priority}
                                                 select
@@ -484,7 +484,7 @@ class ReactClient extends React.Component {
                                         <br />
                                         {this.state.project.status && this.state.project.Project_config.includes("status") &&
                                             <TextField
-                                                style={{ "width": "200px" }}
+                                       
                                                 id="status"
                                                 select
                                                 SelectProps={{
@@ -510,7 +510,7 @@ class ReactClient extends React.Component {
                                         {this.state.project.Category && this.state.project.Project_config.includes("Category") &&
 
                                             <TextField
-                                                style={{ "width": "200px" }}
+                                                
                                                 id="category"
                                                 select
                                                 SelectProps={{
@@ -539,6 +539,7 @@ class ReactClient extends React.Component {
 
                                             <TextField
                                                 id="workorder"
+                                                style={{    "width": "90px"}}
                                                 label="work_order"
                                                 className={classes.textField}
                                                 value={this.state.work_order}
@@ -549,7 +550,7 @@ class ReactClient extends React.Component {
                                         <br />
                                         {this.state.dispatchers &&
                                             <TextField
-                                                style={{ "width": "200px" }}
+                                      
                                                 id="dispatcher"
                                                 select
                                                 SelectProps={{
@@ -573,7 +574,7 @@ class ReactClient extends React.Component {
                                         <br />
                                         {this.state.project.Project_config.includes("assigned_to") && this.state.project &&
                                             <TextField
-                                                style={{ "width": "200px" }}
+                                    
                                                 id="assignee"
                                                 select
                                                 SelectProps={{
@@ -756,6 +757,7 @@ class ReactClient extends React.Component {
 
 
                                     <TextField
+                                        style={{    "width": "90px"}}
                                         id="workorder"
                                         label="work_order"
                                         className={classes.textField}
