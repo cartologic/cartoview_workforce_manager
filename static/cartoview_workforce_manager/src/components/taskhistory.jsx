@@ -6,6 +6,8 @@ import Button from 'material-ui/Button';
 import Paper from 'material-ui/Paper';
 import Grid from 'material-ui/Grid';
 import DeleteIcon from 'material-ui-icons/Delete';
+
+
 export default class TaskHistroy extends Component {
 constructor(props) {
 super(props)
@@ -62,24 +64,27 @@ this.loadTaskHistory()
 }
 render() {
         return ( 
-                 <div>
+           
 
-
-                        <Grid container >
-                                <Grid item xs={9}>
+                      <Paper>
+                         <Grid  >
+                                <Grid item xs={11}>
                                         <Grid container align="flex-start" justify="flex-end">
-                                                <Button raised color="accent" onClick={this.clearHistory}><DeleteIcon/>clear history
+                                                <Button fab color="accent" onClick={this.clearHistory}><DeleteIcon/>
                                                 </Button>
                                         </Grid>
                                 </Grid>
-                <p>  &nbsp;- Task was created by {this.props.task.created_by.username} at < Moment  format = "DD/MM/YYYY"date =  {this.props.task.created_at}/></p>  
+                <p style={{"padding":"2%"}}>  &nbsp;- Task was created by {this.props.task.created_by.username} at < Moment  format = "DD/MM/YYYY"date =  {this.props.task.created_at}/></p> 
+          
                      {this.state.taskhistory.map ((history,i) =>  {
                  if(history.text){
-                     return <p key={i}>  &nbsp;-  {history.text} </p > }
+                     return <p  style={{"padding":"2%"}} key={i}>  &nbsp;-  {history.text} </p > }
                  })} 
                
                
            
-                 </Grid>  </div> )
+                 </Grid>  
+                 </Paper>
+)
         }
 }
