@@ -580,14 +580,19 @@ class ReactClient extends React.Component {
           <main className={classNames(classes.content, this.state.open && classes.contentShift)}>
 
             {this.state.page == "tasks" && this.renderMainTabs()}
-            {this.state.project && this.state.dispatchers && this.state.page == "new" && <AddTask project={this.state.project} mapid={this.state.project.mapid} dispatchers={this.state.dispatchers}/>
+            {this.state.project && this.state.dispatchers && this.state.page == "new" && <AddTask project={this.state.project} mapid={this.state.project.mapid} dispatchers={this.state.dispatchers} classes={this.props.classes}/>
 }
-            {this.state.workers && this.state.project && this.state.page == "details" && <ProjectDetails id={id} project={this.state.project} mapid={this.state.project.mapid} workers={this.state.workers}/>
+            {this.state.workers && this.state.project && this.state.page == "details" && <ProjectDetails id={id} project={this.state.project} mapid={this.state.project.mapid} workers={this.state.workers}  classes={this.props.classes}/>
 }
-            {this.state.page == "about" && <p>
+            {this.state.page == "about" && 
+          <Grid container direction={"row"} spacing={16} align="center" justify="center">  
+            <Grid item xs={16} sm={8}>
+           <Paper><p style={{"padding": "100px"}}>
               Cartoview app to manage project/work group tasks. It provides a full management of a task status, priority, location ,attachments and comments
             </p>
-}
+            </Paper>
+            </Grid>
+            </Grid>}
           </main>
         </div>
       </div>
@@ -599,20 +604,20 @@ class ReactClient extends React.Component {
       <Grid container direction={"row"} spacing={16} align="center" justify="center">
         <Grid item xs={16} sm={8}>
           <AppBar position="static" color="default">
-            <Tabs value={this.state.tabValue} onChange={this.handleMainTabsChange} indicatorColor="primary" textColor="primary" centered fullwidth>
+            <Tabs value={this.state.tabValue} onChange={this.handleMainTabsChange} indicatorColor="primary" textColor="primary" centered >
               <Tab label="Tasks" onClick={() => {
                 this.setState({"selectedtask": null, result: false})
                 this.loadTasks()
-              }}/>
+              }} style={{ width: 700 }}/>
               <Tab label="My Tasks" onClick={() => {
                 this.setState({"selectedtask": null, result: false})
                 this.loadTasks()
-              }}/>
+              }} style={{ width: 700 }}/>
 
             </Tabs>
           </AppBar>
           {this.state.tabValue === 0 && <TabContainer>{this.renderTasksTable()}</TabContainer>}
-          {this.state.tabValue === 1 && <TabContainer><MyTasks id={id} project={this.state.project} selected={this.state.selected}/></TabContainer>}
+          {this.state.tabValue === 1 && <TabContainer><MyTasks id={id} project={this.state.project} selected={this.state.selected}  classes={this.props.classes}/></TabContainer>}
 
         </Grid>
       </Grid>
@@ -624,7 +629,7 @@ class ReactClient extends React.Component {
     return (
       <Paper className={classes.paper}>
         {this.state.loading && <Grid container direction={"row"} spacing={16} align="center" justify="center">
-          <Grid item xs={12} sm={6}>
+          <Grid >
             <img src={URLS.static + 'cartoview_workforce_manager/loader'}/>
           </Grid>
         </Grid>
