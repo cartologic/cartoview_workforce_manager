@@ -69,8 +69,8 @@ loadTask=()=>{
         <div className={classes.root}>
                 <AppBar position="static">
                 <Tabs value={this.state.value} onChange={this.handleChange} scrollable scrollButtons="off" centered>
-                    <Tab icon={<PersonPinIcon />}  label="Details" />
-                    <Tab icon={<EditIcon />}  label="Edit"/>
+                    <Tab icon={<PersonPinIcon />}  label="Details" onClick={this.loadTask} />
+                    <Tab icon={<EditIcon />}  label="Edit" onClick={this.loadTask} />
                     <Tab icon={<HistoryIcon />}  label="History"/>
                 
                 </Tabs>

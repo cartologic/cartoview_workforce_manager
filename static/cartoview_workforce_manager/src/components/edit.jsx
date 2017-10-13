@@ -10,8 +10,27 @@ import Attachments from './attachments.jsx';
 var tComb = {}
 import ol from 'openlayers';
 import Button from 'react-bootstrap-button-loader';
+import { withStyles } from 'material-ui/styles';
+import MenuItem from 'material-ui/Menu/MenuItem';
+import TextField from 'material-ui/TextField';
 
-export default class Edit extends Component {
+
+const styles = theme => ({
+  container: {
+   
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 500,
+  },
+  menu: {
+    width: 200,
+  },
+});
+
+class Edit extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -37,13 +56,13 @@ export default class Edit extends Component {
             },
             value: {
                 title: this.props.task.title,
-                description: this.props.task.description,
-                assigned_to:this.props.task.assigned_to.id,
+                description: this.props.task.description?this.props.task.description:"",
+                assigned_to:this.props.task.assigned_to.id?this.props.task.assigned_to.id:"",
                 due_date:this.props.task.due_date?new Date(this.props.task.due_date):null,
-                priority: this.props.task.priority,
-                status: this.props.task.status,
-                work_order: this.props.task.work_order,
-                Category: this.props.task.Category
+                priority: this.props.task.priority?this.props.task.priority:"",
+                status: this.props.task.status?this.props.task.status:"",
+                work_order: this.props.task.work_order!=0?this.props.task.work_order:"",
+                Category: this.props.task.Category?this.props.task.Category:""
             }
 } 
 
@@ -74,72 +93,45 @@ export default class Edit extends Component {
             })
             .then((data) => {
                 this.setState({assign: data.objects}, () => {
-                    var tCombEnum = {}
-                    this.state.assign.forEach((user) => {
+                    var workers = []
+                    this.state.assign.forEach((user,i) => {
 
-                            tCombEnum[user.worker.id] = user.worker.username
+                            workers[i]={"id":user.worker.id,"username": user.worker.username}
                         }
 
                     )
-                    this.setState({tCombEnum})
+                    this.setState({workers})
               
-                    var priority={}
-                    var Category={}
-                    var status={}
+                    var priority=[]
+                    var Category=[]
+                    var status=[]
                     
                     if(this.state.checked.includes("priority")){
                         for(var i=0;i<this.props.project.priority.priority.length;i++){
-                           priority[this.props.project.priority.priority[i].label]=this.props.project.priority.priority[i].label
+                           priority[i]={"label":this.props.project.priority.priority[i].label}
                        
                         } }
                          
                     if(this.state.checked.includes("Category")){
                         for(var j=0;j<this.props.project.Category.Category.length;j++){
-                           Category[this.props.project.Category.Category[j].label]=this.props.project.Category.Category[j].label
+                           Category[j]={"label":this.props.project.Category.Category[j].label}
                     
                     } }
                     if(this.state.checked.includes("status")){
                         
                         for(var z=0;z<this.props.project.status.status.length;z++){
-                        status[this.props.project.status.status[z].label]=this.props.project.status.status[z].label
+                        status[z]={"label":this.props.project.status.status[z].label}
                     
                     } }
                  this.setState({priority:priority,Category:Category,status:status},()=>{                          
-                const Priority = t.enums(this.state.priority)
-                const Category = t.enums(this.state.Category)
-                const Status = t.enums(this.state.status)
+             
             
                     const TaskObj = {
                         title: t.String,
-                        // description: t.String,
-                        //  assigned_to: maybe(t.enums(tCombEnum)),
-                        // work_order: t.maybe(t.Integer),
-                        // due_date: t.Date,                      
+                 
                     }
-                     if (this.state.checked.includes("description")) {
-              TaskObj['description'] = this.props.project.Description.required_input?t.String:t.maybe(t.String)
-            }
            
-            if (this.state.checked.includes("Category")) {
-              TaskObj['Category'] =this.props.project.Category.required_input?Category: t.maybe(Category)
-            }
-            if (this.state.checked.includes("priority")) {
-              TaskObj['priority'] = this.props.project.priority.required_input?Priority:t.maybe(Priority)
-            }
-            if (this.state.checked.includes("status")) {
-              TaskObj['status'] = this.props.project.status.required_input?Status:t.maybe(Status)
-            }
-            if (this.state.checked.includes("due_date")) {
-              TaskObj['due_date'] = this.props.project.due_date.required_input?t.Date:t.maybe(t.Date)
-            }
-            if (this.state.checked.includes("work_order")) {
-              TaskObj['work_order'] = this.props.project.work_order.required_input?t.String:t.maybe(t.String)
-            }
-             if (this.state.checked.includes("assigned_to")) {
-            
-              TaskObj['assigned_to'] = this.props.project.assigned_to.required_input?t.enums(tCombEnum):t.maybe(t.enums(tCombEnum))
-            } 
-                    const Task=t.struct(TaskObj)
+                     const Task=t.struct(TaskObj)
                     this.setState({task: Task,loading:false})
                 })
                 })
@@ -190,7 +182,10 @@ sendHistory=()=>{
         });
       }
     }
-
+     handleChange = name => event => {
+         this.state.value[name]=event.target.value
+         this.setState({[this.state.value.name]: event.target.value},console.log(this.state.value));
+      };
     init=( map )=> {
       var point_feature = new ol.Feature({ });
     		map.on('singleclick', ( e ) => {
@@ -276,10 +271,10 @@ sendHistory=()=>{
                     {
                                 if(this.props.task.due_date)
                                 {
-                                this.state['history']= username+"  changed the due date from "+this.props.task.due_date.toUTCString() +" to "+ this.state.value.due_date.toUTCString() +" at "+dt
+                                this.state['history']= username+"  changed the due date from "+this.props.task.due_date+" to "+ this.state.value.due_date+" at "+dt
                                 }
                                 else{
-                                this.state['history']= username+"  changed the due date to "+ this.state.value.due_date.toUTCString() +" at "+dt
+                                this.state['history']= username+"  changed the due date to "+ this.state.value.due_date +" at "+dt
                                     
                                 }
                                 this.sendHistory()
@@ -294,8 +289,8 @@ sendHistory=()=>{
     save() {
         
      
-    var value = this.refs.form.getValue();
-    this.setState({value:this.refs.form.getValue()})
+     var value = this.state.value
+    // this.setState({value:this.refs.form.getValue()})
     if (value) {
         let newValue=value.assigned_to?{...value,assigned_to:`/apps/cartoview_workforce_manager/api/v1/user/${value.assigned_to}/`}:value
  
@@ -340,12 +335,7 @@ sendHistory=()=>{
             this.map.updateSize()
             this.map.render()
             }, 2000)
-
-
-
-
-
-    }
+   console.log(this.state)}
   componentWillReceiveProps(nextProps){
   	if(nextProps.children != this.props.children){
 
@@ -353,8 +343,8 @@ sendHistory=()=>{
   
   }
     render() {
-    
-  
+        const {classes}=this.props
+        console.log(this.state)
         return (
             <div>
               {!this.state.task &&
@@ -372,13 +362,138 @@ sendHistory=()=>{
 
                              
                         {this.state.task &&
+                        <form className={classes.container} noValidate autoComplete="off">
+                          <TextField
+                            fullWidth
+                            label="Title"
+                            className={classes.textField}
+                             defaultValue={this.state.value.title}
+                            onChange={this.handleChange('title')}
+                            margin="normal"
+                            />
+                            <br/>
+                            {this.state.checked.includes("description") &&   <TextField
+                            
+                            label="Description"
+                            className={classes.textField}
+                            defaultValue={this.props.task.description}
+                            multiline
+                            rowsMax="4"
+                            onChange={this.handleChange('description')}
+                            margin="normal"
+                            />}<br/>
+                           {this.state.checked.includes("assigned_to") &&  <TextField
+                            select
+                            label="Assigned To"
+                             SelectProps={{
+                                               MenuProps: {
+                                                className: classes.menu,
+                                                },
+                                            }}
+                            className={classes.textField}
+                            value={this.state.value.assigned_to}
+                            onChange={this.handleChange('assigned_to')}
+                            margin="normal"
+                            >
+                              {this.state.workers.map(option => (
+                                    <MenuItem key={option.id} value={option.id}>
+                                    {option.username}
+                                    </MenuItem>
+                                ))}
+                            </TextField>}
+                            <br/>
+                          {this.state.checked.includes("due_date") &&    <TextField
+                            type="date"
+                            label="Due Date"
+                            className={classes.textField}
+                            value={this.state.value.due_date}
+                            onChange={this.handleChange('due_date')}
+                            margin="normal"
+                            InputLabelProps={{
+                              shrink: true,
+                                             }}
+                            />}
+                            <br/>
+                            {this.state.checked.includes("priority") && <TextField
+                            select
+                            label="priority"
+                            className={classes.textField}
+                             SelectProps={{
+                                             
+                                                MenuProps: {
+                                                className: classes.menu,
+                                                },
+                                            }}
+                            value={this.state.value.priority}
+                            onChange={this.handleChange('priority')}
+                            margin="normal"
+                            >
+                            {this.state.priority.map(option => (
+                                    <MenuItem key={option.label} value={option.label}>
+                                    {option.label}
+                                    </MenuItem>
+                                ))}
+                        </TextField>}
+                            <br/>
+                        {this.state.checked.includes("status") &&  <TextField
+                            select
+                            label="status"
+                            className={classes.textField}
+                            SelectProps={{
+                                             
+                                                MenuProps: {
+                                                className: classes.menu,
+                                                },
+                                            }}
+                            value={this.state.value.status}
+                            onChange={this.handleChange('status')}
+                            margin="normal"
+                            >
+                            
+                             {this.state.status.map(option => (
+                                    <MenuItem key={option.label} value={option.label}>
+                                    {option.label}
+                                    </MenuItem>
+                                ))}
+                            </TextField>}
+                            <br/>
+                               {this.state.checked.includes("Category") &&  <TextField
+                            select
+                            label="Category"
+                            className={classes.textField}
+                             SelectProps={{
+                                            
+                                                MenuProps: {
+                                                className: classes.menu,
+                                                },
+                                            }}
+                            value={this.state.value.Category}
+                            onChange={this.handleChange('Category')}
+                            margin="normal"
+                            >
+                             {this.state.Category.map(option => (
+                                    <MenuItem key={option.label} value={option.label}>
+                                    {option.label}
+                                    </MenuItem>
+                                ))}
+                            </TextField>}
+                            <br/>
+                             {this.state.checked.includes("work_order") &&       <TextField
+                            
+                            label="Work Order"
+                            className={classes.textField}
+                            defaultValue={this.state.value.work_order}
+                            onChange={this.handleChange('work_order')}
+                            margin="normal"
+                            />}
+                           
+                        </form>
                      
-                        <Form
-                            ref="form"
-                            options={this.state.options}
-                            type={this.state.task}
-                            value={this.state.value}
-                        />}
+                        }
+
+
+
+
                         {this.state.task &&
                         <div>
                         <label>Click to Edit Task Location</label>
@@ -421,3 +536,5 @@ sendHistory=()=>{
         )
     }
 }
+
+export default withStyles(styles)(Edit);
