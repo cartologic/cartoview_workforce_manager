@@ -118,7 +118,7 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
     }),
-    height: 'calc(100% - 56px)',
+    // height: 'calc(100% - 56px)',
     marginTop: 56,
     [theme.breakpoints.up('sm')]: {
       content: {
