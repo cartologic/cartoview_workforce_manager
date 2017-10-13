@@ -687,10 +687,10 @@ class ReactClient extends React.Component {
           "padding": "2%"
         }}>No result found !</p>}
         {this.state.selectedtask && <div>
-          <TaskDetails task={this.state.selectedtask} mapid={this.state.project.mapid} project={this.state.project}/>
+          <TaskDetails task={this.state.selectedtask} mapid={this.state.project.mapid} project={this.state.project} />
         </div>
 }
-        {this.state.project && this.state.dispatchers && this.state.page == "new" && <AddTask project={this.state.project} mapid={this.state.project.mapid} dispatchers={this.state.dispatchers}/>
+        {this.state.project && this.state.dispatchers && this.state.page == "new" && <AddTask project={this.state.project} mapid={this.state.project.mapid} dispatchers={this.state.dispatchers} />
 }
       </Paper>
     )
