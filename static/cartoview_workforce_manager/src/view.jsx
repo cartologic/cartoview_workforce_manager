@@ -38,15 +38,23 @@ import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/Menu/MenuItem';
 import Hidden from 'material-ui/Hidden';
 import Grid from 'material-ui/Grid';
-import {MuiThemeProvider} from 'material-ui/styles';
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import Table, {TableBody, TableCell, TableHead, TableRow} from 'material-ui/Table'
 import Tabs, {Tab} from 'material-ui/Tabs';
 import Paper from 'material-ui/Paper';
+import blue from 'material-ui/colors/blue';
+import red from 'material-ui/colors/red';
+
 injectTapEventPlugin();
 addLocaleData(enLocaleData);
 
 const drawerWidth = 240;
-
+const theme = createMuiTheme({
+  palette: {
+    // Purple and green play nicely together.
+    danger:red
+  },
+});
 const styles = theme => ({
   root: {
     // width: '100%',
@@ -602,7 +610,7 @@ class ReactClient extends React.Component {
   renderMainTabs = () => {
     return (
       <Grid container direction={"row"} spacing={16} align="center" justify="center">
-        <Grid item xs={16} sm={8}>
+        <Grid item  sm={8}>
           <AppBar position="static" color="default">
             <Tabs value={this.state.tabValue} onChange={this.handleMainTabsChange} indicatorColor="primary" textColor="primary" centered >
               <Tab label="Tasks" onClick={() => {
@@ -719,6 +727,6 @@ ReactClient.propTypes = {
 let App = withStyles(styles)(ReactClient)
 export default withStyles(styles)(ReactClient)
 render(
-  <MuiThemeProvider >
+  <MuiThemeProvider theme={theme}>
   <App/>
 </MuiThemeProvider>, document.getElementById('root'))
