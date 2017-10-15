@@ -520,16 +520,21 @@ sendHistory=()=>{
                 </div>}
                  {this.state.task &&
                         <div >
+                           <Paper style={{"marginTop":"2%"}}>
+                                <p style={{"padding":"1.5%","color":"rgba(0, 0, 0, 0.54)"}}><CommentIcon/> <b>Comments</b></p>
+                                <Divider/>
+                                <div>
+                                    <Comments task={this.props.task.id}/>
+                                </div>
+                            </Paper>
+                            <Paper style={{"marginTop":"2%"}}>
+                                <p style={{"padding":"1.5%","color":"rgba(0, 0, 0, 0.54)"}}><CommentIcon/> <b>Images</b></p>
+                                <Divider/>
+                                <div>
+                                <Attachments task={this.props.task.id}/>
+                                </div>
+                            </Paper>
                         
-                        <Paper style={{"marginTop":"2%"}}>
-                   <p style={{"padding":"1.5%","color":"rgba(0, 0, 0, 0.54)"}}><CommentIcon/> <b>Comments</b></p>
-                   <Divider/>
-                    <div><Comments task={this.props.task.id}/></div>
-                </Paper>
-                        <div className="panel panel-default">
-                            <div className="panel-heading">Images</div>
-                            <div className="panel-body"><Attachments task={this.props.task.id}/></div>
-                        </div>
                             
                         </div>}
                     
