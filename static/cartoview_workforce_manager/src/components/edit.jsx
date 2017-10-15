@@ -13,8 +13,12 @@ import Button from 'react-bootstrap-button-loader';
 import { withStyles } from 'material-ui/styles';
 import MenuItem from 'material-ui/Menu/MenuItem';
 import TextField from 'material-ui/TextField';
-
-
+import Paper from 'material-ui/Paper';
+import Divider from 'material-ui/Divider';
+import MenuIcon from 'material-ui-icons/Menu';
+import ImageIcon from 'material-ui-icons/Image';
+import CommentIcon from 'material-ui-icons/Comment';
+import LocationIcon from 'material-ui-icons/LocationOn';
 const styles = theme => ({
   container: {
    
@@ -365,6 +369,7 @@ sendHistory=()=>{
                         <form className={classes.container} noValidate autoComplete="off">
                           <TextField
                             fullWidth
+                          
                             label="Title"
                             className={classes.textField}
                              defaultValue={this.state.value.title}
@@ -373,7 +378,7 @@ sendHistory=()=>{
                             />
                             <br/>
                             {this.state.checked.includes("description") &&   <TextField
-                            
+                        
                             label="Description"
                             className={classes.textField}
                             defaultValue={this.props.task.description}
@@ -514,11 +519,13 @@ sendHistory=()=>{
 
                 </div>}
                  {this.state.task &&
-                        <div>
-                        <div className="panel panel-default">
-                            <div className="panel-heading">Comments</div>
-                            <div className="panel-body"><Comments task={this.props.task.id}/></div>
-                        </div>
+                        <div >
+                        
+                        <Paper style={{"marginTop":"2%"}}>
+                   <p style={{"padding":"1.5%","color":"rgba(0, 0, 0, 0.54)"}}><CommentIcon/> <b>Comments</b></p>
+                   <Divider/>
+                    <div><Comments task={this.props.task.id}/></div>
+                </Paper>
                         <div className="panel panel-default">
                             <div className="panel-heading">Images</div>
                             <div className="panel-body"><Attachments task={this.props.task.id}/></div>
