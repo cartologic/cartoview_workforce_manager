@@ -187,6 +187,7 @@ sendHistory=()=>{
       }
     }
      handleChange = name => event => {
+         console.log(event.target.value)
          this.state.value[name]=event.target.value
          this.setState({[this.state.value.name]: event.target.value},console.log(this.state.value));
       };

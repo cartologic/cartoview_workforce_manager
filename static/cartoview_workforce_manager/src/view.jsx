@@ -579,7 +579,9 @@ class ReactClient extends React.Component {
           </Hidden>
 
           <Hidden lgUp>
-            <Drawer className='myClass' type="temperory" classes={{
+            <Drawer className='myClass' type="temperory" 
+            onRequestClose={this.handleDrawerClose}
+            classes={{
               paper: classes.drawerPaper2
             }} open={this.state.open}>
               {drawer}
