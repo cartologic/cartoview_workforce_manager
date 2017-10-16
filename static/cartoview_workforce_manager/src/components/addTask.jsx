@@ -149,7 +149,8 @@ class AddTask extends Component {
       image: "",
       commentDone: false,
       imageDone: false,
-      commentValue:""
+      commentValue:"",
+      clicked:false,
     }
 
     this.map = new ol.Map({
@@ -328,7 +329,7 @@ console.log("copy",copy)
         }).then((data) => {
 
           if (this.state.commentValue != "") {
-            var comment = { "comment": this.state.comment, "task": { "pk": data.id } }
+            var comment = { "comment": this.state.commentValue, "task": { "pk": data.id } }
             var url = '/apps/cartoview_workforce_manager/api/v1/comment/'
             fetch(url, {
               method: "POST",
@@ -445,16 +446,18 @@ console.log("copy",copy)
       "status": this.state.statusValue,
       "Category": this.state.CategoryValue,
       "work_order": this.state.work_order,
-      "assigned_to": {pk:this.state.assigned_to},
+       "assigned_to": {pk:this.state.assigned_to},
        "due_date": this.state.due_date
     }
-    
-    this.setState({ value },()=>{
+    t
+    this.setState({ value ,clicked:true},()=>{
       console.log(value)
       var step = this.state.step + 1
       this.setState({ step: step, value: value }, () => {
         this.map.setTarget(ReactDOM.findDOMNode(this.refs.map))
-      })})
+      })
+    
+    })
 
     console.log(this.state)
 
@@ -526,6 +529,17 @@ console.log("copy",copy)
     </div>
     )
   }
+  validate=(field)=>{
+    console.log("this.state[field]",this.state[field])
+    if (field=="title"&&!this.state[field]){
+     return true
+    }
+   else{ console.log(field,this.state.checked.includes(field),this.state[field])
+  if  (this.state.checked.includes(field)&&!this.state[field]){
+    return true
+  }}
+  return false
+  }
   render() {
     const { classes } = this.props
     return (
@@ -545,7 +559,7 @@ console.log("copy",copy)
                       <TextField
                        fullWidth
                        
-                        required
+                        error={this.state.clicked&&this.validate("title")}
                         label="Title"
                         className={classes.textField}
                         value={this.state.title}
@@ -557,6 +571,7 @@ console.log("copy",copy)
                        fullWidth
 
                         label="Description"
+                        error={this.state.clicked&&this.validate("description")}
                         className={classes.textField}
                         value={this.state.description}
                         multiline

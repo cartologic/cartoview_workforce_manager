@@ -613,7 +613,7 @@ class ReactClient extends React.Component {
     return (
       <Grid container direction={"row"} spacing={16} align="center" justify="center">
         <Grid item  sm={8}>
-          <AppBar position="static" color="default">
+          {this.state.pagedTasks.length != 0 && !this.state.selectedtask &&<AppBar position="static" color="default">
             <Tabs value={this.state.tabValue} onChange={this.handleMainTabsChange} indicatorColor="primary" textColor="primary" centered >
               <Tab label="Tasks" onClick={() => {
                 this.setState({"selectedtask": null, result: false})
@@ -625,7 +625,7 @@ class ReactClient extends React.Component {
               }} style={{ width: 700 }}/>
 
             </Tabs>
-          </AppBar>
+          </AppBar>}
           {this.state.tabValue === 0 && <TabContainer>{this.renderTasksTable()}</TabContainer>}
           {this.state.tabValue === 1 && <TabContainer><MyTasks id={id} project={this.state.project} selected={this.state.selected}  classes={this.props.classes}/></TabContainer>}
 
