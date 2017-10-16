@@ -132,8 +132,8 @@ class AddTask extends Component {
       value: {},
       title: "",
       description: "",
-      assigned_to: "",
-      due_date: "",
+      assigned_to: null,
+      due_date: null,
       priorityValue: "",
       statusValue: "",
       work_order: "",
@@ -299,7 +299,9 @@ class AddTask extends Component {
     if (this.refs.image) {
       this.setState({ image: this.refs.image.value })
     }
-    var value = this.state;
+    console.log("value",this.state.value)
+    
+    var value = this.state.value;
     if (value) {
       var project = { "project": { "pk": id } }
       if (this.state.point.length) {
@@ -310,7 +312,7 @@ class AddTask extends Component {
       else {
         var copy = Object.assign(project, value);
       }
-
+console.log("copy",copy)
       this.setState({ loading: true })
       var url = '/apps/cartoview_workforce_manager/api/v1/task/'
       fetch(url, {
@@ -445,7 +447,7 @@ class AddTask extends Component {
       "Category": this.state.CategoryValue,
       "work_order": this.state.work_order,
       "assigned_to": this.state.assigned_to,
-      "due_date": this.state.due_date
+       "due_date": this.state.due_date
     }
     this.setState({ value })
 

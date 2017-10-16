@@ -61,12 +61,13 @@ class Edit extends Component {
             value: {
                 title: this.props.task.title,
                 description: this.props.task.description?this.props.task.description:"",
-                assigned_to:this.props.task.assigned_to.id?this.props.task.assigned_to.id:"",
+                assigned_to:this.props.task.assigned_to.id?this.props.task.assigned_to.id:null,
                 due_date:this.props.task.due_date?new Date(this.props.task.due_date):null,
                 priority: this.props.task.priority?this.props.task.priority:"",
                 status: this.props.task.status?this.props.task.status:"",
                 work_order: this.props.task.work_order!=0?this.props.task.work_order:"",
-                Category: this.props.task.Category?this.props.task.Category:""
+                Category: this.props.task.Category?this.props.task.Category:"",
+                "created_by":{"username":username}
             }
 } 
 
@@ -287,7 +288,7 @@ sendHistory=()=>{
                     }
                     // console.log("assign",this.state.value.assigned_to,this.props.task.assigned_to.id)
                     if(this.state.value.assigned_to!="/apps/cartoview_workforce_manager/api/v1/user/undefined/"&&this.state.value.assigned_to!=this.props.task.assigned_to.id){
-                        this.state['history']= username+"  reassigned the task to "+ this.state.tCombEnum[this.state.value.assigned_to] +" at "+dt
+                        this.state['history']= username+"  reassigned the task to "+ this.state.workers[this.state.value.assigned_to] +" at "+dt
                         this.sendHistory()
                     }
         }

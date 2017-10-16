@@ -497,7 +497,7 @@ class ReactClient extends React.Component {
               } < br /> {
                 this.state.project.Project_config.includes("work_order") && <TextField id="workorder" style={{
                     "width": "90px"
-                  }} label="work_order" className={classes.textField} value={this.state.work_order} onChange={this.handleFilter('Work_order')} margin="normal"/>
+                  }} label="work order" className={classes.textField} defaultValue={this.state.work_order} onChange={this.handleFilter('Work_order')} margin="normal"/>
               } < br /> {
                 this.state.dispatchers && <TextField id="dispatcher" select SelectProps={{
                     MenuProps: {
