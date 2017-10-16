@@ -1,58 +1,62 @@
 import React, {Component} from 'react';
+import { withStyles } from 'material-ui/styles';
+import { GridList, GridListTile, GridListTileBar } from 'material-ui/GridList';
+import IconButton from 'material-ui/IconButton';
+import StarBorderIcon from 'material-ui-icons/StarBorder';
+import Paper from 'material-ui/Paper';
+import Typography from 'material-ui/Typography';
+const styles = theme => ({
+  root: {
+   display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    overflow: 'hidden',
+    background: theme.palette.background.paper,
+  },
+  gridList: {
+    flexWrap: 'nowrap',
+    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+    transform: 'translateZ(0)',
+  },
+  title: {
+    color: theme.palette.primary[200],
+  },
+  titleBar: {
+    background:
+      'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+  },
+});
 
 
-export default class DisplayAttachments extends Component {
+class DisplayAttachments extends Component {
     getImage = () => {
-
         var url = '/apps/cartoview_workforce_manager/api/v1/attachment/?task__id=' + this.props.task
-
         fetch(url, {
             method: "GET",
             credentials: "same-origin",
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
-
             }),
-
         })
             .then(function (response) {
-
                 if (response.status >= 400) {
-
                     throw new Error("Bad response from server");
                 }
-
                 return response.json()
-
-
             }).then((data) => {
-
             if (data.objects.length > 0) {
                 this.setState({"flag": true})
             }
             this.setState({"attachments": data.objects})
-
         })
 
     }
     sendImg = () => {
-
-
         let data = new FormData();
-
         data.append('action', 'ADD');
-
         data.append('task', `/apps/cartoview_workforce_manager/api/v1/task/${this.props.task}/`);
         data.append('image', this.refs.img.files[0])
-
-// this works
-// let request = new XMLHttpRequest();
-// request.open('POST', url);
-// request.send(data);
-
-
         var url = '/apps/cartoview_workforce_manager/api/v1/attachment/'
-
         fetch(url, {
             method: "POST",
             credentials: "same-origin",
@@ -96,52 +100,39 @@ console.log(this.props)
 
     render() {
 
-
+ const { classes } = this.props;
         return (
             <div>
+            
+
+      {this.state.attachments &&<div className={classes.root}>
+      <GridList className={classes.gridList} cols={2.5}>
+        {this.state.attachments.map((tile,i) => (
+          <GridListTile key={i}>
+            <img src={tile.image}  />
+            <GridListTileBar
+             title=""
+              classes={{
+                root: classes.titleBar,
+            
+              }}
              
+            />
+          </GridListTile>
+        ))}
+      </GridList>
+    </div>}
 
-                {this.state.attachments && <div className="container col-md-10">
-
-                    <div id="myCarousel" className="carousel slide" data-ride="carousel"  style={{"height": "300px","width":"350px"}}>
-
-
-                        <div className="carousel-inner"  style={{"width":"350px","height": "300px"}}>
-                            {this.state.attachments.length>0 && <div className="item active">
-                                <img src={this.state.attachments[0].image} style={{"height": "300px","width":"350px"}}/>
-                            </div>}
-                            {this.state.attachments.map((attach, i) => {
-                                if (i > 0) {
-                                    return <div className="item " key={i}>
-                                        <img src={attach.image}  style={{"height": "300px"}}/>
-                                    </div>
-                                }
-
-                            })}
-
-                        </div>
-
-
-                        {this.state.flag && <a className="left carousel-control" href="#myCarousel" data-slide="prev">
-                            <span className="glyphicon glyphicon-chevron-left"></span>
-
-                        </a>}
-                        {this.state.flag && <a className="right carousel-control" href="#myCarousel" data-slide="next">
-                            <span className="glyphicon glyphicon-chevron-right"></span>
-
-                        </a>}
-                    </div>
-                </div>}
-
-
-
-{this.state.attachments.length==0 && 
-<div className="row" style={{"marginRight":"20%","padding": "2%"}}><p>No photos uploaded </p></div>
-} 
-
+ {this.state.attachments.length==0 && <Paper  elevation={4}>
+         <Typography type="headline" component="h3" style={{"padding": "20px"}}>
+          No Photos Yet
+        </Typography>
+        
+      </Paper>}
 
             </div>
 
         )
     }
 }
+export default withStyles(styles)(DisplayAttachments);

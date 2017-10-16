@@ -1,18 +1,32 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Moment from 'react-moment';
-export default class Comments extends Component {
+import Paper from 'material-ui/Paper';
+import Typography from 'material-ui/Typography';
+import { withStyles } from 'material-ui/styles';
+import DeleteIcon from 'material-ui-icons/Delete';
+import Icon from 'material-ui/Icon';
+import IconButton from 'material-ui/IconButton';
+import Button from 'material-ui/Button';
+import TextField from 'material-ui/TextField';
+const styles = theme => ({
+    root: theme.mixins.gutters({
+        paddingTop: 16,
+        paddingBottom: 16,
+
+    }),
+});
+class Comments extends Component {
     constructor(props) {
         super(props)
-
         this.state = {
-            comments: []
+            comments: [],
+            comment: ""
         }
         this.getComments()
-
-
     }
     sendComment = () => {
-        var comment = {"comment": this.refs.comment.value, "task": {"pk": this.props.task}}
+        var comment = { "comment": this.state.comment, "task": { "pk": this.props.task } }
+        console.log(comment)
         var url = '/apps/cartoview_workforce_manager/api/v1/comment/'
         fetch(url, {
             method: "POST",
@@ -23,21 +37,26 @@ export default class Comments extends Component {
             body: JSON.stringify(comment)
         })
             .then(function (response) {
-               
+
                 if (response.status >= 400) {
                     throw new Error("Bad response from server");
                 }
 
             }).then(() => {
-            this.sendHistory()
-            this.getComments()
-        })
-        this.refs.comment.value = ""
+                this.sendHistory()
+                this.getComments()
+            })
+        this.setState({ comment: "" })
     }
-    sendHistory=()=>{
-        var date=new Date()
-        var dt=date.toUTCString()
-        var text = {"text": username+ " added a comment at "+ dt, "task": {"pk": this.props.task}}
+    handleChange = name => event => {
+        this.setState({
+            [name]: event.target.value,
+        });
+    };
+    sendHistory = () => {
+        var date = new Date()
+        var dt = date.toUTCString()
+        var text = { "text": username + " added a comment at " + dt, "task": { "pk": this.props.task } }
         var url = '/apps/cartoview_workforce_manager/api/v1/history/'
         fetch(url, {
             method: "POST",
@@ -53,10 +72,7 @@ export default class Comments extends Component {
                 }
 
             }).then(() => {
-
-           
-        })
-       
+            })
     }
     deleteComment = (id) => {
         var url = '/apps/cartoview_workforce_manager/api/v1/comment/' + id
@@ -68,10 +84,10 @@ export default class Comments extends Component {
                 "Content-Type": "application/json; charset=UTF-8",
             }),
         }).then(function (response) {
-                if (response.status >= 400) {
-                    throw new Error("Bad response from server");
-                }
-            }).then(() => {
+            if (response.status >= 400) {
+                throw new Error("Bad response from server");
+            }
+        }).then(() => {
             this.getComments()
         })
     }
@@ -90,47 +106,68 @@ export default class Comments extends Component {
                 }
                 return response.json()
             }).then((data) => {
-            this.setState({"comments": data.objects})
-        })
+                this.setState({ "comments": data.objects })
+            })
     }
     render() {
+        const { classes } = this.props;
         return (
-			<div>
-				<div>
-					<textarea ref="comment" className="form-control" rows="2" id="comment"
-							  placeholder="add comment"></textarea>
-				</div>
-				<div style={{"paddingTop": 10}}>
-					<button className="btn btn-default pull-right" onClick={this.sendComment}>Comment</button>
-				</div>
-				<div style={{"marginTop": "5%"}}>
+            <div style={{    padding: "20px"}}>
+                <div>
+                    <TextField
+                        ref="comment"
+                        id="comment"
+                        value={this.state.comment}
+                        onChange={this.handleChange('comment')}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        placeholder="Add Comment"
+
+                        fullWidth
+                        margin="normal"
+                    />
+                </div>
+                <div style={{ display: "flex", "paddingTop": 10 }}>
+                    <div style={{ flexGrow: 1 }}></div>
+                    <Button raised disabled={this.state.comment ? false : true} className={classes.button} onClick={this.sendComment} >
+                        Comment
+                     </Button>
+                </div>
+                <div style={{ "marginTop": "5%" }}>
                     {this.state.comments.map((comment, i) => {
-                        return <div key={i} className="well ">
-							<div className="media">
-								<div className="media-body">
-									<h4 className="media-heading"><img src={URLS.static+'user'} style={{"width": "5%","marginRight":"1%"}}/>{comment.commenter.username}
-										<small><i> Posted on <Moment
-											format="YYYY/MM/DD">{comment.created_at}</Moment></i></small>
-									</h4>
-									<p>{comment.comment}</p>
-								</div>
-              {  comment.commenter.username==username &&
-								<button className="btn btn-link pull-right "
-										style={{"color": "indianred", "padding": "0%"}}
-										onClick={() => this.deleteComment(comment.id)}>Delete
-								</button>}
+                        return <div key={i} >
+                            <div >
+                                <Paper key={i} style={{ "padding": "1.5%", "marginTop": "1%" }}>
+
+                                    <h4><img src={URLS.static + 'user'} style={{ "width": "5%", "marginRight": "1%" }} />{comment.commenter.username}
+                                    </h4>
+                                    <i style={{ "fontSize": "12px", "color": "gray" }}> Posted on <Moment
+                                        format="YYYY/MM/DD">{comment.created_at}</Moment>
+                                    </i>
+
+                                    <p style={{ "padding": "20px", "border": "dashed 1px gainsboro", "borderRadius": "20px" }}>{comment.comment}
+
+                                    </p>
+                                    {comment.commenter.username == username &&
+
+                                        <IconButton className={classes.button} aria-label="Delete" onClick={() => this.deleteComment(comment.id)}>
+                                            <DeleteIcon />
+                                        </IconButton>}
+                                </Paper>
 
 
-							</div>
-						</div>
+
+                            </div>
+                        </div>
 
 
                     })}
 
 
-				</div>
-			</div>
-
+                </div>
+            </div>
         )
     }
 }
+export default withStyles(styles)(Comments)

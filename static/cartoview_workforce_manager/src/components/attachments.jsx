@@ -1,16 +1,61 @@
 import React, {Component} from 'react';
+import { withStyles } from 'material-ui/styles';
+import MenuItem from 'material-ui/Menu/MenuItem';
+import TextField from 'material-ui/TextField';
+import Paper from 'material-ui/Paper';
+import Divider from 'material-ui/Divider';
+import { GridList, GridListTile, GridListTileBar } from 'material-ui/GridList';
+import Typography from 'material-ui/Typography';
+import Button from 'material-ui/Button';
+import { SnackbarContent } from 'material-ui/Snackbar';
+import Snackbar from 'material-ui/Snackbar';
 
-
-export default class Attachments extends Component {
+const styles = theme => ({
+    root: {
+     display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'space-around',
+      overflow: 'hidden',
+      background: theme.palette.background.paper,
+    },
+    gridList: {
+      flexWrap: 'nowrap',
+      // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+      transform: 'translateZ(0)',
+    },
+    title: {
+      color: theme.palette.primary[200],
+    },
+    titleBar: {
+      background:
+        'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+    },
+  });
+class Attachments extends Component {
      constructor(props) {
         super(props)
         this.state = {
             attachments: null,
             flag: null,
-            success: false
+            success: false,
+            open: false,
+            vertical: null,
+            horizontal: null,
+          
         }
         this.getImage()
     }
+    handleClick = state => () => {
+        this.setState({ open: true, ...state });
+      };
+    
+      handleRequestClose = () => {
+          console.log(
+              "handel close"
+          )
+        this.setState({ "open": false,"success":false });
+
+      };
 getNext=()=>{
 
 }
@@ -42,10 +87,6 @@ getNext=()=>{
         data.append('task', `/apps/cartoview_workforce_manager/api/v1/task/${this.props.task}/`);
         data.append('image', this.refs.img.files[0])
 console.log(data)
-// this works
-// let request = new XMLHttpRequest();
-// request.open('POST', url);
-// request.send(data);
 
 
         var url = '/apps/cartoview_workforce_manager/api/v1/attachment/'
@@ -66,9 +107,10 @@ console.log(data)
                 return response
 
             }).then(() => {
-            this.setState({"success": true})
+            this.setState({"success": true,open:true})
             this.sendHistory()
             this.getImage()
+            this.refs.img.value=""
         })
 
 
@@ -102,47 +144,47 @@ sendHistory=()=>{
         this.setState({"flag": false})
     }
     render() {
-
+        const vertical="bottom", horizontal="center"
+        const { classes } = this.props;
+        console.log(this.refs)
         return (
             <div>
-                <input type="file" className="form-control" ref="img" name="image" style={{"marginBottom": "2%"}}/>
-                {this.state.success && <div className="alert alert-info">
-                    Your image was attached successfully.
-                </div>}
-                <button className="btn btn-default pull-right" style={{marginTop: "2%"}} onClick={this.sendImg}>upload
-                </button>
+                <input type="file"  ref="img" name="image" style={{"margin": "2%"}}/>
+              
 
-                {this.state.attachments && <div className="container col-md-10">
-
-                    <div id="myCarousel2" className="carousel slide" data-ride="carousel"  style={{"width":"350px","height": "300px"}}>
-
-
-                        <div className="carousel-inner"  style={{"width":"350px","height": "300px"}}>
-                            {this.state.attachments.length>0 && <div className="item active">
-                                <img src={this.state.attachments[0].image}  style={{"width":"350px","height": "300px"}}/>
-                            </div>}
-                            {this.state.attachments.map((attach, i) => {
-                                if (i > 0) {
-                                    return <div className="item " key={i}>
-                                        <img src={attach.image}  style={{"width":"350px","height": "300px"}}/>
-                                    </div>
-                                }
-
-                            })}
-
-                        </div>
-
-
-                        {this.state.flag && <a className="left carousel-control" href="#myCarousel2" data-slide="prev">
-                            <span className="glyphicon glyphicon-chevron-left"></span>
-
-                        </a>}
-                        {this.state.flag && <a className="right carousel-control" href="#myCarousel2" data-slide="next">
-                            <span className="glyphicon glyphicon-chevron-right"></span>
-
-                        </a>}
-                    </div>
-                </div>}
+            
+         {this.state.success&&<Snackbar
+         anchorOrigin={{ vertical, horizontal }}
+         open={open}
+         onRequestClose={this.handleRequestClose}
+         SnackbarContentProps={{
+           'aria-describedby': 'message-id',
+         }}
+         message={<span id="message-id">"Your image was attached successfully."</span>}
+       />}
+                <div style={{ display: "flex", "paddingTop": 10 }}>
+                    <div style={{ flexGrow: 1 }}></div>
+                    <Button style={{ margin:"2%"}} raised className={classes.button} onClick={this.sendImg} >
+                        Upload
+                     </Button>
+                </div>
+                {this.state.attachments &&<div className={classes.root}>
+                    <GridList className={classes.gridList} cols={2.5}>
+                        {this.state.attachments.map((tile,i) => (
+                        <GridListTile key={i}>
+                            <img src={tile.image}  />
+                            <GridListTileBar
+                            title=""
+                            classes={{
+                                root: classes.titleBar,
+                            
+                            }}
+                            
+                            />
+                        </GridListTile>
+                        ))}
+                    </GridList>
+    </div>}
 
 
             </div>
@@ -150,3 +192,4 @@ sendHistory=()=>{
         )
     }
 }
+export default withStyles(styles)(Attachments)

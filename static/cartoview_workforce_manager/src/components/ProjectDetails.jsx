@@ -1,7 +1,11 @@
 import React, {Component} from 'react';
 import {getCRSFToken} from '../helpers/helpers.jsx'
-import '../css/project.css'
+import Paper from 'material-ui/Paper';
 import ShowAllLocationMap from './showAllLocationMap.jsx';
+import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
+import Divider from 'material-ui/Divider';
+import InboxIcon from 'material-ui-icons/Inbox';
+import DraftsIcon from 'material-ui-icons/Drafts';
 export default class ProjectDetails extends Component {
     constructor(props) {
         super(props)
@@ -39,57 +43,57 @@ export default class ProjectDetails extends Component {
     }
 
     render() {
+        const classes=this.props.classes
         return (
             <div>
-               
-
-                {this.state.project && <div className="tab-content" >
-                    <ul className="list-group"  style={{"borderTop": "5px solid #e74c3c","borderBottom": "5px solid #e74c3c",   "boxShadow": "10px 10px 5px #888888"}}>
-                        <li className="list-group-item">
-                            <div className="headers"><b>Project Title:</b></div>
-                            {this.state.project.title}</li>
-                        <li className="list-group-item">
-                            <div className="headers"><b>Project Abstract:</b></div>
-                            {this.state.project.abstract}</li>
-                        <li className="list-group-item">
-                            <div className="headers"><b>Project was created by:</b></div>
-                            {this.state.project.owner}</li>
-                       <li className="list-group-item">
-                            <div className="headers"><b>Project Workers:</b></div>
-                            <div style={{'padding': '3%'}}>
-                                <ul style={{"listStyleType": "disc"}}>
-                                    {this.props.workers.map((worker, i) => {
-
-                                        return <li key={i}>{worker.worker.username}</li>
-                                    })}
-
-                                </ul>
-                            </div>
-                        </li>
-                        <li className="list-group-item">
-                            <div className="headers"><b>Project Dispatchers :</b></div>
-
-
-                            <div style={{'padding': '3%'}}>
-                                <ul style={{"listStyleType": "disc"}}>
-                                    {this.props.project.dispatchers.map((dispatcher, i) => {
-
-                                        return <li key={i}>{dispatcher.username}</li>
-                                    })}
-
-                                </ul>
-                            </div>
-                        </li>
-                        <li className="list-group-item">
-                            <div className="headers"><b>Project map</b></div>
-                            <ShowAllLocationMap mapId={this.props.mapid} project={this.state.project.id} />
-                          </li>
-
-                    </ul>
-
-                </div>
+                {this.state.project && 
+               <Paper>
+                  <div className={classes.root} >
+                        <List>
+                            <ListItem > 
+                            <p> <b>Project Title </b>: {this.state.project.title}</p>
+                            </ListItem>
+                                <Divider />
+                            <ListItem >
+                            <p> <b>Project Abstract </b>: {this.state.project.abstract} </p>
+                            </ListItem>
+                            <Divider />
+                            <ListItem >
+                            <p><b>Project was created by </b> : {this.state.project.owner} </p>
+                            </ListItem>
+                            <Divider />
+                            <ListItem >
+                            <div>
+                            <p><b>Project Dispatchers </b> : </p>
+                            <br/>
+                            {this.props.project.dispatchers.map((dispatcher, i) => {
+                                  return <p key={i}> {dispatcher.username}</p>
+                                                        })}
+                                                        </div>
+                            </ListItem>
+                            <Divider />
+                            <ListItem >
+                            <div>
+                            <p><b>Project Workers </b> : </p>
+                            <br/>
+                            {this.props.workers.map((worker, i) => {
+                                  return <p key={i}>{worker.worker.username}</p>
+                                                        })}
+                             </div>
+                            </ListItem>
+                            <Divider />
+                            <ListItem style={{"display":"block"}}>
+                                <p><b>Project map</b></p>
+                                <ShowAllLocationMap mapId={this.props.mapid} project={this.state.project.id} />
+                            </ListItem>
+                            <Divider />
+                        </List>
+                    
+                        
+                        </div>
+                </Paper>
                 }
-               
-            </div> )
+               </div>
+           )
     }
 }

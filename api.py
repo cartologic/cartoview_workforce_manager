@@ -51,8 +51,7 @@ class ProjectResource(ModelResource):
         ProfileResource, 'owner', full=True, null=True, blank=True)
     def hydrate_owner(self, bundle):
 
-        # owner, created = Profile.objects.get_or_create(
-        #     username=bundle.data['owner'])
+        # owner, created = Profile.objects.get_or_create(username=bundle.data['owner'])
         # bundle.data['owner'] = owner
         bundle.obj.owner = bundle.request.user
         return bundle

@@ -1,470 +1,734 @@
 import React from 'react';
-import { render } from 'react-dom';
-import { addLocaleData, IntlProvider } from 'react-intl';
+import {render} from 'react-dom';
+import {addLocaleData, IntlProvider} from 'react-intl';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import enLocaleData from 'react-intl/locale-data/en';
-import enMessages from '@boundlessgeo/sdk/locale/en';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import CustomTheme from './theme';
 import './app.css';
 import AddTask from './components/addTask';
 import ProjectDetails from './components/ProjectDetails';
 import MyTasks from './components/myTasks';
-import { getCRSFToken } from './helpers/helpers.jsx'
+import {getCRSFToken} from './helpers/helpers.jsx'
 import TaskDetails from './components/taskDetails.jsx'
-import './css/project.css'
+import {withStyles} from 'material-ui/styles';
+import Drawer from 'material-ui/Drawer';
+import Button from 'material-ui/Button';
+import Divider from 'material-ui/Divider';
 import ReactPaginate from 'react-paginate';
+import AppBar from 'material-ui/AppBar';
+import Toolbar from 'material-ui/Toolbar';
+import Typography from 'material-ui/Typography';
+import IconButton from 'material-ui/IconButton';
+import MenuIcon from 'material-ui-icons/Menu';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
+import Avatar from 'material-ui/Avatar';
+import List, {ListItem, ListItemSecondaryAction, ListItemIcon, ListItemText} from 'material-ui/List';
+import AssignmentIcon from 'material-ui-icons/Assignment';
+import AddIcon from 'material-ui-icons/PlaylistAdd';
+import InfoIcon from 'material-ui-icons/InfoOutline';
+import WorkIcon from 'material-ui-icons/Work';
+import FindIcon from 'material-ui-icons/FindInPage';
+import DetailsIcon from 'material-ui-icons/ChromeReaderMode';
+import ExpandLess from 'material-ui-icons/ExpandLess';
+import ExpandMore from 'material-ui-icons/ExpandMore';
+import StarBorder from 'material-ui-icons/StarBorder';
+import Collapse from 'material-ui/transitions/Collapse';
+import TextField from 'material-ui/TextField';
+import MenuItem from 'material-ui/Menu/MenuItem';
+import Hidden from 'material-ui/Hidden';
+import Grid from 'material-ui/Grid';
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import Table, {TableBody, TableCell, TableHead, TableRow} from 'material-ui/Table'
+import Tabs, {Tab} from 'material-ui/Tabs';
+import Paper from 'material-ui/Paper';
+import blue from 'material-ui/colors/blue';
+import red from 'material-ui/colors/red';
+
 injectTapEventPlugin();
 addLocaleData(enLocaleData);
-export default class ReactClient extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            loading: true,
-            project: { Project_config: [] },
-            tasks: "",
-            workers: "",
-            dispatchers: "",
-            tasks: [],
-            selectedtask: null,
-            priority: "",
-            status: "",
-            filter: [],
-            result: false,
-            selectedtask2: "", currentComponent: "list",
-            pageCount: 0,
-            perPage: 7,
-            pagedTasks: [],
-            category: "",
-            selected: null,
-            filtertask: null,
-            flag: false,
-            page: "tasks",
-            filterMenu: false
 
-        }
-        this.loadTasks()
-        this.loadProject()
-        this.loadWorkers()
-        this.loadDispatchers()
+const drawerWidth = 240;
+const theme = createMuiTheme({
+  palette: {
+    // Purple and green play nicely together.
+    danger:red
+  },
+});
+const styles = theme => ({
+  root: {
+    // width: '100%',
+    // height: 'auto', marginTop: theme.spacing.unit * 3,
+    zIndex: 1,
+    // overflow: 'overlay'
+  },
+  appFrame: {
+    position: 'relative',
+    display: 'flex',
+    width: '100%',
+    // height: '100%'
+  },
+  rootGrid: {
+    flexGrow: 1
+  },
+  appBar: {
+    position: 'absolute',
+    transition: theme.transitions.create([
+      'margin', 'width'
+    ], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    })
+  },
+  appBarShift: {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create([
+      'margin', 'width'
+    ], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen
+    })
+  },
+  menuButton: {
+    marginLeft: 12,
+    marginRight: 20
+  },
+  hide: {
+    display: 'none'
+  },
+  drawerPaper: {
+    position: 'relative',
+    height: '100%',
+    width: drawerWidth
+  },
+  drawerPaper2: {
 
+    height: '100%',
+    width: drawerWidth
+  },
+  drawerHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: '0 8px'
+  },
+  content: {
+    width: '100%',
+    marginLeft: `-${drawerWidth + 1}px`,
+    [theme.breakpoints.down('lg')]: {
+      marginLeft: `0px`
+    },
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.default,
+    padding: theme.spacing.unit * 3,
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    }),
+    // height: 'calc(100% - 56px)',
+    marginTop: 56,
+    [theme.breakpoints.up('sm')]: {
+      content: {
+        height: 'calc(100% - 64px)',
+        marginTop: 64
+      }
     }
+  },
+  contentShift: {
+    marginLeft: 0,
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen
+    })
+  }
+});
 
-
-
-    sendFilter = () => {
-        this.setState({page: "tasks"})
-        var priority = "", status = "", work_order = "", worker = "", dispatcher = "", category = ""
-        if (this.refs.priority.value) {
-
-            priority = "priority=" + this.refs.priority.value + "&"
-        }
-        if (this.refs.category.value) {
-
-            category = "Category=" + this.refs.category.value + "&"
-        }
-        if (this.refs.status.value) {
-            status = "status=" + this.refs.status.value + "&"
-        }
-        if (this.refs.work_order.value) {
-            work_order = "work_order=" + this.refs.work_order.value + "&"
-        }
-        if (this.refs.dispatcher.value) {
-            dispatcher = "created_by__username=" + this.refs.dispatcher.value + "&"
-        }
-        if (this.refs.worker.value) {
-            worker = "assigned_to__username=" + this.refs.worker.value + "&"
-        }
-
-        var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + '/tasks/?' + priority + status + work_order + worker + dispatcher + category
-
-        fetch(url, {
-            method: "GET",
-            credentials: "same-origin",
-            headers: new Headers({
-                "Content-Type": "application/json; charset=UTF-8",
-
-            }),
-
-        })
-            .then(function (response) {
-                if (response.status >= 400) {
-                    throw new Error("Bad response from server");
-
-                }
-                return response.json();
-            }).then((data) => {
-                if (data.objects.length == 0) {
-                    console.log("empty")
-                    this.setState({ result: true })
-                }
-                else {
-                    this.setState({ result: false })
-                }
-                this.setState({ tasks: data.objects, filtertask: data.objects, loading: false, pageCount: Math.ceil(data.objects.length / this.state.perPage) }, () => {
-                    var pagedTasks = this.state.tasks.slice(0, this.state.perPage);
-                    this.setState({ pagedTasks: pagedTasks })
-                    console.log(url, data)
-                    console.log(data.objects.length)
-                    this.refs.priority.value ? this.refs.priority.value = "" : false
-                    this.refs.category.value ? this.refs.category.value = "" : false
-                    this.refs.status.value ? this.refs.status.value = "" : false
-                    this.refs.worker.value ? this.refs.worker.value = "" : false
-                    this.refs.work_order.value ? this.refs.work_order.value = "" : false
-                    this.refs.dispatcher.value ? this.refs.dispatcher.value = "" : false
-
-                })
-            })
-    }
-
-    loadTasks = () => {
-        var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + '/tasks'
-        fetch(url, {
-            method: "GET",
-            headers: new Headers({
-                "Content-Type": "application/json; charset=UTF-8",
-                "X-CSRFToken": getCRSFToken(),
-
-            })
-        })
-            .then(function (response) {
-                if (response.status >= 400) {
-                    throw new Error("Bad response from server");
-                }
-                return response.json();
-            })
-            .then((data) => {
-
-                this.setState({ tasks: data.objects, filtertask: data.objects, loading: false, pageCount: Math.ceil(data.objects.length / this.state.perPage) }, () => {
-                    var pagedTasks = this.state.tasks.slice(0, this.state.perPage);
-                    this.setState({ pagedTasks: pagedTasks })
-                })
-
-            });
-    }
-    loadProject = () => {
-        var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id
-        fetch(url, {
-            method: "GET",
-            headers: new Headers({
-                "Content-Type": "application/json; charset=UTF-8",
-                "X-CSRFToken": getCRSFToken(),
-            })
-        })
-            .then(function (response) {
-                if (response.status >= 400) {
-                    throw new Error("Bad response from server");
-                }
-                return response.json();
-            })
-            .then((data) => {
-
-                this.setState({ project: data })
-            });
-    }
-    loadWorkers = () => {
-        var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + "/workers"
-        fetch(url, {
-            method: "GET",
-            headers: new Headers({
-                "Content-Type": "application/json; charset=UTF-8",
-                "X-CSRFToken": getCRSFToken(),
-
-            })
-        })
-            .then(function (response) {
-                if (response.status >= 400) {
-                    throw new Error("Bad response from server");
-                }
-                return response.json();
-            })
-            .then((data) => {
-
-                this.setState({ workers: data.objects })
-            });
-    }
-    handlePageClick = (data) => {
-        var pagedTasks = this.state.tasks.slice(data.selected * this.state.perPage, (data.selected + 1) * this.state.perPage);
-        this.setState({ pagedTasks: pagedTasks })
-
-    }
-    loadDispatchers = () => {
-        var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + "/dispatchers"
-        fetch(url, {
-            method: "GET",
-            headers: new Headers({
-                "Content-Type": "application/json; charset=UTF-8",
-                "X-CSRFToken": getCRSFToken(),
-            })
-        })
-            .then(function (response) {
-                if (response.status >= 400) {
-                    throw new Error("Bad response from server");
-                }
-                return response.json();
-            })
-            .then((data) => {
-
-                this.setState({ dispatchers: data.objects })
-            });
-    }
-
-    componentWillMount() {
-
-    }
-
-    getChildContext() {
-        return { muiTheme: getMuiTheme(CustomTheme) };
-    }
-
-    componentDidMount() {
-
-    }
-
-    _toggleBaseMapModal() {
-
-    }
-    search = (e) => {
-        e.preventDefault()
-
-    }
-    toggle = () => {
-        this.setState({ filterMenu: !this.state.filterMenu })
-    }
-
-    render() {
-        let { currentComponent } = this.state
-        // this.state.project['Project_config']=[]
-        return (
-            <div id="wrapper" className="toggled">
-                <div className="overlay "></div>
-                <nav className="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
-                    <ul className="nav sidebar-nav ">
-                        <li className="sidebar-brand">
-                            <a >
-                                <img src={this.state.project.logo ? this.state.project.logo.base64 : URLS.static + 'nologo.png'} className="img-circle" style={{ "width": "50px", "marginRight": "3%" }} />
-                                {this.state.project.title}
-                            </a>
-                        </li>
-                        <hr />
-                        <li onClick={() => {
-                            this.setState({ "selectedtask": null, result: false, page: "tasks" })
-                            this.loadTasks()
-                        }} className="active"><a
-                            href="#home">Tasks</a>
-                        </li>
-                        <li onClick={() => this.setState({ currentComponent: "add", page: "new" })}
-                        ><a
-                            href="#menu1" >New Task</a>
-                        </li>
-                        <li className="dropdown" >
-                            <a onClick={this.toggle}>Filters <span className="caret"></span></a> </li>
-                        {this.state.filterMenu && <ul role="menu" >
-                            {this.state.project.priority && this.state.project.Project_config.includes("priority") &&
-                                <select className="form-control" ref="priority">
-                                    <option value="">priority</option>
-                                    {this.state.project.priority.priority.map((pri, i) => {
-                                      return <option key={i} value={pri.label}>{pri.label}</option>
-                                    })
-                                    }
-                                </select>
-                            }
-                            {this.state.project.status && this.state.project.Project_config.includes("status") &&
-                                <select className="form-control" ref="status">
-                                    <option value="">status</option>
-                                    {this.state.project.status && this.state.project.status.status.map((status, i) => {
-                                        return <option key={i} value={status.label}>{status.label}</option>
-                                    })
-                                    }
-                                </select>
-                            }
-                            {this.state.project.Category && this.state.project.Project_config.includes("Category") && <select className="form-control" ref="category">
-                                <option value="">category</option>
-                                {this.state.project.Category && this.state.project.Category.Category.map((cat, i) => {
-                                    return <option key={i} value={cat.label}>{cat.label}</option>
-                                })
-                                }
-                            </select>}
-                            {this.state.project.Project_config.includes("work_order") &&
-                                <input placeholder="work order" className="form-control" ref="work_order" style={{ "margin": "5px", "width": "82%" }} />
-                            }
-                            {this.state.dispatchers &&
-                                <select className="form-control" ref="dispatcher">
-                                    <option value="">task creator</option>
-                                    {this.state.dispatchers.map((dispatcher, i) => {
-                                        return <option key={i} value={dispatcher.dispatcher.username}>{dispatcher.dispatcher.username}</option>
-                                    })}
-                                </select>}
-                            {this.state.project.Project_config.includes("assigned_to") && this.state.project &&
-                                <select className="form-control" id="sel1" ref="worker">
-                                    <option value=""> Assignee</option>
-                                    {this.state.workers.map((worker, i) => {
-                                        return <option key={i} value={worker.worker.username}>{worker.worker.username}</option>
-                                    })}
-
-                                </select>}
-                            <button className="btn btn-default pull-right" style={{ "marginRight": "19px" }} onClick={this.sendFilter} >Filter</button>
-
-                        </ul>}
-
-                        <li onClick={() => this.setState({ currentComponent: "details", page: "details" })}>
-                            <a href="#menu2"  >Project Details</a>
-                        </li>
-                        <li>
-                            <a href={'/apps/appinstances/?app__title=Cartoview%20Workforce%20Manager&limit=100&offset=0&owner__username=' + username}>My Project</a>
-                        </li>
-                        <li onClick={() => this.setState({ page: "about" })}>
-                            <a href="#about">About</a>
-                        </li>
-                    </ul>
-                </nav>
-                <div id="page-content-wrapper">
-                    <button type="button" className="hamburger is-open" data-toggle="offcanvas">
-                        <span className="hamb-top"></span>
-                        <span className="hamb-middle"></span>
-                        <span className="hamb-bottom"></span>
-                    </button>
-                    <div className="">
-                        <div className="">
-                            <div className="col-md-9 col-md-offset-1">
-                                {this.state.loading &&
-                                    <div>
-                                        <div className="col-md-4"></div>
-                                        <div className="col-md-4"><img src={URLS.static + 'cartoview_workforce_manager/loader'} />
-                                        </div>
-                                        <div className="col-md-4"></div>
-                                    </div>
-                                }
-                                {!this.state.loading && <div className="tab-content">
-                                    <div className="container">
-                                        <div className="row">
-                                            <div className="col-md-8">
-                                                <div className="tab" role="tabpanel">
-                                                    {this.state.tasks.length > 0 && !this.state.loading && this.state.page == "tasks" && <ul className="nav nav-tabs" role="tablist">
-                                                        <li role="presentation" className="active" onClick={() => {
-                                                            this.setState({ "selectedtask": null, result: false })
-                                                            this.loadTasks()
-                                                        }}><a href="#all" aria-controls="home" role="tab" data-toggle="tab"><i className="fa fa-envelope-o"></i>All Tasks</a></li>
-                                                        <li onClick={() => {
-                                                            this.setState({ "selectedtask": null, result: false })
-                                                            this.loadTasks()
-                                                        }} role="presentation"><a href="#mine" aria-controls="profile" role="tab" data-toggle="tab"><i className="fa fa-cube"></i>My tasks</a></li>
-                                                    </ul>}
-                                                    {this.state.page == "tasks" && <div id="home" className="tab-pane fade in active">
-                                                        <div className="tab-content">
-                                                            <div id="all" className="tab-pane fade in active" role="tabpanel">
-                                                                <div className="">
-                                                                    <br />
-                                                                    {this.state.pagedTasks.length != 0 && !this.state.selectedtask && !this.state.loading &&
-                                                                        <div className="" style={{ "padding": "1%" }}>
-                                                                            <div className="" style={{ "overflowX": "auto" }}>
-                                                                                <table className="table table-hover ">
-                                                                                    <thead>
-                                                                                        <tr>
-                                                                                            <th>Title</th>
-                                                                                            {this.state.project.Project_config.includes("assigned_to") && <th> Assigned To</th>}
-                                                                                            {this.state.project.Project_config.includes("priority") && <th>Priority</th>}
-                                                                                            {this.state.project.Project_config.includes("status") && <th>Status</th>}
-                                                                                        </tr>
-                                                                                    </thead>
-                                                                                    <tbody>
-                                                                                        {this.state.pagedTasks.map((item, i) => {
-                                                                                            return <tr key={i} onClick={() => {
-                                                                                                this.setState({ "selectedtask": item })
-                                                                                            }} style={{ "cursor": "pointer" }}>
-                                                                                                <td>{item.title}</td>
-                                                                                                {this.state.project.Project_config.includes("assigned_to") && <td>{item.assigned_to.username?item.assigned_to.username:"-"}</td>}
-                                                                                                {this.state.project.Project_config.includes("priority") && <td>{item.priority?item.priority:'-'}
-                                                                                                </td>}
-                                                                                                {this.state.project.Project_config.includes("status") && <td>{item.status?item.status:'-'}
-                                                                                                </td>}
-                                                                                            </tr>
-                                                                                        }
-                                                                                        )}
-                                                                                    </tbody>
-                                                                                </table>
-                                                                                {this.state.pageCount > 1 && <div className="commentBox">
-                                                                                    <ReactPaginate previousLabel={"previous"}
-                                                                                        nextLabel={"next"}
-                                                                                        breakLabel={<a href="">...</a>}
-                                                                                        breakClassName={"break-me"}
-                                                                                        pageCount={this.state.pageCount}
-                                                                                        marginPagesDisplayed={2}
-                                                                                        pageRangeDisplayed={5}
-                                                                                        onPageChange={this.handlePageClick}
-                                                                                        containerClassName={"pagination"}
-                                                                                        subContainerClassName={"pages pagination"}
-                                                                                        activeClassName={"active"} />
-                                                                                </div>}
-                                                                            </div>
-                                                                        </div>
-                                                                    }
-                                                                    {this.state.pagedTasks.length == 0 && this.state.result && <p style={{
-                                                                        "fontSize": "25px",
-                                                                        "fontStyle": "oblique", "padding": "2%"
-                                                                    }}>No result found !</p>}
-                                                                    {
-                                                                        this.state.selectedtask &&
-                                                                        <div>
-                                                                            <TaskDetails task={this.state.selectedtask} mapid={this.state.project.mapid} project={this.state.project} />
-                                                                        </div>}
-                                                                    {!this.state.tasks.length && !this.state.loading && !this.state.result && <div style={{ "padding": "5%", "textAlign": "center" }}>
-                                                                        <p style={{
-                                                                            "fontSize": "25px",
-                                                                            "fontStyle": "oblique"
-                                                                        }}>No tasks yet for this project</p>
-                                                                    </div>
-                                                                    }
-                                                                </div>
-                                                            </div>
-                                                            <div id="mine" className="tab-pane fade" role="tabpanel">
-                                                                <MyTasks id={id} project={this.state.project} selected={this.state.selected} />
-                                                            </div>
-                                                        </div>
-                                                    </div>}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {this.state.page == "new" && <div id="menu1">
-                                        {this.state.project && this.state.dispatchers && currentComponent === "add" &&
-                                            <AddTask project={this.state.project} mapid={this.state.project.mapid} dispatchers={this.state.dispatchers} />
-                                        }
-                                    </div>}
-                                    {this.state.page == "details" && <div id="menu2">
-                                        {this.state.workers && this.state.project && currentComponent === "details" &&
-                                            <ProjectDetails id={id} project={this.state.project} mapid={this.state.project.mapid} workers={this.state.workers} />
-                                        }
-                                    </div>}
-                                    {this.state.page == "about" &&
-                                        <div id="about">
-                                            <section className="success" id="about">
-                                                <div className="">
-                                                    <h2 className="text-center">About</h2>
-                                                    <hr className="star-light" />
-                                                    <div className="text-center">
-                                                        <p className="para"> Cartoview app to manage project/work group tasks. It provides a full management of a task status, priority, location ,attachments and comments
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </section>
-                                        </div>
-                                    }
-                                </div>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
-    }
+function TabContainer({children, dir}) {
+  return (
+    <div dir={dir}>
+      {children}
+    </div>
+  );
 }
-ReactClient.childContextTypes = {
-    muiTheme: React.PropTypes.object
-};
-render(
-    <IntlProvider locale='en' messages={enMessages}>
-        <ReactClient></ReactClient>
-    </IntlProvider>, document.getElementById('root'))
 
+class ReactClient extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      loading: true,
+      project: {
+        Project_config: []
+      },
+      tasks: "",
+      workers: "",
+      dispatchers: "",
+      tasks: [],
+      selectedtask: null,
+      priority: "",
+      status: "",
+      category: "",
+      work_order: "",
+      created_by: "",
+      assigned_to: "",
+      filter: [],
+      result: false,
+      selectedtask2: "",
+      currentComponent: "list",
+      pageCount: 0,
+      perPage: 7,
+      pagedTasks: [],
+      selected: null,
+      filtertask: null,
+      flag: false,
+      page: "tasks",
+      filterMenu: false,
+      open: false,
+      filterOpen: false,
+      tabValue: 0
+    }
+    this.loadTasks()
+    this.loadProject()
+    this.loadWorkers()
+    this.loadDispatchers()
+
+  }
+
+  openFilterMenu = () => {
+    this.setState({
+      page: "tasks",
+      filterOpen: !this.state.filterOpen
+    });
+  };
+  state = {
+    mobileOpen: false
+  };
+
+  handleDrawerToggle = () => {
+    this.setState({
+      mobileOpen: !this.state.mobileOpen
+    });
+  };
+  sendFilter = () => {
+    this.setState({page: "tasks"})
+    var priority = "",
+      status = "",
+      work_order = "",
+      worker = "",
+      dispatcher = "",
+      category = ""
+    if (this.state.priority) {
+
+      priority = "priority=" + this.state.priority + "&"
+    }
+    if (this.state.category) {
+
+      category = "Category=" + this.state.category + "&"
+    }
+    if (this.state.status) {
+      status = "status=" + this.state.status + "&"
+    }
+    if (this.state.work_order) {
+      work_order = "work_order=" + this.state.work_order + "&"
+    }
+    if (this.state.created_by) {
+      dispatcher = "created_by__username=" + this.state.created_by + "&"
+    }
+    if (this.state.assigned_to) {
+      worker = "assigned_to__username=" + this.state.assigned_to + "&"
+    }
+
+    var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + '/tasks/?' + priority + status + work_order + worker + dispatcher + category
+
+    fetch(url, {
+      method: "GET",
+      credentials: "same-origin",
+      headers: new Headers({"Content-Type": "application/json; charset=UTF-8"})
+    }).then(function(response) {
+      if (response.status >= 400) {
+        throw new Error("Bad response from server");
+
+      }
+      return response.json();
+    }).then((data) => {
+      if (data.objects.length == 0) {
+        console.log("empty")
+        this.setState({result: true})
+      } else {
+        this.setState({result: false})
+      }
+      this.setState({
+        tasks: data.objects,
+        filtertask: data.objects,
+        loading: false,
+        pageCount: Math.ceil(data.objects.length / this.state.perPage)
+      }, () => {
+        var pagedTasks = this.state.tasks.slice(0, this.state.perPage);
+        this.setState({pagedTasks: pagedTasks})
+        console.log(url, data)
+        console.log(data.objects.length)
+        // this.state.priority ? this.refs.priority = "" : false
+        // this.refs.category ? this.refs.category = "" : false
+        // this.refs.status ? this.refs.status = "" : false
+        // this.refs.worker ? this.refs.worker = "" : false
+        // this.refs.work_order ? this.refs.work_order = "" : false
+        // this.refs.dispatcher ? this.refs.dispatcher = "" : false
+        this.setState({
+          priority: "",
+          status: "",
+          category: "",
+          work_order: "",
+          assigned_to: "",
+          created_by: ""
+        })
+
+      })
+    })
+  }
+
+  loadTasks = () => {
+    var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + '/tasks'
+    fetch(url, {
+      method: "GET",
+      headers: new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken()})
+    }).then(function(response) {
+      if (response.status >= 400) {
+        throw new Error("Bad response from server");
+      }
+      return response.json();
+    }).then((data) => {
+
+      this.setState({
+        tasks: data.objects,
+        filtertask: data.objects,
+        loading: false,
+        pageCount: Math.ceil(data.objects.length / this.state.perPage)
+      }, () => {
+        var pagedTasks = this.state.tasks.slice(0, this.state.perPage);
+        this.setState({pagedTasks: pagedTasks})
+      })
+
+    });
+  }
+  loadProject = () => {
+    var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id
+    fetch(url, {
+      method: "GET",
+      headers: new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken()})
+    }).then(function(response) {
+      if (response.status >= 400) {
+        throw new Error("Bad response from server");
+      }
+      return response.json();
+    }).then((data) => {
+
+      this.setState({project: data})
+    });
+  }
+  loadWorkers = () => {
+    var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + "/workers"
+    fetch(url, {
+      method: "GET",
+      headers: new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken()})
+    }).then(function(response) {
+      if (response.status >= 400) {
+        throw new Error("Bad response from server");
+      }
+      return response.json();
+    }).then((data) => {
+
+      this.setState({workers: data.objects})
+    });
+  }
+  handlePageClick = (data) => {
+    var pagedTasks = this.state.tasks.slice(data.selected * this.state.perPage, (data.selected + 1) * this.state.perPage);
+    this.setState({pagedTasks: pagedTasks})
+
+  }
+  loadDispatchers = () => {
+    var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + "/dispatchers"
+    fetch(url, {
+      method: "GET",
+      headers: new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken()})
+    }).then(function(response) {
+      if (response.status >= 400) {
+        throw new Error("Bad response from server");
+      }
+      return response.json();
+    }).then((data) => {
+
+      this.setState({dispatchers: data.objects})
+    });
+  }
+
+  componentWillMount() {}
+
+  getChildContext() {
+    // return { muiTheme: getMuiTheme(CustomTheme) };
+  }
+
+  componentDidMount() {}
+
+  _toggleBaseMapModal() {}
+  handleMainTabsChange = (event, tabValue) => {
+    this.setState({tabValue});
+  };
+
+  handleMainTabsChangeIndex = index => {
+    this.setState({tabValue: index});
+  };
+
+  search = (e) => {
+    e.preventDefault()
+
+  }
+  toggle = () => {
+    this.setState({
+      filterMenu: !this.state.filterMenu
+    })
+  }
+  handleFilter = name => event => {
+    this.setState({
+      [name]: event.target.value
+    }, console.log(this.state));
+  };
+
+  myProjects = () => {
+    window.location.href = '/apps/appinstances/?app__title=Cartoview%20Workforce%20Manager&limit=100&offset=0&owner__username=' + username
+  }
+  handleDrawerOpen = () => {
+    this.setState({open: true});
+  };
+
+  handleDrawerClose = () => {
+    this.setState({open: false});
+  };
+
+  renderResponsiveDrawer = () => {
+
+    const {classes, theme} = this.props;
+
+    const drawer = (
+
+      <div className={classes.drawerInner}>
+
+        <Divider/>
+        <List>
+          <ListItem dense button style={{
+            paper: classes.drawerPaper
+          }}>
+            <Avatar src={this.state.project.logo
+              ? this.state.project.logo.base64
+              : URLS.static + 'nologo.png'}/>
+            <ListItemText primary={this.state.project.title}/>
+            <ListItemSecondaryAction>
+              <IconButton onClick={this.handleDrawerClose}>
+
+                <ChevronLeftIcon/>
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+          <Divider/>
+
+          <ListItem dense button onClick={() => {
+            this.setState({"selectedtask": null, result: false, page: "tasks"})
+            this.loadTasks()
+          }}>
+            <ListItemIcon>
+              <AssignmentIcon/>
+            </ListItemIcon>
+            <ListItemText primary="Tasks"/>
+          </ListItem>
+          <ListItem dense button onClick={() => this.setState({currentComponent: "add", page: "new"})}>
+            <ListItemIcon>
+              <AddIcon/>
+            </ListItemIcon>
+            <ListItemText primary='New Task'/>
+          </ListItem>
+          <ListItem dense button onClick={this.openFilterMenu}>
+            <ListItemIcon>
+              <FindIcon/>
+            </ListItemIcon>
+            <ListItemText primary="Filters"/> {this.state.filterOpen
+              ? <ExpandLess/>
+              : <ExpandMore/>}
+          </ListItem>
+          <Collapse in={this.state.filterOpen} transitionDuration="auto" unmountOnExit>
+            <ListItem className={classes.nested}>
+              {< ul > {
+                this.state.project.priority && this.state.project.Project_config.includes("priority") && <TextField id="priority" value={this.state.priority} select SelectProps={{
+                    MenuProps: {
+                      className: classes.menu
+                    }
+                  }} className={styles.textField} onChange={this.handleFilter('priority')} helperText="Filter By Priority" margin="normal">
+
+                    {this.state.project.priority.priority.map(option => (
+                      <MenuItem key={option.label} value={option.label}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+              } < br /> {
+                this.state.project.status && this.state.project.Project_config.includes("status") && <TextField id="status" select SelectProps={{
+                    MenuProps: {
+                      className: styles.menu
+                    }
+                  }} className={styles.textField} value={this.state.status} onChange={this.handleFilter('status')} helperText="Filter By Status" margin="normal">
+
+                    {this.state.project.status.status.map(option => (
+                      <MenuItem key={option.label} value={option.label}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+              } < br /> {
+                this.state.project.Category && this.state.project.Project_config.includes("Category") && <TextField id="category" select SelectProps={{
+                    MenuProps: {
+                      className: styles.menu
+                    }
+                  }} className={styles.textField} value={this.state.category} onChange={this.handleFilter('category')} helperText="Filter By Category" margin="normal">
+
+                    {this.state.project.Category.Category.map(option => (
+                      <MenuItem key={option.label} value={option.label}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+              } < br /> {
+                this.state.project.Project_config.includes("work_order") && <TextField id="workorder" style={{
+                    "width": "90px"
+                  }} label="work order" className={classes.textField} defaultValue={this.state.work_order} onChange={this.handleFilter('Work_order')} margin="normal"/>
+              } < br /> {
+                this.state.dispatchers && <TextField id="dispatcher" select SelectProps={{
+                    MenuProps: {
+                      className: styles.menu
+                    }
+                  }} className={styles.textField} value={this.state.created_by} onChange={this.handleFilter('created_by')} helperText="Filter By Creator " margin="normal">
+
+                    {this.state.dispatchers.map(option => (
+                      <MenuItem key={option.dispatcher.username} value={option.dispatcher.username}>
+                        {option.dispatcher.username}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+              } < br /> {
+                this.state.project.Project_config.includes("assigned_to") && this.state.project && <TextField id="assignee" select SelectProps={{
+                    MenuProps: {
+                      className: styles.menu
+                    }
+                  }} className={styles.textField} value={this.state.assigned_to} onChange={this.handleFilter('assigned_to')} helperText="Filter By assignee " margin="normal">
+                    {this.state.workers.map(option => (
+                      <MenuItem key={option.worker.username} value={option.worker.username}>
+                        {option.worker.username}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+              } < Button raised color = "primary" style = {{ "marginLeft": "50%" }}onClick = {
+                this.sendFilter
+              } > Filter < /Button>
+
+ </ul >}
+            </ListItem>
+          </Collapse>
+          <ListItem dense button onClick={() => this.setState({currentComponent: "details", page: "details"})}>
+            <ListItemIcon>
+              <AssignmentIcon/>
+            </ListItemIcon>
+            <ListItemText primary='Project Details'/>
+          </ListItem>
+
+          <ListItem dense button onClick={this.myProjects}>
+            <ListItemIcon>
+              <WorkIcon/>
+            </ListItemIcon>
+            <ListItemText primary='My Projects'/>
+          </ListItem>
+
+          <ListItem dense button onClick={() => this.setState({page: "about"})}>
+            <ListItemIcon>
+              <InfoIcon/>
+            </ListItemIcon>
+            <ListItemText primary='About'/>
+          </ListItem>
+        </List>
+      </div>
+    );
+
+    return (
+      <div className={classes.root}>
+        <div className={classes.appFrame}>
+          <AppBar className={classNames(classes.appBar, this.state.open && classes.appBarShift)}>
+            <Toolbar disableGutters={!this.state.open}>
+              <IconButton color="contrast" aria-label="open drawer" onClick={() => {
+                this.handleDrawerOpen()
+              }} className={classNames(classes.menuButton, this.state.open && classes.hide)}>
+                <MenuIcon/>
+              </IconButton>
+              <Typography type="title" color="inherit" noWrap>
+                {this.props.title}
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <Hidden mdDown>
+            <Drawer type="persistent" classes={{
+              paper: classes.drawerPaper
+            }} open={this.state.open}>
+              {drawer}
+            </Drawer>
+
+          </Hidden>
+
+          <Hidden lgUp>
+            <Drawer className='myClass' type="temperory" 
+            onRequestClose={this.handleDrawerClose}
+            classes={{
+              paper: classes.drawerPaper2
+            }} open={this.state.open}>
+              {drawer}
+            </Drawer>
+          </Hidden>
+          <main className={classNames(classes.content, this.state.open && classes.contentShift)}>
+
+            {this.state.page == "tasks" && this.renderMainTabs()}
+            {this.state.project && this.state.dispatchers && this.state.page == "new" && <AddTask project={this.state.project} mapid={this.state.project.mapid} dispatchers={this.state.dispatchers} classes={this.props.classes}/>
+}
+            {this.state.workers && this.state.project && this.state.page == "details" && <ProjectDetails id={id} project={this.state.project} mapid={this.state.project.mapid} workers={this.state.workers}  classes={this.props.classes}/>
+}
+            {this.state.page == "about" && 
+          <Grid container direction={"row"} spacing={16} align="center" justify="center">  
+            <Grid item xs={16} sm={8}>
+           <Paper><p style={{"padding": "100px"}}>
+              Cartoview app to manage project/work group tasks. It provides a full management of a task status, priority, location ,attachments and comments
+            </p>
+            </Paper>
+            </Grid>
+            </Grid>}
+          </main>
+        </div>
+      </div>
+    );
+  }
+
+  renderMainTabs = () => {
+    return (
+      <Grid container direction={"row"} spacing={16} align="center" justify="center">
+        <Grid item  sm={8}>
+          <AppBar position="static" color="default">
+            <Tabs value={this.state.tabValue} onChange={this.handleMainTabsChange} indicatorColor="primary" textColor="primary" centered >
+              <Tab label="Tasks" onClick={() => {
+                this.setState({"selectedtask": null, result: false})
+                this.loadTasks()
+              }} style={{ width: 700 }}/>
+              <Tab label="My Tasks" onClick={() => {
+                this.setState({"selectedtask": null, result: false})
+                this.loadTasks()
+              }} style={{ width: 700 }}/>
+
+            </Tabs>
+          </AppBar>
+          {this.state.tabValue === 0 && <TabContainer>{this.renderTasksTable()}</TabContainer>}
+          {this.state.tabValue === 1 && <TabContainer><MyTasks id={id} project={this.state.project} selected={this.state.selected}  classes={this.props.classes}/></TabContainer>}
+
+        </Grid>
+      </Grid>
+    )
+  }
+
+  renderTasksTable = () => {
+    const {classes, theme} = this.props;
+    return (
+      <Paper className={classes.paper}>
+        {this.state.loading && <Grid container direction={"row"} spacing={16} align="center" justify="center">
+          <Grid >
+            <img src={URLS.static + 'cartoview_workforce_manager/loader'}/>
+          </Grid>
+        </Grid>
+}
+
+        {this.state.pagedTasks.length != 0 && !this.state.selectedtask && !this.state.loading && <Grid>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell >
+                  Title</TableCell>
+                {this.state.project.Project_config.includes("assigned_to") &&< TableCell > Assigned to < /TableCell>}
+                {this.state.project.Project_config.includes("priority") && <TableCell>Priority</TableCell>}
+                {this.state.project.Project_config.includes("status") &&< TableCell > Status < /TableCell>}
+
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {this.state.pagedTasks.map(item => {
+                return (
+                  <TableRow key={item.id} hover onClick={() => {
+                    this.setState({"selectedtask": item})
+                  }}>
+                    <TableCell>{item.title}</TableCell>
+                    {this.state.project.Project_config.includes("assigned_to") &&< TableCell > {
+                      item.assigned_to.username
+                        ? item.assigned_to.username
+                        : "-"
+                    } < /TableCell>}
+                    {this.state.project.Project_config.includes("priority") && <TableCell>{item.priority
+                        ? item.priority
+                        : '-'}</TableCell>}
+                    {this.state.project.Project_config.includes("status") &&< TableCell > {
+                      item.status
+                        ? item.status
+                        : '-'
+                    } < /TableCell>}
+
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+          {this.state.pageCount > 1 && <ReactPaginate previousLabel={"previous"} nextLabel={"next"} breakLabel={< a href = "" > ...</a>} breakClassName={"break-me"} pageCount={this.state.pageCount} marginPagesDisplayed={2} pageRangeDisplayed={5} onPageChange={this.handlePageClick} containerClassName={"pagination"} subContainerClassName={"pages pagination"} activeClassName={"active"}/>}
+        </Grid>}
+
+        {!this.state.tasks.length && !this.state.loading && !this.state.result && <div style={{
+          "padding": "5%",
+          "textAlign": "center"
+        }}>
+          <p>No tasks yet for this project</p>
+        </div>
+}
+        {this.state.pagedTasks.length == 0 && this.state.result && <p style={{
+          "padding": "2%"
+        }}>No result found !</p>}
+        {this.state.selectedtask && <div>
+          <TaskDetails task={this.state.selectedtask} mapid={this.state.project.mapid} project={this.state.project} />
+        </div>
+}
+        {this.state.project && this.state.dispatchers && this.state.page == "new" && <AddTask project={this.state.project} mapid={this.state.project.mapid} dispatchers={this.state.dispatchers} />
+}
+      </Paper>
+    )
+  }
+
+  
+  render() {
+    console.log(this.props)
+    let {currentComponent} = this.state
+    return (
+      <div >
+        {this.renderResponsiveDrawer()}
+
+
+      </div>
+    )
+  }
+}
+
+ReactClient.childContextTypes = {
+  muiTheme: React.PropTypes.object
+};
+ReactClient.propTypes = {
+  classes: PropTypes.object.isRequired
+};
+let App = withStyles(styles)(ReactClient)
+export default withStyles(styles)(ReactClient)
+render(
+  <MuiThemeProvider theme={theme}>
+  <App/>
+</MuiThemeProvider>, document.getElementById('root'))

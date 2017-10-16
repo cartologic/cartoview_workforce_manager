@@ -1,7 +1,17 @@
 import React, {Component} from 'react';
 import Moment from 'react-moment';
+import Paper from 'material-ui/Paper';
+import Typography from 'material-ui/Typography';
+import { withStyles } from 'material-ui/styles';
 
-export default class DisplayComments extends Component {
+const styles = theme => ({
+  root: theme.mixins.gutters({
+    paddingTop: 16,
+    paddingBottom: 16,
+ 
+  }),
+});
+class DisplayComments extends Component {
     constructor(props) {
         super(props)
 
@@ -101,43 +111,33 @@ export default class DisplayComments extends Component {
 
     render() {
 
-
+ const { classes } =this.props;
         return (
 			<div>
-				
-				<div style={{"marginTop": "5%"}}>
+				<Paper>
                     {this.state.comments.map((comment, i) => {
-
-                        return <div key={i} className="well ">
-
-
-							<div className="media">
-
-								<div className="media-body">
-									<h4 className="media-heading"><img src={URLS.static+'user'} style={{"width": "5%","marginRight":"1%"}}/>{comment.commenter.username}
-										<small><i> Posted on <Moment
-											format="YYYY/MM/DD">{comment.created_at}</Moment></i></small>
-									</h4>
-									<p>{comment.comment}</p>
-								</div>
-      
-
-
-							</div>
-						</div>
-
-
+                        return	<Paper key={i} style={{"padding": "1.5%","marginTop": "1%"}}>
+									<h4><img src={URLS.static+'user'} style={{"width": "5%","marginRight":"1%"}}/>{comment.commenter.username}
+                                    </h4>
+										<i style={{    "fontSize": "12px","color":"gray"}}> Posted on <Moment
+											format="YYYY/MM/DD">{comment.created_at}</Moment>
+                                        </i>
+										<p style={{    "padding": "20px","border": "dashed 1px gainsboro","borderRadius": "20px"}}>{comment.comment}
+                                        </p>
+							    </Paper>
                     })}
-
-
-                    {this.state.comments.length==0 && <div>
-                    <p>No comments yet</p>
-                    </div>}
-
-
-				</div>
+				</Paper>
+                <div>
+         {this.state.comments.length==0 && <Paper className={classes.root} elevation={4}>
+         <Typography type="headline" component="h3">
+          No Comments Yet
+        </Typography>
+        
+      </Paper>}
+    </div>
 			</div>
 
         )
     }
 }
+export default withStyles(styles)(DisplayComments);
