@@ -66,7 +66,7 @@ render() {
         return ( 
            
 
-                      <Paper>
+                  
                          <Grid  >
                                 {/* <Grid item xs={11}>
                                         <Grid container align="flex-start" justify="flex-end">
@@ -84,7 +84,7 @@ render() {
                
            
                  </Grid>  
-                 </Paper>
+              
 )
         }
 }
