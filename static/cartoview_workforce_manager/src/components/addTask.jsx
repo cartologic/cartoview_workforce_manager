@@ -113,7 +113,7 @@ const styles = theme => ({
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    width: 500,
+    
   },
 });
 
@@ -449,23 +449,13 @@ console.log("copy",copy)
       "assigned_to": this.state.assigned_to,
        "due_date": this.state.due_date
     }
-    this.setState({ value })
-
-    if (this.state.value) {
-
-
+    
+    this.setState({ value },()=>{
+      console.log(value)
       var step = this.state.step + 1
       this.setState({ step: step, value: value }, () => {
         this.map.setTarget(ReactDOM.findDOMNode(this.refs.map))
-      })
-
-    }
-
-    if (this.state.step == 2) {
-      var step = this.state.step + 1
-      this.setState({ step: step, value: this.state.value })
-    }
-
+      })})
 
     console.log(this.state)
 
@@ -541,7 +531,8 @@ console.log("copy",copy)
 
                     <form className={classes.container} autoComplete="off">
                       <TextField
-                        fullWidth
+                       fullWidth
+                       
                         required
                         label="Title"
                         className={classes.textField}
@@ -551,6 +542,7 @@ console.log("copy",copy)
                       />
                       <br />
                       {this.state.checked.includes("description") && <TextField
+                       fullWidth
 
                         label="Description"
                         className={classes.textField}
@@ -561,6 +553,7 @@ console.log("copy",copy)
                         margin="normal"
                       />}<br />
                       {this.state.checked.includes("assigned_to") && <TextField
+                       fullWidth
                         select
                         label="Assigned To"
                         SelectProps={{
@@ -581,6 +574,7 @@ console.log("copy",copy)
                       </TextField>}
                       <br />
                       {this.state.checked.includes("due_date") && <TextField
+                       fullWidth
                         type="date"
                         label="Due Date"
                         className={classes.textField}
@@ -593,6 +587,7 @@ console.log("copy",copy)
                       />}
                       <br />
                       {this.state.checked.includes("priority") && <TextField
+                       fullWidth
                         select
                         label="priority"
                         className={classes.textField}
@@ -614,6 +609,7 @@ console.log("copy",copy)
                       </TextField>}
                       <br />
                       {this.state.checked.includes("status") && <TextField
+                       fullWidth
                         select
                         label="status"
                         className={classes.textField}
@@ -636,6 +632,7 @@ console.log("copy",copy)
                       </TextField>}
                       <br />
                       {this.state.checked.includes("Category") && <TextField
+                       fullWidth
                         select
                         label="Category"
                         className={classes.textField}
@@ -657,6 +654,7 @@ console.log("copy",copy)
                       </TextField>}
                       <br />
                       {this.state.checked.includes("work_order") && <TextField
+                       fullWidth
 
                         label="Work Order"
                         className={classes.textField}
@@ -664,10 +662,10 @@ console.log("copy",copy)
                         onChange={this.handleChange('work_order')}
                         margin="normal"
                       />}
+                      <Button  raised className={classes.button} style={{ "float":"right"}} onClick={this.next} >Next <i className="fa fa-arrow-right"></i></Button>
 
                     </form>
 
-                    <Button  raised className={classes.button} style={{ "float":"right"}} onClick={this.next} >Next <i className="fa fa-arrow-right"></i></Button>
 
                   </div>
 
