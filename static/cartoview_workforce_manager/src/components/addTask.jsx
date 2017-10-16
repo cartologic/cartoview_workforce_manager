@@ -149,6 +149,7 @@ class AddTask extends Component {
       image: "",
       commentDone: false,
       imageDone: false,
+      commentValue:""
     }
 
     this.map = new ol.Map({
@@ -293,9 +294,7 @@ class AddTask extends Component {
 
   save() {
 
-    if (this.refs.comment) {
-      this.setState({ comment: this.refs.comment.value })
-    }
+    
     if (this.refs.image) {
       this.setState({ image: this.refs.image.value })
     }
@@ -328,8 +327,8 @@ console.log("copy",copy)
           return response.json()
         }).then((data) => {
 
-          if (this.state.comment != "") {
-            var comment = { "comment": this.refs.comment.value, "task": { "pk": data.id } }
+          if (this.state.commentValue != "") {
+            var comment = { "comment": this.state.comment, "task": { "pk": data.id } }
             var url = '/apps/cartoview_workforce_manager/api/v1/comment/'
             fetch(url, {
               method: "POST",
@@ -446,7 +445,7 @@ console.log("copy",copy)
       "status": this.state.statusValue,
       "Category": this.state.CategoryValue,
       "work_order": this.state.work_order,
-      "assigned_to": this.state.assigned_to,
+      "assigned_to": {pk:this.state.assigned_to},
        "due_date": this.state.due_date
     }
     
@@ -493,8 +492,21 @@ console.log("copy",copy)
   renderComments() {
     return (<div>
       <div>
-        <label>Add comment </label>
-        <textarea ref="comment" className="form-control" rows="3" id="comment" defaultValue={this.state.comment} ></textarea>
+       
+        {/* <textarea ref="comment" className="form-control" rows="3" id="comment" defaultValue={this.state.comment} ></textarea> */}
+        <TextField
+                        ref="comment"
+                        id="comment"
+                        value={this.state.comment}
+                        onChange={this.handleChange('commentValue')}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        placeholder="Add Comment"
+
+                        fullWidth
+                        margin="normal"
+                    />
       </div>
 
     </div>
