@@ -9,9 +9,10 @@ import FavoriteIcon from 'material-ui-icons/Favorite';
 import PersonPinIcon from 'material-ui-icons/PersonPin';
 import HistoryIcon from 'material-ui-icons/History';
 import EditIcon from 'material-ui-icons/ModeEdit';
-
+import Button from 'material-ui/Button'
 import { withStyles } from 'material-ui/styles';
-
+import IconButton from 'material-ui/IconButton';
+import '../css/project.css'
 function TabContainer(props) {
   return <div style={{ padding: 8 * 3 }}>{props.children}</div>;
 }
@@ -31,6 +32,9 @@ class TaskDetails extends Component {
          this.state={
              task:this.props.task,
              value: 0,
+             history:false,
+             edit:false,
+             details:true
          }
     }
 loadTask=()=>{
@@ -69,16 +73,39 @@ loadTask=()=>{
         <div className={classes.root}>
                 <AppBar position="static">
                 <Tabs value={this.state.value} onChange={this.handleChange} scrollable scrollButtons="off" centered>
-                    <Tab icon={<PersonPinIcon />}  label="Details" onClick={this.loadTask} />
-                    <Tab icon={<EditIcon />}  label="Edit" onClick={this.loadTask} />
-                    <Tab icon={<HistoryIcon />}  label="History"/>
+                    <Tab icon={<PersonPinIcon />}  label="Details" onClick={()=>
+                {this.setState({edit:false,history:false,details:true})
+                 this.loadTask}} />
+             
                 
                 </Tabs>
                 </AppBar>
-                {this.state.value === 0 && <TabContainer> { this.state.task &&<Details task={this.state.task} mapid={this.props.mapid} project={this.props.project} />}</TabContainer>}
-                {this.state.value === 1 && <TabContainer> { this.state.task &&<Edit task={this.state.task} mapid={this.props.mapid} project={this.props.project} />}</TabContainer>}
-                {this.state.value === 2 && <TabContainer> { this.state.task &&<TaskHistroy task={this.state.task}/>}</TabContainer>}
 
+
+       <IconButton className={classes.button} style={{float:"right"}}onClick={()=>{this.setState({history:true,edit:false,details:false})
+                this.loadTask
+                }}>
+            <HistoryIcon />
+      </IconButton>    
+      <IconButton className={classes.button}  style={{float:"right"}} onClick={()=>
+                {this.setState({edit:true,history:false,details:false})
+                 this.loadTask}}>
+        <EditIcon />
+      </IconButton>
+
+             
+                {this.state.details && !this.state.history &&!this.state.edit &&<TabContainer>
+                 { this.state.task &&
+                
+                <div>
+               
+               
+                <Details task={this.state.task} mapid={this.props.mapid} project={this.props.project} />
+                </div>}
+                </TabContainer>
+               }
+                {!this.state.history && this.state.edit&&!this.state.details  &&<TabContainer> { this.state.task &&<Edit task={this.state.task} mapid={this.props.mapid} project={this.props.project} />}</TabContainer>}
+                {this.state.history && !this.state.edit&& !this.state.details &&<TabContainer> { this.state.task &&<TaskHistroy task={this.state.task}/>}</TabContainer>}
       </div>
     )
                
