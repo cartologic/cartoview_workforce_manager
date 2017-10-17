@@ -18,7 +18,8 @@ import ImageIcon from 'material-ui-icons/Image';
 import CommentIcon from 'material-ui-icons/Comment';
 import LocationIcon from 'material-ui-icons/LocationOn'; const Form = t.form.Form;
 import Grid from 'material-ui/Grid';
-
+import Snackbar from 'material-ui/Snackbar';
+import Fade from 'material-ui/transitions/Fade';
 const drawerWidth = 240
 
 
@@ -31,7 +32,7 @@ const styles = theme => ({
     // overflow: 'overlay'
   },
   appFrame: {
-    position: 'relative',
+  
     display: 'flex',
     width: '100%',
     // height: '100%'
@@ -66,7 +67,7 @@ const styles = theme => ({
     display: 'none'
   },
   drawerPaper: {
-    position: 'relative',
+    
     height: '100%',
     width: drawerWidth
   },
@@ -104,7 +105,7 @@ const styles = theme => ({
     }
   },
   contentShift: {
-    marginLeft: 0,
+    marginLeft: 10,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
@@ -388,7 +389,8 @@ console.log("copy",copy)
             this.setState({ imageDone: true })
           }
 
-          this.setState({ "success": true, "loading": false })
+          this.setState({ "success": true, "loading": false , 
+    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,description:"",due_date:"",step:1,clicked:false})
 
 
         })
@@ -446,7 +448,7 @@ console.log("copy",copy)
       "status": this.state.status,
       "Category": this.state.Category,
       "work_order": this.state.work_order,
-       "assigned_to": {pk:this.state.assigned_to},
+       "assigned_to": this.state.assigned_to?{pk:this.state.assigned_to}:null,
        "due_date": this.state.due_date
     }
     t
@@ -489,7 +491,8 @@ console.log("copy",copy)
   componentWillReceiveProps(nextProps) {
 
     console.log("will")
-    this.setState({ success: false, value: "", step: 1, point: [], comment: null })
+    this.setState({ success: false, value: "", point: [], comment: null,
+    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,description:"",due_date:"",step:1,clicked:false})
 
   }
 
@@ -516,6 +519,11 @@ console.log("copy",copy)
     </div>
     )
   }
+
+
+ handleRequestClose = () => {
+    this.setState({ success: false});
+  };
 
   handleChange = name => event => {
     console.log(event.target.value)
@@ -735,9 +743,18 @@ console.log("copy",copy)
 
             </Paper>}
             {this.state.success &&
-              <div className="succ">
-                <p> Your Task was created successfully.</p>
-              </div>
+             
+      
+        <Snackbar
+          open={this.state.success}
+          onRequestClose={this.handleRequestClose}
+          transition={Fade}
+          SnackbarContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">Your Task was created successfully</span>}
+        />
+  
 
             }
 

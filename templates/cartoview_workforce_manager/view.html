@@ -1,7 +1,4 @@
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+{% comment %}  {% endcomment %}
 {% load bootstrap_tags staticfiles %}
 {% load i18n %}
 
@@ -15,38 +12,7 @@
 
 {% block extra_script %}
 
-<script>
 
-        $(document).ready(function () {
-            var trigger = $('.hamburger'),
-                overlay = $('.overlay'),
-               isClosed = true;
-          
-              trigger.click(function () {
-                  console.log("hiieelo")
-                hamburger_cross();      
-              });
-          
-              function hamburger_cross() {
-          
-                if (isClosed == true) {          
-                  overlay.hide();
-                  trigger.removeClass('is-open');
-                  trigger.addClass('is-closed');
-                  isClosed = false;
-                } else {   
-                 
-                  trigger.removeClass('is-closed');
-                  trigger.addClass('is-open');
-                  isClosed = true;
-                }
-            }
-            
-            $('[data-toggle="offcanvas"]').click(function () {
-                  $('#wrapper').toggleClass('toggled');
-            });  
-          });
-</script>
     <script>
      var username="{{request.user.username}}"
 

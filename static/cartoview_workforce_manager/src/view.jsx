@@ -63,7 +63,7 @@ const styles = theme => ({
     // overflow: 'overlay'
   },
   appFrame: {
-    position: 'relative',
+
     display: 'flex',
     width: '100%',
     // height: '100%'
@@ -98,7 +98,7 @@ const styles = theme => ({
     display: 'none'
   },
   drawerPaper: {
-    position: 'relative',
+    
     height: '100%',
     width: drawerWidth
   },
@@ -136,7 +136,7 @@ const styles = theme => ({
     }
   },
   contentShift: {
-    marginLeft: 0,
+    marginLeft: 10,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
