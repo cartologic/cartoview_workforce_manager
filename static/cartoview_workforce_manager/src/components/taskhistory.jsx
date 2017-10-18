@@ -66,14 +66,14 @@ render() {
         return ( 
            
 
-                      <Paper>
+                  
                          <Grid  >
-                                <Grid item xs={11}>
+                                {/* <Grid item xs={11}>
                                         <Grid container align="flex-start" justify="flex-end">
                                                 <Button fab color="accent" onClick={this.clearHistory}><DeleteIcon/>
                                                 </Button>
                                         </Grid>
-                                </Grid>
+                                </Grid> */}
                 <p style={{"padding":"2%"}}>  &nbsp;- Task was created by {this.props.task.created_by.username} at < Moment  format = "DD/MM/YYYY"date =  {this.props.task.created_at}/></p> 
           
                      {this.state.taskhistory.map ((history,i) =>  {
@@ -84,7 +84,7 @@ render() {
                
            
                  </Grid>  
-                 </Paper>
+              
 )
         }
 }

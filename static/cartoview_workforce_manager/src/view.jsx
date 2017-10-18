@@ -44,7 +44,7 @@ import Tabs, {Tab} from 'material-ui/Tabs';
 import Paper from 'material-ui/Paper';
 import blue from 'material-ui/colors/blue';
 import red from 'material-ui/colors/red';
-
+import './css/project.css'
 injectTapEventPlugin();
 addLocaleData(enLocaleData);
 
@@ -63,7 +63,7 @@ const styles = theme => ({
     // overflow: 'overlay'
   },
   appFrame: {
-    position: 'relative',
+
     display: 'flex',
     width: '100%',
     // height: '100%'
@@ -98,7 +98,7 @@ const styles = theme => ({
     display: 'none'
   },
   drawerPaper: {
-    position: 'relative',
+    
     height: '100%',
     width: drawerWidth
   },
@@ -136,7 +136,7 @@ const styles = theme => ({
     }
   },
   contentShift: {
-    marginLeft: 0,
+    marginLeft: 10,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
@@ -455,7 +455,7 @@ class ReactClient extends React.Component {
           </ListItem>
           <Collapse in={this.state.filterOpen} transitionDuration="auto" unmountOnExit>
             <ListItem className={classes.nested}>
-              {< ul > {
+              {<ul> {
                 this.state.project.priority && this.state.project.Project_config.includes("priority") && <TextField id="priority" value={this.state.priority} select SelectProps={{
                     MenuProps: {
                       className: classes.menu
@@ -468,7 +468,7 @@ class ReactClient extends React.Component {
                       </MenuItem>
                     ))}
                   </TextField>
-              } < br /> {
+              } <br/> {
                 this.state.project.status && this.state.project.Project_config.includes("status") && <TextField id="status" select SelectProps={{
                     MenuProps: {
                       className: styles.menu
@@ -525,7 +525,7 @@ class ReactClient extends React.Component {
                   </TextField>
               } < Button raised color = "primary" style = {{ "marginLeft": "50%" }}onClick = {
                 this.sendFilter
-              } > Filter < /Button>
+              } > Filter </Button>
 
  </ul >}
             </ListItem>
@@ -609,11 +609,11 @@ class ReactClient extends React.Component {
     );
   }
 
-  renderMainTabs = () => {
+  renderMainTabs =()=> {
     return (
       <Grid container direction={"row"} spacing={16} align="center" justify="center">
         <Grid item  sm={8}>
-          <AppBar position="static" color="default">
+          {this.state.pagedTasks.length != 0 && !this.state.selectedtask &&<AppBar position="static" color="default">
             <Tabs value={this.state.tabValue} onChange={this.handleMainTabsChange} indicatorColor="primary" textColor="primary" centered >
               <Tab label="Tasks" onClick={() => {
                 this.setState({"selectedtask": null, result: false})
@@ -625,7 +625,7 @@ class ReactClient extends React.Component {
               }} style={{ width: 700 }}/>
 
             </Tabs>
-          </AppBar>
+          </AppBar>}
           {this.state.tabValue === 0 && <TabContainer>{this.renderTasksTable()}</TabContainer>}
           {this.state.tabValue === 1 && <TabContainer><MyTasks id={id} project={this.state.project} selected={this.state.selected}  classes={this.props.classes}/></TabContainer>}
 
@@ -651,9 +651,9 @@ class ReactClient extends React.Component {
               <TableRow>
                 <TableCell >
                   Title</TableCell>
-                {this.state.project.Project_config.includes("assigned_to") &&< TableCell > Assigned to < /TableCell>}
+                {this.state.project.Project_config.includes("assigned_to") &&<TableCell > Assigned to </TableCell>}
                 {this.state.project.Project_config.includes("priority") && <TableCell>Priority</TableCell>}
-                {this.state.project.Project_config.includes("status") &&< TableCell > Status < /TableCell>}
+                {this.state.project.Project_config.includes("status") &&<TableCell > Status </TableCell>}
 
               </TableRow>
             </TableHead>
@@ -668,22 +668,23 @@ class ReactClient extends React.Component {
                       item.assigned_to.username
                         ? item.assigned_to.username
                         : "-"
-                    } < /TableCell>}
+                    } </TableCell>}
                     {this.state.project.Project_config.includes("priority") && <TableCell>{item.priority
                         ? item.priority
                         : '-'}</TableCell>}
-                    {this.state.project.Project_config.includes("status") &&< TableCell > {
+                    {this.state.project.Project_config.includes("status") &&<TableCell > {
                       item.status
                         ? item.status
                         : '-'
-                    } < /TableCell>}
+                    } 
+                    </TableCell>}
 
                   </TableRow>
                 );
               })}
             </TableBody>
           </Table>
-          {this.state.pageCount > 1 && <ReactPaginate previousLabel={"previous"} nextLabel={"next"} breakLabel={< a href = "" > ...</a>} breakClassName={"break-me"} pageCount={this.state.pageCount} marginPagesDisplayed={2} pageRangeDisplayed={5} onPageChange={this.handlePageClick} containerClassName={"pagination"} subContainerClassName={"pages pagination"} activeClassName={"active"}/>}
+          {this.state.pageCount > 1 && <ReactPaginate previousLabel={"previous"} nextLabel={"next"} breakLabel={<a href = "" > ...</a>} breakClassName={"break-me"} pageCount={this.state.pageCount} marginPagesDisplayed={2} pageRangeDisplayed={5} onPageChange={this.handlePageClick} containerClassName={"pagination"} subContainerClassName={"pages pagination"} activeClassName={"active"}/>}
         </Grid>}
 
         {!this.state.tasks.length && !this.state.loading && !this.state.result && <div style={{

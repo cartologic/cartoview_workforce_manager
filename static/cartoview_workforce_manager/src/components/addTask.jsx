@@ -18,7 +18,8 @@ import ImageIcon from 'material-ui-icons/Image';
 import CommentIcon from 'material-ui-icons/Comment';
 import LocationIcon from 'material-ui-icons/LocationOn'; const Form = t.form.Form;
 import Grid from 'material-ui/Grid';
-
+import Snackbar from 'material-ui/Snackbar';
+import Fade from 'material-ui/transitions/Fade';
 const drawerWidth = 240
 
 
@@ -31,7 +32,7 @@ const styles = theme => ({
     // overflow: 'overlay'
   },
   appFrame: {
-    position: 'relative',
+  
     display: 'flex',
     width: '100%',
     // height: '100%'
@@ -66,7 +67,7 @@ const styles = theme => ({
     display: 'none'
   },
   drawerPaper: {
-    position: 'relative',
+    
     height: '100%',
     width: drawerWidth
   },
@@ -104,7 +105,7 @@ const styles = theme => ({
     }
   },
   contentShift: {
-    marginLeft: 0,
+    marginLeft: 10,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
@@ -131,17 +132,17 @@ class AddTask extends Component {
       extent: null,
       value: {},
       title: "",
-      description: "",
+      Description: "",
       assigned_to: null,
       due_date: null,
-      priorityValue: "",
-      statusValue: "",
+      priority: "",
+      status: "",
       work_order: "",
-      CategoryValue: ""
+      Category: ""
       ,
-      priority: null,
-      Category: null,
-      status: null,
+      priorityList: null,
+      CategoryList: null,
+      statusList: null,
       checked: this.props.project.Project_config,
       loading: false,
       step: 1,
@@ -149,7 +150,8 @@ class AddTask extends Component {
       image: "",
       commentDone: false,
       imageDone: false,
-      commentValue:""
+      commentValue:"",
+      clicked:false,
     }
 
     this.map = new ol.Map({
@@ -206,7 +208,7 @@ class AddTask extends Component {
 
             }
           }
-          this.setState({ priority: priority, Category: Category, status: status }, () => {
+          this.setState({ priorityList: priority, CategoryList: Category, statusList: status }, () => {
             // const Priority = t.enums(this.state.priority)
             // const Category = t.enums(this.state.Category)
             // const Status = t.enums(this.state.status)
@@ -328,7 +330,7 @@ console.log("copy",copy)
         }).then((data) => {
 
           if (this.state.commentValue != "") {
-            var comment = { "comment": this.state.comment, "task": { "pk": data.id } }
+            var comment = { "comment": this.state.commentValue, "task": { "pk": data.id } }
             var url = '/apps/cartoview_workforce_manager/api/v1/comment/'
             fetch(url, {
               method: "POST",
@@ -387,7 +389,8 @@ console.log("copy",copy)
             this.setState({ imageDone: true })
           }
 
-          this.setState({ "success": true, "loading": false })
+          this.setState({ "success": true, "loading": false , 
+    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,description:"",due_date:null,step:1,clicked:false})
 
 
         })
@@ -440,21 +443,24 @@ console.log("copy",copy)
     console.log(this.state.step)
     var value = {
       "title": this.state.title,
-      "description": this.state.description,
-      "priority": this.state.priorityValue,
-      "status": this.state.statusValue,
-      "Category": this.state.CategoryValue,
+      "description": this.state.Description,
+      "priority": this.state.priority,
+      "status": this.state.status,
+      "Category": this.state.Category,
       "work_order": this.state.work_order,
-      "assigned_to": {pk:this.state.assigned_to},
+       "assigned_to": this.state.assigned_to?{pk:this.state.assigned_to}:null,
        "due_date": this.state.due_date
     }
-    
-    this.setState({ value },()=>{
+  
+    this.setState({ value ,clicked:true},()=>{
       console.log(value)
+      if(!this.validate("title")&&!this.validate("Category")&&!this.validate("work_order")&&!this.validate("assigned_to")&&!this.validate("status")&&!this.validate("priority")&&!this.validate("due_date")){
       var step = this.state.step + 1
       this.setState({ step: step, value: value }, () => {
         this.map.setTarget(ReactDOM.findDOMNode(this.refs.map))
-      })})
+      })
+      }
+    })
 
     console.log(this.state)
 
@@ -485,7 +491,8 @@ console.log("copy",copy)
   componentWillReceiveProps(nextProps) {
 
     console.log("will")
-    this.setState({ success: false, value: "", step: 1, point: [], comment: null })
+    this.setState({ success: false, value: "", point: [], comment: null,
+    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,description:"",due_date:null,step:1,clicked:false})
 
   }
 
@@ -513,6 +520,11 @@ console.log("copy",copy)
     )
   }
 
+
+ handleRequestClose = () => {
+    this.setState({ success: false});
+  };
+
   handleChange = name => event => {
     console.log(event.target.value)
     // console.log(this.state.title)
@@ -525,6 +537,19 @@ console.log("copy",copy)
       <input type="file" className="form-control" ref="image" name="image" defaultValue={this.state.image} style={{ "marginBottom": "2%" }} />
     </div>
     )
+  }
+  validate=(field)=>{
+
+    console.log("this.state[field]",this.props.project.field)
+    if (field=="title"&&!this.state[field]){
+     return true
+    }
+   else{ console.log("----->",field,this.state.checked.includes(field),this.state[field])
+  if  ( this.props.project[field].required_input&&!this.state[field]){
+    console.log("in if",field)
+    return true
+  }}
+  return false
   }
   render() {
     const { classes } = this.props
@@ -545,7 +570,7 @@ console.log("copy",copy)
                       <TextField
                        fullWidth
                        
-                        required
+                        error={this.state.clicked&&this.validate("title")}
                         label="Title"
                         className={classes.textField}
                         value={this.state.title}
@@ -565,6 +590,7 @@ console.log("copy",copy)
                         margin="normal"
                       />}<br />
                       {this.state.checked.includes("assigned_to") && <TextField
+                       error={this.state.clicked&&this.validate("assigned_to")}
                        fullWidth
                         select
                         label="Assigned To"
@@ -586,6 +612,7 @@ console.log("copy",copy)
                       </TextField>}
                       <br />
                       {this.state.checked.includes("due_date") && <TextField
+                       error={this.state.clicked&&this.validate("due_date")}
                        fullWidth
                         type="date"
                         label="Due Date"
@@ -598,7 +625,9 @@ console.log("copy",copy)
                         }}
                       />}
                       <br />
-                      {this.state.checked.includes("priority") && <TextField
+                      {this.state.checked.includes("priority") && 
+                      <TextField
+                       error={this.state.clicked&&this.validate("priority")}
                        fullWidth
                         select
                         label="priority"
@@ -609,18 +638,20 @@ console.log("copy",copy)
                             className: classes.menu,
                           },
                         }}
-                        value={this.state.priorityValue}
-                        onChange={this.handleChange('priorityValue')}
+                        value={this.state.priority}
+                        onChange={this.handleChange('priority')}
                         margin="normal"
                       >
-                        {this.state.priority.map(option => (
+                        {this.state.priorityList.map(option => (
                           <MenuItem key={option.label} value={option.label}>
                             {option.label}
                           </MenuItem>
                         ))}
                       </TextField>}
                       <br />
-                      {this.state.checked.includes("status") && <TextField
+                      {this.state.checked.includes("status") && 
+                      <TextField
+                       error={this.state.clicked&&this.validate("status")}
                        fullWidth
                         select
                         label="status"
@@ -631,19 +662,21 @@ console.log("copy",copy)
                             className: classes.menu,
                           },
                         }}
-                        value={this.state.statusValue}
-                        onChange={this.handleChange('statusValue')}
+                        value={this.state.status}
+                        onChange={this.handleChange('status')}
                         margin="normal"
                       >
 
-                        {this.state.status.map(option => (
+                        {this.state.statusList.map(option => (
                           <MenuItem key={option.label} value={option.label}>
                             {option.label}
                           </MenuItem>
                         ))}
                       </TextField>}
                       <br />
-                      {this.state.checked.includes("Category") && <TextField
+                      {this.state.checked.includes("Category") && 
+                      <TextField
+                       error={this.state.clicked&&this.validate("Category")}
                        fullWidth
                         select
                         label="Category"
@@ -654,18 +687,20 @@ console.log("copy",copy)
                             className: classes.menu,
                           },
                         }}
-                        value={this.state.CategoryValue}
-                        onChange={this.handleChange('CategoryValue')}
+                        value={this.state.Category}
+                        onChange={this.handleChange('Category')}
                         margin="normal"
                       >
-                        {this.state.Category.map(option => (
+                        {this.state.CategoryList.map(option => (
                           <MenuItem key={option.label} value={option.label}>
                             {option.label}
                           </MenuItem>
                         ))}
                       </TextField>}
                       <br />
-                      {this.state.checked.includes("work_order") && <TextField
+                      {this.state.checked.includes("work_order") && 
+                      <TextField
+                       error={this.state.clicked&&this.validate("work_order")}
                        fullWidth
 
                         label="Work Order"
@@ -708,9 +743,18 @@ console.log("copy",copy)
 
             </Paper>}
             {this.state.success &&
-              <div className="succ">
-                <p> Your Task was created successfully.</p>
-              </div>
+             
+      
+        <Snackbar
+          open={this.state.success}
+          onRequestClose={this.handleRequestClose}
+          transition={Fade}
+          SnackbarContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">Your Task was created successfully</span>}
+        />
+  
 
             }
 
