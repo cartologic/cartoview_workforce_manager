@@ -649,11 +649,11 @@ class ReactClient extends React.Component {
               <Table >
                 <TableHead>
                   <TableRow>
-                    <TableCell style={{"padding": "0" ,"paddingLeft": "3%"}}>
+                    <TableCell style={{"padding": "0" ,"textAlign": "center"}}>
                       Title</TableCell>
-                    {this.state.project.Project_config.includes("assigned_to") && <TableCell > Assigned to </TableCell>}
-                    {this.state.project.Project_config.includes("priority") && <TableCell>Priority</TableCell>}
-                    {this.state.project.Project_config.includes("status") && <TableCell > Status </TableCell>}
+                    {this.state.project.Project_config.includes("assigned_to") && <TableCell style={{"padding": "0" ,"textAlign": "center"}} > Assigned to </TableCell>}
+                    {this.state.project.Project_config.includes("priority") && <TableCell style={{"padding": "0" ,"textAlign": "center"}}>Priority</TableCell>}
+                    {this.state.project.Project_config.includes("status") && <TableCell style={{"padding": "0" ,"textAlign": "center"}} > Status </TableCell>}
 
                   </TableRow>
                 </TableHead>
@@ -663,16 +663,16 @@ class ReactClient extends React.Component {
                       <TableRow key={item.id} hover onClick={() => {
                         this.setState({ "selectedtask": item })
                       }}>
-                        <TableCell style={{"padding": "0" ,"paddingLeft": "3%"}}>{item.title}</TableCell>
-                        {this.state.project.Project_config.includes("assigned_to") && < TableCell style={{"padding": "0" ,"paddingLeft": "3%"}}> {
+                        <TableCell style={{"padding": "0" ,"textAlign": "center"}}>{item.title}</TableCell>
+                        {this.state.project.Project_config.includes("assigned_to") && < TableCell style={{"padding": "0" ,"textAlign": "center"}}> {
                           item.assigned_to.username
                             ? item.assigned_to.username
                             : "-"
                         } </TableCell>}
-                        {this.state.project.Project_config.includes("priority") && <TableCell style={{"padding": "0" ,"paddingLeft": "3%"}}>{item.priority
+                        {this.state.project.Project_config.includes("priority") && <TableCell style={{"padding": "0" ,"textAlign": "center"}}>{item.priority
                           ? item.priority
                           : '-'}</TableCell>}
-                        {this.state.project.Project_config.includes("status") && <TableCell  style={{"padding": "0" ,"paddingLeft": "3%"}}> {
+                        {this.state.project.Project_config.includes("status") && <TableCell  style={{"padding": "0" ,"textAlign": "center"}}> {
                           item.status
                             ? item.status
                             : '-'
