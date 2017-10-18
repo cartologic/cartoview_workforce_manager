@@ -390,7 +390,7 @@ console.log("copy",copy)
           }
 
           this.setState({ "success": true, "loading": false , 
-    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,description:"",due_date:null,step:1,clicked:false})
+    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,Description:"",due_date:null,step:1,clicked:false})
 
 
         })
@@ -454,7 +454,7 @@ console.log("copy",copy)
   
     this.setState({ value ,clicked:true},()=>{
       console.log(value)
-      if(!this.validate("title")&&!this.validate("Category")&&!this.validate("work_order")&&!this.validate("assigned_to")&&!this.validate("status")&&!this.validate("priority")&&!this.validate("due_date")){
+      if(!this.validate("title")&&!this.validate("Description")&&!this.validate("Category")&&!this.validate("work_order")&&!this.validate("assigned_to")&&!this.validate("status")&&!this.validate("priority")&&!this.validate("due_date")){
       var step = this.state.step + 1
       this.setState({ step: step, value: value }, () => {
         this.map.setTarget(ReactDOM.findDOMNode(this.refs.map))
@@ -492,7 +492,7 @@ console.log("copy",copy)
 
     console.log("will")
     this.setState({ success: false, value: "", point: [], comment: null,
-    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,description:"",due_date:null,step:1,clicked:false})
+    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,Description:"",due_date:null,step:1,clicked:false})
 
   }
 
@@ -582,11 +582,12 @@ console.log("copy",copy)
                        fullWidth
 
                         label="Description"
+                        error={this.state.clicked&&this.validate("Description")}
                         className={classes.textField}
-                        value={this.state.description}
+                        value={this.state.Description}
                         multiline
                         rowsMax="4"
-                        onChange={this.handleChange('description')}
+                        onChange={this.handleChange('Description')}
                         margin="normal"
                       />}<br />
                       {this.state.checked.includes("assigned_to") && <TextField

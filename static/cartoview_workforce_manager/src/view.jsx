@@ -44,7 +44,7 @@ import Tabs, {Tab} from 'material-ui/Tabs';
 import Paper from 'material-ui/Paper';
 import blue from 'material-ui/colors/blue';
 import red from 'material-ui/colors/red';
-import './css/project.css'
+
 injectTapEventPlugin();
 addLocaleData(enLocaleData);
 
