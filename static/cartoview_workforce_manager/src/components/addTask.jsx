@@ -132,7 +132,7 @@ class AddTask extends Component {
       extent: null,
       value: {},
       title: "",
-      description: "",
+      Description: "",
       assigned_to: null,
       due_date: null,
       priority: "",
@@ -390,7 +390,7 @@ console.log("copy",copy)
           }
 
           this.setState({ "success": true, "loading": false , 
-    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,description:"",due_date:"",step:1,clicked:false})
+    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,description:"",due_date:null,step:1,clicked:false})
 
 
         })
@@ -443,7 +443,7 @@ console.log("copy",copy)
     console.log(this.state.step)
     var value = {
       "title": this.state.title,
-      "description": this.state.description,
+      "description": this.state.Description,
       "priority": this.state.priority,
       "status": this.state.status,
       "Category": this.state.Category,
@@ -451,10 +451,10 @@ console.log("copy",copy)
        "assigned_to": this.state.assigned_to?{pk:this.state.assigned_to}:null,
        "due_date": this.state.due_date
     }
-    t
+  
     this.setState({ value ,clicked:true},()=>{
       console.log(value)
-      if(!this.validate("title")&&!this.validate("Description")&&!this.validate("Category")&&!this.validate("work_order")&&!this.validate("assigned_to")&&!this.validate("status")&&!this.validate("priority")&&!this.validate("due_date")){
+      if(!this.validate("title")&&!this.validate("Category")&&!this.validate("work_order")&&!this.validate("assigned_to")&&!this.validate("status")&&!this.validate("priority")&&!this.validate("due_date")){
       var step = this.state.step + 1
       this.setState({ step: step, value: value }, () => {
         this.map.setTarget(ReactDOM.findDOMNode(this.refs.map))
@@ -492,7 +492,7 @@ console.log("copy",copy)
 
     console.log("will")
     this.setState({ success: false, value: "", point: [], comment: null,
-    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,description:"",due_date:"",step:1,clicked:false})
+    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,description:"",due_date:null,step:1,clicked:false})
 
   }
 
@@ -546,6 +546,7 @@ console.log("copy",copy)
     }
    else{ console.log("----->",field,this.state.checked.includes(field),this.state[field])
   if  ( this.props.project[field].required_input&&!this.state[field]){
+    console.log("in if",field)
     return true
   }}
   return false
@@ -581,7 +582,6 @@ console.log("copy",copy)
                        fullWidth
 
                         label="Description"
-                        error={this.state.clicked&&this.validate("Description")}
                         className={classes.textField}
                         value={this.state.description}
                         multiline
