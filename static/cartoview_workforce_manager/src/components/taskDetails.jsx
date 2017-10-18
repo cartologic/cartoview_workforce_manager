@@ -8,6 +8,7 @@ import PhoneIcon from 'material-ui-icons/Phone';
 import FavoriteIcon from 'material-ui-icons/Favorite';
 import PersonPinIcon from 'material-ui-icons/PersonPin';
 import HistoryIcon from 'material-ui-icons/History';
+import DetailsIcon from 'material-ui-icons/FeaturedPlayList';
 import EditIcon from 'material-ui-icons/ModeEdit';
 import Button from 'material-ui/Button'
 import { withStyles } from 'material-ui/styles';
@@ -71,7 +72,7 @@ loadTask=()=>{
 
                     
         <div className={classes.root}>
-                <AppBar position="static">
+                {/* <AppBar position="static">
                 <Tabs value={this.state.value} onChange={this.handleChange} scrollable scrollButtons="off" centered>
                     <Tab icon={<PersonPinIcon />}  label="Details" onClick={()=>
                 {this.setState({edit:false,history:false,details:true})
@@ -79,21 +80,25 @@ loadTask=()=>{
              
                 
                 </Tabs>
-                </AppBar>
+                </AppBar> */}
 
-
-       <IconButton className={classes.button} style={{float:"right"}}onClick={()=>{this.setState({history:true,edit:false,details:false})
+                 
+       <IconButton className={classes.button} color={this.state.history?"primary":""} style={{float:"right"}}onClick={()=>{this.setState({history:true,edit:false,details:false})
                 this.loadTask
                 }}>
             <HistoryIcon />
       </IconButton>    
-      <IconButton className={classes.button}  style={{float:"right"}} onClick={()=>
+      <IconButton className={classes.button}  color={this.state.edit?"primary":""}  style={{float:"right"}} onClick={()=>
                 {this.setState({edit:true,history:false,details:false})
                  this.loadTask}}>
         <EditIcon />
       </IconButton>
 
-             
+      <IconButton className={classes.button} color={this.state.details?"primary":""} style={{float:"right"}}onClick={()=>{this.setState({history:false,edit:false,details:true})
+                this.loadTask
+                }}>
+            <DetailsIcon />
+      </IconButton>  
                 {this.state.details && !this.state.history &&!this.state.edit &&<TabContainer>
                  { this.state.task &&
                 
