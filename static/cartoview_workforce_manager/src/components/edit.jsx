@@ -19,6 +19,9 @@ import MenuIcon from 'material-ui-icons/Menu';
 import ImageIcon from 'material-ui-icons/Image';
 import CommentIcon from 'material-ui-icons/Comment';
 import LocationIcon from 'material-ui-icons/LocationOn';
+import Snackbar from 'material-ui/Snackbar';
+import Fade from 'material-ui/transitions/Fade';
+
 const styles = theme => ({
     container: {
 
@@ -68,9 +71,10 @@ class Edit extends Component {
                 work_order: this.props.task.work_order != 0 ? this.props.task.work_order : "",
                 Category: this.props.task.Category ? this.props.task.Category : "",
                 "created_by": { "username": username }
-            }
+            },
+            open: false,
         }
-
+       
         this.map = new ol.Map({
             //controls: [new ol.control.Attribution({collapsible: false}), new ol.control.ScaleLine()],
             layers: [new ol.layer.Tile({ title: 'OpenStreetMap', source: new ol.source.OSM() })],
@@ -148,6 +152,9 @@ class Edit extends Component {
         this.save = this.save.bind(this)
         //  this.init( this.map )
     }
+    handleRequestClose = () => {
+        this.setState({ success: false });
+      };
     sendHistory = () => {
 
         var text = { "text": this.state.history, "task": { "pk": this.props.task.id } }
@@ -528,13 +535,19 @@ class Edit extends Component {
 
                                 </div>
                             </div>}
-                        {this.state.success && <div>
-                            <br />
-                            <div className="succ">
-                                Your changes were saved successfully.
-                    </div>
+                        {this.state.success && 
+                           
 
-                        </div>}
+                    <Snackbar
+                            open={this.state.success}
+                            onRequestClose={this.handleRequestClose}
+                            transition={Fade}
+                            SnackbarContentProps={{
+                                'aria-describedby': 'message-id',
+                            }}
+                            message={<span id="message-id"> Your changes were saved successfully.</span>}
+                            />
+                       }
                         {this.state.task &&
                             <div >
                                 <Paper style={{ "marginTop": "2%" }}>

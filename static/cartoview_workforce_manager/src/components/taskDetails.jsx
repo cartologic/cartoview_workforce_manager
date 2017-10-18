@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Details from './details.jsx';
 import Edit from './edit.jsx';
 import TaskHistroy from './taskhistory.jsx'
@@ -15,37 +15,36 @@ import { withStyles } from 'material-ui/styles';
 import IconButton from 'material-ui/IconButton';
 import '../css/project.css'
 function TabContainer(props) {
-  return <div style={{ padding: 8 * 3 }}>{props.children}</div>;
+    return <div style={{ padding: 8 * 3 }}>{props.children}</div>;
 }
 
 const styles = theme => ({
-  root: {
-    flexGrow: 1,
-    width: '100%',
-    // marginTop: theme.spacing.unit * 3,
-    backgroundColor: theme.palette.background.paper,
-  },
+    root: {
+        flexGrow: 1,
+        width: '100%',
+        // marginTop: theme.spacing.unit * 3,
+        backgroundColor: theme.palette.background.paper,
+    },
 });
 
 class TaskDetails extends Component {
     constructor(props) {
         super(props)
-         this.state={
-             task:this.props.task,
-             value: 0,
-             history:false,
-             edit:false,
-             details:true
-         }
+        this.state = {
+            task: this.props.task,
+            value: 0,
+            history: false,
+            edit: false,
+            details: true
+        }
     }
-loadTask=()=>{
-    this.setState({task: false})
-        var url = '/apps/cartoview_workforce_manager/api/v1/task/' + this.props.task.id 
-          fetch(url, {  method: "GET",
+    loadTask = () => {
+        this.setState({ task: false })
+        var url = '/apps/cartoview_workforce_manager/api/v1/task/' + this.props.task.id
+        fetch(url, {
+            method: "GET",
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
-        
-
             })
         })
             .then(function (response) {
@@ -57,64 +56,59 @@ loadTask=()=>{
             })
             .then((data) => {
 
-                this.setState({task: data})
+                this.setState({ task: data })
             });
 
 
-}
-     handleChange = (event, value) => {
-         this.setState({ value });
-                                    };
+    }
+    handleChange = (event, value) => {
+        this.setState({ value });
+    };
 
     render() {
-       const {classes, theme} = this.props;
+        const { classes, theme } = this.props;
         return (
 
+
+            <div className={classes.root}>
+                <IconButton className={classes.button} aria-label="Task History" color={this.state.history ? "primary" : ""} style={{ float: "right" }} onClick={() => {
+                    this.loadTask
+                    this.setState({ history: true, edit: false, details: false })
                     
-        <div className={classes.root}>
-                {/* <AppBar position="static">
-                <Tabs value={this.state.value} onChange={this.handleChange} scrollable scrollButtons="off" centered>
-                    <Tab icon={<PersonPinIcon />}  label="Details" onClick={()=>
-                {this.setState({edit:false,history:false,details:true})
-                 this.loadTask}} />
-             
-                
-                </Tabs>
-                </AppBar> */}
-
-                 
-       <IconButton className={classes.button} color={this.state.history?"primary":""} style={{float:"right"}}onClick={()=>{this.setState({history:true,edit:false,details:false})
-                this.loadTask
                 }}>
-            <HistoryIcon />
-      </IconButton>    
-      <IconButton className={classes.button}  color={this.state.edit?"primary":""}  style={{float:"right"}} onClick={()=>
-                {this.setState({edit:true,history:false,details:false})
-                 this.loadTask}}>
-        <EditIcon />
-      </IconButton>
-
-      <IconButton className={classes.button} color={this.state.details?"primary":""} style={{float:"right"}}onClick={()=>{this.setState({history:false,edit:false,details:true})
-                this.loadTask
+                    <HistoryIcon />
+                </IconButton>
+                <IconButton className={classes.button} aria-label="Edit Task" color={this.state.edit ? "primary" : ""} style={{ float: "right" }} onClick={() => {
+                    this.loadTask
+                    this.setState({ edit: true, history: false, details: false })
+                    
                 }}>
-            <DetailsIcon />
-      </IconButton>  
-                {this.state.details && !this.state.history &&!this.state.edit &&<TabContainer>
-                 { this.state.task &&
-                
-                <div>
-               
-               
-                <Details task={this.state.task} mapid={this.props.mapid} project={this.props.project} />
-                </div>}
+                    <EditIcon />
+                </IconButton>
+
+                <IconButton className={classes.button} aria-label="Task Details" color={this.state.details ? "primary" : ""} style={{ float: "right" }} onClick={() => {
+                    this.loadTask
+                    this.setState({ history: false, edit: false, details: true })
+                    
+                }}>
+                    <DetailsIcon />
+                </IconButton>
+                {this.state.details && !this.state.history && !this.state.edit && <TabContainer>
+                    {this.state.task &&
+
+                        <div>
+
+
+                            <Details task={this.state.task} mapid={this.props.mapid} project={this.props.project} />
+                        </div>}
                 </TabContainer>
-               }
-                {!this.state.history && this.state.edit&&!this.state.details  &&<TabContainer> { this.state.task &&<Edit task={this.state.task} mapid={this.props.mapid} project={this.props.project} />}</TabContainer>}
-                {this.state.history && !this.state.edit&& !this.state.details &&<TabContainer> { this.state.task &&<TaskHistroy task={this.state.task}/>}</TabContainer>}
-      </div>
-    )
-               
-        
+                }
+                {!this.state.history && this.state.edit && !this.state.details && <TabContainer> {this.state.task && <Edit task={this.state.task} mapid={this.props.mapid} project={this.props.project} />}</TabContainer>}
+                {this.state.history && !this.state.edit && !this.state.details && <TabContainer> {this.state.task && <TaskHistroy task={this.state.task} />}</TabContainer>}
+            </div>
+        )
+
+
     }
 }
 export default withStyles(styles)(TaskDetails)
