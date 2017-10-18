@@ -46,7 +46,7 @@ class Details extends Component {
         return (
             
 
-            <div style={{"padding": "2%"}}>
+            <div >
   <Paper className={classes.paper}>
    {!this.props.task &&<img src={URLS.static + 'cartoview_workforce_manager/loader'} />}                 
       <Table>

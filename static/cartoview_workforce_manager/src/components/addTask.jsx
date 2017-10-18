@@ -556,13 +556,13 @@ console.log("copy",copy)
     return (
       <div>
         <Grid container direction={"row"} spacing={16} align="center" justify="center">
-          <Grid item sm={8}>
+          <Grid item xs={12} sm={12} md={9} lg={10}>
             {this.state.auth && this.state.step == 1 &&
 
 
 
-              <Paper style={{ "paddingBottom": "10%", "padding": "5%" }}>
-                <br />
+              <Paper style={{ "padding":"10%" }}>
+              
                 {this.state.workers &&
                   <div>
 
@@ -710,8 +710,9 @@ console.log("copy",copy)
                         onChange={this.handleChange('work_order')}
                         margin="normal"
                       />}
+                      <div>
                       <Button  raised className={classes.button} style={{ "float":"right"}} onClick={this.next} >Next <i className="fa fa-arrow-right"></i></Button>
-
+</div>
                     </form>
 
 

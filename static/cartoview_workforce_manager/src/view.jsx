@@ -1,15 +1,15 @@
 import React from 'react';
-import {render} from 'react-dom';
-import {addLocaleData, IntlProvider} from 'react-intl';
+import { render } from 'react-dom';
+import { addLocaleData, IntlProvider } from 'react-intl';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import enLocaleData from 'react-intl/locale-data/en';
 import './app.css';
 import AddTask from './components/addTask';
 import ProjectDetails from './components/ProjectDetails';
 import MyTasks from './components/myTasks';
-import {getCRSFToken} from './helpers/helpers.jsx'
+import { getCRSFToken } from './helpers/helpers.jsx'
 import TaskDetails from './components/taskDetails.jsx'
-import {withStyles} from 'material-ui/styles';
+import { withStyles } from 'material-ui/styles';
 import Drawer from 'material-ui/Drawer';
 import Button from 'material-ui/Button';
 import Divider from 'material-ui/Divider';
@@ -23,7 +23,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import Avatar from 'material-ui/Avatar';
-import List, {ListItem, ListItemSecondaryAction, ListItemIcon, ListItemText} from 'material-ui/List';
+import List, { ListItem, ListItemSecondaryAction, ListItemIcon, ListItemText } from 'material-ui/List';
 import AssignmentIcon from 'material-ui-icons/Assignment';
 import AddIcon from 'material-ui-icons/PlaylistAdd';
 import InfoIcon from 'material-ui-icons/InfoOutline';
@@ -39,8 +39,8 @@ import MenuItem from 'material-ui/Menu/MenuItem';
 import Hidden from 'material-ui/Hidden';
 import Grid from 'material-ui/Grid';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
-import Table, {TableBody, TableCell, TableHead, TableRow} from 'material-ui/Table'
-import Tabs, {Tab} from 'material-ui/Tabs';
+import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table'
+import Tabs, { Tab } from 'material-ui/Tabs';
 import Paper from 'material-ui/Paper';
 import blue from 'material-ui/colors/blue';
 import red from 'material-ui/colors/red';
@@ -52,7 +52,7 @@ const drawerWidth = 240;
 const theme = createMuiTheme({
   palette: {
     // Purple and green play nicely together.
-    danger:red
+    danger: red
   },
 });
 const styles = theme => ({
@@ -76,9 +76,9 @@ const styles = theme => ({
     transition: theme.transitions.create([
       'margin', 'width'
     ], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    })
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen
+      })
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -86,9 +86,9 @@ const styles = theme => ({
     transition: theme.transitions.create([
       'margin', 'width'
     ], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen
-    })
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen
+      })
   },
   menuButton: {
     marginLeft: 12,
@@ -98,7 +98,7 @@ const styles = theme => ({
     display: 'none'
   },
   drawerPaper: {
-    
+
     height: '100%',
     width: drawerWidth
   },
@@ -121,7 +121,7 @@ const styles = theme => ({
     },
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 3,
+    paddingTop: theme.spacing.unit * 4,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
@@ -135,16 +135,22 @@ const styles = theme => ({
       }
     }
   },
+  
   contentShift: {
     marginLeft: 10,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
     })
-  }
+  }, tableResponsive: {
+    overflowX: 'overlay',
+    overflowY: 'overlay',
+
+  },
+
 });
 
-function TabContainer({children, dir}) {
+function TabContainer({ children, dir }) {
   return (
     <div dir={dir}>
       {children}
@@ -176,7 +182,7 @@ class ReactClient extends React.Component {
       selectedtask2: "",
       currentComponent: "list",
       pageCount: 0,
-      perPage: 7,
+      perPage: 6,
       pagedTasks: [],
       selected: null,
       filtertask: null,
@@ -210,7 +216,7 @@ class ReactClient extends React.Component {
     });
   };
   sendFilter = () => {
-    this.setState({page: "tasks"})
+    this.setState({ page: "tasks" })
     var priority = "",
       status = "",
       work_order = "",
@@ -243,8 +249,8 @@ class ReactClient extends React.Component {
     fetch(url, {
       method: "GET",
       credentials: "same-origin",
-      headers: new Headers({"Content-Type": "application/json; charset=UTF-8"})
-    }).then(function(response) {
+      headers: new Headers({ "Content-Type": "application/json; charset=UTF-8" })
+    }).then(function (response) {
       if (response.status >= 400) {
         throw new Error("Bad response from server");
 
@@ -253,9 +259,9 @@ class ReactClient extends React.Component {
     }).then((data) => {
       if (data.objects.length == 0) {
         console.log("empty")
-        this.setState({result: true})
+        this.setState({ result: true })
       } else {
-        this.setState({result: false})
+        this.setState({ result: false })
       }
       this.setState({
         tasks: data.objects,
@@ -264,7 +270,7 @@ class ReactClient extends React.Component {
         pageCount: Math.ceil(data.objects.length / this.state.perPage)
       }, () => {
         var pagedTasks = this.state.tasks.slice(0, this.state.perPage);
-        this.setState({pagedTasks: pagedTasks})
+        this.setState({ pagedTasks: pagedTasks })
         console.log(url, data)
         console.log(data.objects.length)
         // this.state.priority ? this.refs.priority = "" : false
@@ -290,8 +296,8 @@ class ReactClient extends React.Component {
     var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + '/tasks'
     fetch(url, {
       method: "GET",
-      headers: new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken()})
-    }).then(function(response) {
+      headers: new Headers({ "Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken() })
+    }).then(function (response) {
       if (response.status >= 400) {
         throw new Error("Bad response from server");
       }
@@ -305,7 +311,7 @@ class ReactClient extends React.Component {
         pageCount: Math.ceil(data.objects.length / this.state.perPage)
       }, () => {
         var pagedTasks = this.state.tasks.slice(0, this.state.perPage);
-        this.setState({pagedTasks: pagedTasks})
+        this.setState({ pagedTasks: pagedTasks })
       })
 
     });
@@ -314,68 +320,68 @@ class ReactClient extends React.Component {
     var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id
     fetch(url, {
       method: "GET",
-      headers: new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken()})
-    }).then(function(response) {
+      headers: new Headers({ "Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken() })
+    }).then(function (response) {
       if (response.status >= 400) {
         throw new Error("Bad response from server");
       }
       return response.json();
     }).then((data) => {
 
-      this.setState({project: data})
+      this.setState({ project: data })
     });
   }
   loadWorkers = () => {
     var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + "/workers"
     fetch(url, {
       method: "GET",
-      headers: new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken()})
-    }).then(function(response) {
+      headers: new Headers({ "Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken() })
+    }).then(function (response) {
       if (response.status >= 400) {
         throw new Error("Bad response from server");
       }
       return response.json();
     }).then((data) => {
 
-      this.setState({workers: data.objects})
+      this.setState({ workers: data.objects })
     });
   }
   handlePageClick = (data) => {
     var pagedTasks = this.state.tasks.slice(data.selected * this.state.perPage, (data.selected + 1) * this.state.perPage);
-    this.setState({pagedTasks: pagedTasks})
+    this.setState({ pagedTasks: pagedTasks })
 
   }
   loadDispatchers = () => {
     var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + "/dispatchers"
     fetch(url, {
       method: "GET",
-      headers: new Headers({"Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken()})
-    }).then(function(response) {
+      headers: new Headers({ "Content-Type": "application/json; charset=UTF-8", "X-CSRFToken": getCRSFToken() })
+    }).then(function (response) {
       if (response.status >= 400) {
         throw new Error("Bad response from server");
       }
       return response.json();
     }).then((data) => {
 
-      this.setState({dispatchers: data.objects})
+      this.setState({ dispatchers: data.objects })
     });
   }
 
-  componentWillMount() {}
+  componentWillMount() { }
 
   getChildContext() {
     // return { muiTheme: getMuiTheme(CustomTheme) };
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
-  _toggleBaseMapModal() {}
+  _toggleBaseMapModal() { }
   handleMainTabsChange = (event, tabValue) => {
-    this.setState({tabValue});
+    this.setState({ tabValue });
   };
 
   handleMainTabsChangeIndex = index => {
-    this.setState({tabValue: index});
+    this.setState({ tabValue: index });
   };
 
   search = (e) => {
@@ -397,79 +403,79 @@ class ReactClient extends React.Component {
     window.location.href = '/apps/appinstances/?app__title=Cartoview%20Workforce%20Manager&limit=100&offset=0&owner__username=' + username
   }
   handleDrawerOpen = () => {
-    this.setState({open: true});
+    this.setState({ open: true });
   };
 
   handleDrawerClose = () => {
-    this.setState({open: false});
+    this.setState({ open: false });
   };
 
   renderResponsiveDrawer = () => {
 
-    const {classes, theme} = this.props;
+    const { classes, theme } = this.props;
 
     const drawer = (
 
       <div className={classes.drawerInner}>
 
-        <Divider/>
+        <Divider />
         <List>
           <ListItem dense button style={{
             paper: classes.drawerPaper
           }}>
             <Avatar src={this.state.project.logo
               ? this.state.project.logo.base64
-              : URLS.static + 'nologo.png'}/>
-            <ListItemText primary={this.state.project.title}/>
+              : URLS.static + 'nologo.png'} />
+            <ListItemText primary={this.state.project.title} />
             <ListItemSecondaryAction>
               <IconButton onClick={this.handleDrawerClose}>
 
-                <ChevronLeftIcon/>
+                <ChevronLeftIcon />
               </IconButton>
             </ListItemSecondaryAction>
           </ListItem>
-          <Divider/>
+          <Divider />
 
           <ListItem dense button onClick={() => {
-            this.setState({"selectedtask": null, result: false, page: "tasks"})
+            this.setState({ "selectedtask": null, result: false, page: "tasks" })
             this.loadTasks()
           }}>
             <ListItemIcon>
-              <AssignmentIcon/>
+              <AssignmentIcon />
             </ListItemIcon>
-            <ListItemText primary="Tasks"/>
+            <ListItemText primary="Tasks" />
           </ListItem>
-          <ListItem dense button onClick={() => this.setState({currentComponent: "add", page: "new"})}>
+          <ListItem dense button onClick={() => this.setState({ currentComponent: "add", page: "new" })}>
             <ListItemIcon>
-              <AddIcon/>
+              <AddIcon />
             </ListItemIcon>
-            <ListItemText primary='New Task'/>
+            <ListItemText primary='New Task' />
           </ListItem>
           <ListItem dense button onClick={this.openFilterMenu}>
             <ListItemIcon>
-              <FindIcon/>
+              <FindIcon />
             </ListItemIcon>
-            <ListItemText primary="Filters"/> {this.state.filterOpen
-              ? <ExpandLess/>
-              : <ExpandMore/>}
+            <ListItemText primary="Filters" /> {this.state.filterOpen
+              ? <ExpandLess />
+              : <ExpandMore />}
           </ListItem>
           <Collapse in={this.state.filterOpen} transitionDuration="auto" unmountOnExit>
             <ListItem className={classes.nested}>
-              {<ul> {
+              {< ul > {
                 this.state.project.priority && this.state.project.Project_config.includes("priority") && <TextField id="priority" value={this.state.priority} select SelectProps={{
-                    MenuProps: {
-                      className: classes.menu
-                    }
-                  }} className={styles.textField} onChange={this.handleFilter('priority')} helperText="Filter By Priority" margin="normal">
+                  MenuProps: {
+                    className: classes.menu
+                  }
+                }} className={styles.textField} onChange={this.handleFilter('priority')} helperText="Filter By Priority" margin="normal">
 
-                    {this.state.project.priority.priority.map(option => (
-                      <MenuItem key={option.label} value={option.label}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-              } <br/> {
-                this.state.project.status && this.state.project.Project_config.includes("status") && <TextField id="status" select SelectProps={{
+                  {this.state.project.priority.priority.map(option => (
+                    <MenuItem key={option.label} value={option.label}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              } < br /> {
+                  this.state.project.status && this.state.project.Project_config.includes("status") && <TextField id="status" select SelectProps={{
                     MenuProps: {
                       className: styles.menu
                     }
@@ -481,8 +487,8 @@ class ReactClient extends React.Component {
                       </MenuItem>
                     ))}
                   </TextField>
-              } < br /> {
-                this.state.project.Category && this.state.project.Project_config.includes("Category") && <TextField id="category" select SelectProps={{
+                } < br /> {
+                  this.state.project.Category && this.state.project.Project_config.includes("Category") && <TextField id="category" select SelectProps={{
                     MenuProps: {
                       className: styles.menu
                     }
@@ -494,12 +500,12 @@ class ReactClient extends React.Component {
                       </MenuItem>
                     ))}
                   </TextField>
-              } < br /> {
-                this.state.project.Project_config.includes("work_order") && <TextField id="workorder" style={{
+                } < br /> {
+                  this.state.project.Project_config.includes("work_order") && <TextField id="workorder" style={{
                     "width": "90px"
-                  }} label="work order" className={classes.textField} defaultValue={this.state.work_order} onChange={this.handleFilter('Work_order')} margin="normal"/>
-              } < br /> {
-                this.state.dispatchers && <TextField id="dispatcher" select SelectProps={{
+                  }} label="work order" className={classes.textField} defaultValue={this.state.work_order} onChange={this.handleFilter('Work_order')} margin="normal" />
+                } < br /> {
+                  this.state.dispatchers && <TextField id="dispatcher" select SelectProps={{
                     MenuProps: {
                       className: styles.menu
                     }
@@ -511,8 +517,8 @@ class ReactClient extends React.Component {
                       </MenuItem>
                     ))}
                   </TextField>
-              } < br /> {
-                this.state.project.Project_config.includes("assigned_to") && this.state.project && <TextField id="assignee" select SelectProps={{
+                } < br /> {
+                  this.state.project.Project_config.includes("assigned_to") && this.state.project && <TextField id="assignee" select SelectProps={{
                     MenuProps: {
                       className: styles.menu
                     }
@@ -523,32 +529,32 @@ class ReactClient extends React.Component {
                       </MenuItem>
                     ))}
                   </TextField>
-              } < Button raised color = "primary" style = {{ "marginLeft": "50%" }}onClick = {
-                this.sendFilter
-              } > Filter </Button>
+                } < Button raised color="primary" style={{ "marginLeft": "50%" }} onClick={
+                  this.sendFilter
+                } > Filter </Button>
 
- </ul >}
+              </ul >}
             </ListItem>
           </Collapse>
-          <ListItem dense button onClick={() => this.setState({currentComponent: "details", page: "details"})}>
+          <ListItem dense button onClick={() => this.setState({ currentComponent: "details", page: "details" })}>
             <ListItemIcon>
-              <AssignmentIcon/>
+              <AssignmentIcon />
             </ListItemIcon>
-            <ListItemText primary='Project Details'/>
+            <ListItemText primary='Project Details' />
           </ListItem>
 
           <ListItem dense button onClick={this.myProjects}>
             <ListItemIcon>
-              <WorkIcon/>
+              <WorkIcon />
             </ListItemIcon>
-            <ListItemText primary='My Projects'/>
+            <ListItemText primary='My Projects' />
           </ListItem>
 
-          <ListItem dense button onClick={() => this.setState({page: "about"})}>
+          <ListItem dense button onClick={() => this.setState({ page: "about" })}>
             <ListItemIcon>
-              <InfoIcon/>
+              <InfoIcon />
             </ListItemIcon>
-            <ListItemText primary='About'/>
+            <ListItemText primary='About' />
           </ListItem>
         </List>
       </div>
@@ -562,7 +568,7 @@ class ReactClient extends React.Component {
               <IconButton color="contrast" aria-label="open drawer" onClick={() => {
                 this.handleDrawerOpen()
               }} className={classNames(classes.menuButton, this.state.open && classes.hide)}>
-                <MenuIcon/>
+                <MenuIcon />
               </IconButton>
               <Typography type="title" color="inherit" noWrap>
                 {this.props.title}
@@ -579,55 +585,128 @@ class ReactClient extends React.Component {
           </Hidden>
 
           <Hidden lgUp>
-            <Drawer className='myClass' type="temperory" 
-            onRequestClose={this.handleDrawerClose}
-            classes={{
-              paper: classes.drawerPaper2
-            }} open={this.state.open}>
+            <Drawer className='myClass' type="temperory"
+              onRequestClose={this.handleDrawerClose}
+              classes={{
+                paper: classes.drawerPaper2
+              }} open={this.state.open}>
               {drawer}
             </Drawer>
           </Hidden>
-          <main className={classNames(classes.content, this.state.open && classes.contentShift)}>
+          <Grid container spacing={0} align="center" justify="center">
+            <Grid item xs={12} sm={12}>
+              <main className={classNames(classes.content, this.state.open && classes.contentShift)}>
 
-            {this.state.page == "tasks" && this.renderMainTabs()}
-            {this.state.project && this.state.dispatchers && this.state.page == "new" && <AddTask project={this.state.project} mapid={this.state.project.mapid} dispatchers={this.state.dispatchers} classes={this.props.classes}/>
-}
-            {this.state.workers && this.state.project && this.state.page == "details" && <ProjectDetails id={id} project={this.state.project} mapid={this.state.project.mapid} workers={this.state.workers}  classes={this.props.classes}/>
-}
-            {this.state.page == "about" && 
-          <Grid container direction={"row"} spacing={16} align="center" justify="center">  
-            <Grid item xs={16} sm={8}>
-           <Paper><p style={{"padding": "100px"}}>
-              Cartoview app to manage project/work group tasks. It provides a full management of a task status, priority, location ,attachments and comments
-            </p>
-            </Paper>
+                {this.state.page == "tasks" && this.renderMainTabs()}
+                {this.state.project && this.state.dispatchers && this.state.page == "new" && <AddTask project={this.state.project} mapid={this.state.project.mapid} dispatchers={this.state.dispatchers} classes={this.props.classes} />
+                }
+                {this.state.workers && this.state.project && this.state.page == "details" && <ProjectDetails id={id} project={this.state.project} mapid={this.state.project.mapid} workers={this.state.workers} classes={this.props.classes} />
+                }
+                {this.state.page == "about" &&
+                  <Grid container direction={"row"} spacing={16} align="center" justify="center">
+                    <Grid item xs={12} sm={8}>
+                      <Paper>
+                        <p style={{ "padding": "100px" }}>
+                          Cartoview app to manage project/work group tasks. It provides a full management of a task status, priority, location ,attachments and comments
+                        </p>
+                      </Paper>
+                    </Grid>
+                  </Grid>}
+              </main>
             </Grid>
-            </Grid>}
-          </main>
+          </Grid>
         </div>
       </div>
     );
   }
 
-  renderMainTabs =()=> {
+  renderMainTabs = () => {
     return (
-      <Grid container direction={"row"} spacing={16} align="center" justify="center">
-        <Grid item  sm={8}>
-          {this.state.pagedTasks.length != 0 && !this.state.selectedtask &&<AppBar position="static" color="default">
+      <Grid container align="center" justify="center">
+        <Grid item xs={12} sm={12} md={9} lg={9}>
+          {this.state.pagedTasks.length != 0 && !this.state.selectedtask && <AppBar position="static" color="default">
             <Tabs value={this.state.tabValue} onChange={this.handleMainTabsChange} indicatorColor="primary" textColor="primary" centered >
               <Tab label="Tasks" onClick={() => {
-                this.setState({"selectedtask": null, result: false})
+                this.setState({ "selectedtask": null, result: false })
                 this.loadTasks()
-              }} style={{ width: 700 }}/>
+              }} />
               <Tab label="My Tasks" onClick={() => {
-                this.setState({"selectedtask": null, result: false})
+                this.setState({ "selectedtask": null, result: false })
                 this.loadTasks()
-              }} style={{ width: 700 }}/>
+              }} />
 
             </Tabs>
           </AppBar>}
-          {this.state.tabValue === 0 && <TabContainer>{this.renderTasksTable()}</TabContainer>}
-          {this.state.tabValue === 1 && <TabContainer><MyTasks id={id} project={this.state.project} selected={this.state.selected}  classes={this.props.classes}/></TabContainer>}
+          {this.state.tabValue === 0 && <TabContainer>
+            {this.state.pagedTasks.length != 0 && !this.state.selectedtask && !this.state.loading && <div className={this.props.classes.tableResponsive}>
+              {this.state.loading && <Grid container align="center" justify="center">
+                <Grid >
+                  <img src={URLS.static + 'cartoview_workforce_manager/loader'} />
+                </Grid>
+              </Grid>
+              }
+
+              <Table >
+                <TableHead>
+                  <TableRow>
+                    <TableCell style={{"padding": "0" ,"paddingLeft": "3%"}}>
+                      Title</TableCell>
+                    {this.state.project.Project_config.includes("assigned_to") && <TableCell > Assigned to </TableCell>}
+                    {this.state.project.Project_config.includes("priority") && <TableCell>Priority</TableCell>}
+                    {this.state.project.Project_config.includes("status") && <TableCell > Status </TableCell>}
+
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {this.state.pagedTasks.map(item => {
+                    return (
+                      <TableRow key={item.id} hover onClick={() => {
+                        this.setState({ "selectedtask": item })
+                      }}>
+                        <TableCell style={{"padding": "0" ,"paddingLeft": "3%"}}>{item.title}</TableCell>
+                        {this.state.project.Project_config.includes("assigned_to") && < TableCell style={{"padding": "0" ,"paddingLeft": "3%"}}> {
+                          item.assigned_to.username
+                            ? item.assigned_to.username
+                            : "-"
+                        } </TableCell>}
+                        {this.state.project.Project_config.includes("priority") && <TableCell style={{"padding": "0" ,"paddingLeft": "3%"}}>{item.priority
+                          ? item.priority
+                          : '-'}</TableCell>}
+                        {this.state.project.Project_config.includes("status") && <TableCell  style={{"padding": "0" ,"paddingLeft": "3%"}}> {
+                          item.status
+                            ? item.status
+                            : '-'
+                        }
+                        </TableCell>}
+
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+
+              {!this.state.tasks.length && !this.state.loading && !this.state.result && <div style={{
+                "padding": "5%",
+                "textAlign": "center"
+              }}>
+                <p>No tasks yet for this project</p>
+              </div>
+              }
+              {this.state.pagedTasks.length == 0 && this.state.result && <p style={{
+                "padding": "2%"
+              }}>No result found !</p>}
+              
+              {this.state.project && this.state.dispatchers && this.state.page == "new" && <AddTask project={this.state.project} mapid={this.state.project.mapid} dispatchers={this.state.dispatchers} />
+              }
+
+              {this.state.pageCount > 1 && <ReactPaginate previousLabel={"previous"} nextLabel={"next"} breakLabel={<a href="" > ...</a>} breakClassName={"break-me"} pageCount={this.state.pageCount} marginPagesDisplayed={2} pageRangeDisplayed={5} onPageChange={this.handlePageClick} containerClassName={"pagination"} subContainerClassName={"pages pagination"} activeClassName={"active"} />}
+            </div>}
+          </TabContainer>}
+          {this.state.selectedtask && <div>
+                <TaskDetails task={this.state.selectedtask} mapid={this.state.project.mapid} project={this.state.project} />
+              </div>
+              }
+          {this.state.tabValue === 1 && <TabContainer><MyTasks id={id} project={this.state.project} selected={this.state.selected} classes={this.props.classes} /></TabContainer>}
 
         </Grid>
       </Grid>
@@ -635,84 +714,25 @@ class ReactClient extends React.Component {
   }
 
   renderTasksTable = () => {
-    const {classes, theme} = this.props;
+    const { classes, theme } = this.props;
     return (
-      <Paper className={classes.paper}>
-        {this.state.loading && <Grid container direction={"row"} spacing={16} align="center" justify="center">
-          <Grid >
-            <img src={URLS.static + 'cartoview_workforce_manager/loader'}/>
-          </Grid>
+      <Grid container>
+        <Grid item xs={12} sm={12}  md={9} lg={9} >
+          <Paper className={classes.paper}>
+
+          </Paper>
         </Grid>
-}
-
-        {this.state.pagedTasks.length != 0 && !this.state.selectedtask && !this.state.loading && <Grid>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell >
-                  Title</TableCell>
-                {this.state.project.Project_config.includes("assigned_to") &&<TableCell > Assigned to </TableCell>}
-                {this.state.project.Project_config.includes("priority") && <TableCell>Priority</TableCell>}
-                {this.state.project.Project_config.includes("status") &&<TableCell > Status </TableCell>}
-
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {this.state.pagedTasks.map(item => {
-                return (
-                  <TableRow key={item.id} hover onClick={() => {
-                    this.setState({"selectedtask": item})
-                  }}>
-                    <TableCell>{item.title}</TableCell>
-                    {this.state.project.Project_config.includes("assigned_to") &&< TableCell > {
-                      item.assigned_to.username
-                        ? item.assigned_to.username
-                        : "-"
-                    } </TableCell>}
-                    {this.state.project.Project_config.includes("priority") && <TableCell>{item.priority
-                        ? item.priority
-                        : '-'}</TableCell>}
-                    {this.state.project.Project_config.includes("status") &&<TableCell > {
-                      item.status
-                        ? item.status
-                        : '-'
-                    } 
-                    </TableCell>}
-
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-          {this.state.pageCount > 1 && <ReactPaginate previousLabel={"previous"} nextLabel={"next"} breakLabel={<a href = "" > ...</a>} breakClassName={"break-me"} pageCount={this.state.pageCount} marginPagesDisplayed={2} pageRangeDisplayed={5} onPageChange={this.handlePageClick} containerClassName={"pagination"} subContainerClassName={"pages pagination"} activeClassName={"active"}/>}
-        </Grid>}
-
-        {!this.state.tasks.length && !this.state.loading && !this.state.result && <div style={{
-          "padding": "5%",
-          "textAlign": "center"
-        }}>
-          <p>No tasks yet for this project</p>
-        </div>
-}
-        {this.state.pagedTasks.length == 0 && this.state.result && <p style={{
-          "padding": "2%"
-        }}>No result found !</p>}
-        {this.state.selectedtask && <div>
-          <TaskDetails task={this.state.selectedtask} mapid={this.state.project.mapid} project={this.state.project} />
-        </div>
-}
-        {this.state.project && this.state.dispatchers && this.state.page == "new" && <AddTask project={this.state.project} mapid={this.state.project.mapid} dispatchers={this.state.dispatchers} />
-}
-      </Paper>
+      </Grid>
     )
   }
 
-  
+
   render() {
     console.log(this.props)
-    let {currentComponent} = this.state
+    let { currentComponent } = this.state
     return (
       <div >
+
         {this.renderResponsiveDrawer()}
 
 
@@ -731,5 +751,5 @@ let App = withStyles(styles)(ReactClient)
 export default withStyles(styles)(ReactClient)
 render(
   <MuiThemeProvider theme={theme}>
-  <App/>
-</MuiThemeProvider>, document.getElementById('root'))
+    <App />
+  </MuiThemeProvider>, document.getElementById('root'))
