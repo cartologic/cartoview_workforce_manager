@@ -55,10 +55,10 @@ export default class MyTasks extends Component {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell >
+                           <TableCell style={{"padding": "0" ,"textAlign": "center"}} >
                                 Title</TableCell>
-                            {this.props.project.Project_config.includes("assigned_to") && <TableCell > Assigned to < /TableCell>}
-                {this.props.project.Project_config.includes("priority") && <TableCell>Priority</TableCell>}
+                            {this.props.project.Project_config.includes("assigned_to") &&<TableCell style={{"padding": "0" ,"textAlign": "center"}} > Assigned to < /TableCell>}
+                {this.props.project.Project_config.includes("priority") &&<TableCell style={{"padding": "0" ,"textAlign": "center"}}>Priority</TableCell>}
                                 {this.props.project.Project_config.includes("status") && < TableCell > Status < /TableCell>}
 
               </TableRow>
@@ -69,13 +69,13 @@ export default class MyTasks extends Component {
                                             <TableRow key={item.id} hover onClick={() => {
                                                 this.setState({ "selectedtask": item })
                                             }}>
-                                                <TableCell>{item.title}</TableCell>
+                                               <TableCell style={{"padding": "0" ,"textAlign": "center"}}>{item.title}</TableCell>
                                                 {this.props.project.Project_config.includes("assigned_to") && < TableCell > {
                                                     item.assigned_to.username
                                                         ? item.assigned_to.username
                                                         : "-"
                                                 } </TableCell>}
-                                                {this.props.project.Project_config.includes("priority") && <TableCell>{item.priority
+                                                {this.props.project.Project_config.includes("priority") &&<TableCell style={{"padding": "0" ,"textAlign": "center"}}>{item.priority
                                                     ? item.priority
                                                     : '-'}</TableCell>}
                                                 {this.props.project.Project_config.includes("status") && < TableCell > {
