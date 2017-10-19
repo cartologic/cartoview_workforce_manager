@@ -100,7 +100,7 @@ export default class MyTasks extends Component {
 
                                     {!this.state.tasks.length && !this.state.loading &&
                                         <div style={{ "padding": "5%","textAlign": "center"}}>
-                                            <p> You don&#39;t have Tasks </p>
+                                            <p className="formated"> You don&#39;t have Tasks </p>
                                         </div>
 
                                     }
