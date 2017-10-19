@@ -70,7 +70,7 @@ export default class MyTasks extends Component {
                                                 this.setState({ "selectedtask": item })
                                             }}>
                                                <TableCell style={{"padding": "0" ,"textAlign": "center"}}>{item.title}</TableCell>
-                                                {this.props.project.Project_config.includes("assigned_to") && < TableCell > {
+                                                {this.props.project.Project_config.includes("assigned_to") && < TableCell style={{"padding": "0" ,"textAlign": "center"}}  > {
                                                     item.assigned_to.username
                                                         ? item.assigned_to.username
                                                         : "-"
@@ -99,7 +99,7 @@ export default class MyTasks extends Component {
                                         </div>}
 
                                     {!this.state.tasks.length && !this.state.loading &&
-                                        <div style={{ padding: "2%" }}>
+                                        <div style={{ "padding": "5%","textAlign": "center"}}>
                                             <p> You don&#39;t have Tasks </p>
                                         </div>
 

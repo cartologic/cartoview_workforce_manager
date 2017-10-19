@@ -14,6 +14,8 @@ import Button from 'material-ui/Button'
 import { withStyles } from 'material-ui/styles';
 import IconButton from 'material-ui/IconButton';
 import '../css/project.css'
+import Grid from 'material-ui/Grid';
+
 function TabContainer(props) {
     return <div style={{ padding: 8 * 3 }}>{props.children}</div>;
 }
@@ -70,7 +72,7 @@ class TaskDetails extends Component {
         return (
 
 
-            <div className={classes.root}>
+            <div className={classes.root , this.props.open && classes.contentShift}>
                 <IconButton className={classes.button} aria-label="Task History" color={this.state.history ? "primary" : ""} style={{ float: "right" }} onClick={() => {
                     this.loadTask
                     this.setState({ history: true, edit: false, details: false })

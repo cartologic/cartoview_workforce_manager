@@ -115,7 +115,7 @@ const styles = theme => ({
   },
   content: {
     width: '100%',
-    marginLeft: `-${drawerWidth + 1}px`,
+    // marginLeft: `-${drawerWidth + 1}px`,
     [theme.breakpoints.down('lg')]: {
       marginLeft: `0px`
     },
@@ -137,7 +137,7 @@ const styles = theme => ({
   },
   
   contentShift: {
-    marginLeft: 10,
+    marginLeft: 0,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
@@ -594,13 +594,13 @@ class ReactClient extends React.Component {
             </Drawer>
           </Hidden>
           <Grid container spacing={0} align="center" justify="center">
-            <Grid item xs={12} sm={12}>
+            <Grid item xs={11} sm={11} md={8} lg={8}>
               <main className={classNames(classes.content, this.state.open && classes.contentShift)}>
 
                 {this.state.page == "tasks" && this.renderMainTabs()}
                 {this.state.project && this.state.dispatchers && this.state.page == "new" && <AddTask project={this.state.project} mapid={this.state.project.mapid} dispatchers={this.state.dispatchers} classes={this.props.classes} />
                 }
-                {this.state.workers && this.state.project && this.state.page == "details" && <ProjectDetails id={id} project={this.state.project} mapid={this.state.project.mapid} workers={this.state.workers} classes={this.props.classes} />
+                {this.state.workers && this.state.project && this.state.page == "details" && <ProjectDetails id={id} project={this.state.project} mapid={this.state.project.mapid} workers={this.state.workers} classes={this.props.classes} open={this.state.open}/>
                 }
                 {this.state.page == "about" &&
                   <Grid container direction={"row"} spacing={16} align="center" justify="center">
@@ -624,6 +624,7 @@ class ReactClient extends React.Component {
     return (
       <Grid container align="center" justify="center">
         <Grid item xs={12} sm={12} md={9} lg={9}>
+        <Paper>
           {this.state.pagedTasks.length != 0 && !this.state.selectedtask && <AppBar position="static" color="default">
             <Tabs value={this.state.tabValue} onChange={this.handleMainTabsChange} indicatorColor="primary" textColor="primary" centered >
               <Tab label="Tasks" onClick={() => {
@@ -685,17 +686,7 @@ class ReactClient extends React.Component {
                 </TableBody>
               </Table>
 
-              {!this.state.tasks.length && !this.state.loading && !this.state.result && <div style={{
-                "padding": "5%",
-                "textAlign": "center"
-              }}>
-                <p>No tasks yet for this project</p>
-              </div>
-              }
-              {this.state.pagedTasks.length == 0 && this.state.result && <p style={{
-                "padding": "2%"
-              }}>No result found !</p>}
-              
+            
               {this.state.project && this.state.dispatchers && this.state.page == "new" && <AddTask project={this.state.project} mapid={this.state.project.mapid} dispatchers={this.state.dispatchers} />
               }
 
@@ -707,7 +698,14 @@ class ReactClient extends React.Component {
               </div>
               }
           {this.state.tabValue === 1 && <TabContainer><MyTasks id={id} project={this.state.project} selected={this.state.selected} classes={this.props.classes} /></TabContainer>}
-
+  {!this.state.tasks.length && !this.state.loading && !this.state.result && <div>
+                <p >No tasks yet for this project</p>
+              </div>
+              }
+              {this.state.pagedTasks.length == 0 && this.state.result && 
+             <div className="center"><p>No result found !</p></div>}
+              
+</Paper>
         </Grid>
       </Grid>
     )

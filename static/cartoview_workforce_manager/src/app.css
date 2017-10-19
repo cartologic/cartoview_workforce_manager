@@ -86,3 +86,20 @@
   padding: 0 !important;
   padding-left: 7% !important;
 }
+body{
+  background-color:"#fafafa"
+}
+
+p{
+  font-family: "Abril Fatface";
+  font-size: 25;
+  color: grey;
+  padding: 5%;
+ 
+}
+.center{
+  text-align: center
+}
+#message-id{
+  font-size: 18
+}
