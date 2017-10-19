@@ -606,7 +606,7 @@ class ReactClient extends React.Component {
                   <Grid container direction={"row"} spacing={16} align="center" justify="center">
                     <Grid item xs={12} sm={8}>
                       <Paper>
-                        <p style={{ "padding": "100px" }}>
+                        <p >
                           Cartoview app to manage project/work group tasks. It provides a full management of a task status, priority, location ,attachments and comments
                         </p>
                       </Paper>
