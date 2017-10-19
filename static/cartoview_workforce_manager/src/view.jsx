@@ -606,7 +606,7 @@ class ReactClient extends React.Component {
                   <Grid container direction={"row"} spacing={16} align="center" justify="center">
                     <Grid item xs={12} sm={8}>
                       <Paper>
-                        <p >
+                        <p className="formated" >
                           Cartoview app to manage project/work group tasks. It provides a full management of a task status, priority, location ,attachments and comments
                         </p>
                       </Paper>
@@ -699,11 +699,11 @@ class ReactClient extends React.Component {
               }
           {this.state.tabValue === 1 && <TabContainer><MyTasks id={id} project={this.state.project} selected={this.state.selected} classes={this.props.classes} /></TabContainer>}
   {!this.state.tasks.length && !this.state.loading && !this.state.result && <div>
-                <p >No tasks yet for this project</p>
+                <p className="formated">No tasks yet for this project</p>
               </div>
               }
               {this.state.pagedTasks.length == 0 && this.state.result && 
-             <div className="center"><p>No result found !</p></div>}
+             <div className="center"><p className="formated">No result found !</p></div>}
               
 </Paper>
         </Grid>
