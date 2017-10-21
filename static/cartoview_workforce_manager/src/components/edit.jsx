@@ -9,7 +9,7 @@ import Comments from './comments';
 import Attachments from './attachments.jsx';
 var tComb = {}
 import ol from 'openlayers';
-import Button from 'react-bootstrap-button-loader';
+import Button from 'material-ui/Button';
 import { withStyles } from 'material-ui/styles';
 import MenuItem from 'material-ui/Menu/MenuItem';
 import TextField from 'material-ui/TextField';
@@ -21,6 +21,8 @@ import CommentIcon from 'material-ui-icons/Comment';
 import LocationIcon from 'material-ui-icons/LocationOn';
 import Snackbar from 'material-ui/Snackbar';
 import Fade from 'material-ui/transitions/Fade';
+import { CircularProgress } from 'material-ui/Progress';
+
 
 const styles = theme => ({
     container: {
@@ -531,7 +533,9 @@ class Edit extends Component {
                                 </div>
 
                                 <div className="row">
-                                    <Button loading={this.state.btnLoading} className="btn btn-primary pull-right" style={{ "margin": "2%" }} onClick={this.save}>Save</Button>
+                                    <Button  className="btn btn-primary pull-right" style={{ "margin": "2%" }} onClick={this.save}>
+                                    { this.state.btnLoading&&<CircularProgress className={classes.progress} />}
+                                    Save</Button>
 
                                 </div>
                             </div>}

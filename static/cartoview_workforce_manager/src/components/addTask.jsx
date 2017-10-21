@@ -23,6 +23,7 @@ import Fade from 'material-ui/transitions/Fade';
 import MobileStepper from 'material-ui/MobileStepper';
 import KeyboardArrowLeft from 'material-ui-icons/KeyboardArrowLeft';
 import KeyboardArrowRight from 'material-ui-icons/KeyboardArrowRight';
+import { CircularProgress } from 'material-ui/Progress';
 const drawerWidth = 240
 
 
@@ -776,6 +777,7 @@ console.log("copy",copy)
           Next
             {<KeyboardArrowRight /> }
           </Button>:<Button dense onClick={this.save} >
+          { this.state.loading&&<CircularProgress className={classes.progress} />}
           Save
             {<KeyboardArrowRight /> }
           </Button>
