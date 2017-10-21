@@ -17,7 +17,7 @@ import '../css/project.css'
 import Grid from 'material-ui/Grid';
 import Tooltip from 'material-ui/Tooltip';
 function TabContainer(props) {
-    return <div style={{ padding: 8 * 3 }}>{props.children}</div>;
+    return <div >{props.children}</div>;
 }
 
 const styles = theme => ({
