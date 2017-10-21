@@ -639,7 +639,7 @@ class ReactClient extends React.Component {
             </Tabs>
           </AppBar>}
           {this.state.tabValue === 0 && <TabContainer>
-            {this.state.pagedTasks.length != 0 && !this.state.selectedtask && !this.state.loading && <div className={this.props.classes.tableResponsive}>
+            {this.state.pagedTasks.length != 0 && !this.state.selectedtask && !this.state.loading && <div >
               {this.state.loading && <Grid container align="center" justify="center">
                 <Grid >
                   <img src={URLS.static + 'cartoview_workforce_manager/loader'} />

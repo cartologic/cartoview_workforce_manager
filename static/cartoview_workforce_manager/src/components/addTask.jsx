@@ -20,6 +20,9 @@ import LocationIcon from 'material-ui-icons/LocationOn'; const Form = t.form.For
 import Grid from 'material-ui/Grid';
 import Snackbar from 'material-ui/Snackbar';
 import Fade from 'material-ui/transitions/Fade';
+import MobileStepper from 'material-ui/MobileStepper';
+import KeyboardArrowLeft from 'material-ui-icons/KeyboardArrowLeft';
+import KeyboardArrowRight from 'material-ui-icons/KeyboardArrowRight';
 const drawerWidth = 240
 
 
@@ -145,7 +148,7 @@ class AddTask extends Component {
       statusList: null,
       checked: this.props.project.Project_config,
       loading: false,
-      step: 1,
+      step: 0,
       comment: "",
       image: "",
       commentDone: false,
@@ -390,7 +393,7 @@ console.log("copy",copy)
           }
 
           this.setState({ "success": true, "loading": false , 
-    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,Description:"",due_date:null,step:1,clicked:false})
+    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,Description:"",due_date:null,step:0,clicked:false})
 
 
         })
@@ -492,7 +495,7 @@ console.log("copy",copy)
 
     console.log("will")
     this.setState({ success: false, value: "", point: [], comment: null,
-    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,Description:"",due_date:null,step:1,clicked:false})
+    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,Description:"",due_date:null,step:0,clicked:false})
 
   }
 
@@ -557,7 +560,7 @@ console.log("copy",copy)
       <div>
         <Grid container direction={"row"} spacing={16} align="center" justify="center">
           <Grid item xs={12} sm={12} md={9} lg={10}>
-            {this.state.auth && this.state.step == 1 &&
+            {this.state.auth && this.state.step == 0 &&
 
 
 
@@ -710,9 +713,7 @@ console.log("copy",copy)
                         onChange={this.handleChange('work_order')}
                         margin="normal"
                       />}
-                      <div>
-                      <Button  raised className={classes.button} style={{ "float":"right"}} onClick={this.next} >Next <i className="fa fa-arrow-right"></i></Button>
-</div>
+                      
                     </form>
 
 
@@ -724,7 +725,7 @@ console.log("copy",copy)
 
               </Paper>
             }
-            {this.state.step == 2 && !this.state.success &&
+            {this.state.step == 1 && !this.state.success &&
               <Paper style={{ "paddingBottom": "10%" }}>
                 <label style={{ padding: "1%" }}>Click to Add Task Location</label>
                 {!this.state.point.length && <small> (loctaion is not set)</small>
@@ -732,17 +733,11 @@ console.log("copy",copy)
                 <div style={{ height: "100%" }} ref="map" className={'map-ct'}>
                   {this.props.children}
                 </div>
-                <Button  raised className={classes.button} style={{ "float":"right",margin: "1%"}} onClick={this.next} > Next <i className="fa fa-arrow-right"></i></Button>
-                <Button  raised className={classes.button} style={{ "float":"right",margin: "1%"}} onClick={this.prev}> <i className="fa fa-arrow-left"></i>Back</Button>
-              </Paper>}
-            {this.state.step == 3 && !this.state.success && <Paper style={{ "padding": "4%", "paddingBottom": "10%" }}>
+                </Paper>}
+            {this.state.step == 2 && !this.state.success && <Paper style={{ "padding": "4%", "paddingBottom": "10%" }}>
               {this.renderComments()}
               {this.renderImage()}
-              {/* <Button  raised className={classes.button} loading={this.state.loading} className="btndefault pull-right" style={{ "float":"right",margin: "1%"}} spinColor="#444" onClick={this.save}  >Save</Button> */}
-              <Button  raised className={classes.button} className="btndefault pull-right" style={{ "float":"right",margin: "1%"}} onClick={this.save}  >Save</Button>
-            
-              <Button  raised className={classes.button} style={{ "float":"right",margin: "1%"}} onClick={this.prev}> <i className="fa fa-arrow-left"></i>Back</Button>
-
+             
             </Paper>}
             {this.state.success &&
              
@@ -768,8 +763,36 @@ console.log("copy",copy)
             </div>}
 
             <div ></div>
+                     {this.state.workers &&
+                     <Paper><MobileStepper
+        type="dots"
+        steps={3}
+        position="static"
+        activeStep={this.state.step}
+        className={classes.root}
+         
+        nextButton={
+          this.state.step!=2?<Button dense onClick={this.next} >
+          Next
+            {<KeyboardArrowRight /> }
+          </Button>:<Button dense onClick={this.save} >
+          Save
+            {<KeyboardArrowRight /> }
+          </Button>
+          
+
+
+        }
+        backButton={
+          <Button dense onClick={this.prev} disabled={this.state.step === 0}>
+            {<KeyboardArrowLeft />}
+            Back
+          </Button>
+        }
+      /></Paper>}
           </Grid>
         </Grid>
+          
       </div>
     )
   }
