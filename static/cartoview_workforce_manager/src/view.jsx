@@ -206,7 +206,9 @@ class ReactClient extends React.Component {
     this.loadDispatchers()
 
   }
-
+  resetFilter=()=>{
+    this.setState({priority:"",status:"",category:"",work_order:"",created_by:"",assigned_to:""})
+  }
   openFilterMenu = () => {
     this.setState({
       page: "tasks",
@@ -539,11 +541,16 @@ class ReactClient extends React.Component {
                 } 
 
 
-<IconButton color="primary" className={classes.button} style={{ "marginLeft": "50%" }} onClick={
+<Button raised color="default" className={classes.button} onClick={
                   this.sendFilter
                 }>
-<FindIcon/>
-      </IconButton>
+Filter
+      </Button>
+      <Button raised color="default" className={classes.button}  style={{"marginTop": "10px"}} onClick={
+                  this.resetFilter
+                }>
+reset
+      </Button>
 
               </ul >}
             </ListItem>
@@ -605,7 +612,7 @@ class ReactClient extends React.Component {
               {drawer}
             </Drawer>
           </Hidden>
-          <Grid container spacing={0} align="center" justify="center">
+          <Grid container spacing={0} alignItems="center" justify="center">
             <Grid item xs={11} sm={11} md={8} lg={8}>
               <main className={classNames(classes.content, this.state.open && classes.contentShift)}>
 
@@ -615,7 +622,7 @@ class ReactClient extends React.Component {
                 {this.state.workers && this.state.project && this.state.page == "details" && <ProjectDetails id={id} project={this.state.project} mapid={this.state.project.mapid} workers={this.state.workers} classes={this.props.classes} open={this.state.open}/>
                 }
                 {this.state.page == "about" &&
-                  <Grid container direction={"row"} spacing={16} align="center" justify="center">
+                  <Grid container direction={"row"} spacing={16} alignItems="center" justify="center">
                     <Grid item xs={12} sm={8}>
                       <Paper>
                         <p className="formated" >
@@ -634,7 +641,7 @@ class ReactClient extends React.Component {
 
   renderMainTabs = () => {
     return (
-      <Grid container align="center" justify="center">
+      <Grid container alignItems="center" justify="center">
         <Grid item xs={12} sm={12} md={9} lg={9}>
         <Paper>
           {this.state.pagedTasks.length != 0 && !this.state.selectedtask && <AppBar position="static" color="default">
@@ -652,7 +659,7 @@ class ReactClient extends React.Component {
           </AppBar>}
           {this.state.tabValue === 0 && <TabContainer>
             {this.state.pagedTasks.length != 0 && !this.state.selectedtask && !this.state.loading && <div >
-              {this.state.loading && <Grid container align="center" justify="center">
+              {this.state.loading && <Grid container alignItems="center" justify="center">
                 <Grid >
                   <img src={URLS.static + 'cartoview_workforce_manager/loader'} />
                 </Grid>

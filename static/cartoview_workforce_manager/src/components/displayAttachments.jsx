@@ -124,9 +124,9 @@ console.log(this.props)
     </div>}
 
  {this.state.attachments.length==0 && <Paper  elevation={4}>
-         <Typography type="headline" component="h3" style={{"padding": "20px"}}>
+         <p style={{"padding": "20px"}}>
           No Photos Yet
-        </Typography>
+        </p>
         
       </Paper>}
 
