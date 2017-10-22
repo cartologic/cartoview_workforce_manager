@@ -87,7 +87,8 @@
   padding-left: 7% !important;
 }
 body{
-  background-color:"#fafafa"
+  background-color:"#fafafa";
+  position: inherit !important;
 }
 
 .formated{

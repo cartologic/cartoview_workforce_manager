@@ -529,9 +529,14 @@ class ReactClient extends React.Component {
                       </MenuItem>
                     ))}
                   </TextField>
-                } < Button raised color="primary" style={{ "marginLeft": "50%" }} onClick={
+                } 
+
+
+<IconButton color="primary" className={classes.button} style={{ "marginLeft": "50%" }} onClick={
                   this.sendFilter
-                } > Filter </Button>
+                }>
+<FindIcon/>
+      </IconButton>
 
               </ul >}
             </ListItem>
