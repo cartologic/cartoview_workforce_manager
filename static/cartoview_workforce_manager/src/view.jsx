@@ -642,7 +642,7 @@ reset
   renderMainTabs = () => {
     return (
       <Grid container alignItems="center" justify="center">
-        <Grid item xs={12} sm={12} md={9} lg={9}>
+        <Grid item xs={12} sm={12} md={12} lg={12}>
         <Paper>
           {this.state.pagedTasks.length != 0 && !this.state.selectedtask && <AppBar position="static" color="default">
             <Tabs value={this.state.tabValue} onChange={this.handleMainTabsChange} indicatorColor="primary" textColor="primary" centered >
@@ -737,7 +737,7 @@ reset
     const { classes, theme } = this.props;
     return (
       <Grid container>
-        <Grid item xs={12} sm={12}  md={9} lg={9} >
+        <Grid item xs={12} sm={12}  md={12} lg={12} >
           <Paper className={classes.paper}>
 
           </Paper>
