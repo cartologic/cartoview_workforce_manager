@@ -114,3 +114,4 @@ body{
 .map-ct{
 height:"250px" !important
 }
+.hoverPointer { cursor: pointer; cursor: hand; }

@@ -649,7 +649,7 @@ class ReactClient extends React.Component {
 
               <Table >
                 <TableHead>
-                  <TableRow>
+                  <TableRow >
                     <TableCell style={{"padding": "0" ,"textAlign": "center"}}>
                       Title</TableCell>
                     {this.state.project.Project_config.includes("assigned_to") && <TableCell style={{"padding": "0" ,"textAlign": "center"}} > Assigned to </TableCell>}
@@ -661,7 +661,7 @@ class ReactClient extends React.Component {
                 <TableBody>
                   {this.state.pagedTasks.map(item => {
                     return (
-                      <TableRow key={item.id} hover onClick={() => {
+                      <TableRow className={"hoverPointer"} key={item.id} hover onClick={() => {
                         this.setState({ "selectedtask": item })
                       }}>
                         <TableCell style={{"padding": "0" ,"textAlign": "center"}}>{item.title}</TableCell>
