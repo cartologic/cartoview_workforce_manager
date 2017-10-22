@@ -22,6 +22,7 @@ import MenuIcon from 'material-ui-icons/Menu';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
+import ChevronRightIcon from 'material-ui-icons/ChevronRight';
 import Avatar from 'material-ui/Avatar';
 import List, { ListItem, ListItemSecondaryAction, ListItemIcon, ListItemText } from 'material-ui/List';
 import AssignmentIcon from 'material-ui-icons/Assignment';
@@ -44,6 +45,7 @@ import Tabs, { Tab } from 'material-ui/Tabs';
 import Paper from 'material-ui/Paper';
 import blue from 'material-ui/colors/blue';
 import red from 'material-ui/colors/red';
+import Pagination from 'materialui-pagination'; 
 
 injectTapEventPlugin();
 addLocaleData(enLocaleData);
@@ -191,7 +193,12 @@ class ReactClient extends React.Component {
       filterMenu: false,
       open: false,
       filterOpen: false,
-      tabValue: 0
+      tabValue: 0,
+      rowsPerPage: [5,10,15],
+      rows: [],
+      numberOfRows: 5,
+      pages: 1,
+      total: undefined
     }
     this.loadTasks()
     this.loadProject()
@@ -695,8 +702,11 @@ class ReactClient extends React.Component {
               {this.state.project && this.state.dispatchers && this.state.page == "new" && <AddTask project={this.state.project} mapid={this.state.project.mapid} dispatchers={this.state.dispatchers} />
               }
 
-              {this.state.pageCount > 1 && <ReactPaginate previousLabel={"previous"} nextLabel={"next"} breakLabel={<a href="" > ...</a>} breakClassName={"break-me"} pageCount={this.state.pageCount} marginPagesDisplayed={2} pageRangeDisplayed={5} onPageChange={this.handlePageClick} containerClassName={"pagination"} subContainerClassName={"pages pagination"} activeClassName={"active"} />}
+              {this.state.pageCount > 1 && 
+              <ReactPaginate previousLabel={<ChevronLeftIcon/>} nextLabel={<ChevronRightIcon/>} breakLabel={<a href="" > ...</a>} breakClassName={"break-me"} pageCount={this.state.pageCount} marginPagesDisplayed={2} pageRangeDisplayed={5} onPageChange={this.handlePageClick} containerClassName={"pagination"} subContainerClassName={"pages pagination"} activeClassName={"active"} />}
             </div>}
+
+         
           </TabContainer>}
           {this.state.selectedtask && <div>
                 <TaskDetails task={this.state.selectedtask} mapid={this.state.project.mapid} project={this.state.project} />
@@ -734,12 +744,14 @@ class ReactClient extends React.Component {
     console.log(this.props)
     let { currentComponent } = this.state
     return (
+
       <div >
 
         {this.renderResponsiveDrawer()}
 
 
       </div>
+     
     )
   }
 }
