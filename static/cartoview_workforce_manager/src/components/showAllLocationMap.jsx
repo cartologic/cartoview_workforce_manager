@@ -138,7 +138,7 @@ preparePoints=()=>{
   render() {
 
     var {className=''} = this.props;
-    return (<div  ref="map" className={className + ' map-ct'}>
+    return (<div  ref="map" style={{"height":"250px"}}  className={className + ' map-ct'}>
 
       {this.props.children}
     </div>);

@@ -108,3 +108,9 @@ body{
     font-size: 25;
   }
 }
+.ol-overlaycontainer-stopevent{
+  display: none
+}
+.map-ct{
+height:"250px" !important
+}
