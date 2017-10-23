@@ -13,8 +13,8 @@
   "dependencies": {
     "@boundlessgeo/sdk": "^1.0.0",
     "jquery": "^3.2.1",
-    "material-ui": "^1.0.0-beta.17",
-    "material-ui-icons": "^1.0.0-beta.15",
+    "material-ui": "1.0.0-beta.17",
+    "material-ui-icons": "1.0.0-beta.15",
     "moment": "^2.18.1",
     "react": "^15.5.4",
     "react-addons-css-transition-group": "^15.5.2",

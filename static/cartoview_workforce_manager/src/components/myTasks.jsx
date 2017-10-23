@@ -66,7 +66,7 @@ export default class MyTasks extends Component {
             <TableBody>
                                     {this.state.tasks.map(item => {
                                         return (
-                                            <TableRow key={item.id} hover onClick={() => {
+                                            <TableRow className={"hoverPointer"} key={item.id} hover onClick={() => {
                                                 this.setState({ "selectedtask": item })
                                             }}>
                                                <TableCell style={{"padding": "0" ,"textAlign": "center"}}>{item.title}</TableCell>

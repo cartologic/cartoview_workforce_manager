@@ -731,7 +731,7 @@ console.log("copy",copy)
                 <label style={{ padding: "1%" }}>Click to Add Task Location</label>
                 {!this.state.point.length && <small> (loctaion is not set)</small>
                 }
-                <div style={{ height: "100%" }} ref="map" className={'map-ct'}>
+                <div style={{ height: "250px" }} ref="map" className={'map-ct'}>
                   {this.props.children}
                 </div>
                 </Paper>}
@@ -777,7 +777,7 @@ console.log("copy",copy)
           Next
             {<KeyboardArrowRight /> }
           </Button>:<Button dense onClick={this.save} >
-          { this.state.loading&&<CircularProgress className={classes.progress} />}
+          {this.state.loading&&<CircularProgress className={classes.progress} />}
           Save
             {<KeyboardArrowRight /> }
           </Button>

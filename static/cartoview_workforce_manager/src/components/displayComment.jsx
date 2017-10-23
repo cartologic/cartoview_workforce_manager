@@ -128,10 +128,10 @@ class DisplayComments extends Component {
                     })}
 				</Paper>
                 <div>
-         {this.state.comments.length==0 && <Paper className={classes.root} elevation={4}>
-         <Typography type="headline" component="h3">
+         {this.state.comments.length==0 && <Paper className={classes.root} >
+        <p>
           No Comments Yet
-        </Typography>
+        </p>
         
       </Paper>}
     </div>

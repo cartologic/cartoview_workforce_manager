@@ -22,13 +22,15 @@ import MenuIcon from 'material-ui-icons/Menu';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
+import ChevronRightIcon from 'material-ui-icons/ChevronRight';
 import Avatar from 'material-ui/Avatar';
 import List, { ListItem, ListItemSecondaryAction, ListItemIcon, ListItemText } from 'material-ui/List';
 import AssignmentIcon from 'material-ui-icons/Assignment';
 import AddIcon from 'material-ui-icons/PlaylistAdd';
 import InfoIcon from 'material-ui-icons/InfoOutline';
 import WorkIcon from 'material-ui-icons/Work';
-import FindIcon from 'material-ui-icons/FindInPage';
+import FindIcon from 'material-ui-icons/Search';
+import ResetIcon from 'material-ui-icons/Clear';
 import DetailsIcon from 'material-ui-icons/ChromeReaderMode';
 import ExpandLess from 'material-ui-icons/ExpandLess';
 import ExpandMore from 'material-ui-icons/ExpandMore';
@@ -44,6 +46,7 @@ import Tabs, { Tab } from 'material-ui/Tabs';
 import Paper from 'material-ui/Paper';
 import blue from 'material-ui/colors/blue';
 import red from 'material-ui/colors/red';
+
 
 injectTapEventPlugin();
 addLocaleData(enLocaleData);
@@ -100,7 +103,9 @@ const styles = theme => ({
   drawerPaper: {
 
     height: '100%',
-    width: drawerWidth
+    width: drawerWidth,
+    top: '64px',
+    position: 'absolute',
   },
   drawerPaper2: {
 
@@ -115,7 +120,7 @@ const styles = theme => ({
   },
   content: {
     width: '100%',
-    // marginLeft: `-${drawerWidth + 1}px`,
+    //  marginLeft: `${drawerWidth + 1}px`,
     [theme.breakpoints.down('lg')]: {
       marginLeft: `0px`
     },
@@ -137,7 +142,7 @@ const styles = theme => ({
   },
   
   contentShift: {
-    marginLeft: 0,
+    marginLeft:"50px",
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
@@ -147,7 +152,11 @@ const styles = theme => ({
     overflowY: 'overlay',
 
   },
+buttonCenter:{
 
+     minWidth: "300px" 
+  
+}
 });
 
 function TabContainer({ children, dir }) {
@@ -191,7 +200,12 @@ class ReactClient extends React.Component {
       filterMenu: false,
       open: false,
       filterOpen: false,
-      tabValue: 0
+      tabValue: 0,
+      rowsPerPage: [5,10,15],
+      rows: [],
+      numberOfRows: 5,
+      pages: 1,
+      total: undefined
     }
     this.loadTasks()
     this.loadProject()
@@ -199,7 +213,9 @@ class ReactClient extends React.Component {
     this.loadDispatchers()
 
   }
-
+  resetFilter=()=>{
+    this.setState({priority:"",status:"",category:"",work_order:"",created_by:"",assigned_to:""})
+  }
   openFilterMenu = () => {
     this.setState({
       page: "tasks",
@@ -212,7 +228,7 @@ class ReactClient extends React.Component {
 
   handleDrawerToggle = () => {
     this.setState({
-      mobileOpen: !this.state.mobileOpen
+      open: !this.state.open
     });
   };
   sendFilter = () => {
@@ -420,21 +436,8 @@ class ReactClient extends React.Component {
 
         <Divider />
         <List>
-          <ListItem dense button style={{
-            paper: classes.drawerPaper
-          }}>
-            <Avatar src={this.state.project.logo
-              ? this.state.project.logo.base64
-              : URLS.static + 'nologo.png'} />
-            <ListItemText primary={this.state.project.title} />
-            <ListItemSecondaryAction>
-              <IconButton onClick={this.handleDrawerClose}>
-
-                <ChevronLeftIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-          <Divider />
+         
+     
 
           <ListItem dense button onClick={() => {
             this.setState({ "selectedtask": null, result: false, page: "tasks" })
@@ -529,10 +532,16 @@ class ReactClient extends React.Component {
                       </MenuItem>
                     ))}
                   </TextField>
-                } < Button raised color="primary" style={{ "marginLeft": "50%" }} onClick={
-                  this.sendFilter
-                } > Filter </Button>
+                } 
 
+<div>
+      <IconButton raised color="primary" className={classes.button} onClick={this.sendFilter}>
+          <FindIcon/>
+      </IconButton>
+      <IconButton raised color="primary" className={classes.button}  style={{"marginTop": "10px"}} onClick={this.resetFilter}>
+           <ResetIcon/>
+      </IconButton>
+</div>
               </ul >}
             </ListItem>
           </Collapse>
@@ -563,15 +572,18 @@ class ReactClient extends React.Component {
     return (
       <div className={classes.root}>
         <div className={classes.appFrame}>
-          <AppBar className={classNames(classes.appBar, this.state.open && classes.appBarShift)}>
+          <AppBar className={classNames(classes.appBar)}>
             <Toolbar disableGutters={!this.state.open}>
               <IconButton color="contrast" aria-label="open drawer" onClick={() => {
-                this.handleDrawerOpen()
-              }} className={classNames(classes.menuButton, this.state.open && classes.hide)}>
+                this.handleDrawerToggle()
+              }} className={classNames(classes.menuButton)}>
                 <MenuIcon />
               </IconButton>
+               <Avatar src={this.state.project.logo
+              ? this.state.project.logo.base64
+              : URLS.static + 'nologo.png'} />
               <Typography type="title" color="inherit" noWrap>
-                {this.props.title}
+                {this.state.project.title}
               </Typography>
             </Toolbar>
           </AppBar>
@@ -593,7 +605,7 @@ class ReactClient extends React.Component {
               {drawer}
             </Drawer>
           </Hidden>
-          <Grid container spacing={0} align="center" justify="center">
+          <Grid container spacing={0} alignItems="center" justify="center">
             <Grid item xs={11} sm={11} md={8} lg={8}>
               <main className={classNames(classes.content, this.state.open && classes.contentShift)}>
 
@@ -603,7 +615,7 @@ class ReactClient extends React.Component {
                 {this.state.workers && this.state.project && this.state.page == "details" && <ProjectDetails id={id} project={this.state.project} mapid={this.state.project.mapid} workers={this.state.workers} classes={this.props.classes} open={this.state.open}/>
                 }
                 {this.state.page == "about" &&
-                  <Grid container direction={"row"} spacing={16} align="center" justify="center">
+                  <Grid container direction={"row"} spacing={16} alignItems="center" justify="center">
                     <Grid item xs={12} sm={8}>
                       <Paper>
                         <p className="formated" >
@@ -622,12 +634,12 @@ class ReactClient extends React.Component {
 
   renderMainTabs = () => {
     return (
-      <Grid container align="center" justify="center">
-        <Grid item xs={12} sm={12} md={9} lg={9}>
+      <Grid container alignItems="center" justify="center">
+        <Grid item xs={12} sm={12} md={12} lg={12}>
         <Paper>
           {this.state.pagedTasks.length != 0 && !this.state.selectedtask && <AppBar position="static" color="default">
             <Tabs value={this.state.tabValue} onChange={this.handleMainTabsChange} indicatorColor="primary" textColor="primary" centered >
-              <Tab label="Tasks" onClick={() => {
+              <Tab label="Tasks"  className={"buttonCenter"} onClick={() => {
                 this.setState({ "selectedtask": null, result: false })
                 this.loadTasks()
               }} />
@@ -640,7 +652,7 @@ class ReactClient extends React.Component {
           </AppBar>}
           {this.state.tabValue === 0 && <TabContainer>
             {this.state.pagedTasks.length != 0 && !this.state.selectedtask && !this.state.loading && <div >
-              {this.state.loading && <Grid container align="center" justify="center">
+              {this.state.loading && <Grid container alignItems="center" justify="center">
                 <Grid >
                   <img src={URLS.static + 'cartoview_workforce_manager/loader'} />
                 </Grid>
@@ -649,7 +661,7 @@ class ReactClient extends React.Component {
 
               <Table >
                 <TableHead>
-                  <TableRow>
+                  <TableRow >
                     <TableCell style={{"padding": "0" ,"textAlign": "center"}}>
                       Title</TableCell>
                     {this.state.project.Project_config.includes("assigned_to") && <TableCell style={{"padding": "0" ,"textAlign": "center"}} > Assigned to </TableCell>}
@@ -661,7 +673,7 @@ class ReactClient extends React.Component {
                 <TableBody>
                   {this.state.pagedTasks.map(item => {
                     return (
-                      <TableRow key={item.id} hover onClick={() => {
+                      <TableRow className={"hoverPointer"} key={item.id} hover onClick={() => {
                         this.setState({ "selectedtask": item })
                       }}>
                         <TableCell style={{"padding": "0" ,"textAlign": "center"}}>{item.title}</TableCell>
@@ -690,8 +702,11 @@ class ReactClient extends React.Component {
               {this.state.project && this.state.dispatchers && this.state.page == "new" && <AddTask project={this.state.project} mapid={this.state.project.mapid} dispatchers={this.state.dispatchers} />
               }
 
-              {this.state.pageCount > 1 && <ReactPaginate previousLabel={"previous"} nextLabel={"next"} breakLabel={<a href="" > ...</a>} breakClassName={"break-me"} pageCount={this.state.pageCount} marginPagesDisplayed={2} pageRangeDisplayed={5} onPageChange={this.handlePageClick} containerClassName={"pagination"} subContainerClassName={"pages pagination"} activeClassName={"active"} />}
+              {this.state.pageCount > 1 && 
+              <ReactPaginate previousLabel={<ChevronLeftIcon/>} nextLabel={<ChevronRightIcon/>} breakLabel={<a href="" > ...</a>} breakClassName={"break-me"} pageCount={this.state.pageCount} marginPagesDisplayed={2} pageRangeDisplayed={5} onPageChange={this.handlePageClick} containerClassName={"pagination"} subContainerClassName={"pages pagination"} activeClassName={"active"} />}
             </div>}
+
+         
           </TabContainer>}
           {this.state.selectedtask && <div>
                 <TaskDetails task={this.state.selectedtask} mapid={this.state.project.mapid} project={this.state.project} />
@@ -715,7 +730,7 @@ class ReactClient extends React.Component {
     const { classes, theme } = this.props;
     return (
       <Grid container>
-        <Grid item xs={12} sm={12}  md={9} lg={9} >
+        <Grid item xs={12} sm={12}  md={12} lg={12} >
           <Paper className={classes.paper}>
 
           </Paper>
@@ -729,12 +744,14 @@ class ReactClient extends React.Component {
     console.log(this.props)
     let { currentComponent } = this.state
     return (
+
       <div >
 
         {this.renderResponsiveDrawer()}
 
 
       </div>
+     
     )
   }
 }

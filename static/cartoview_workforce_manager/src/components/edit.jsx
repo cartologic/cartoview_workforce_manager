@@ -23,7 +23,6 @@ import Snackbar from 'material-ui/Snackbar';
 import Fade from 'material-ui/transitions/Fade';
 import { CircularProgress } from 'material-ui/Progress';
 
-
 const styles = theme => ({
     container: {
 
@@ -528,15 +527,15 @@ class Edit extends Component {
                         {this.state.task &&
                             <div>
                                 <label>Click to Edit Task Location</label>
-                                <div style={{ height: "100%" }} ref="map" className={' map-ct'}>
+                                <div style={{ height: "250px" }} ref="map" className={' map-ct'}>
                                     {this.props.children}
                                 </div>
 
                                 <div className="row">
-                                    <Button  className="btn btn-primary pull-right" style={{ "margin": "2%" }} onClick={this.save}>
-                                    { this.state.btnLoading&&<CircularProgress className={classes.progress} />}
+                                    <Button raised   style={{ "margin": "2%",float:"right" }} onClick={this.save}>
+                                    {this.state.btnLoading&&<CircularProgress className={classes.progress} />}
                                     Save</Button>
-
+                                     
                                 </div>
                             </div>}
                         {this.state.success && 
