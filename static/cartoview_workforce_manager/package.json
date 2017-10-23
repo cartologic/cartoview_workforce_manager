@@ -1,7 +1,7 @@
 {
   "name": "CartoviewWorkForceManager",
   "version": "1.0.0",
-  "description": "Cartoview Map Viewer Client",
+  "description": "Cartoview workforce manager",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -20,8 +20,7 @@
     "react-addons-css-transition-group": "^15.5.2",
     "react-addons-transition-group": "^15.5.2",
     "react-autocomplete": "^1.7.1",
-    "react-bootstrap": "^0.31.3",
-    "react-bootstrap-button-loader": "^1.0.8",
+
     "react-chips": "^0.6.2",
     "react-dom": "^15.5.4",
     "react-file-base64": "^1.0.3",

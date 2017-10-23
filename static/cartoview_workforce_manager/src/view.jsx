@@ -650,14 +650,15 @@ class ReactClient extends React.Component {
 
             </Tabs>
           </AppBar>}
-          {this.state.tabValue === 0 && <TabContainer>
-            {this.state.pagedTasks.length != 0 && !this.state.selectedtask && !this.state.loading && <div >
-              {this.state.loading && <Grid container alignItems="center" justify="center">
+          {this.state.loading && <Grid container alignItems="center" justify="center">
                 <Grid >
                   <img src={URLS.static + 'cartoview_workforce_manager/loader'} />
                 </Grid>
               </Grid>
               }
+          {this.state.tabValue === 0 && <TabContainer>
+            {this.state.pagedTasks.length != 0 && !this.state.selectedtask && !this.state.loading && <div >
+              
 
               <Table >
                 <TableHead>
@@ -712,7 +713,7 @@ class ReactClient extends React.Component {
                 <TaskDetails task={this.state.selectedtask} mapid={this.state.project.mapid} project={this.state.project} />
               </div>
               }
-          {this.state.tabValue === 1 && <TabContainer><MyTasks id={id} project={this.state.project} selected={this.state.selected} classes={this.props.classes} /></TabContainer>}
+          {this.state.tabValue === 1 && <TabContainer><MyTasks id={id} project={this.state.project} selected={this.state.selected} pageCount={this.state.pageCount} classes={this.props.classes} /></TabContainer>}
   {!this.state.tasks.length && !this.state.loading && !this.state.result && <div>
                 <p className="formated">No tasks yet for this project</p>
               </div>

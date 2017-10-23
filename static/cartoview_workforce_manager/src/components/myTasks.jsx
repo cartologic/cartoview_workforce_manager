@@ -4,6 +4,9 @@ import TaskDetails from './taskDetails.jsx'
 import TaskHistroy from './taskhistory.jsx'
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table'
 import Paper from 'material-ui/Paper';
+import ReactPaginate from 'react-paginate';
+import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
+import ChevronRightIcon from 'material-ui-icons/ChevronRight';
 
 export default class MyTasks extends Component {
     constructor(props) {
@@ -11,6 +14,9 @@ export default class MyTasks extends Component {
         this.state = {
             loading: true,
             tasks: [],
+            pageCount: 0,
+            pagedTasks: [],
+            perPage:6,
             selectedtask: this.props.selected
         }
         var url = '/apps/cartoview_workforce_manager/api/v1/project/' + this.props.id + '/tasks/?assigned_to__username=' + username
@@ -31,7 +37,11 @@ export default class MyTasks extends Component {
             })
             .then((data) => {
 
-                this.setState({ tasks: data.objects, loading: false })
+                this.setState({ tasks: data.objects, loading: false, pageCount: Math.ceil(data.objects.length / this.state.perPage) },()=>
+                { var pagedTasks = this.state.tasks.slice(0, this.state.perPage);
+                  this.setState({ pagedTasks: pagedTasks })
+                 
+                  })
             });
 
     }
@@ -44,6 +54,11 @@ export default class MyTasks extends Component {
     componentDidMount() {
 
     }
+      handlePageClick = (data) => {
+    var pagedTasks = this.state.tasks.slice(data.selected * this.state.perPage, (data.selected + 1) * this.state.perPage);
+    this.setState({ pagedTasks: pagedTasks })
+
+  }
     render() {
         const { classes, theme } = this.props;
         console.log(this.props)
@@ -51,7 +66,8 @@ export default class MyTasks extends Component {
 
 
 
-            {this.state.tasks.length != 0 && !this.state.selectedtask && !this.state.loading &&
+            {this.state.pagedTasks.length != 0 && !this.state.selectedtask && !this.state.loading &&
+              <div>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -64,7 +80,7 @@ export default class MyTasks extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-                                    {this.state.tasks.map(item => {
+                                    {this.state.pagedTasks.map(item => {
                                         return (
                                             <TableRow className={"hoverPointer"} key={item.id} hover onClick={() => {
                                                 this.setState({ "selectedtask": item })
@@ -88,7 +104,12 @@ export default class MyTasks extends Component {
                 );
               })}
             </TableBody>
-          </Table>}
+          </Table>
+ {this.state.pageCount > 1 && <ReactPaginate previousLabel={<ChevronLeftIcon/>} nextLabel={<ChevronRightIcon/>} breakLabel={<a href="" > ...</a>} breakClassName={"break-me"} pageCount={this.state.pageCount} marginPagesDisplayed={2} pageRangeDisplayed={5} onPageChange={this.handlePageClick} containerClassName={"pagination"} subContainerClassName={"pages pagination"} activeClassName={"active"} />}
+</div>
+}
+
+          
 
                 {
                                         this.state.selectedtask &&
