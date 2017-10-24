@@ -206,11 +206,17 @@ color:  #3648b0;
 }
 .photo{
   margin-top: 10%; 
-  border: solid 1px lightgrey;
-  border-radius: 10px;
+
   padding: 10;
 }
 .para{
   color: grey !important ;
   font-family: "Roboto" !important ;
 }
+.input-file{
+width:0.1px;
+height: 0.1px;
+opacity: 0;
+overflow: hidden;
+position :absolute;
+z-index :-1;}

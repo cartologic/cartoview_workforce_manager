@@ -15,6 +15,8 @@ import Paper from 'material-ui/Paper';
 import Divider from 'material-ui/Divider';
 import MenuIcon from 'material-ui-icons/Menu';
 import ImageIcon from 'material-ui-icons/Image';
+import UploadIcon from 'material-ui-icons/FileUpload';
+
 import CommentIcon from 'material-ui-icons/Comment';
 import LocationIcon from 'material-ui-icons/LocationOn'; const Form = t.form.Form;
 import Grid from 'material-ui/Grid';
@@ -504,7 +506,7 @@ console.log("copy",copy)
 
   renderComments() {
     return (<div>
-      <div>
+      <div style={{"marginLeft": "4%"}}>
        
         {/* <textarea ref="comment" className="form-control" rows="3" id="comment" defaultValue={this.state.comment} ></textarea> */}
         <TextField
@@ -526,7 +528,11 @@ console.log("copy",copy)
     )
   }
 
-
+  handleChooseFileClick=()=> {
+    setTimeout(() => {
+      this._inputLabel.click();
+    }, 50);
+  }
  handleRequestClose = () => {
     this.setState({ success: false});
   };
@@ -539,9 +545,21 @@ console.log("copy",copy)
   };
   renderImage() {
     return (<div className={"photo"}>
-      <p className="para"> Add Photo </p>
+     
+      <div>
+      <input type="file" name="file" ref="image" id="file" className="input-file"  defaultValue={this.state.image} style={{ "marginBottom": "2%" }} />
+        
+  
+  <label htmlFor="file" ref={x => this._inputLabel = x} className="para">
+    <Button dense fab color="primary" label="Choose a File" onTouchTap={this.handleChooseFileClick.bind(this)}>
+    <UploadIcon/>
+   
+    </Button>
+    &nbsp; Upload Photo
+  </label>
+</div>
     
-      <input type="file" ref="image" name="image" defaultValue={this.state.image} style={{ "marginBottom": "2%" }} />
+
     </div>
     )
   }
