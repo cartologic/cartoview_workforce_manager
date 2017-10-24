@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import Attachments from './attachments.jsx';
 import ShowLocationMap from './showLocationMap.jsx';
@@ -25,53 +25,62 @@ const styles = theme => ({
   },
 });
 class Details extends Component {
-    constructor(props) {
-        super(props)
+  constructor(props) {
+    super(props)
 
-    }
+  }
 
-    render() {
-        const { classes } = this.props;
-       
-        
+  render() {
+    const { classes } = this.props;
 
 
-        return (
-            
 
-            <div >
-  <Paper className={classes.paper}>
-   {!this.props.task &&<img src={URLS.static + 'cartoview_workforce_manager/loader'} />}                 
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell><b> <MenuIcon/>Basic Details</b></TableCell>
-            <TableCell></TableCell>
-           
-          </TableRow>
-        </TableHead>
-        <TableBody>
+
+    return (
+
+
+      <div >
+        <Paper className={classes.paper}>
+          {!this.props.task && <img src={URLS.static + 'cartoview_workforce_manager/loader'} />}
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  <div style={{ display: "flex" }}>
+                    <div>
+                      <MenuIcon />
+                    </div>
+                    <div style={{ fontSize: "19px" }}>
+                      Details
+                </div>
+                  </div>
+                </TableCell>
+                <TableCell></TableCell>
+
+              </TableRow>
+            </TableHead>
+            <TableBody>
               <TableRow >
                 <TableCell><b>Title </b></TableCell>
                 <TableCell>{this.props.task.title}</TableCell>
               </TableRow>
-               {this.props.project.Project_config.includes("description") && <TableRow >
+              {this.props.project.Project_config.includes("description") && <TableRow >
                 <TableCell><b>Description</b></TableCell>
                 <TableCell>{this.props.task.description}</TableCell>
               </TableRow>}
-               <TableRow >
+              <TableRow >
                 <TableCell><b>Created by</b></TableCell>
                 <TableCell>{this.props.task.created_by.username}</TableCell>
               </TableRow>
-               <TableRow >
+              <TableRow >
                 <TableCell><b>Created At </b></TableCell>
                 <TableCell> <Moment format="YYYY/MM/DD">{this.props.task.created_at}</Moment></TableCell>
               </TableRow>
-                {this.props.project.Project_config.includes("priority") && <TableRow >
+              {this.props.project.Project_config.includes("priority") && <TableRow >
                 <TableCell><b>Priority</b></TableCell>
                 <TableCell>{this.props.task.priority}</TableCell>
               </TableRow>}
-              {this.props.project.Project_config.includes("status")  && <TableRow >
+              {this.props.project.Project_config.includes("status") && <TableRow >
                 <TableCell><b>Status</b></TableCell>
                 <TableCell>{this.props.task.status}</TableCell>
               </TableRow>}
@@ -79,43 +88,71 @@ class Details extends Component {
                 <TableCell><b>Due Date</b></TableCell>
                 <TableCell> <Moment format="YYYY/MM/DD">{this.props.task.due_date}</Moment></TableCell>
               </TableRow>}
-               {this.props.project.Project_config.includes("assigned_to") &&  <TableRow >
+              {this.props.project.Project_config.includes("assigned_to") && <TableRow >
                 <TableCell><b>Assigned To</b></TableCell>
                 <TableCell>{this.props.task.assigned_to.username}</TableCell>
               </TableRow>}
-                 {this.props.project.Project_config.includes("work_order") && <TableRow >
+              {this.props.project.Project_config.includes("work_order") && <TableRow >
                 <TableCell><b>Work Order</b></TableCell>
-                <TableCell>{this.props.task.work_order == 0 ?<span>No work order was specified for this task </span> : this.props.task.work_order}</TableCell>
+                <TableCell>{this.props.task.work_order == 0 ? <span>No work order was specified for this task </span> : this.props.task.work_order}</TableCell>
               </TableRow>}
-                 {this.props.project.Project_config.includes("Category")  && <TableRow >
+              {this.props.project.Project_config.includes("Category") && <TableRow >
                 <TableCell><b>Category</b></TableCell>
                 <TableCell>{this.props.task.Category}</TableCell>
               </TableRow>}
-          
-        </TableBody>
-      </Table>
-    </Paper>
-                <Paper style={{"marginTop":"2%"}}>
-                 <p style={{"padding":"1.5%","color":"rgba(0, 0, 0, 0.54)"}}><b> <ImageIcon/> Images</b></p>
-                   <Divider/>
-                    <div><DisplayAttachments task={this.props.task.id}/></div>
-                </Paper>
-              <Paper style={{"marginTop":"2%"}}>
-                   <p style={{"padding":"1.5%","color":"rgba(0, 0, 0, 0.54)"}}><CommentIcon/> <b>Comments</b></p>
-                   <Divider/>
-                    <div><DisplayComments task={this.props.task.id}/></div>
-                </Paper>
-               <Paper style={{"marginTop":"2%"}}>
-                  <p style={{"padding":"1.5%","color":"rgba(0, 0, 0, 0.54)"}}><LocationIcon/> <b>Location</b></p>
-                   
-                   
-                   <Divider/>
-                    <div><ShowLocationMap mapId={this.props.mapid} x={this.props.task.x} y={this.props.task.y} extent={this.props.task.extent}/></div>
-                </Paper>
-              
-            </div>
 
-        )
-    }
+            </TableBody>
+          </Table>
+        </Paper>
+        <Paper style={{ "marginTop": "2%" }}>
+
+
+          <div style={{ display: "flex","padding": "1.5%", "color": "rgba(0, 0, 0, 0.54)" }}>
+            <div>
+              <ImageIcon />
+            </div>
+            <div style={{ fontSize: "19px" }}>
+              Images
+                </div>
+          </div>
+
+
+          <Divider />
+          <div><DisplayAttachments task={this.props.task.id} /></div>
+        </Paper>
+        <Paper style={{ "marginTop": "2%" }}>
+
+
+          <div style={{ display: "flex" ,"padding": "1.5%", "color": "rgba(0, 0, 0, 0.54)"}}>
+            <div>
+              <CommentIcon />
+            </div>
+            <div style={{ fontSize: "19px" }}>
+              Comments
+                </div>
+          </div>
+
+          <Divider />
+          <div><DisplayComments task={this.props.task.id} /></div>
+        </Paper>
+        <Paper style={{ "marginTop": "2%" }}>
+
+          <div style={{ display: "flex","padding": "1.5%", "color": "rgba(0, 0, 0, 0.54)"}}>
+            <div>
+              <LocationIcon />
+            </div>
+            <div style={{ fontSize: "19px",  }}>
+              Location
+                </div>
+          </div>
+
+          <Divider />
+          <div><ShowLocationMap mapId={this.props.mapid} x={this.props.task.x} y={this.props.task.y} extent={this.props.task.extent} /></div>
+        </Paper>
+
+      </div>
+
+    )
+  }
 }
 export default withStyles(styles)(Details);
