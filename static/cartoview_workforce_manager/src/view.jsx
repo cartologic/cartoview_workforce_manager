@@ -156,6 +156,9 @@ buttonCenter:{
 
      minWidth: "300px" 
   
+},
+title:{
+  marginLeft: "5px"
 }
 });
 
@@ -582,7 +585,7 @@ class ReactClient extends React.Component {
                <Avatar src={this.state.project.logo
               ? this.state.project.logo.base64
               : URLS.static + 'nologo.png'} />
-              <Typography type="title" color="inherit" noWrap>
+              <Typography type="title"  className={this.props.classes.title} color="inherit" noWrap>
                 {this.state.project.title}
               </Typography>
             </Toolbar>
