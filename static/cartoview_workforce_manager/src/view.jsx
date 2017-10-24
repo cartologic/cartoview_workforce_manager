@@ -218,6 +218,7 @@ class ReactClient extends React.Component {
   }
   resetFilter=()=>{
     this.setState({priority:"",status:"",category:"",work_order:"",created_by:"",assigned_to:""})
+  this.loadTasks()
   }
   openFilterMenu = () => {
     this.setState({
@@ -298,14 +299,14 @@ class ReactClient extends React.Component {
         // this.refs.worker ? this.refs.worker = "" : false
         // this.refs.work_order ? this.refs.work_order = "" : false
         // this.refs.dispatcher ? this.refs.dispatcher = "" : false
-        this.setState({
-          priority: "",
-          status: "",
-          category: "",
-          work_order: "",
-          assigned_to: "",
-          created_by: ""
-        })
+        // this.setState({
+        //   priority: "",
+        //   status: "",
+        //   category: "",
+        //   work_order: "",
+        //   assigned_to: "",
+        //   created_by: ""
+        // })
 
       })
     })
