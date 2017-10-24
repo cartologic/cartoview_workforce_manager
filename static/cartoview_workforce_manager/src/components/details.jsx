@@ -12,7 +12,7 @@ import MenuIcon from 'material-ui-icons/Menu';
 import ImageIcon from 'material-ui-icons/Image';
 import CommentIcon from 'material-ui-icons/Comment';
 import LocationIcon from 'material-ui-icons/LocationOn';
-
+import Moment from 'react-moment';
 
 
 
@@ -32,15 +32,8 @@ class Details extends Component {
 
     render() {
         const { classes } = this.props;
-        var date = new Date(this.props.task.due_date)
-        var day = date.getDate()
-        var month = date.getMonth();
-        var year = date.getFullYear()
-
-        var date2 = new Date(this.props.task.created_at)
-        var day2 = date2.getDate()
-        var month2 = date2.getMonth();
-        var year2 = date2.getFullYear()
+       
+        
 
 
         return (
@@ -72,7 +65,7 @@ class Details extends Component {
               </TableRow>
                <TableRow >
                 <TableCell><b>Created At </b></TableCell>
-                <TableCell>{day2 + "/" + month2 + "/" + year2}</TableCell>
+                <TableCell> <Moment format="YYYY/MM/DD">{this.props.task.created_at}</Moment></TableCell>
               </TableRow>
                 {this.props.project.Project_config.includes("priority") && <TableRow >
                 <TableCell><b>Priority</b></TableCell>
@@ -84,7 +77,7 @@ class Details extends Component {
               </TableRow>}
               {this.props.project.Project_config.includes("due_date") && <TableRow >
                 <TableCell><b>Due Date</b></TableCell>
-                <TableCell>{day + "/" + month + "/" + year}</TableCell>
+                <TableCell> <Moment format="YYYY/MM/DD">{this.props.task.due_date}</Moment></TableCell>
               </TableRow>}
                {this.props.project.Project_config.includes("assigned_to") &&  <TableRow >
                 <TableCell><b>Assigned To</b></TableCell>
