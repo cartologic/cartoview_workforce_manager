@@ -6,6 +6,7 @@ import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import InboxIcon from 'material-ui-icons/Inbox';
 import DraftsIcon from 'material-ui-icons/Drafts';
+import Grid from 'material-ui/Grid';
 export default class ProjectDetails extends Component {
     constructor(props) {
         super(props)
@@ -45,7 +46,8 @@ export default class ProjectDetails extends Component {
     render() {
         const classes=this.props.classes
         return (
-            <div>
+        <Grid container spacing={0} align="center" justify="center">
+            <Grid item xs={12} sm={12} md={8} lg={8}>
                 {this.state.project && 
                <Paper>
                   <div className={classes.root} >
@@ -93,7 +95,8 @@ export default class ProjectDetails extends Component {
                         </div>
                 </Paper>
                 }
-               </div>
+               </Grid>
+               </Grid>
            )
     }
 }

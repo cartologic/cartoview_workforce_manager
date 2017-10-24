@@ -1,36 +1,33 @@
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
-{% load bootstrap_tags staticfiles %}
-{% load i18n %}
 
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <link href="https://fonts.googleapis.com/css?family=Abril+Fatface" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+    
+    </head>
+    <body  style="background-color:#FAFAFA">
+            <div id="page-wrapper">
+                    <div class="">
+            
+                        <div id="root"></div>
+                    </div>
+                </div>
+        <script>
+                var username="{{request.user.username}}"
+           
+               var id= {{id}}
+            var URLS = {
+                 
+                   static: "{{ STATIC_URL }}",
+                
+                 };
+                 function getMapConfigUrl(id){
+                   return "/maps/" + id + "/data"
+                 }
+           
+               </script>
+        <script src="{{ STATIC_URL }}cartoview_workforce_manager/dist/ReactClient.bundle.js"></script>
+    </body>
 
-    <div id="page-wrapper">
-        <div class="">
-
-            <div id="root"></div>
-        </div>
-    </div>
-
-{% block extra_script %}
-
-    <script>
-     var username="{{request.user.username}}"
-
-    var id= {{id}}
- var URLS = {
-      
-        static: "{{ STATIC_URL }}",
-     
-      };
-      function getMapConfigUrl(id){
-        return "/maps/" + id + "/data"
-      }
-
-    </script>
-   
-  <script src="{{ STATIC_URL }}cartoview_workforce_manager/dist/ReactClient.bundle.js"></script>
- 
-{% endblock %}
-
+</html>

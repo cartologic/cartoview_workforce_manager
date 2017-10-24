@@ -14,8 +14,10 @@ import Button from 'material-ui/Button'
 import { withStyles } from 'material-ui/styles';
 import IconButton from 'material-ui/IconButton';
 import '../css/project.css'
+import Grid from 'material-ui/Grid';
+import Tooltip from 'material-ui/Tooltip';
 function TabContainer(props) {
-    return <div style={{ padding: 8 * 3 }}>{props.children}</div>;
+    return <div >{props.children}</div>;
 }
 
 const styles = theme => ({
@@ -70,29 +72,34 @@ class TaskDetails extends Component {
         return (
 
 
-            <div className={classes.root}>
-                <IconButton className={classes.button} aria-label="Task History" color={this.state.history ? "primary" : ""} style={{ float: "right" }} onClick={() => {
+            <div className={classes.root , this.props.open && classes.contentShift}>
+              <Tooltip id="tooltip-top-start" title="History" placement="top-start">
+                <IconButton className={classes.button} aria-label="Task History" color={this.state.history ? "primary" : "default"} style={{ float: "right" }} onClick={() => {
                     this.loadTask
                     this.setState({ history: true, edit: false, details: false })
                     
                 }}>
                     <HistoryIcon />
                 </IconButton>
-                <IconButton className={classes.button} aria-label="Edit Task" color={this.state.edit ? "primary" : ""} style={{ float: "right" }} onClick={() => {
+                </Tooltip>
+                  <Tooltip id="tooltip-top-start" title="Edit" placement="top-start">
+                <IconButton className={classes.button} aria-label="Edit Task" color={this.state.edit ? "primary" : "default"} style={{ float: "right" }} onClick={() => {
                     this.loadTask
                     this.setState({ edit: true, history: false, details: false })
                     
                 }}>
                     <EditIcon />
                 </IconButton>
-
-                <IconButton className={classes.button} aria-label="Task Details" color={this.state.details ? "primary" : ""} style={{ float: "right" }} onClick={() => {
+</Tooltip>
+  <Tooltip id="tooltip-top-start" title="Details" placement="top-start">
+                <IconButton className={classes.button} aria-label="Task Details" color={this.state.details ? "primary" : "default"} style={{ float: "right" }} onClick={() => {
                     this.loadTask
                     this.setState({ history: false, edit: false, details: true })
                     
                 }}>
                     <DetailsIcon />
                 </IconButton>
+                </Tooltip>
                 {this.state.details && !this.state.history && !this.state.edit && <TabContainer>
                     {this.state.task &&
 

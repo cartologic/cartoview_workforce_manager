@@ -20,6 +20,10 @@ import LocationIcon from 'material-ui-icons/LocationOn'; const Form = t.form.For
 import Grid from 'material-ui/Grid';
 import Snackbar from 'material-ui/Snackbar';
 import Fade from 'material-ui/transitions/Fade';
+import MobileStepper from 'material-ui/MobileStepper';
+import KeyboardArrowLeft from 'material-ui-icons/KeyboardArrowLeft';
+import KeyboardArrowRight from 'material-ui-icons/KeyboardArrowRight';
+import { CircularProgress } from 'material-ui/Progress';
 const drawerWidth = 240
 
 
@@ -145,7 +149,7 @@ class AddTask extends Component {
       statusList: null,
       checked: this.props.project.Project_config,
       loading: false,
-      step: 1,
+      step: 0,
       comment: "",
       image: "",
       commentDone: false,
@@ -390,7 +394,7 @@ console.log("copy",copy)
           }
 
           this.setState({ "success": true, "loading": false , 
-    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,description:"",due_date:null,step:1,clicked:false})
+    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,Description:"",due_date:null,step:0,clicked:false})
 
 
         })
@@ -454,7 +458,7 @@ console.log("copy",copy)
   
     this.setState({ value ,clicked:true},()=>{
       console.log(value)
-      if(!this.validate("title")&&!this.validate("Category")&&!this.validate("work_order")&&!this.validate("assigned_to")&&!this.validate("status")&&!this.validate("priority")&&!this.validate("due_date")){
+      if(!this.validate("title")&&!this.validate("Description")&&!this.validate("Category")&&!this.validate("work_order")&&!this.validate("assigned_to")&&!this.validate("status")&&!this.validate("priority")&&!this.validate("due_date")){
       var step = this.state.step + 1
       this.setState({ step: step, value: value }, () => {
         this.map.setTarget(ReactDOM.findDOMNode(this.refs.map))
@@ -492,7 +496,7 @@ console.log("copy",copy)
 
     console.log("will")
     this.setState({ success: false, value: "", point: [], comment: null,
-    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,description:"",due_date:null,step:1,clicked:false})
+    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,Description:"",due_date:null,step:0,clicked:false})
 
   }
 
@@ -556,13 +560,13 @@ console.log("copy",copy)
     return (
       <div>
         <Grid container direction={"row"} spacing={16} align="center" justify="center">
-          <Grid item sm={8}>
-            {this.state.auth && this.state.step == 1 &&
+          <Grid item xs={12} sm={12} md={9} lg={10}>
+            {this.state.auth && this.state.step == 0 &&
 
 
 
-              <Paper style={{ "paddingBottom": "10%", "padding": "5%" }}>
-                <br />
+              <Paper style={{ "padding":"10%" }}>
+              
                 {this.state.workers &&
                   <div>
 
@@ -582,11 +586,12 @@ console.log("copy",copy)
                        fullWidth
 
                         label="Description"
+                        error={this.state.clicked&&this.validate("Description")}
                         className={classes.textField}
-                        value={this.state.description}
+                        value={this.state.Description}
                         multiline
                         rowsMax="4"
-                        onChange={this.handleChange('description')}
+                        onChange={this.handleChange('Description')}
                         margin="normal"
                       />}<br />
                       {this.state.checked.includes("assigned_to") && <TextField
@@ -709,8 +714,7 @@ console.log("copy",copy)
                         onChange={this.handleChange('work_order')}
                         margin="normal"
                       />}
-                      <Button  raised className={classes.button} style={{ "float":"right"}} onClick={this.next} >Next <i className="fa fa-arrow-right"></i></Button>
-
+                      
                     </form>
 
 
@@ -722,25 +726,19 @@ console.log("copy",copy)
 
               </Paper>
             }
-            {this.state.step == 2 && !this.state.success &&
+            {this.state.step == 1 && !this.state.success &&
               <Paper style={{ "paddingBottom": "10%" }}>
                 <label style={{ padding: "1%" }}>Click to Add Task Location</label>
                 {!this.state.point.length && <small> (loctaion is not set)</small>
                 }
-                <div style={{ height: "100%" }} ref="map" className={'map-ct'}>
+                <div style={{ height: "250px" }} ref="map" className={'map-ct'}>
                   {this.props.children}
                 </div>
-                <Button  raised className={classes.button} style={{ "float":"right",margin: "1%"}} onClick={this.next} > Next <i className="fa fa-arrow-right"></i></Button>
-                <Button  raised className={classes.button} style={{ "float":"right",margin: "1%"}} onClick={this.prev}> <i className="fa fa-arrow-left"></i>Back</Button>
-              </Paper>}
-            {this.state.step == 3 && !this.state.success && <Paper style={{ "padding": "4%", "paddingBottom": "10%" }}>
+                </Paper>}
+            {this.state.step == 2 && !this.state.success && <Paper style={{ "padding": "4%", "paddingBottom": "10%" }}>
               {this.renderComments()}
               {this.renderImage()}
-              {/* <Button  raised className={classes.button} loading={this.state.loading} className="btndefault pull-right" style={{ "float":"right",margin: "1%"}} spinColor="#444" onClick={this.save}  >Save</Button> */}
-              <Button  raised className={classes.button} className="btndefault pull-right" style={{ "float":"right",margin: "1%"}} onClick={this.save}  >Save</Button>
-            
-              <Button  raised className={classes.button} style={{ "float":"right",margin: "1%"}} onClick={this.prev}> <i className="fa fa-arrow-left"></i>Back</Button>
-
+             
             </Paper>}
             {this.state.success &&
              
@@ -766,8 +764,37 @@ console.log("copy",copy)
             </div>}
 
             <div ></div>
+                     {this.state.workers &&
+                     <Paper><MobileStepper
+        type="dots"
+        steps={3}
+        position="static"
+        activeStep={this.state.step}
+        className={classes.root}
+         
+        nextButton={
+          this.state.step!=2?<Button dense onClick={this.next} >
+          Next
+            {<KeyboardArrowRight /> }
+          </Button>:<Button dense onClick={this.save} >
+          {this.state.loading&&<CircularProgress className={classes.progress} />}
+          Save
+            {<KeyboardArrowRight /> }
+          </Button>
+          
+
+
+        }
+        backButton={
+          <Button dense onClick={this.prev} disabled={this.state.step === 0}>
+            {<KeyboardArrowLeft />}
+            Back
+          </Button>
+        }
+      /></Paper>}
           </Grid>
         </Grid>
+          
       </div>
     )
   }
