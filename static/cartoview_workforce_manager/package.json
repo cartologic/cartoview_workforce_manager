@@ -16,6 +16,7 @@
     "material-ui": "1.0.0-beta.17",
     "material-ui-icons": "1.0.0-beta.15",
     "moment": "^2.19.1",
+    "rd-react-datepicker": "^1.1.1",
     "react": "^15.5.4",
     "react-addons-css-transition-group": "^15.5.2",
     "react-addons-transition-group": "^15.5.2",
