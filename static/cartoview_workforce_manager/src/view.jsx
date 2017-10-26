@@ -156,6 +156,9 @@ buttonCenter:{
 
      minWidth: "300px" 
   
+},
+title:{
+  marginLeft: "5px"
 }
 });
 
@@ -215,6 +218,7 @@ class ReactClient extends React.Component {
   }
   resetFilter=()=>{
     this.setState({priority:"",status:"",category:"",work_order:"",created_by:"",assigned_to:""})
+  this.loadTasks()
   }
   openFilterMenu = () => {
     this.setState({
@@ -295,14 +299,14 @@ class ReactClient extends React.Component {
         // this.refs.worker ? this.refs.worker = "" : false
         // this.refs.work_order ? this.refs.work_order = "" : false
         // this.refs.dispatcher ? this.refs.dispatcher = "" : false
-        this.setState({
-          priority: "",
-          status: "",
-          category: "",
-          work_order: "",
-          assigned_to: "",
-          created_by: ""
-        })
+        // this.setState({
+        //   priority: "",
+        //   status: "",
+        //   category: "",
+        //   work_order: "",
+        //   assigned_to: "",
+        //   created_by: ""
+        // })
 
       })
     })
@@ -582,7 +586,7 @@ class ReactClient extends React.Component {
                <Avatar src={this.state.project.logo
               ? this.state.project.logo.base64
               : URLS.static + 'nologo.png'} />
-              <Typography type="title" color="inherit" noWrap>
+              <Typography type="title"  className={this.props.classes.title} color="inherit" noWrap>
                 {this.state.project.title}
               </Typography>
             </Toolbar>

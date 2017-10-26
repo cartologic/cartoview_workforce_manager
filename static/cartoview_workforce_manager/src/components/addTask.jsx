@@ -15,6 +15,8 @@ import Paper from 'material-ui/Paper';
 import Divider from 'material-ui/Divider';
 import MenuIcon from 'material-ui-icons/Menu';
 import ImageIcon from 'material-ui-icons/Image';
+import UploadIcon from 'material-ui-icons/FileUpload';
+
 import CommentIcon from 'material-ui-icons/Comment';
 import LocationIcon from 'material-ui-icons/LocationOn'; const Form = t.form.Form;
 import Grid from 'material-ui/Grid';
@@ -24,6 +26,7 @@ import MobileStepper from 'material-ui/MobileStepper';
 import KeyboardArrowLeft from 'material-ui-icons/KeyboardArrowLeft';
 import KeyboardArrowRight from 'material-ui-icons/KeyboardArrowRight';
 import { CircularProgress } from 'material-ui/Progress';
+import { DatePicker, local } from 'rd-react-datepicker';
 const drawerWidth = 240
 
 
@@ -156,6 +159,7 @@ class AddTask extends Component {
       imageDone: false,
       commentValue:"",
       clicked:false,
+      due_dat:null
     }
 
     this.map = new ol.Map({
@@ -394,7 +398,7 @@ console.log("copy",copy)
           }
 
           this.setState({ "success": true, "loading": false , 
-    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,Description:"",due_date:null,step:0,clicked:false})
+    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,Description:"",due_date:null,due_dat:null,step:0,clicked:false})
 
 
         })
@@ -496,13 +500,13 @@ console.log("copy",copy)
 
     console.log("will")
     this.setState({ success: false, value: "", point: [], comment: null,
-    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,Description:"",due_date:null,step:0,clicked:false})
+    title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,Description:"",due_dat:null,due_date:null,step:0,clicked:false})
 
   }
 
   renderComments() {
     return (<div>
-      <div>
+      <div style={{"marginLeft": "4%"}}>
        
         {/* <textarea ref="comment" className="form-control" rows="3" id="comment" defaultValue={this.state.comment} ></textarea> */}
         <TextField
@@ -524,7 +528,11 @@ console.log("copy",copy)
     )
   }
 
-
+  handleChooseFileClick=()=> {
+    setTimeout(() => {
+      this._inputLabel.click();
+    }, 50);
+  }
  handleRequestClose = () => {
     this.setState({ success: false});
   };
@@ -536,9 +544,22 @@ console.log("copy",copy)
     this.setState({ [name]: event.target.value }, console.log(this.state));
   };
   renderImage() {
-    return (<div>
-      <label> Add Photo </label>
-      <input type="file" className="form-control" ref="image" name="image" defaultValue={this.state.image} style={{ "marginBottom": "2%" }} />
+    return (<div className={"photo"}>
+     
+      <div>
+      <input type="file" name="file" ref="image" id="file" className="input-file"  defaultValue={this.state.image} style={{ "marginBottom": "2%" }} />
+        
+  
+  <label htmlFor="file" ref={x => this._inputLabel = x} className="para">
+    <Button dense fab color="primary" label="Choose a File" onTouchTap={this.handleChooseFileClick.bind(this)}>
+    <UploadIcon/>
+   
+    </Button>
+    &nbsp; Upload Photo
+  </label>
+</div>
+    
+
     </div>
     )
   }
@@ -616,19 +637,17 @@ console.log("copy",copy)
                         ))}
                       </TextField>}
                       <br />
-                      {this.state.checked.includes("due_date") && <TextField
-                       error={this.state.clicked&&this.validate("due_date")}
-                       fullWidth
-                        type="date"
-                        label="Due Date"
-                        className={classes.textField}
-                        value={this.state.due_date}
-                        onChange={this.handleChange('due_date')}
-                        margin="normal"
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                      />}
+                     
+                      {this.state.checked.includes("due_date") &&     
+                       <div style={{marginLeft:"1%","marginTop": "7%"}}>
+                      <p  className={"datepicker"}> Due Date</p> 
+                      <DatePicker
+                      placeholder="date"
+                        value={this.state.due_dat}
+                        
+                        change={(newDate) => {this.setState({due_dat: newDate,due_date:newDate._d}) }} />
+                      
+                      </div>}
                       <br />
                       {this.state.checked.includes("priority") && 
                       <TextField
@@ -728,9 +747,9 @@ console.log("copy",copy)
             }
             {this.state.step == 1 && !this.state.success &&
               <Paper style={{ "paddingBottom": "10%" }}>
-                <label style={{ padding: "1%" }}>Click to Add Task Location</label>
-                {!this.state.point.length && <small> (loctaion is not set)</small>
-                }
+                <p style={{ padding: "2%" }}>Click to Add Task Location
+            {!this.state.point.length && <small> (loctaion is not set)</small>}</p>
+                
                 <div style={{ height: "250px" }} ref="map" className={'map-ct'}>
                   {this.props.children}
                 </div>

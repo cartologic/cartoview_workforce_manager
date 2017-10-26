@@ -9,7 +9,7 @@ import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import { SnackbarContent } from 'material-ui/Snackbar';
 import Snackbar from 'material-ui/Snackbar';
-
+import AddIcon from 'material-ui-icons/Add';
 const styles = theme => ({
     root: {
      display: 'flex',
@@ -143,14 +143,29 @@ sendHistory=()=>{
     componentWillMount() {
         this.setState({"flag": false})
     }
+    handleChooseFileClick=()=> {
+        setTimeout(() => {
+          this._inputLabel.click();
+        }, 50);
+      }
     render() {
         const vertical="bottom", horizontal="center"
         const { classes } = this.props;
         console.log(this.refs)
         return (
-            <div>
-                <input type="file"  ref="img" name="image" style={{"margin": "2%"}}/>
-              
+           <div>
+               <div style={{    margin: "10px"}}>
+      <input type="file" name="file" ref="img" id="file" className="input-file"  defaultValue={this.state.image} style={{ "marginBottom": "2%" }} />
+        
+  
+  <label htmlFor="file" ref={x => this._inputLabel = x} className="para">
+    <Button dense fab color="primary" label="Choose a File" onTouchTap={this.handleChooseFileClick.bind(this)}>
+    <AddIcon/>
+   
+    </Button>
+    &nbsp; Add Photo
+  </label>
+</div>
 
             
          {this.state.success&&<Snackbar

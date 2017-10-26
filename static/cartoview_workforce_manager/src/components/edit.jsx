@@ -22,7 +22,8 @@ import LocationIcon from 'material-ui-icons/LocationOn';
 import Snackbar from 'material-ui/Snackbar';
 import Fade from 'material-ui/transitions/Fade';
 import { CircularProgress } from 'material-ui/Progress';
-
+import { DatePicker, local } from 'rd-react-datepicker';
+import  moment from 'moment';
 const styles = theme => ({
     container: {
 
@@ -74,6 +75,7 @@ class Edit extends Component {
                 "created_by": { "username": username }
             },
             open: false,
+            due_dat:this.props.task.due_date?moment(this.props.task.due_date):null
         }
        
         this.map = new ol.Map({
@@ -318,6 +320,7 @@ class Edit extends Component {
                 var copy = Object.assign(project, newValue)
             }
             this.setState({ btnLoading: true })
+            console.log("dddddddd",copy)
             var url = '/apps/cartoview_workforce_manager/api/v1/task/' + this.props.task.id + '/'
             fetch(url, {
                 method: "PUT",
@@ -359,15 +362,8 @@ class Edit extends Component {
     }
     render() {
         const { classes } = this.props
-        console.log("------------------------kll",this.props)
-        var date=null
-        if(this.props.task.due_date){
-        var fields = this.props.task.due_date.split('T');
-        
-        date = fields[0];
-        var time = fields[1];
-    console.log(date,time,"0000000000000")
-    }
+   
+
         return (
             <div>
                 {!this.state.task &&
@@ -427,18 +423,21 @@ class Edit extends Component {
                                     ))}
                                 </TextField>}
                                 <br />
-                                {this.state.checked.includes("due_date") && <TextField
-                                    fullWidth
-                                    type="date"
-                                    label="Due Date"
-                                    className={classes.textField}
-                                    value={date}
-                                    onChange={this.handleChange('due_date')}
-                                    margin="normal"
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />}
+                            
+                                {this.state.checked.includes("due_date") &&     
+                                    <div style={{marginLeft:"1%","marginTop": "7%"}}>
+                                    <p  className={"datepicker"}> Due Date</p> 
+                                    <DatePicker
+                                        
+                                        value={this.state.due_dat}
+                                        
+                                        change={(newDate) => {this.setState({due_dat: newDate},()=>{
+                                           this.state.value["due_date"] = newDate._d
+                                        //    this.setState({ [this.state.value.name]: event.target.value })
+
+                                        }) }} />
+                                    
+                                    </div>}
                                 <br />
                                 {this.state.checked.includes("priority") && <TextField
                                     fullWidth
