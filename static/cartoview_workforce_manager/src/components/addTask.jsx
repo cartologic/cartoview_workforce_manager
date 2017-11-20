@@ -512,7 +512,7 @@ console.log("copy",copy)
         <TextField
                         ref="comment"
                         id="comment"
-                        value={this.state.comment}
+                        defaultValue={this.state.comment}
                         onChange={this.handleChange('commentValue')}
                         InputLabelProps={{
                             shrink: true,
