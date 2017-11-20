@@ -525,7 +525,7 @@ class Edit extends Component {
 
                         {this.state.task &&
                             <div>
-                                <label>Click to Edit Task Location</label>
+                                <label>Click at the new Position to edit location</label>
                                 <div style={{ height: "250px" }} ref="map" className={' map-ct'}>
                                     {this.props.children}
                                 </div>

@@ -351,6 +351,7 @@ class ReactClient extends React.Component {
       this.setState({ project: data })
     });
   }
+ 
   loadWorkers = () => {
     var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + "/workers"
     fetch(url, {
@@ -387,7 +388,9 @@ class ReactClient extends React.Component {
     });
   }
 
-  componentWillMount() { }
+  componentWillMount() { 
+   
+  }
 
   getChildContext() {
     // return { muiTheme: getMuiTheme(CustomTheme) };
@@ -714,7 +717,7 @@ class ReactClient extends React.Component {
          
           </TabContainer>}
           {this.state.selectedtask && <div>
-                <TaskDetails task={this.state.selectedtask} mapid={this.state.project.mapid} project={this.state.project} />
+                <TaskDetails task={this.state.selectedtask} mapid={this.state.project.mapid} project={this.state.project} dispatchers={this.state.dispatchers}/>
               </div>
               }
           {this.state.tabValue === 1 && <TabContainer><MyTasks id={id} project={this.state.project} selected={this.state.selected} pageCount={this.state.pageCount} classes={this.props.classes} /></TabContainer>}

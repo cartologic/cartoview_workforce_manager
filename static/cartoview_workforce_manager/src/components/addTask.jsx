@@ -274,13 +274,7 @@ class AddTask extends Component {
     }
   }
 
-  checkDispatcher = () => {
-    this.props.dispatchers.forEach((dispatcher) => {
-      if (dispatcher.dispatcher.username == username) {
-        this.setState({ auth: true })
-      }
-    })
-  }
+  
   init = (map) => {
     var point_feature = new ol.Feature({});
     map.on('singleclick', (e) => {
