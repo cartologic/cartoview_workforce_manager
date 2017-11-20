@@ -42,12 +42,12 @@ class TaskDetails extends Component {
         }
     }
     checkDispatcher = () => {
-        console.log(this.props.dispatchers)
+     
     this.props.dispatchers.map((dispatcher) => {
        
       if (dispatcher.dispatcher.username === username) {
         this.setState({auth:true})
-         console.log(dispatcher.dispatcher.username,username)
+
       }
     })
   }

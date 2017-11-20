@@ -278,7 +278,8 @@ class ReactClient extends React.Component {
       return response.json();
     }).then((data) => {
       if (data.objects.length == 0) {
-        console.log("empty")
+      
+      
         this.setState({ result: true })
       } else {
         this.setState({ result: false })
@@ -291,8 +292,7 @@ class ReactClient extends React.Component {
       }, () => {
         var pagedTasks = this.state.tasks.slice(0, this.state.perPage);
         this.setState({ pagedTasks: pagedTasks })
-        console.log(url, data)
-        console.log(data.objects.length)
+      
         // this.state.priority ? this.refs.priority = "" : false
         // this.refs.category ? this.refs.category = "" : false
         // this.refs.status ? this.refs.status = "" : false
@@ -419,7 +419,7 @@ class ReactClient extends React.Component {
   handleFilter = name => event => {
     this.setState({
       [name]: event.target.value
-    }, console.log(this.state));
+    });
   };
 
   myProjects = () => {
@@ -749,7 +749,7 @@ class ReactClient extends React.Component {
 
 
   render() {
-    console.log(this.props)
+
     let { currentComponent } = this.state
     return (
 
