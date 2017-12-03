@@ -30,7 +30,6 @@ include "geonode/app_header.html" %} {{ block.super }} {% endblock %} {% block b
   {% endif %}
   // var username="{{instance.owner.username}}"
   var username = "{{request.user.username}}"
-
   var viewer = new Viewer('root', { 'urls': { 'resources_url': "/api/maps", "view": "/apps/cartoview_workforce_manager/" + id + "/view/", "mapLayers": "/apps/maplayers/api", "layerAttributes": "/apps/rest/app_manager/geonodelayerattribute/" }, 'limit': 9 }, username);
   viewer.view();
 </script>

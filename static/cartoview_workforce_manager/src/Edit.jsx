@@ -104,6 +104,7 @@ export default class Edit extends Component {
                 resourcesUrl: this.props.config.urls.resources_url,
                 instance: this.state.selectedResource || { "id": this.state.map },
                 username: this.props.username,
+                resource:this.state.selectedResource,
                 selectMap: (resource) => {
                     this.setState({ selectedResource: resource })
                 },

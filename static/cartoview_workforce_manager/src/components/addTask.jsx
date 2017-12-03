@@ -423,6 +423,16 @@ class AddTask extends Component {
 
 
   }
+  checkDispatcher = () => {
+    
+   this.props.dispatchers.map((dispatcher) => {
+      
+     if (dispatcher.dispatcher.username === username) {
+       this.setState({auth:true})
+
+     }
+   })
+ }
   componentWillMount() {
     this.checkDispatcher()
   }

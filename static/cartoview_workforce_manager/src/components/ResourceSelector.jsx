@@ -16,7 +16,8 @@ export default class ResourceSelector extends Component {
       loading: true,
       showPagination: true,
       pageCount: 0,
-      mymaps:true
+      mymaps:true,
+      resource:this.props.instance?this.props.instance:null
     }
   }
 
@@ -52,6 +53,7 @@ export default class ResourceSelector extends Component {
 
   componentDidMount() {
     this.loadResources(0)
+    console.log(this.props.instance)
   }
 
 
@@ -103,7 +105,11 @@ export default class ResourceSelector extends Component {
       });
     }
   }
-
+checkResource=()=>{
+  if(this.state.resource)
+   {return false}
+    return true
+}
 
   render() {
     return (
@@ -113,7 +119,7 @@ export default class ResourceSelector extends Component {
        
           </div>
           <div className="col-xs-7 col-md-8">
-            {(this.props.instance ? this.props.instance : false)
+            {this.state.resource && this.state.resource.id
               ?<button
                 style={{display:"inline-block", marginBottom: "2%"}}
                 className="btn btn-primary btn-sm pull-right" onClick={() => this.props.onComplete()}>{"next "} 	<i className="fa fa-arrow-right"></i></button>
@@ -150,7 +156,8 @@ export default class ResourceSelector extends Component {
         {!this.state.loading && this.state.resources.map((resource) => {
           return (
             <div
-              onClick={() => this.props.selectMap(resource)}
+              onClick={() => {this.props.selectMap(resource)
+               this.setState({resource})}}
               key={resource.id}
               className={(this.props.instance
               ? (this.props.instance && this.props.instance.id == resource.id)
