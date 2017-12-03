@@ -274,13 +274,7 @@ class AddTask extends Component {
     }
   }
 
-  checkDispatcher = () => {
-    this.props.dispatchers.forEach((dispatcher) => {
-      if (dispatcher.dispatcher.username == username) {
-        this.setState({ auth: true })
-      }
-    })
-  }
+  
   init = (map) => {
     var point_feature = new ol.Feature({});
     map.on('singleclick', (e) => {
@@ -306,9 +300,10 @@ class AddTask extends Component {
 
     
     if (this.refs.image) {
+      console.log(this.refs.image,"kkkkkkkkkk")
       this.setState({ image: this.refs.image.value })
     }
-    console.log("value",this.state.value)
+
     
     var value = this.state.value;
     if (value) {
@@ -321,7 +316,7 @@ class AddTask extends Component {
       else {
         var copy = Object.assign(project, value);
       }
-console.log("copy",copy)
+
       this.setState({ loading: true })
       var url = '/apps/cartoview_workforce_manager/api/v1/task/'
       fetch(url, {
@@ -368,7 +363,7 @@ console.log("copy",copy)
 
 
           if (this.state.image != "") {
-            console.log("image not empty")
+  this.setState({image: this.refs.image.files[0]})
             var formdata = new FormData();
 
             formdata.append('task', "/apps/cartoview_workforce_manager/api/v1/task/" + data.id + "/");
@@ -388,7 +383,7 @@ console.log("copy",copy)
                 return response
 
               }).then(() => {
-                console.log("done")
+              
                 this.setState({ imageDone: true })
 
               })
@@ -432,12 +427,12 @@ console.log("copy",copy)
     this.checkDispatcher()
   }
   componentDidMount() {
-    console.log(this.props.children)
+
     if (this.state.next) {
       this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
-      console.log("nect")
+  
     }
-    console.log(this.refs.map)
+
     this.update(this.props.mapid);
     this.init(this.map)
     setTimeout(() => {
@@ -448,7 +443,7 @@ console.log("copy",copy)
   }
 
   next = () => {
-    console.log(this.state.step)
+   
     var value = {
       "title": this.state.title,
       "description": this.state.Description,
@@ -461,7 +456,7 @@ console.log("copy",copy)
     }
   
     this.setState({ value ,clicked:true},()=>{
-      console.log(value)
+
       if(!this.validate("title")&&!this.validate("Description")&&!this.validate("Category")&&!this.validate("work_order")&&!this.validate("assigned_to")&&!this.validate("status")&&!this.validate("priority")&&!this.validate("due_date")){
       var step = this.state.step + 1
       this.setState({ step: step, value: value }, () => {
@@ -470,7 +465,6 @@ console.log("copy",copy)
       }
     })
 
-    console.log(this.state)
 
   }
   prev = () => {
@@ -479,12 +473,12 @@ console.log("copy",copy)
         this.setState({ comment: this.refs.comment.value })
       }
       if (this.refs.image) {
-        console.log("resssssssssss", this.refs.image.value)
-        this.setState({ image: this.refs.image.value }, console.log(this.state))
+
+        this.setState({ image: this.refs.image.value })
       }
     }
     this.setState({ step: --this.state.step }, () => {
-      console.log("dec step")
+
       if (this.state.step == 2) {
         this.map.setTarget(ReactDOM.findDOMNode(this.refs.map))
       }
@@ -498,7 +492,7 @@ console.log("copy",copy)
   }
   componentWillReceiveProps(nextProps) {
 
-    console.log("will")
+    
     this.setState({ success: false, value: "", point: [], comment: null,
     title:"",Category:"",assigned_to:null,priority:"",status:"",work_order:"" ,Description:"",due_dat:null,due_date:null,step:0,clicked:false})
 
@@ -512,7 +506,7 @@ console.log("copy",copy)
         <TextField
                         ref="comment"
                         id="comment"
-                        value={this.state.comment}
+                        defaultValue={this.state.comment}
                         onChange={this.handleChange('commentValue')}
                         InputLabelProps={{
                             shrink: true,
@@ -528,20 +522,40 @@ console.log("copy",copy)
     )
   }
 
-  handleChooseFileClick=()=> {
+  handleChooseFileClick=(e)=> {
+ console.log(e)
     setTimeout(() => {
       this._inputLabel.click();
+     
     }, 50);
+  
+$(function () {
+    $(":file").change(function () {
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+            reader.onload = imageIsLoaded;
+            reader.readAsDataURL(this.files[0]);
+        }
+   this.set });
+});
+
+function imageIsLoaded(e) {
+  // this.setState({display:true})
+  
+    $('#img').attr('src', e.target.result);
+
+        $('#img').show();
+};
   }
  handleRequestClose = () => {
     this.setState({ success: false});
   };
 
   handleChange = name => event => {
-    console.log(event.target.value)
+  
     // console.log(this.state.title)
     this.state[name] = event.target.value
-    this.setState({ [name]: event.target.value }, console.log(this.state));
+    this.setState({ [name]: event.target.value });
   };
   renderImage() {
     return (<div className={"photo"}>
@@ -553,10 +567,13 @@ console.log("copy",copy)
   <label htmlFor="file" ref={x => this._inputLabel = x} className="para">
     <Button dense fab color="primary" label="Choose a File" onTouchTap={this.handleChooseFileClick.bind(this)}>
     <UploadIcon/>
-   
+      
     </Button>
     &nbsp; Upload Photo
   </label>
+  <div>
+<img id='img' style={{"display":"none"}} src={''}/>
+ </div>
 </div>
     
 
@@ -565,15 +582,14 @@ console.log("copy",copy)
   }
   validate=(field)=>{
 
-    console.log("this.state[field]",this.props.project.field)
     if (field=="title"&&!this.state[field]){
      return true
     }
-   else{ console.log("----->",field,this.state.checked.includes(field),this.state[field])
+
   if  ( this.props.project[field].required_input&&!this.state[field]){
-    console.log("in if",field)
+
     return true
-  }}
+  }
   return false
   }
   render() {

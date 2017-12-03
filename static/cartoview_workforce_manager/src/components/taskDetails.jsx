@@ -37,9 +37,20 @@ class TaskDetails extends Component {
             value: 0,
             history: false,
             edit: false,
-            details: true
+            details: true,
+            auth:false
         }
     }
+    checkDispatcher = () => {
+     
+    this.props.dispatchers.map((dispatcher) => {
+       
+      if (dispatcher.dispatcher.username === username) {
+        this.setState({auth:true})
+
+      }
+    })
+  }
     loadTask = () => {
         this.setState({ task: false })
         var url = '/apps/cartoview_workforce_manager/api/v1/task/' + this.props.task.id
@@ -67,8 +78,12 @@ class TaskDetails extends Component {
         this.setState({ value });
     };
 
+  componentWillMount(){
+      this.checkDispatcher()
+      }
     render() {
         const { classes, theme } = this.props;
+        console.log(this.state.auth)
         return (
 
 
@@ -82,15 +97,17 @@ class TaskDetails extends Component {
                     <HistoryIcon />
                 </IconButton>
                 </Tooltip>
-                  <Tooltip id="tooltip-top-start" title="Edit" placement="top-start">
-                <IconButton className={classes.button} aria-label="Edit Task" color={this.state.edit ? "primary" : "default"} style={{ float: "right" }} onClick={() => {
+                  {this.state.auth &&  <Tooltip id="tooltip-top-start" title="Edit" placement="top-start">
+                   
+               <IconButton className={classes.button} aria-label="Edit Task" color={this.state.edit ? "primary" : "default"} style={{ float: "right" }} onClick={() => {
                     this.loadTask
                     this.setState({ edit: true, history: false, details: false })
                     
                 }}>
-                    <EditIcon />
+               <EditIcon />
                 </IconButton>
-</Tooltip>
+                
+</Tooltip>}
   <Tooltip id="tooltip-top-start" title="Details" placement="top-start">
                 <IconButton className={classes.button} aria-label="Task Details" color={this.state.details ? "primary" : "default"} style={{ float: "right" }} onClick={() => {
                     this.loadTask
