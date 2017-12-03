@@ -229,3 +229,6 @@ z-index :-1;}
         padding: 5px;
 
 }
+span.Select-clear{
+  display: none
+}

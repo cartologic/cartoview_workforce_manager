@@ -64,3 +64,6 @@
       background-color: lightgreen;
   }
 }
+span.Select-clear{
+  display: none
+}

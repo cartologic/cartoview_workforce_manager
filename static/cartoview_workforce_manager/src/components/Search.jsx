@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Select from 'react-select'
-
+import '../css/app.css'
 import "react-select/dist/react-select.min.css";
 
 export default class Search extends Component {
