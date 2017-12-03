@@ -161,6 +161,7 @@ export default class ResourceSelector extends Component {
               <div
                 className="col-xs-12 col-sm-5 col-md-4 col-lg-4 resource-box-img-container">
                 <Img
+                  style={{width:"250px",height:"180px"}}
                   className="resource-box-img img-responsive"
                   src={[resource.thumbnail_url, "/static/app_manager/img/no-image.jpg"]}
                   loader={< Spinner name = "line-scale-pulse-out" color = "steelblue" />}/>
