@@ -9,8 +9,8 @@ import jsonfield.fields
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('app_manager', '0005_delete_apptag'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('app_manager', '0001_initial'),
     ]
 
     operations = [
