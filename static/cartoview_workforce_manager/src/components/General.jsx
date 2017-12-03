@@ -8,8 +8,12 @@ const options = {
     fields: {
         title: {
             label: "Project Title"
-        }
-
+        },
+       
+        abstract: { type: 'textarea',attrs: {
+            rows: 4
+         }}
+        
     }
 };
 const Form = t.form.Form;
