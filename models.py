@@ -5,6 +5,7 @@ from django.conf import settings
 from django.db.models import signals
 from cartoview.app_manager.models import AppInstance
 User = settings.AUTH_USER_MODEL
+from geonode.people.models import Profile
 from jsonfield import JSONField
 class Project(AppInstance):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -25,12 +26,12 @@ class Project(AppInstance):
     logo = JSONField(blank=True, null=True)
 
 class ProjectDispatchers(models.Model):
-     dispatcher = models.ForeignKey(User, on_delete=models.CASCADE)
+     dispatcher = models.ForeignKey(Profile, on_delete=models.CASCADE)
      project = models.ForeignKey(Project, on_delete=models.CASCADE)
     
 
 class ProjectWorkers(models.Model):
-     worker = models.ForeignKey(User, on_delete=models.CASCADE)
+     worker = models.ForeignKey(Profile, on_delete=models.CASCADE)
      project = models.ForeignKey(Project, on_delete=models.CASCADE)
     
 class Task(models.Model):
