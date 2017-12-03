@@ -160,14 +160,14 @@ return (
 				</div>
        {this.state.users&&
        <div>
-        <label>Choose Project&#39;s Dispatchers</label>
+        <label>Choose Project&#39;s Dispatchers*</label>
        <Chips
           value={this.state.selectedDispatchers}
           onChange={this.onChangeDispatcher}
           suggestions={this.state.usernames}
           fromSuggestionsOnly={true}
         />
-         <label>Choose Project&#39;s Workers</label>
+         <label>Choose Project&#39;s Workers*</label>
        <Chips
           value={this.state.selectedworkers}
           onChange={this.onChangeWorker}

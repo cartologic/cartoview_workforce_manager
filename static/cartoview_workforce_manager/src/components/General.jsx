@@ -7,10 +7,10 @@ const projectConfig = t.struct({title: t.String, abstract: t.String,});
 const options = {
     fields: {
         title: {
-            label: "Project Title"
+            label: "Project Title*"
         },
        
-        abstract: { type: 'textarea',attrs: {
+        abstract: { type: 'textarea',label: "Abstract*",attrs: {
             rows: 4
          }}
         
