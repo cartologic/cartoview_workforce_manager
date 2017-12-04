@@ -54,11 +54,15 @@ export default class FieldConfigModal extends Component {
         var valu = this.refs.form.getValue()
         console.log(valu)
         var value = {}
-        value[ this.props.selected] = valu
-        this.setState({value})
-        this.props.setFormValue(valu, this.props.selected)
+        // value[ this.props.selected] = valu
+        // this.setState({value})
+        // this.props.setFormValue(valu, this.props.selected)
         
         if (valu) {
+            value[ this.props.selected] = valu
+            this.setState({value})
+            this.props.setFormValue(valu, this.props.selected)
+            console.log("value,",valu)
             this.props.updateAttribute(valu)
             $(ReactDOM.findDOMNode(this)).modal('hide')
         }
