@@ -18,7 +18,8 @@ loading:false
 
 
 
-var url = '/apps/cartoview_workforce_manager/api/v1/user/'
+
+var url = '/api/profiles'
 fetch(url,  {
                 method:"GET", 
                 headers:new Headers( {
