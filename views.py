@@ -65,10 +65,10 @@ def save(request, instance_id=None, app_name=APP_NAME):
     instance_obj.set_permissions(permessions)
 
     # update the instance keywords
-    if hasattr(instance_obj, 'keywords'):
-        for k in keywords:
-            if k not in instance_obj.keyword_list():
-                instance_obj.keywords.add(k)
+    # if hasattr(instance_obj, 'keywords'):
+    #     for k in keywords:
+    #         if k not in instance_obj.keyword_list():
+    #             instance_obj.keywords.add(k)
 
     res_json.update(dict(success=True, id=instance_obj.id))
     return HttpResponse(json.dumps(res_json), content_type="application/json")

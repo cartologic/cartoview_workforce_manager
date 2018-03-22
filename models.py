@@ -4,9 +4,13 @@ from django.contrib.gis.db import models
 from django.conf import settings
 from django.db.models import signals
 from cartoview.app_manager.models import AppInstance
+from geonode.base.models import ResourceBase
 User = settings.AUTH_USER_MODEL
 from geonode.people.models import Profile
 from jsonfield import JSONField
+from geonode.contrib.geosites.models import post_save_resource, post_delete_resource
+from django.conf import settings
+
 class Project(AppInstance):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -70,3 +74,7 @@ def appinstance_post_save(instance, *args, **kwargs):
     if not isinstance(instance, AppInstance):
         return True
 signals.post_save.connect(appinstance_post_save,sender=Project)
+
+if  'geonode.contrib.geosites' in settings.INSTALLED_APPS:
+        signals.post_save.connect(post_save_resource, sender=Project)
+        signals.post_delete.connect(post_delete_resource, sender=Project)

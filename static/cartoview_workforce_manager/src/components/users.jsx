@@ -1,7 +1,7 @@
 import React,  {Component}from 'react'; 
 import {getCRSFToken}from '../helpers/helpers.jsx'
 import Chips, { Chip } from 'react-chips';
-import Button from 'react-bootstrap-button-loader';
+
 export default class Users extends Component {
 constructor(props) {
 super(props)
@@ -18,7 +18,7 @@ loading:false
 
 
 
-var url = '/apps/cartoview_workforce_manager/api/v1/user/'
+var url = '/api/profiles'
 fetch(url,  {
                 method:"GET", 
                 headers:new Headers( {
@@ -140,7 +140,7 @@ return (
 
 					</div>
 					<div className="col-xs-7 col-md-8">
-						<Button loading={this.state.loading} 
+						<button loading={this.state.loading} 
 							style={{
                                 display: "inline-block",
                                 margin: "0px 3px 0px 3px"
@@ -152,7 +152,7 @@ return (
                                 }}
                             disabled={this.state.selectedDispatchers.length==0||this.state.selectedworkers.length==0}>{"Save"}
 							
-						</Button>
+						</button>
 					
 
 
