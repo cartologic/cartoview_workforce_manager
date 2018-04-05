@@ -145,7 +145,8 @@ class AddTask extends Component {
       imageDone: false,
       commentValue: "",
       clicked: false,
-      due_dat: null
+      due_dat: null,
+     
     }
 
     this.map = new ol.Map({
@@ -249,7 +250,12 @@ class AddTask extends Component {
   }
   save() {
    if (this.refs.image) {
-      this.setState({ image: this.refs.image.value })
+
+      var file = this.refs.image.files[0];
+      var fileType = file["type"];
+      var ValidImageTypes = ["image/gif","image/jpg", "image/jpeg", "image/png"];
+     if (ValidImageTypes.includes(fileType))
+      {this.setState({ image: this.refs.image.value })}
     }
     var value = this.state.value;
     if (value) {
@@ -455,17 +461,28 @@ class AddTask extends Component {
       this._inputLabel.click();
     }, 50);
     $(function () {
+     
+var ValidImageTypes = ["image/gif","image/jpg", "image/jpeg", "image/png"];
+
       $(":file").change(function () {
-        if (this.files && this.files[0]) {
+        var file = this.files[0];
+        console.log(this.files,"**".file)
+        var fileType = file["type"];
+        console.log("file type",fileType)
+        if (this.files && this.files[0]&& $.inArray(fileType, ValidImageTypes) > 0) {
           var reader = new FileReader();
           reader.onload = imageIsLoaded;
           reader.readAsDataURL(this.files[0]);
         }
+        if($.inArray(fileType, ValidImageTypes) < 0){
+          $("#image_error").text("file type not supported")
+        } else{ $("#image_error").text("")}
         this.set
       });
     });
 
     function imageIsLoaded(e) {
+      console.log("image loaded ")
       $('#img').attr('src', e.target.result);
       $('#img').show();
     };
@@ -488,14 +505,15 @@ class AddTask extends Component {
             <UploadIcon />
 
           </Button>
+         
           &nbsp; Upload Photo
   </label>
         <div>
           <img id='img' style={{ "display": "none" }} src={''} />
         </div>
       </div>
-
-
+ <div id="image_error" style={{"padding": "20px","color":"red"}}>  </div>
+  
     </div>
     )
   }
