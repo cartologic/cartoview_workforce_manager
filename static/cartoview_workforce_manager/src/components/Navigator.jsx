@@ -8,7 +8,6 @@ export default class Navigator extends Component {
             this.props.onStepSelected(index)
         }
     }
-
     item(label, index) {
         const {step, onStepSelected} = this.props;
         const className = index == step
@@ -23,7 +22,6 @@ export default class Navigator extends Component {
 			</li>
         )
     }
-
     render() {
         const {steps} = this.props;
         return (

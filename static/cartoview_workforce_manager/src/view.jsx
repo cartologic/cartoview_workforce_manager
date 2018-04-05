@@ -120,7 +120,6 @@ const styles = theme => ({
   },
   content: {
     width: '100%',
-    //  marginLeft: `${drawerWidth + 1}px`,
     [theme.breakpoints.down('lg')]: {
       marginLeft: `0px`
     },
@@ -131,7 +130,6 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
     }),
-    // height: 'calc(100% - 56px)',
     marginTop: 56,
     [theme.breakpoints.up('sm')]: {
       content: {
@@ -147,19 +145,8 @@ const styles = theme => ({
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
     })
-  }, tableResponsive: {
-    overflowX: 'overlay',
-    overflowY: 'overlay',
-
   },
-buttonCenter:{
 
-     minWidth: "300px" 
-  
-},
-title:{
-  marginLeft: "5px"
-}
 });
 
 function TabContainer({ children, dir }) {
@@ -273,12 +260,10 @@ class ReactClient extends React.Component {
     }).then(function (response) {
       if (response.status >= 400) {
         throw new Error("Bad response from server");
-
       }
       return response.json();
     }).then((data) => {
       if (data.objects.length == 0) {
-      
       
         this.setState({ result: true })
       } else {
@@ -292,21 +277,6 @@ class ReactClient extends React.Component {
       }, () => {
         var pagedTasks = this.state.tasks.slice(0, this.state.perPage);
         this.setState({ pagedTasks: pagedTasks })
-      
-        // this.state.priority ? this.refs.priority = "" : false
-        // this.refs.category ? this.refs.category = "" : false
-        // this.refs.status ? this.refs.status = "" : false
-        // this.refs.worker ? this.refs.worker = "" : false
-        // this.refs.work_order ? this.refs.work_order = "" : false
-        // this.refs.dispatcher ? this.refs.dispatcher = "" : false
-        // this.setState({
-        //   priority: "",
-        //   status: "",
-        //   category: "",
-        //   work_order: "",
-        //   assigned_to: "",
-        //   created_by: ""
-        // })
 
       })
     })

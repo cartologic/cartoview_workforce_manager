@@ -44,31 +44,22 @@ export default class FieldConfigModal extends Component {
         }
     }
     componentDidMount() {
-        console.log("st")
         $(ReactDOM.findDOMNode(this)).modal('show');
         $(ReactDOM.findDOMNode(this)).on('hidden.bs.modal', this.props.handleHideModal);
     }
     save = () => {
-    
-        
         var valu = this.refs.form.getValue()
-        console.log(valu)
         var value = {}
-        // value[ this.props.selected] = valu
-        // this.setState({value})
-        // this.props.setFormValue(valu, this.props.selected)
-        
         if (valu) {
             value[ this.props.selected] = valu
             this.setState({value})
             this.props.setFormValue(valu, this.props.selected)
-            console.log("value,",valu)
+    
             this.props.updateAttribute(valu)
             $(ReactDOM.findDOMNode(this)).modal('hide')
         }
     }
     render() {
-        console.log("stateeeeeeeeee",this.state.value,this.props)
         return (
             <div className="modal fade" tabIndex="-1" role="dialog">
                 <div className="modal-dialog" role="document">

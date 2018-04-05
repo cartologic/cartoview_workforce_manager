@@ -16,7 +16,6 @@ const cat = t.struct({
     label: t.String,
     status_color: t.maybe(Color)
 })
-
 export default class FormFields extends Component {
     constructor(props) {
         super(props)
@@ -39,7 +38,6 @@ export default class FormFields extends Component {
         if (!isNaN(id)) {
             this.loadProject()
         }
-
     }
     loadProject = () => {
         var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id
@@ -56,7 +54,6 @@ export default class FormFields extends Component {
                 return response.json();
             })
             .then((data) => {
-                console.log(data)
                 this.setState({
                     "project": data, "Category": data.Category&&data.Category.Category ? data.Category : "", "priority": data.priority&&data.priority.priority ? data.priority : "", "status": data.status&&data.status.status ? data.status : "", 
                     "value": {
@@ -90,10 +87,7 @@ export default class FormFields extends Component {
 
             }
         }
-
     }
-
-
     generateForm = () => {
         let x = {
             required_input: t.Boolean
@@ -126,7 +120,7 @@ export default class FormFields extends Component {
         var Category= {"Category": [{"label": "Health"},{"label": "Enviroment"}],"required_input": false,
         
         }
-        console.log(this.state)
+   
         this.props.onComplete(this.state.priority!=""?this.state.priority:priority, this.state.status!=""?this.state.status:status, this.state.Category!=""?this.state.Category:Category,this.state.checkedValues,this.state.due_date,this.state.work_order,this.state.description,this.state.assigned_to)
     }
     setFormValue = (value, s) => {  
@@ -135,12 +129,8 @@ export default class FormFields extends Component {
         this.setState(obj)
     }
     check = (value) => {
-    console.log(this.state)
-    console.log(this.state.checkedValues)
         if (this.state.checkedValues.includes(value)) {
-            console.log("inside if",value)
             if (this.state[value] == "") { 
-                console.log("btn should be disabled")
                 return true }
             else { return false }
         }
@@ -158,16 +148,13 @@ export default class FormFields extends Component {
                                 display: "inline-block",
                                 margin: "0px 3px 0px 3px"
                             }}
-                            // disabled={this.check("status") || this.check("priority") || this.check("Category")}
+
                             className="btn btn-primary btn-sm pull-right"
                             onClick={this.save.bind(this)}>{"next"}
                             <i className="fa fa-arrow-right"></i>
                         </button>
-
-
                     </div>
                 </div>
-
                 <div className="col-lg-6">
                     <div className="input-group">
                         <span className="input-group-addon">
@@ -269,7 +256,6 @@ export default class FormFields extends Component {
                             <i className="fa fa-cog" ></i>
                         </span>
                     </div>
-
                 </div>
                 {this.state.showModal
                     && <FieldConfigModal
@@ -282,16 +268,6 @@ export default class FormFields extends Component {
                         handleHideModal={this.handleHideModal} updateAttribute={this.updateAttribute} />
                 }
             </div>
-
-
-
-
-
-
         )
-
-
     }
-
-
 }

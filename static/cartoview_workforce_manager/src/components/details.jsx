@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import Attachments from './attachments.jsx';
 import ShowLocationMap from './showLocationMap.jsx';
 import DisplayComments from './displayComment';
@@ -14,9 +13,6 @@ import CommentIcon from 'material-ui-icons/Comment';
 import LocationIcon from 'material-ui-icons/LocationOn';
 import Moment from 'react-moment';
 
-
-
-
 const styles = theme => ({
   paper: {
     width: '100%',
@@ -27,18 +23,10 @@ const styles = theme => ({
 class Details extends Component {
   constructor(props) {
     super(props)
-
   }
-
   render() {
     const { classes } = this.props;
-
-
-
-
     return (
-
-
       <div >
         <Paper className={classes.paper}>
           {!this.props.task && <img src={URLS.static + 'cartoview_workforce_manager/loader'} />}
@@ -100,13 +88,10 @@ class Details extends Component {
                 <TableCell><b>Category</b></TableCell>
                 <TableCell>{this.props.task.Category}</TableCell>
               </TableRow>}
-
             </TableBody>
           </Table>
         </Paper>
         <Paper style={{ "marginTop": "2%" }}>
-
-
           <div style={{ display: "flex","padding": "1.5%", "color": "rgba(0, 0, 0, 0.54)" }}>
             <div>
               <ImageIcon />
@@ -115,14 +100,10 @@ class Details extends Component {
               Images
                 </div>
           </div>
-
-
           <Divider />
           <div><DisplayAttachments task={this.props.task.id} /></div>
         </Paper>
         <Paper style={{ "marginTop": "2%" }}>
-
-
           <div style={{ display: "flex" ,"padding": "1.5%", "color": "rgba(0, 0, 0, 0.54)"}}>
             <div>
               <CommentIcon />
@@ -131,12 +112,10 @@ class Details extends Component {
               Comments
                 </div>
           </div>
-
           <Divider />
           <div><DisplayComments task={this.props.task.id} /></div>
         </Paper>
         <Paper style={{ "marginTop": "2%" }}>
-
           <div style={{ display: "flex","padding": "1.5%", "color": "rgba(0, 0, 0, 0.54)"}}>
             <div>
               <LocationIcon />
@@ -145,13 +124,10 @@ class Details extends Component {
               Location
                 </div>
           </div>
-
           <Divider />
           <div><ShowLocationMap mapId={this.props.mapid} x={this.props.task.x} y={this.props.task.y} extent={this.props.task.extent} /></div>
         </Paper>
-
       </div>
-
     )
   }
 }

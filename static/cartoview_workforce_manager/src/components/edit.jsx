@@ -79,8 +79,7 @@ class Edit extends Component {
         }
        
         this.map = new ol.Map({
-            //controls: [new ol.control.Attribution({collapsible: false}), new ol.control.ScaleLine()],
-            layers: [new ol.layer.Tile({ title: 'OpenStreetMap', source: new ol.source.OSM() })],
+           layers: [new ol.layer.Tile({ title: 'OpenStreetMap', source: new ol.source.OSM() })],
             view: new ol.View({
                 center: [
                     0, 0
@@ -202,9 +201,9 @@ class Edit extends Component {
         }
     }
     handleChange = name => event => {
-        console.log(event.target.value)
+   
         this.state.value[name] = event.target.value
-        this.setState({ [this.state.value.name]: event.target.value }, console.log(this.state.value));
+        this.setState({ [this.state.value.name]: event.target.value });
     };
     init = (map) => {
         var point_feature = new ol.Feature({});
@@ -292,23 +291,16 @@ class Edit extends Component {
 
             }
             this.sendHistory()
-
         }
-
-        // console.log("assign",this.state.value.assigned_to,this.state.workers[this.state.assigned_to],this.state.workers[this.state.assigned_to].username)
         if (this.state.value.assigned_to != "/apps/cartoview_workforce_manager/api/v1/user/undefined/" && this.state.value.assigned_to != this.props.task.assigned_to.id) {
             this.state['history'] = username + "  reassigned the task to " + this.state.worker[this.state.value.assigned_to] + " at " + dt
             this.sendHistory()
         }
     }
     save() {
-
-
         var value = this.state.value
-        // this.setState({value:this.refs.form.getValue()})
         if (value) {
             let newValue = value.assigned_to ? { ...value, assigned_to: `/apps/cartoview_workforce_manager/api/v1/user/${value.assigned_to}/` } : value
-
             this.setState({ btnLoading: true })
             var project = { "project": { "pk": id } }
             if (this.state.x && this.state.y) {
@@ -320,7 +312,6 @@ class Edit extends Component {
                 var copy = Object.assign(project, newValue)
             }
             this.setState({ btnLoading: true })
-            console.log("dddddddd",copy)
             var url = '/apps/cartoview_workforce_manager/api/v1/task/' + this.props.task.id + '/'
             fetch(url, {
                 method: "PUT",
@@ -339,9 +330,7 @@ class Edit extends Component {
                 }).then((res) => {
                     this.historyCheck()
                     this.setState({ "success": true, "btnLoading": false })
-
                 })
-
         }
     }
     componentDidMount() {
@@ -352,18 +341,14 @@ class Edit extends Component {
             this.map.updateSize()
             this.map.render()
         }, 2000)
-        console.log(this.props.due_date)
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.children != this.props.children) {
 
         }
-
     }
     render() {
         const { classes } = this.props
-   
-
         return (
             <div>
                 {!this.state.task &&
@@ -374,12 +359,8 @@ class Edit extends Component {
                         <div ></div>
                     </div>
                 }
-
                 < div className=" ">
-
                     <div style={{ "padding": "2%" }}>
-
-
                         {this.state.task &&
                             <form className={classes.container} noValidate autoComplete="off">
                                 <TextField
@@ -433,8 +414,6 @@ class Edit extends Component {
                                         
                                         change={(newDate) => {this.setState({due_dat: newDate},()=>{
                                            this.state.value["due_date"] = newDate._d
-                                        //    this.setState({ [this.state.value.name]: event.target.value })
-
                                         }) }} />
                                     
                                     </div>}
@@ -467,7 +446,6 @@ class Edit extends Component {
                                     label="status"
                                     className={classes.textField}
                                     SelectProps={{
-
                                         MenuProps: {
                                             className: classes.menu,
                                         },
@@ -519,10 +497,6 @@ class Edit extends Component {
                             </form>
 
                         }
-
-
-
-
                         {this.state.task &&
                             <div>
                                 <label>Click at the new Position to edit location</label>
@@ -538,8 +512,6 @@ class Edit extends Component {
                                 </div>
                             </div>}
                         {this.state.success && 
-                           
-
                     <Snackbar
                             open={this.state.success}
                             onRequestClose={this.handleRequestClose}
@@ -566,16 +538,9 @@ class Edit extends Component {
                                         <Attachments task={this.props.task.id} />
                                     </div>
                                 </Paper>
-
-
                             </div>}
-
                     </div>
                 </div>
-
-
-
-
             </div>
         )
     }

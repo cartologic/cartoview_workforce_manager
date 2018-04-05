@@ -1,9 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import MapConfigTransformService from '@boundlessgeo/sdk/services/MapConfigTransformService';
 import MapConfigService from '@boundlessgeo/sdk/services/MapConfigService';
-
 import ol from 'openlayers';
 
 export default class ShowAllLocationMap extends React.Component {
@@ -14,13 +12,12 @@ export default class ShowAllLocationMap extends React.Component {
      }
     this.loaded = false;
     this.map = new ol.Map({
-      //controls: [new ol.control.Attribution({collapsible: false}), new ol.control.ScaleLine()],
-      layers: [new ol.layer.Tile({title: 'OpenStreetMap', source: new ol.source.OSM()})],
-      view: new ol.View({
-        center: [
+        layers: [new ol.layer.Tile({title: 'OpenStreetMap', source: new ol.source.OSM()})],
+        view: new ol.View({
+          center: [
           0, 0
-        ],
-        zoom: 3
+                  ],
+          zoom: 3
       })
     });
     this.preparePoints()
@@ -38,9 +35,7 @@ export default class ShowAllLocationMap extends React.Component {
       }).then((config) => {
         if (config) {
           MapConfigService.load(MapConfigTransformService.transform(config), this.map);
-        //  this.props.onMapReady(this.map)
-
-
+       
         }
       });
     }
@@ -52,8 +47,6 @@ preparePoints=()=>{
             method: "GET",
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
-
-
             })
         })
             .then(function (response) {
@@ -72,7 +65,6 @@ preparePoints=()=>{
                   point_feature.setGeometry(point_geom);
                   array.push(point_feature)
 
-
                  })
                  this.setState({points:array},()=>{
 
@@ -87,48 +79,14 @@ preparePoints=()=>{
                         });
                             vector_layer.setStyle(style);
                             this.map.addLayer(vector_layer);
-
-
-
                  })
                 })
             })
-
-
-}
-
-  init=( map )=> {
-
-
-
-
-
-    //     var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: this.state.points})})
-
-
-    //     var style = new ol.style.Style({
-    //       image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
-    //       anchor: [0.5, 10],
-    //       anchorXUnits: 'fraction',
-    //       anchorYUnits: 'pixels',
-    //       src: URLS.static +'marker.png'
-    //   }))
-    //   });
-    //     vector_layer.setStyle(style);
-    //    map.addLayer(vector_layer);
-
-
-
-
-  }
-
-
-
-
+          }
   componentDidMount() {
     this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
     this.update(this.props.mapId);
-    this.init( this.map )
+   
     setTimeout(()=>{
       this.map.updateSize()
       this.map.render()
@@ -139,7 +97,6 @@ preparePoints=()=>{
 
     var {className=''} = this.props;
     return (<div  ref="map" style={{"height":"250px"}}  className={className + ' map-ct'}>
-
       {this.props.children}
     </div>);
   }}

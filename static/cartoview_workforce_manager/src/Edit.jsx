@@ -86,10 +86,8 @@ export default class Edit extends Component {
                 logo:this.state.logo,
                 config: this.props.config.instance ? this.props.config.instance.config : undefined,
                 onComplete: (basicConfig, project,logo) => {
-                    console.log(logo)
+                
                     var conf=Object.assign(basicConfig, { "logo":logo})
-                    console.log(basicConfig)
-                    console.log(conf)
                     this.setState({ value: basicConfig, map: project.mapid, generalConfig: conf, success: true, id: project.id ,logo:logo})
                     let { step } = this.state;
                     this.goToStep(++step)

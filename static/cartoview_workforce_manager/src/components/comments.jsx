@@ -26,7 +26,7 @@ class Comments extends Component {
     }
     sendComment = () => {
         var comment = { "comment": this.state.comment, "task": { "pk": this.props.task } }
-        console.log(comment)
+   
         var url = '/apps/cartoview_workforce_manager/api/v1/comment/'
         fetch(url, {
             method: "POST",

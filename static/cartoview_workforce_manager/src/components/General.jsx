@@ -3,7 +3,6 @@ import t from 'tcomb-form';
 import FileBase64 from 'react-file-base64'
 import PropTypes from 'prop-types'
 
-
 const title_length = t.refinement(t.String, (n) => {
     if (n.length < 50) {
         return true
@@ -43,7 +42,6 @@ const Form = t.form.Form;
 export default class General extends Component {
     constructor(props) {
         super(props)
-
         if (!isNaN(id)) {
             this.loadProject()
         }
@@ -69,16 +67,12 @@ export default class General extends Component {
             this.setState({ messages: "this file isn't an image" })
         }
     }
-
     loadProject = () => {
         var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id
-
         fetch(url, {
             method: "GET",
             headers: new Headers({
                 "Content-Type": "application/json; charset=UTF-8",
-
-
             })
         })
             .then(function (response) {
@@ -88,7 +82,6 @@ export default class General extends Component {
                 return response.json();
             })
             .then((data) => {
-
                 this.setState({
                     "project": data, file: data.logo, "value": {
                         title: data.title,
@@ -108,8 +101,6 @@ export default class General extends Component {
             this.props.onComplete(properConfig, this.state.project, this.state.file)
         }
     }
-
-
     render() {
 
         let { file, messages } = this.state
@@ -117,38 +108,31 @@ export default class General extends Component {
             <div className="row">
                 <div className="row">
                     <div className="col-xs-5 col-md-4">
-
-                    </div>
-                    <div className="col-xs-7 col-md-8">
-                        <button
-                            style={{
-                                display: "inline-block",
-                                margin: "0px 3px 0px 3px"
-                            }}
-                            className="btn btn-primary btn-sm pull-right"
-                            onClick={this.save.bind(this)}>{"next "}
-                            <i className="fa fa-arrow-right"></i>
-                        </button>
-
-
-                    </div>
                 </div>
+             <div className="col-xs-7 col-md-8">
+                <button
+                    style={{
+                        display: "inline-block",
+                        margin: "0px 3px 0px 3px"
+                    }}
+                    className="btn btn-primary btn-sm pull-right"
+                    onClick={this.save.bind(this)}>{"next "}
+                    <i className="fa fa-arrow-right"></i>
+                </button>
 
 
+             </div>
+            </div>
                 <Form
                     ref="form"
                     value={this.state.value}
                     type={projectConfig}
                     options={options} />
-
-
                 <div className="row">
                     <div className="col-xs-5 col-md-4">
                         <h5>{'Logo'}</h5>
                     </div>
-
                 </div>
-
                 <FileBase64
                     multiple={false}
                     onDone={this.getFiles.bind(this)}
@@ -156,7 +140,6 @@ export default class General extends Component {
                 <h4 style={{ color: "red" }}>{messages}</h4>
                 {file && <div className="row" style={{ width: "500px" }}>
                     <div className="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
-
                         <img className="img-responsive" src={file.base64} />
                     </div>
                 </div>}

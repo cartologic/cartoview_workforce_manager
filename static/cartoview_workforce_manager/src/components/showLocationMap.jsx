@@ -9,10 +9,8 @@ import ol from 'openlayers';
 export default class ShowLocationMap extends React.Component {
   constructor(props) {
     super(props);
-
     this.loaded = false;
     this.map = new ol.Map({
-      //controls: [new ol.control.Attribution({collapsible: false}), new ol.control.ScaleLine()],
       layers: [new ol.layer.Tile({title: 'OpenStreetMap', source: new ol.source.OSM()})],
       view: new ol.View({
         center: [
@@ -21,7 +19,7 @@ export default class ShowLocationMap extends React.Component {
         zoom: 3,
       })
     });
-   
+  
 }
   update(mapId) {
     if (mapId) {
@@ -36,9 +34,6 @@ export default class ShowLocationMap extends React.Component {
       }).then((config) => {
         if (config) {
           MapConfigService.load(MapConfigTransformService.transform(config), this.map);
-  
-
-
         }
       });
     }
@@ -46,11 +41,9 @@ export default class ShowLocationMap extends React.Component {
 
 
   init=( map )=> {
-    console.log("hheee")
-
+  
     var point_feature = new ol.Feature({ });
   		if(this.props.x&&this.props.y) {
-
         
          setTimeout(()=>{
       
@@ -72,12 +65,7 @@ export default class ShowLocationMap extends React.Component {
         vector_layer.setStyle(style);
        map.addLayer(vector_layer);
       },500)}}
-
-
-
-
   componentDidMount() {
-    console.log("did ni")
     this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
     this.update(this.props.mapId);
     this.init( this.map )
@@ -87,19 +75,13 @@ export default class ShowLocationMap extends React.Component {
     }, 1000)
 
   }
- componentWillReceiveProps(nextProps){
-    console.log("show will pre")
-  }
-
   render() {
-console.log("render")
     var {className=''} = this.props;
     return (<div  ref="map"   style={{"height":"250px"}} className={className + ' map-ct'}>
-
-      {this.props.children}
-    </div>);
-      this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
-        this.update(this.props.mapId);
-    this.init( this.map )
+                {this.props.children}
+            </div>);
+    this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
+    this.update(this.props.mapId);
+     this.init( this.map )
   }
   }
