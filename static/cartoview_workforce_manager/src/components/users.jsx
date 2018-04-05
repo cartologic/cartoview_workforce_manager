@@ -44,29 +44,17 @@ fetch(url,  {
                       })
                                 }); 
 
-
-
-
-
-
 if(!isNaN(id)){ 
-
 this.loadWorkers()
 this.loadDispatchers()
-
-
-
-
 }}
 loadDispatchers=()=>{
 var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + "/dispatchers"
-
 fetch(url,  {
                 method:"GET", 
                 headers:new Headers( {
                 "Content-Type":"application/json; charset=UTF-8", 
                 "X-CSRFToken":getCRSFToken(), 
-
                 })
                 })
                 .then(function (response) {
@@ -76,7 +64,6 @@ fetch(url,  {
                 return response.json(); 
                 })
                 .then((data) =>  {
-                
                 this.setState( {selectedDis:data.objects},
                 ()=>{this.state.selectedDis.map((user)=>{
                     this.state.selectedDispatchers.push(user.dispatcher.username)})
@@ -84,14 +71,9 @@ fetch(url,  {
                     })
                 }); 
                 }
-
-
-
 loadWorkers=()=>{
-
     var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + "/workers"
-
-fetch(url,  {
+    fetch(url,  {
                 method:"GET", 
                 headers:new Headers( {
                 "Content-Type":"application/json; charset=UTF-8", 
@@ -114,16 +96,11 @@ fetch(url,  {
                         this.setState({selectedworkers:this.state.selectedworkers})
                     })
                 }); 
-                
-
-
+            
 }
-
-
 save() {   
 this.props.onComplete(this.state.selectedDispatchers,this.state.selectedworkers)
 }
-
 onChangeDispatcher = selectedDispatchers => {
   this.setState({ selectedDispatchers});
   }
@@ -131,13 +108,10 @@ onChangeWorker = selectedworkers=> {
     this.setState({ selectedworkers});
   }
 render() {
-return (
-
-   
+return (  
    	<div className="row">
 				<div className="row">
 					<div className="col-xs-5 col-md-4">
-
 					</div>
 					<div className="col-xs-7 col-md-8">
 						<button loading={this.state.loading} 
@@ -151,11 +125,7 @@ return (
                                 this.setState({loading:true},this.save.bind(this))
                                 }}
                             disabled={this.state.selectedDispatchers.length==0||this.state.selectedworkers.length==0||this.state.loading}>{"Save"}
-							
 						</button>
-					
-
-
 					</div>
 				</div>
        {this.state.users&&

@@ -441,25 +441,26 @@ class ReactClient extends React.Component {
           </ListItem>
           <Collapse in={this.state.filterOpen} transitionDuration="auto" unmountOnExit>
             <ListItem className={classes.nested}>
-              {< ul > {
-                this.state.project.priority && this.state.project.Project_config.includes("priority") && <TextField id="priority" value={this.state.priority} select SelectProps={{
+              {< ul style={{width:"100%"}}> {
+                this.state.project.priority && this.state.project.Project_config.includes("priority") && <TextField fullWidth="true" id="priority" value={this.state.priority} select SelectProps={{
                   MenuProps: {
                     className: classes.menu
                   }
-                }} className={styles.textField} onChange={this.handleFilter('priority')} helperText="Filter By Priority" margin="normal">
+                }} className={styles.textField} fullWidth="true" onChange={this.handleFilter('priority')} helperText="Filter By Priority" margin="normal">
 
                   {this.state.project.priority.priority.map(option => (
                     <MenuItem key={option.label} value={option.label}>
                       {option.label}
                     </MenuItem>
                   ))}
+                  
                 </TextField>
               } < br /> {
-                  this.state.project.status && this.state.project.Project_config.includes("status") && <TextField id="status" select SelectProps={{
+                  this.state.project.status && this.state.project.Project_config.includes("status") && <TextField fullWidth="true" id="status" select SelectProps={{
                     MenuProps: {
                       className: styles.menu
                     }
-                  }} className={styles.textField} value={this.state.status} onChange={this.handleFilter('status')} helperText="Filter By Status" margin="normal">
+                  }} className={styles.textField} value={this.state.status} fullWidth="true" onChange={this.handleFilter('status')} helperText="Filter By Status" margin="normal">
 
                     {this.state.project.status.status.map(option => (
                       <MenuItem key={option.label} value={option.label}>
@@ -468,7 +469,7 @@ class ReactClient extends React.Component {
                     ))}
                   </TextField>
                 } < br /> {
-                  this.state.project.Category && this.state.project.Project_config.includes("Category") && <TextField id="category" select SelectProps={{
+                  this.state.project.Category && this.state.project.Project_config.includes("Category") && <TextField  fullWidth="true"id="category" select SelectProps={{
                     MenuProps: {
                       className: styles.menu
                     }
@@ -481,11 +482,11 @@ class ReactClient extends React.Component {
                     ))}
                   </TextField>
                 } < br /> {
-                  this.state.project.Project_config.includes("work_order") && <TextField id="workorder" style={{
-                    "width": "90px"
+                  this.state.project.Project_config.includes("work_order") && <TextField  fullWidth="true" id="workorder" style={{
+
                   }} label="work order" className={classes.textField} defaultValue={this.state.work_order} onChange={this.handleFilter('Work_order')} margin="normal" />
                 } < br /> {
-                  this.state.dispatchers && <TextField id="dispatcher" select SelectProps={{
+                  this.state.dispatchers && <TextField fullWidth="true" id="dispatcher" select SelectProps={{
                     MenuProps: {
                       className: styles.menu
                     }
@@ -498,7 +499,7 @@ class ReactClient extends React.Component {
                     ))}
                   </TextField>
                 } < br /> {
-                  this.state.project.Project_config.includes("assigned_to") && this.state.project && <TextField id="assignee" select SelectProps={{
+                  this.state.project.Project_config.includes("assigned_to") && this.state.project && <TextField  fullWidth="true"id="assignee" select SelectProps={{
                     MenuProps: {
                       className: styles.menu
                     }
