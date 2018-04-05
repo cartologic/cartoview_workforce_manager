@@ -336,6 +336,7 @@ class Edit extends Component {
     componentDidMount() {
         this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
         this.init(this.map)
+        this.update(this.props.mapid)
         setTimeout(() => {
             this.map.setTarget(ReactDOM.findDOMNode(this.refs.map));
             this.map.updateSize()
