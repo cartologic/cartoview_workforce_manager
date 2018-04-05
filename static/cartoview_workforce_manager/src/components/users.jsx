@@ -150,7 +150,7 @@ return (
                                 ()=>{
                                 this.setState({loading:true},this.save.bind(this))
                                 }}
-                            disabled={this.state.selectedDispatchers.length==0||this.state.selectedworkers.length==0}>{"Save"}
+                            disabled={this.state.selectedDispatchers.length==0||this.state.selectedworkers.length==0||this.state.loading}>{"Save"}
 							
 						</button>
 					
