@@ -249,7 +249,7 @@ class AddTask extends Component {
     })
   }
   save() {
-   if (this.refs.image) {
+   if (this.refs.image.files[0]) {
 
       var file = this.refs.image.files[0];
       var fileType = file["type"];
