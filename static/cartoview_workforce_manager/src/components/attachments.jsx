@@ -75,7 +75,15 @@ class Attachments extends Component {
         let data = new FormData();
         data.append('action', 'ADD');
         data.append('task', `/apps/cartoview_workforce_manager/api/v1/task/${this.props.task}/`);
-        data.append('image', this.refs.img.files[0])
+        
+        
+        var file = this.refs.img.files[0];
+        var fileType = file["type"];
+        var ValidImageTypes = ["image/gif","image/jpg", "image/jpeg", "image/png"];
+       if (ValidImageTypes.includes(fileType))
+    
+        
+      { data.append('image', this.refs.img.files[0])
         var url = '/apps/cartoview_workforce_manager/api/v1/attachment/'
         fetch(url, {
             method: "POST",
@@ -94,7 +102,7 @@ class Attachments extends Component {
                 this.sendHistory()
                 this.getImage()
                 this.refs.img.value = ""
-            })
+            })}
     }
     sendHistory = () => {
         var date = new Date()
