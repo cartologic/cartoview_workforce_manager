@@ -423,7 +423,7 @@ class ReactClient extends React.Component {
   };
 
   myProjects = () => {
-    window.location.href = '/apps/appinstances/?app__title=Cartoview%20Workforce%20Manager&limit=100&offset=0&owner__username=' + username
+    window.location.href = '/apps/appinstances/?app__name='+ app_name +'&limit=100&offset=0&owner__username=' + username
   }
   handleDrawerOpen = () => {
     this.setState({ open: true });

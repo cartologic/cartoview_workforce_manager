@@ -108,6 +108,7 @@ def view_app(
     context.update({
         # "map_config": instance.map.viewer_json(request.user, None),
         "instance": instance,
-        "id":instance_id
+        "id":instance_id,
+        "app_name":APP_NAME
     })
     return render(request, template, context)

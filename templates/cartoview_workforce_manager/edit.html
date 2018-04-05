@@ -19,14 +19,7 @@ include "geonode/app_header.html" %} {{ block.super }} {% endblock %} {% block b
   var app = "{{app}}"
   {% if instance %}
   var id = {{id }}
- 
-  // var appConfig = {{ instance.config|escape|safe }};
-  // var abstract = " {% spaceless %}{{ instance.abstract|title }}{% endspaceless %} ";
-  // var title = "{{ instance.title }}";
-  // var map_id={{instance.map_id}};
-  // var instance_id={{instance.id}};
-  // var geoserver_url = "{{ GEOSERVER_BASE_URL }}";
-  // var abstract = " {% spaceless %}{{ instance.abstract|title }}{% endspaceless %} ";
+
   {% endif %}
   // var username="{{instance.owner.username}}"
   var username = "{{request.user.username}}"

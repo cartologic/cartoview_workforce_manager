@@ -16,13 +16,12 @@
                     </div>
                 </div>
         <script>
-                var username="{{request.user.username}}"
-           
+               var username="{{request.user.username}}"
+               var app_name="{{app_name}}"
+      
                var id= {{id}}
-            var URLS = {
-                 
+               var URLS = {
                    static: "{{ STATIC_URL }}",
-                
                  };
                  function getMapConfigUrl(id){
                    return "/maps/" + id + "/data"
