@@ -695,7 +695,7 @@ class AddTask extends Component {
               </div>
             </div>}
             <div ></div>
-            {this.state.workers &&
+            {this.state.workers &&this.state.auth &&
               <Paper><MobileStepper
                 type="dots"
                 steps={3}
