@@ -11,12 +11,9 @@ const title_length = t.refinement(t.String, (n) => {
     }
 })
 title_length.getValidationErrorMessage = (value) => {
-    if (!value) {
-        return 'Required'
-    } else {
+  
         return 'Title too long'
     }
-}
 
 const filter = t.struct({
     type: t.String,
@@ -46,7 +43,7 @@ export default class General extends Component {
             this.loadProject()
         }
         this.state = {
-            project: "",
+            project: this.props.project?this.props.project:"",
             value: this.props.value ? this.props.value : "",
             file: this.props.config ? this.props.logo : null,
             messages: ""
@@ -90,7 +87,7 @@ export default class General extends Component {
                 })
             });
     }
-    save() {
+    save=()=> {
         var basicConfig = this.refs.form.getValue();
         if (basicConfig) {
             let properConfig = {
@@ -101,6 +98,26 @@ export default class General extends Component {
             this.props.onComplete(properConfig, this.state.project, this.state.file)
         }
     }
+    next=()=> {
+   
+        var basicConfig = this.refs.form.getValue();
+        if (basicConfig) {
+            let properConfig = {
+                title: basicConfig.title,
+                abstract: basicConfig.abstract,
+                app: app,
+            }
+            this.props.next(properConfig, this.state.project, this.state.file)
+        }
+    }
+    componentWillReceiveProps(nextProps){
+
+        this.setState({...nextProps})
+        this.setState({file:nextProps.logo})
+    }
+    componentWillUnmount(){
+        this.next()
+     }
     render() {
 
         let { file, messages } = this.state
@@ -116,8 +133,8 @@ export default class General extends Component {
                         margin: "0px 3px 0px 3px"
                     }}
                     className="btn btn-primary btn-sm pull-right"
-                    onClick={this.save.bind(this)}>{"next "}
-                    <i className="fa fa-arrow-right"></i>
+                    onClick={this.save.bind(this)}>{"save"}
+                  
                 </button>
 
 

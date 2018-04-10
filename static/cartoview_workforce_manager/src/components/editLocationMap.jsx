@@ -38,7 +38,7 @@ export default class EditLocationMap extends React.Component {
   init=( map )=> {
     var point_feature = new ol.Feature({ });
   		map.on('singleclick', ( e ) => {
-        console.log( e.coordinate,map.getView().calculateExtent(map.getSize()))
+       
         var point_geom = new ol.geom.Point(e.coordinate)
         point_feature.setGeometry(point_geom);
         var vector_layer = new ol.layer.Vector({source: new ol.source.Vector({features: [point_feature]})})

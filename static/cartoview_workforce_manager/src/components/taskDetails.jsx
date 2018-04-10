@@ -83,7 +83,7 @@ class TaskDetails extends Component {
       }
     render() {
         const { classes, theme } = this.props;
-        console.log(this.state.auth)
+
         return (
 
 
@@ -132,7 +132,7 @@ class TaskDetails extends Component {
             </div>
         )
 
-
+z
     }
 }
 export default withStyles(styles)(TaskDetails)

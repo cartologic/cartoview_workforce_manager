@@ -69,6 +69,17 @@ export default class FormFields extends Component {
                 })
             });
     }
+    componentDidMount(){
+        console.log("mount")
+    }
+    componentWillReceiveProps(nextProps){
+        console.log("form",nextProps)
+        this.setState({...nextProps})
+    }
+    componentWillUnmount(){
+        console.log("unmount")
+        this.next()
+     }
     includeChanged = (e) => {
         {
             var checkedArray = this.state.checkedValues;
@@ -123,6 +134,20 @@ export default class FormFields extends Component {
    
         this.props.onComplete(this.state.priority!=""?this.state.priority:priority, this.state.status!=""?this.state.status:status, this.state.Category!=""?this.state.Category:Category,this.state.checkedValues,this.state.due_date,this.state.work_order,this.state.description,this.state.assigned_to)
     }
+    next = () => {
+        var priority= {
+         "priority": [{"label": "Low"},{"label": "Medium"},{"label":"High"}], "required_input": false,
+        }
+       
+       var status= {
+         "status": [{"label": "Opened"},{"label": "Resolved"},{"label":"Closed"}], "required_input": false
+        }
+        var Category= {"Category": [{"label": "Health"},{"label": "Enviroment"}],"required_input": false,
+        
+        }
+   
+        this.props.next(this.state.priority!=""?this.state.priority:priority, this.state.status!=""?this.state.status:status, this.state.Category!=""?this.state.Category:Category,this.state.checkedValues,this.state.due_date,this.state.work_order,this.state.description,this.state.assigned_to)
+    }
     setFormValue = (value, s) => {  
         var obj = {}
         obj[s] = value
@@ -137,7 +162,7 @@ export default class FormFields extends Component {
         else { return false }
     }
     render() {
-        return (
+       if(!this.props.display){ return (
             <div>
                 <div>
                     <div className="col-xs-5 col-md-4">
@@ -150,8 +175,8 @@ export default class FormFields extends Component {
                             }}
 
                             className="btn btn-primary btn-sm pull-right"
-                            onClick={this.save.bind(this)}>{"next"}
-                            <i className="fa fa-arrow-right"></i>
+                            onClick={this.save.bind(this)}>{"save"}
+                        
                         </button>
                     </div>
                 </div>
@@ -268,6 +293,13 @@ export default class FormFields extends Component {
                         handleHideModal={this.handleHideModal} updateAttribute={this.updateAttribute} />
                 }
             </div>
-        )
+        )}
+        else {
+            return(
+                <div>
+
+                </div>
+            )
+        }
     }
 }

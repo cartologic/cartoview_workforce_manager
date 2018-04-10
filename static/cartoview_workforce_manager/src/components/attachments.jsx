@@ -143,7 +143,7 @@ class Attachments extends Component {
         const vertical = "bottom",
             horizontal = "center"
         const {classes} = this.props;
-        console.log(this.refs)
+
         return (
             <div>
                 <div style={{

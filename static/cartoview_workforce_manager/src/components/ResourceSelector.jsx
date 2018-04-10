@@ -21,6 +21,18 @@ export default class ResourceSelector extends Component {
     }
   }
 
+  next=()=> {
+   
+        this.props.next()
+  
+}
+  componentWillReceiveProps(nextProps){
+
+    this.setState({...nextProps})
+}
+componentWillUnmount(){
+    this.next()
+ }
 
   loadResources(off) {
     this.setState({loading: true})
@@ -107,14 +119,11 @@ checkResource=()=>{
           <div className="col-xs-5 col-md-4">
           </div>
           <div className="col-xs-7 col-md-8">
-            {this.state.resource && this.state.resource.id
-              ?<button
+   
+             <button
                 style={{display:"inline-block", marginBottom: "2%"}}
-                className="btn btn-primary btn-sm pull-right" onClick={() => this.props.onComplete()}>{"next "} 	<i className="fa fa-arrow-right"></i></button>
-              :<button
-                style={{display:"inline-block", marginBottom: "2%"}}
-                className="btn btn-primary btn-sm pull-right disabled" onClick={() => this.props.onComplete()}>{"next "} 	<i className="fa fa-arrow-right"></i></button>
-            }
+                className="btn btn-primary btn-sm pull-right" onClick={() => this.props.onComplete()}>{"save"} 	</button>
+             
             <br/>
           </div>
         </div>

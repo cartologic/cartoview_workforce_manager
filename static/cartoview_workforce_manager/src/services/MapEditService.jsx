@@ -8,7 +8,7 @@ export default class MapEditService {
 
 
  if(isNaN(id)){
-	 	console.log("in save",id)
+	 
 		const url =this.baseUrl + "apps/cartoview_workforce_manager/new/"
 			
 		

@@ -19,7 +19,7 @@ export default class EditService {
             }).then((response) => {
                 return response.json()
             }).then((res) => {
-                console.log("RESS", res.id)
+            
                 var dispatcher_url = '/apps/cartoview_workforce_manager/api/v1/project_dispatchers/'
                 var addDispatcherPromises = [];
                 for (var i = 0; i < dispatchers.length; i++) {
@@ -71,7 +71,7 @@ export default class EditService {
             })
         }
         else {
-            console.log("edititnf", instanceConfig)
+            
             const url = this.baseUrl + "apps/cartoview_workforce_manager/api/v1/project/" + id
             return fetch(url, {
                 method: 'PUT',
@@ -120,8 +120,7 @@ export default class EditService {
                                 )
                             }
                             Promise.all(addDispatchersPromises).then(values => {
-                                console.log('---dispatchers---')
-                                console.log(values);
+                              
                                 resolve(200);
                             })
                         }
@@ -163,8 +162,7 @@ export default class EditService {
                                     })
                                 )
                                 Promise.all(addWorkersPromises).then(values => {
-                                    console.log('----workers----');
-                                    console.log(values);
+                            
                                     resolve(200);
                                 })
                             }
@@ -174,7 +172,7 @@ export default class EditService {
 
                 // TODO: errors from all promises must be handled.
                 Promise.all([dispatchersPromise, workersPromise]).then(values => {
-                    console.log('dispatchers & workers');
+                
                     window.location.href = "/apps/cartoview_workforce_manager/" + id + "/view/"
                 })
             })

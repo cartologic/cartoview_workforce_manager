@@ -466,9 +466,8 @@ var ValidImageTypes = ["image/gif","image/jpg", "image/jpeg", "image/png"];
 
       $(":file").change(function () {
         var file = this.files[0];
-        console.log(this.files,"**".file)
         var fileType = file["type"];
-        console.log("file type",fileType)
+    
         if (this.files && this.files[0]&& $.inArray(fileType, ValidImageTypes) > 0) {
           var reader = new FileReader();
           reader.onload = imageIsLoaded;
@@ -482,7 +481,7 @@ var ValidImageTypes = ["image/gif","image/jpg", "image/jpeg", "image/png"];
     });
 
     function imageIsLoaded(e) {
-      console.log("image loaded ")
+    
       $('#img').attr('src', e.target.result);
       $('#img').show();
     };
@@ -523,7 +522,7 @@ var ValidImageTypes = ["image/gif","image/jpg", "image/jpeg", "image/png"];
       return true
     }
 
-    if (this.props.project[field].required_input && !this.state[field]) {
+    if (this.props.project[field]&&this.props.project[field].required_input && !this.state[field]) {
 
       return true
     }

@@ -4,7 +4,6 @@ import Navigator from './components/Navigator.jsx'
 import General from './components/General.jsx'
 import EditService from './services/editService'
 import { getCRSFToken } from './helpers/helpers.jsx'
-
 import ResourceSelector from './components/ResourceSelector.jsx'
 import Users from './components/users.jsx';
 import FormFields from './components/form.jsx'
@@ -12,9 +11,10 @@ export default class Edit extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            save_error:false,
             project: null,
-            workers: "",
-            dispatchers: "",
+            workers:[],
+            dispatchers: [],
             step: 0,
             Category: [],
             priority: [],
@@ -29,10 +29,40 @@ export default class Edit extends Component {
         }
             if(!isNaN(id)){
                 this.loadProject()
+                this.loadWorkers()
+                this.loadDispatchers()
                         }
         this.editService = new EditService({ baseUrl: '/' })
 
     }
+    save=()=>{
+      
+        if(this.state.generalConfig && this.state.workers.length>0&&this.state.dispatchers.length>0)
+        {this.editService.save(this.state.generalConfig, this.state.workers, this.state.dispatchers).then(() => {
+            this.setState({ success: true })
+
+            if (this.state.id) {
+                //  window.location.href = "/apps/cartoview_workforce_manager/" + this.state.id + "/view/"
+
+            }
+
+        })
+    }
+    else if (this.state.project&&this.state.project.dispatchers){
+        this.editService.save(this.state.generalConfig, this.state.project.workers,this.state.project.dispatchers).then(() => {
+            this.setState({ success: true })
+
+            if (this.state.id) {
+                //  window.location.href = "/apps/cartoview_workforce_manager/" + this.state.id + "/view/"
+
+            }
+
+        })
+    }
+else{
+    this.setState({save_error:true})
+}
+}
  loadProject=()=>{
       var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id
 
@@ -63,6 +93,58 @@ export default class Edit extends Component {
             });
 }
 
+
+    loadDispatchers=()=>{
+    var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + "/dispatchers"
+    fetch(url,  {
+                    method:"GET", 
+                    headers:new Headers( {
+                    "Content-Type":"application/json; charset=UTF-8", 
+                    "X-CSRFToken":getCRSFToken(), 
+                    })
+                    })
+                    .then(function (response) {
+                    if (response.status >= 400) {
+                    throw new Error("Bad response from server"); 
+                    }
+                    return response.json(); 
+                    })
+                    .then((data) =>  {
+                    this.setState( {selectedDis:data.objects},
+                    ()=>{this.state.selectedDis.map((user)=>{
+                        this.state.dispatchers.push(user.dispatcher.username)})
+                            this.setState({dispatchers:this.state.dispatchers})
+                        })
+                    }); 
+                    }
+    loadWorkers=()=>{
+        var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + "/workers"
+        fetch(url,  {
+                    method:"GET", 
+                    headers:new Headers( {
+                    "Content-Type":"application/json; charset=UTF-8", 
+                    "X-CSRFToken":getCRSFToken(), 
+    
+                    })
+                    })
+                    .then(function (response) {
+                    if (response.status >= 400) {
+                    throw new Error("Bad response from server"); 
+                    }
+                    return response.json(); 
+                    })
+                    .then((data) =>  {
+                    
+                    this.setState( {selectedwor:data.objects},
+                    ()=>{this.state.selectedwor.map((user)=>{
+                        
+                        this.state.workers.push(user.worker.username)})
+                            this.setState({workers:this.state.workers})
+                        })
+                    }); 
+                
+    }
+
     goToStep(step) {
         this.setState({ step });
     }
@@ -86,12 +168,26 @@ export default class Edit extends Component {
                 logo:this.state.logo,
                 config: this.props.config.instance ? this.props.config.instance.config : undefined,
                 onComplete: (basicConfig, project,logo) => {
-                
+                  
                     var conf=Object.assign(basicConfig, { "logo":logo})
-                    this.setState({ value: basicConfig, map: project.mapid, generalConfig: conf, success: true, id: project.id ,logo:logo})
+                    this.setState({
+                        generalConfig: Object.assign(this.state.generalConfig,conf)
+                    })
+                    this.setState({ value: basicConfig,  map:project? project.mapid:null, generalConfig: conf, success: true, id: project?project.id :null,logo:logo},this.save())
                     let { step } = this.state;
-                    this.goToStep(++step)
-
+                    // this.goToStep(++step)
+                    
+                }
+                ,next: (basicConfig, project,logo) => {
+                  
+                    var conf=Object.assign(basicConfig, { "logo":logo})
+                    this.setState({
+                        generalConfig: Object.assign(this.state.generalConfig,conf)
+                    })
+                    this.setState({ value: basicConfig, map:project? project.mapid:null, generalConfig: conf, success: true, id: project?project.id :null,logo:logo})
+                    let { step } = this.state;
+             
+                    
                 }
             }
 
@@ -110,13 +206,24 @@ export default class Edit extends Component {
                 onComplete: () => {
                     var { step } = this.state;
                     this.setState({
-                        genralConfig: Object.assign(this.state.generalConfig, { "mapid": this.state.selectedResource ? this.state.selectedResource.id : this.state.mapid })
+                        generalConfig: Object.assign(this.state.generalConfig, { "mapid": this.state.selectedResource ? this.state.selectedResource.id : this.state.mapid })
                     }, () => {
                       
                         let {step} = this.state;
-                        this.goToStep(++step)
+                        // this.goToStep(++step)
                     })
-
+            this.save()    
+                },
+                next: () => {
+                    var { step } = this.state;
+                    this.setState({
+                        generalConfig: Object.assign(this.state.generalConfig, { "mapid": this.state.selectedResource ? this.state.selectedResource.id : this.state.mapid })
+                    }, () => {
+                      
+                        let {step} = this.state;
+                        // this.goToStep(++step)
+                    })
+  
                 }
             }
         }, {
@@ -133,18 +240,27 @@ export default class Edit extends Component {
                 Category:this.state.Category,
                 onComplete: (priority, status, Category,checked,due_date,work_order,description,assigned_to) => {
                    this.setState({"priority": priority, "status": status, "Category": Category})
-                    this.setState({ genralConfig: Object.assign(this.state.generalConfig, {"priority": priority, "status": status, "Category": Category ,"Project_config":checked,"due_date":due_date,"work_order":work_order,"Description":description,"assigned_to":assigned_to}) })
+                    this.setState({ generalConfig: Object.assign(this.state.generalConfig, {"priority": priority, "status": status, "Category": Category ,"Project_config":checked,"due_date":due_date,"work_order":work_order,"Description":description,"assigned_to":assigned_to}) })
                     let { step } = this.state;
-                    this.goToStep(++step)
- 
-                }
+                    // this.goToStep(++step)
+                    this.save() 
+                },
+                next: (priority, status, Category,checked,due_date,work_order,description,assigned_to) => {
+                    this.setState({"priority": priority, "status": status, "Category": Category})
+                     this.setState({ generalConfig: Object.assign(this.state.generalConfig, {"priority": priority, "status": status, "Category": Category ,"Project_config":checked,"due_date":due_date,"work_order":work_order,"Description":description,"assigned_to":assigned_to}) })
+                     let { step } = this.state;
+                     // this.goToStep(++step)
+                  
+                 }
             }
+           
         },
 
         {
             label: "Users",
             component: Users,
             props: {
+                error:this.state.save_error,
                 id: this.state.id,
                 dispatchers: this.state.dispatchers,
                 workers: this.state.workers,
@@ -169,13 +285,42 @@ export default class Edit extends Component {
                     })
 
                 }
+            ,   next: (dispatchers, workers) => {
+                this.setState({ dispatchers: dispatchers, workers: workers }, () => {
+    
+})
 
+}
             }
         }
 
 
         ]
-        return (<div className="wrapping">  <Navigator
+        return (
+        
+        <div className="wrapping"> 
+       { this.state.step==0&&this.state.generalConfig&& <FormFields    style={{display:"none"}}
+        display={true}
+        checkedValues={this.state.checkedValues}
+        work_order={this.state.work_order}
+        due_date={this.state.due_date}
+        assigned_to={this.state.assigned_to}
+        description={this.state.description}
+        priority={this.state.priority}
+        status={this.state.status}
+        Category={this.state.Category}
+        next={ (priority, status, Category,checked,due_date,work_order,description,assigned_to) => {
+         
+             this.setState({"priority": priority, "status": status, "Category": Category})
+             this.setState({ generalConfig: Object.assign(this.state.generalConfig, {"priority": priority, "status": status, "Category": Category ,"Project_config":checked,"due_date":due_date,"work_order":work_order,"Description":description,"assigned_to":assigned_to},console.log("___",this.state.generalConfig)) })
+             let { step } = this.state;
+             // this.goToStep(++step)
+          
+         }}
+        
+     />}
+         <Navigator
+            save_error={this.state.save_error}
             steps={steps}
             step={step}
             onStepSelected={(step) => this.goToStep(step)} />  <div className="col-xs-12 col-sm-12 col-md-9 col-lg-9 right-panel" >  {steps.map((s, index) => index == step && < s.component key={index} {...s.props} />)} </div>  </div>)

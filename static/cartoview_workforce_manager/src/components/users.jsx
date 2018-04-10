@@ -10,7 +10,8 @@ users:"",
 usernames:[], 
 selectedDispatchers:[], 
 selectedworkers:[],
-loading:false
+loading:false,
+
 
     
 
@@ -101,6 +102,17 @@ loadWorkers=()=>{
 save() {   
 this.props.onComplete(this.state.selectedDispatchers,this.state.selectedworkers)
 }
+next=()=> {   
+    this.props.next(this.state.selectedDispatchers,this.state.selectedworkers)
+    }
+componentWillReceiveProps(nextProps){
+
+    this.setState({...nextProps})
+
+}
+componentWillUnmount(){
+    this.next()
+    }
 onChangeDispatcher = selectedDispatchers => {
   this.setState({ selectedDispatchers});
   }
@@ -114,7 +126,7 @@ return (
 					<div className="col-xs-5 col-md-4">
 					</div>
 					<div className="col-xs-7 col-md-8">
-						<button loading={this.state.loading} 
+						<button 
 							style={{
                                 display: "inline-block",
                                 margin: "0px 3px 0px 3px"
@@ -132,14 +144,14 @@ return (
        <div>
         <label>Choose Project&#39;s Dispatchers*</label>
        <Chips
-          value={this.state.selectedDispatchers}
+          value={this.state.selectedDispatchers.length>0?this.state.selectedDispatchers:this.props.dispatchers}
           onChange={this.onChangeDispatcher}
           suggestions={this.state.usernames}
           fromSuggestionsOnly={true}
         />
          <label>Choose Project&#39;s Workers*</label>
        <Chips
-          value={this.state.selectedworkers}
+          value={this.state.selectedworkers.length>0?this.state.selectedworkers:this.props.workers}
           onChange={this.onChangeWorker}
           suggestions={this.state.usernames}
           fromSuggestionsOnly={true}
