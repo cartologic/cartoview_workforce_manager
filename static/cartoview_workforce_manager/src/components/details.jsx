@@ -29,7 +29,7 @@ class Details extends Component {
     return (
       <div >
         <Paper className={classes.paper}>
-          {!this.props.task && <img src={URLS.static + 'cartoview_workforce_manager/loader'} />}
+          {!this.props.task && <img src={URLS.static + '/loader'} />}
           <Table>
             <TableHead>
               <TableRow>

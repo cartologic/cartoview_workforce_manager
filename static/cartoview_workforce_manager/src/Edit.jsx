@@ -23,6 +23,8 @@ export default class Edit extends Component {
             selectedResource: this.props.config.instance ? this.props.config.instance.map : undefined,
             value: {},
             map: 0,
+            auth:false,
+            done:false,
             generalConfig: {},
             selectedResource: this.props.config.instance ? this.props.config.instance.map : undefined,
             checkedValues:isNaN(id)? ["work_order","description","due_date","assigned_to","Category","priority","status"]:[],
@@ -35,6 +37,13 @@ export default class Edit extends Component {
         this.editService = new EditService({ baseUrl: '/' })
 
     }
+    checkDispatcher = (dispatchers) => {
+        dispatchers.map((dispatcher) => {
+        if (dispatcher.dispatcher.username === username) {
+          this.setState({ auth: true })
+        }
+      })
+    this.setState({done:true})}
     save=()=>{
       
         if(this.state.generalConfig && this.state.workers.length>0&&this.state.dispatchers.length>0)
@@ -110,8 +119,9 @@ else{
                     return response.json(); 
                     })
                     .then((data) =>  {
-                    this.setState( {selectedDis:data.objects},
-                    ()=>{this.state.selectedDis.map((user)=>{
+                        this.checkDispatcher(data.objects)
+                        this.setState( {selectedDis:data.objects},
+                        ()=>{this.state.selectedDis.map((user)=>{
                         this.state.dispatchers.push(user.dispatcher.username)})
                             this.setState({dispatchers:this.state.dispatchers})
                         })
@@ -296,8 +306,8 @@ else{
 
 
         ]
-        return (
-        
+        if(this.state.auth && !isNaN(id)|| isNaN(id) ){return (
+       
         <div className="wrapping"> 
        { this.state.step==0&&this.state.generalConfig&& <FormFields    style={{display:"none"}}
         display={true}
@@ -323,6 +333,30 @@ else{
             save_error={this.state.save_error}
             steps={steps}
             step={step}
-            onStepSelected={(step) => this.goToStep(step)} />  <div className="col-xs-12 col-sm-12 col-md-9 col-lg-9 right-panel" >  {steps.map((s, index) => index == step && < s.component key={index} {...s.props} />)} </div>  </div>)
+            onStepSelected={(step) => this.goToStep(step)} />  <div className="col-xs-12 col-sm-12 col-md-9 col-lg-9 right-panel" >  {steps.map((s, index) => index == step && < s.component key={index} {...s.props} />)} </div>  
+            
+            </div>
+        )}else if(this.state.done&&!this.state.auth){
+            return(
+                <div className="container">
+            
+              
+                <div className="alert alert-danger">
+                  <strong>Only dispatchers can edit projects setttings </strong>
+                </div>
+              </div>
+            )
+        }
+        else return (
+            <div className={"row"}>
+                <div className={"col-md-4"}>
+                </div>
+                <div className={"col-md-4"}>
+                  <img src={'/static/loader'} />
+                </div>
+                <div className={"col-md-4"}>
+                </div>
+            </div>
+        )
     }
 }

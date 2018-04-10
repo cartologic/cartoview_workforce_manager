@@ -70,14 +70,14 @@ export default class FormFields extends Component {
             });
     }
     componentDidMount(){
-        console.log("mount")
+
     }
     componentWillReceiveProps(nextProps){
-        console.log("form",nextProps)
+     
         this.setState({...nextProps})
     }
     componentWillUnmount(){
-        console.log("unmount")
+
         this.next()
      }
     includeChanged = (e) => {

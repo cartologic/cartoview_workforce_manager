@@ -146,6 +146,7 @@ checkResource=()=>{
           <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-md-offset-3 text-center"><Spinner name="line-scale-pulse-out" color="steelblue"/></div>
         </div>}
         {!this.state.loading && this.state.resources.map((resource) => {
+          
           return (
             <div
               onClick={() => {this.props.selectMap(resource)

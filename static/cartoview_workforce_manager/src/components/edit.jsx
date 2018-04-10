@@ -355,7 +355,7 @@ class Edit extends Component {
                 {!this.state.task &&
                     <div>
                         <div ></div>
-                        <div ><img src={URLS.static + 'cartoview_workforce_manager/loader'} />
+                        <div ><img src={URLS.static + '/loader'} />
                         </div>
                         <div ></div>
                     </div>
