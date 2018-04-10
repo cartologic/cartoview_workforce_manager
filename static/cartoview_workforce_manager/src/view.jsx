@@ -167,7 +167,7 @@ class ReactClient extends React.Component {
       },
       tasks: "",
       workers: "",
-      dispatchers: "",
+      dispatchers: [],
       tasks: [],
       selectedtask: null,
       priority: "",
@@ -195,14 +195,16 @@ class ReactClient extends React.Component {
       rows: [],
       numberOfRows: 5,
       pages: 1,
-      total: undefined
+      total: undefined,
+      auth:false,
     }
     this.loadTasks()
     this.loadProject()
     this.loadWorkers()
     this.loadDispatchers()
-
+   
   }
+
   resetFilter=()=>{
     this.setState({priority:"",status:"",category:"",work_order:"",created_by:"",assigned_to:""})
   this.loadTasks()
@@ -281,7 +283,13 @@ class ReactClient extends React.Component {
       })
     })
   }
-
+  checkDispatcher = (dispatchers) => {
+      dispatchers.map((dispatcher) => {
+      if (dispatcher.dispatcher.username === username) {
+        this.setState({ auth: true })
+      }
+    })
+  }
   loadTasks = () => {
     var url = '/apps/cartoview_workforce_manager/api/v1/project/' + id + '/tasks'
     fetch(url, {
@@ -353,8 +361,8 @@ class ReactClient extends React.Component {
       }
       return response.json();
     }).then((data) => {
-
-      this.setState({ dispatchers: data.objects })
+      console.log(data.objects)
+      this.setState({ dispatchers: data.objects }, this.checkDispatcher(data.objects))
     });
   }
 
@@ -425,12 +433,13 @@ class ReactClient extends React.Component {
             </ListItemIcon>
             <ListItemText primary="Tasks" />
           </ListItem>
-          <ListItem dense button onClick={() => this.setState({ currentComponent: "add", page: "new" })}>
+         {this.state.auth&& <ListItem dense button onClick={() => this.setState({ currentComponent: "add", page: "new" })}>
             <ListItemIcon>
               <AddIcon />
             </ListItemIcon>
+            
             <ListItemText primary='New Task' />
-          </ListItem>
+          </ListItem>}
           <ListItem dense button onClick={this.openFilterMenu}>
             <ListItemIcon>
               <FindIcon />
